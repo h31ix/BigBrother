@@ -145,7 +145,23 @@ public class BBPlayerInfo {
      */
     public void setHasOpenedChest(Chest c,ItemStack[] contents) {
         myOpenChest=c;
-        chestContents=contents;
+        
+        if (contents!=null)	{
+        chestContents = new ItemStack[contents.length];
+        	for(int i = 0;i<contents.length;i++)	{
+        		if(contents[i]==null)
+        		{
+        			chestContents[i] = null;
+        		}
+        		else
+        		{
+        			//primitive cloning  - I can't figure, how to get Data field as well (ag)
+        			chestContents[i] = new ItemStack(contents[i].getTypeId(),contents[i].getAmount(),contents[i].getDurability());
+        		}
+        	}
+        } else {
+        	chestContents = null;
+        }
     }
     
     /**

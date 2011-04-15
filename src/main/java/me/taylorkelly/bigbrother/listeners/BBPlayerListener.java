@@ -132,7 +132,8 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         final Player player = event.getPlayer();
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        plugin.closeChestIfOpen(pi);
+        //I don't think this should be here, because it can happen when player has chest open
+        //plugin.closeChestIfOpen(pi);
         if (BBSettings.pickupItem && pi.getWatched()) {
             PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
             dataBlock.send();
@@ -143,7 +144,8 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        plugin.closeChestIfOpen(pi);
+        //I don't think this should be here, because it can happen when player has chest open
+        //plugin.closeChestIfOpen(pi);
         if (BBSettings.dropItem && pi.getWatched()) {
             DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
             dataBlock.send();
@@ -207,7 +209,7 @@ public class BBPlayerListener extends PlayerListener {
                 if(block.getState() instanceof Chest) {
                     Chest chest = ((Chest)block.getState());
                     // OH SHI-
-                    BBUsersTable.getInstance().userOpenedChest(player.getName(),chest,chest.getInventory().getContents());
+                    BBUsersTable.getInstance().userOpenedChest(player.getName(),chest,plugin.getChestContents(chest));
                     return;
                 }
                 switch (event.getMaterial()) {

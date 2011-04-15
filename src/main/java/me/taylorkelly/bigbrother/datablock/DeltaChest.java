@@ -47,9 +47,11 @@ public class DeltaChest extends BBDataBlock {
         builder.append("{"); // Marker for the new format
         for (int i = 0; i < orig.length; i++) {
             DeltaEntry e = new DeltaEntry(i,orig[i],latest[i]);
-            builder.append(e.toString());
-            if (i + 1 < orig.length) {
-                builder.append(";");
+            if(e.isChanged()) {
+            	builder.append(e.toString());
+            	//if (i + 1 < orig.length) { // do we really need this?
+                    builder.append(";");
+                //}
             }
         }
         return builder.toString();
@@ -132,24 +134,39 @@ public class DeltaChest extends BBDataBlock {
                     Data=0;
                 else
                     Data=orig.getData().getData();
-            } else {
-                ID=orig.getTypeId();
-                Damage=orig.getDurability();
-                // Why do you do this
-                if(orig.getData()==null)
-                    Data=0;
-                else
-                    Data=orig.getData().getData();
-                Amount=orig.getAmount()-latest.getAmount();
+            } else {      	
+            	//First we must determine this
+                Amount=latest.getAmount()-orig.getAmount();
                 if(Amount==0)
                     Type=DeltaType.NO_CHANGE;
-                else if(Amount>0)
+                else if(Amount<0) {
                     Type=DeltaType.REMOVED;
-                else if(Amount<0)
-                    Type=DeltaType.ADDED;
+                    //item might be removed completely, so our information source must be 'orig'
+                    ID = orig.getTypeId();
+                    Damage = orig.getDurability();
+                    if(orig.getData()==null)
+                        Data = 0;
+                    else
+                        Data = orig.getData().getData();
+                    
+                } else if(Amount>0)	{
+                	Type=DeltaType.ADDED;
+                	//item might be added to an empty slot
+                	ID = latest.getTypeId();
+                    Damage = latest.getDurability();
+                    if(latest.getData()==null)
+                        Data = 0;
+                    else
+                        Data = latest.getData().getData();
+                }   
             }
         }
 
+        public boolean isChanged()
+        {
+        	return (Type!=DeltaType.NO_CHANGE);
+        }
+        
         private boolean isTypeDifferent(ItemStack orig, ItemStack latest) {
             if(orig.getTypeId()==0 || latest.getTypeId()==0)
                 return false;
@@ -189,17 +206,10 @@ public class DeltaChest extends BBDataBlock {
                 b.append(":");
                 b.append(ID);
                 b.append(":");
-                switch(Type) {
-                case ADDED:
-                    b.append("+");
-                    break;
-                case REMOVED:
-                    b.append("-");
-                break;
-                default:
-                    break;
+                if (Type == DeltaType.ADDED)  {
+                	b.append("+");	//nothing else to do here. If it was removed, the minus is already in the amount.
                 }
-                b.append((Amount==-1) ? 0 : Amount);
+                b.append(Amount);	
                 b.append(":");
                 b.append(Data);
                 b.append(":");
