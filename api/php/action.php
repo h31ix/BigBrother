@@ -3,6 +3,7 @@
 
 Blah blah blah BSD License.
 */
+require('constants.php');
 
 require('actions/block_modified.php');
 require('actions/button_pressed.php');
