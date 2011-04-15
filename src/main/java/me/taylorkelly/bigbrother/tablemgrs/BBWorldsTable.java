@@ -39,7 +39,7 @@ public abstract class BBWorldsTable extends DBTable {
 	
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE "+getTableName()+" ("
+        return "CREATE TABLE IF NOT EXISTS "+getTableName()+" ("
             + "id INTEGER PRIMARY KEY,"
             + "name varchar(50) NOT NULL DEFAULT 'world');";
     }
