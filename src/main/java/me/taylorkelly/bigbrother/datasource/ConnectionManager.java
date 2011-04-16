@@ -72,7 +72,7 @@ public class ConnectionManager {
     private static Connection createConnection(boolean firstConnection) {
         try {
             BBLogging.debug("Opening connection");
-            Connection conn = DriverManager.getConnection("jdbc:jdc:jdcpool");
+			Connection conn = DriverManager.getConnection("jdbc:jdc:jdcpool");
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException e) {
