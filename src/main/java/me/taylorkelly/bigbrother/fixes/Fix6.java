@@ -23,7 +23,7 @@ public class Fix6 extends Fix {
 	public void apply() {
 		if (needsUpdate(version)) {
 			BBLogging.info("Updating tables for 1.8");
-			if(BBDataTable.getInstance().executeUpdate("Upgrading to BLOBs instead of VARCHAR.","ALTER TABLE `'"+BBSettings.applyPrefix("bbdata")+"'` CHANGE `data` `data` BLOB NOT NULL DEFAULT ''")) {
+			if(BBDataTable.getInstance().executeUpdate("Upgrading to BLOBs instead of VARCHAR.","ALTER TABLE `'"+BBSettings.applyPrefix("bbdata")+"'` CHANGE `data` `data` BLOB NOT NULL")) {
 				updateVersion(version);
 			}
 		}
