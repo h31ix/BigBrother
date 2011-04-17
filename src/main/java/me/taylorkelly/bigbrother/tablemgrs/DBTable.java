@@ -95,7 +95,7 @@ public abstract class DBTable {
     
 
 
-    protected boolean executeUpdate(String desc, String sql) {
+    public boolean executeUpdate(String desc, String sql) {
         return executeUpdate(desc,sql,new Object[]{});
     }
 }
