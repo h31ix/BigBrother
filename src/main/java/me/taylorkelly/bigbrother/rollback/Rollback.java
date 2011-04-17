@@ -168,8 +168,9 @@ public class Rollback {
 
                 int rollbackSize = 0;
                 while (set.next()) {
-                	Blob dataBlob = set.getBlob("data");
-                	String data = new String(dataBlob.getBytes(0, (int) (dataBlob.length())));
+                	Blob blob = set.getBlob("data");
+                	byte[] bdata = blob.getBytes(1, (int) blob.length());
+                	String data = new String(bdata);
                     listBlocks.addLast(BBDataBlock.getBBDataBlock(set.getInt("player"), Action.values()[set.getInt("action")], set.getString("world"), set.getInt("x"),
                             set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,11 +77,9 @@ public class DataBlockSender {
                 ps.setInt(6, block.y);
                 ps.setInt(7, block.z);
                 ps.setInt(8, block.type);
-                if (block.data.length() > 150) {
-                    ps.setString(9, block.data.substring(0, 150));
-                } else {
-                    ps.setString(9, block.data);
-                }
+                Blob data = conn.createBlob();
+                data.setBytes(1, block.data.getBytes());
+                ps.setBlob(9, data);
                 ps.addBatch();
             }
             ps.executeBatch();
