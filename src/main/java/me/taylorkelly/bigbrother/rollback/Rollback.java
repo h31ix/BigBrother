@@ -1,5 +1,6 @@
 package me.taylorkelly.bigbrother.rollback;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -167,8 +168,10 @@ public class Rollback {
 
                 int rollbackSize = 0;
                 while (set.next()) {
+                	Blob dataBlob = set.getBlob("data");
+                	String data = new String(dataBlob.getBytes(0, (int) (dataBlob.length())));
                     listBlocks.addLast(BBDataBlock.getBBDataBlock(set.getInt("player"), Action.values()[set.getInt("action")], set.getString("world"), set.getInt("x"),
-                            set.getInt("y"), set.getInt("z"), set.getInt("type"), set.getString("data")));
+                            set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;
                 }
                 if (rollbackSize > 0) {

@@ -1,5 +1,6 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ public class BBDataPostgreSQL extends BBDataMySQL {
         + "\"y\" smallint NOT NULL DEFAULT '0'," 
         + "\"z\" int NOT NULL DEFAULT '0'," 
         + "\"type\" smallint NOT NULL DEFAULT '0',"
-        + "\"data\" varchar(500) NOT NULL DEFAULT '',"
+        + "\"data\" BLOB NOT NULL DEFAULT '',"
         + "\"rbacked\" boolean NOT NULL DEFAULT '0',"
         + "PRIMARY KEY (\"id\"));"
         + "CREATE INDEX \""+getTableName()+"_index_world\""
@@ -120,7 +121,8 @@ public class BBDataPostgreSQL extends BBDataMySQL {
                 conn.commit();
                 
                 while (rs.next()) {
-                    BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), rs.getString("data"));
+                	Blob data = rs.getBlob("data");
+                    BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), new String(data.getBytes(0,(int)data.length())));
                     newBlock.date = rs.getLong("date");
                     blockList.add(newBlock);
                 }

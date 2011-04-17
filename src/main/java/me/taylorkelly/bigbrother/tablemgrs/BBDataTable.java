@@ -1,5 +1,6 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,7 +94,8 @@ public abstract class BBDataTable extends DBTable {
                 conn.commit();
                 
                 while (rs.next()) {
-                    BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), rs.getString("data"));
+                	Blob data = rs.getBlob("data");
+                    BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), new String(data.getBytes(0,(int)data.length())));
                     newBlock.date = rs.getLong("date");
                     blockList.add(newBlock);
                 }
