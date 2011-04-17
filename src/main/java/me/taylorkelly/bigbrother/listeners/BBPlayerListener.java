@@ -132,11 +132,13 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         final Player player = event.getPlayer();
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        //I don't think this should be here, because it can happen when player has chest open
-        //plugin.closeChestIfOpen(pi);
         if (BBSettings.pickupItem && pi.getWatched()) {
-            PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
-            dataBlock.send();
+        	// It should not be null, but I have no other way to explain the NPEs.  Bukkit Bug?
+        	if(event.getItem() != null && event.getItem().getItemStack() != null)
+        	{
+	            PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
+	            dataBlock.send();
+        	}
         }
     }
     
@@ -144,25 +146,11 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        //I don't think this should be here, because it can happen when player has chest open
-        //plugin.closeChestIfOpen(pi);
         if (BBSettings.dropItem && pi.getWatched()) {
             DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
             dataBlock.send();
         }
     }
-    
-    /*
-     * 
-    public void onBlockRightClick(BlockRightClickEvent event) {
-        Player player = event.getPlayer();
-        if (BBPermissions.info(player) && plugin.hasStick(player, player.getItemInHand()) && plugin.rightClickStick(player)) {
-            plugin.stick(player, event.getBlock());
-        }
-    }
-    public void onBlockInteract(BlockInteractEvent event) {
-    }
-    */
     
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
