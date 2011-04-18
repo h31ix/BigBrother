@@ -55,7 +55,7 @@ public class BBDataMySQL extends BBDataTable {
         + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," 
         + "`z` int NOT NULL DEFAULT '0'," 
         + "`type` smallint NOT NULL DEFAULT '0',"
-        + "`data` varchar(500) NOT NULL DEFAULT '',"
+        + "`data` BLOB NOT NULL DEFAULT '',"
         + "`rbacked` boolean NOT NULL DEFAULT '0',"
         + "PRIMARY KEY (`id`)," 
         + "INDEX(`world`)," 

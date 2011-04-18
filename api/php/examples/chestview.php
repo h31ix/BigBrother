@@ -21,10 +21,10 @@ while($result = mysql_fetch_array($query))
    $player[$result["id"]] = $result["name"];
 }
 
-//args + simple sql injection prevention
-$world = isset($_GET['world']) ? $_GET['world']+0 : 0 ;
-$hours = isset($_GET['hours']) ? $_GET['hours']+0 : 3 ;
-$from = isset($_GET['from']) ? $_GET['from']+0 : 3;
+//args
+$world = intval($_GET['world']); // World ID #
+$hours = intval($_GET['hours']); // Hours ago?
+$from = intval($_GET['from']); // idk
 
 //some time computation
 $now = time();
@@ -46,7 +46,7 @@ $i = 0;
 while($result = mysql_fetch_array($query))  {
   $actions[$i] = Action::FromData($result);
   $i++;
-  }
+}
 
 
 ?>
@@ -89,7 +89,5 @@ foreach($actions as $i => $action)
 
 ?>
 </table>
-
 </body>
-
 </html>

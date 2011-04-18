@@ -37,7 +37,7 @@ public class ConnectionManager {
             initConnection();
     }
 
-    public static boolean setupConnection() {
+	public static boolean setupConnection() {
         try {
             BBLogging.debug("Creating connection using " + BBSettings.databaseSystem + " at " + BBSettings.getDSN());
             if (BBSettings.usingDBMS(DBMS.MYSQL)) {
@@ -72,7 +72,7 @@ public class ConnectionManager {
     private static Connection createConnection(boolean firstConnection) {
         try {
             BBLogging.debug("Opening connection");
-            Connection conn = DriverManager.getConnection("jdbc:jdc:jdcpool");
+			Connection conn = DriverManager.getConnection("jdbc:jdc:jdcpool");
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException e) {

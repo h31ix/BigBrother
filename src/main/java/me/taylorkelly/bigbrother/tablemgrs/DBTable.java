@@ -73,7 +73,7 @@ public abstract class DBTable {
         }
     }
 
-    protected boolean executeUpdate(String desc, String sql, Object[] args) {
+    public boolean executeUpdate(String desc, String sql, Object[] args) {
         BBLogging.debug(sql);
         Connection conn = null;
         PreparedStatement ps = null;
@@ -95,7 +95,7 @@ public abstract class DBTable {
     
 
 
-    protected boolean executeUpdate(String desc, String sql) {
+    public boolean executeUpdate(String desc, String sql) {
         return executeUpdate(desc,sql,new Object[]{});
     }
 }
