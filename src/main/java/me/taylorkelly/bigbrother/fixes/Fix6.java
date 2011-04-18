@@ -4,6 +4,7 @@ import java.io.File;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
+import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
 /**
@@ -23,7 +24,10 @@ public class Fix6 extends Fix {
 	public void apply() {
 		if (needsUpdate(version)) {
 			BBLogging.info("Updating tables for 1.8");
-			if(BBDataTable.getInstance().executeUpdate("Upgrading to BLOBs instead of VARCHAR.","ALTER TABLE `"+BBSettings.applyPrefix("bbdata")+"` CHANGE `data` `data` BLOB NOT NULL")) {
+			String sql = "ALTER TABLE `"+BBSettings.applyPrefix("bbdata")+"` CHANGE `data` `data` BLOB NOT NULL";
+			if(BBSettings.usingDBMS(DBMS.H2)) // FFFFFFFFFUCK YOU H2.
+				sql="ALTER TABLE `"+BBSettings.applyPrefix("bbdata")+"` ALTER COLUMN data BLOB NOT NULL";
+			if(BBDataTable.getInstance().executeUpdate("Upgrading to BLOBs instead of VARCHAR.",sql)) {
 				updateVersion(version);
 			}
 		}

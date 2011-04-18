@@ -37,7 +37,7 @@ public class ConnectionManager {
             initConnection();
     }
 
-    public static boolean setupConnection() {
+	public static boolean setupConnection() {
         try {
             BBLogging.debug("Creating connection using " + BBSettings.databaseSystem + " at " + BBSettings.getDSN());
             if (BBSettings.usingDBMS(DBMS.MYSQL)) {
