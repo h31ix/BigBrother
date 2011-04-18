@@ -35,6 +35,7 @@ class ChestChanged extends Action
 	     $this->changed = false;
        $data = $this->data;
        $data = substr($data,1);   //get rid of {
+       $modif = array();
        if (strlen($data)>1) {
         $changes = preg_split('/;/',$data);
         foreach ($changes as $id => $change){
@@ -44,12 +45,23 @@ class ChestChanged extends Action
               $split = preg_split('/=/',$change);
               $dataRemoved = preg_split('/:/',$split[0]);
               $dataAdded = preg_split('/:/',$split[1]);
-              $modif[$dataRemoved[1]] -= intval($dataRemoved[2]);
-              $modif[$dataAdded[0]] += intval($dataAdded[1]);
+              
+              if (isset($modif[$dataRemoved[1]])) {
+                $modif[$dataRemoved[1]] -= intval($dataRemoved[2]);
+                } else { $modif[$dataRemoved[1]] = -intval($dataRemoved[2]); }
+              
+              if (isset($modif[$dataAdded[0]])) {  
+                $modif[$dataAdded[0]] += intval($dataAdded[1]);
+                } else { $modif[$dataAdded[0]] = intval($dataAdded[1]); }
+                
             } else {
               //Item was added or removed
               $data = preg_split('/:/',$change);
-              $modif[$data[1]] += intval($data[2]);
+              
+              if (isset($modif[$data[1]])) {
+                $modif[$data[1]] += intval($data[2]);
+                } else { $modif[$data[1]] = intval($data[2]); }
+                  	
             } 
           }
         }

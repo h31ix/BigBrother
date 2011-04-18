@@ -120,7 +120,7 @@ class Action
 			$act=new Exploded($row,0);
 		break;
 		case MISC_EXPLOSION:
-			$act=new Teleport($row,-1);
+			$act=new Exploded($row,-1);
 		break;
 		case OPEN_CHEST:
 			$act=new ChestOpened($row);
