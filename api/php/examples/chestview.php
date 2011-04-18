@@ -21,10 +21,10 @@ while($result = mysql_fetch_array($query))
    $player[$result["id"]] = $result["name"];
 }
 
-//args
-$world = intval($_GET['world']); // World ID #
-$hours = intval($_GET['hours']); // Hours ago?
-$from = intval($_GET['from']); // idk
+//args - see top of the script
+$world = isset($_GET['world']) ? intval($_GET['world']) : 0 ;
+$hours = isset($_GET['hours']) ? intval($_GET['hours']) : 3 ;
+$from = isset($_GET['from']) ? intval($_GET['from']) : 3;
 
 //some time computation
 $now = time();
@@ -38,7 +38,7 @@ $start = $now - 60*60*$from;
 $end = $start + 60*60*$hours;
 }
 
-$query = mysql_query('SELECT * FROM bbdata where world='.$world.' and type=54 and date>'.$start.' and date<'.$end.' order by date desc',$conn);
+$query = mysql_query('SELECT * FROM bbdata where world='.$world.' and action='.DELTA_CHEST.' and date>'.$start.' and date<'.$end.' order by date desc',$conn);
 
 $actions = array();
 $i = 0;
@@ -77,6 +77,7 @@ foreach($actions as $i => $action)
     $modif = $action->getModifications();
     foreach($modif as $id => $count)  {
       if($count!=0) {
+        if($count>0) { $o .= '+'; }
         $o .= $count.' '.$items[$id].'<br />';
       }
     }
