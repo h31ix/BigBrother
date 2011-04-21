@@ -240,7 +240,7 @@ public class Rollback {
                     try {
                         dataBlock.rollback(server.getWorld(dataBlock.world));
                     } catch (Exception e) {
-                        BBLogging.warning("Caught exception when rolling back a " + dataBlock.action);
+                        BBLogging.warning("Caught exception when rolling back a " + dataBlock.action, e);
                     }
                     count++;
                 }
