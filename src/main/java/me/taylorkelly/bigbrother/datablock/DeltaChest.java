@@ -63,9 +63,14 @@ public class DeltaChest extends BBDataBlock {
         for(int i = 0;i<chestCapacity;i++) {
             de[i] = new DeltaEntry(i);
         }
-        for(String chunk : data.split(";")) {
+        String[] chunks = data.split(";");
+        for(String chunk : chunks) {
             DeltaEntry e = new DeltaEntry(chunk);
-            de[e.Slot]=e;
+            if(e.Slot > chestCapacity-1) {
+            	BBLogging.debug("Skipping slot #"+e.Slot+", not enough room in chest.");
+            } else {
+            	de[e.Slot]=e;
+            }
         }
         return de;
     }
