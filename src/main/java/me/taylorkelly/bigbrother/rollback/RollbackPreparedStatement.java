@@ -30,7 +30,7 @@ public abstract class RollbackPreparedStatement {
     public String create(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS `world`");
         statement.append(" FROM");
-        statement.append(" "+BBDataTable.getInstance().getTableName() + " AS bbdata,");
+        statement.append(" "+BBDataTable.getInstance().getTableName() + " AS bbdata, ");
         statement.append(" "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds, ");
         statement.append(" "+BBUsersTable.getInstance().getTableName()+" AS usr ");
         statement.append(" WHERE ");
@@ -87,7 +87,7 @@ public abstract class RollbackPreparedStatement {
             statement.append("'");
         }
         if(BBSettings.usingDBMS(DBMS.H2))
-        	statement.append("AND rbacked = false");
+        	statement.append(" AND rbacked = false");
         else
         	statement.append(" AND rbacked = '0'");
         
@@ -157,7 +157,7 @@ public abstract class RollbackPreparedStatement {
         StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" "+BBDataTable.getInstance().getTableName() + " AS bbdata");
         if(BBSettings.usingDBMS(DBMS.H2))
-        	statement.append("SET rbacked = true");
+        	statement.append(" SET rbacked = true");
         else
         	statement.append(" SET rbacked = '1'");
         statement.append(" WHERE ");
