@@ -20,7 +20,7 @@ public class SignDestroyed extends BBDataBlock {
     }
 
     public SignDestroyed(String player, String[] lines, Block block) {
-        super(player, Action.SIGN_DESTROYED, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, getText(lines));
+        super(player, Action.SIGN_DESTROYED, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, 0+"\u0060"+getText(lines));
     }
 
     private static String getText(Sign sign) {
@@ -55,19 +55,22 @@ public class SignDestroyed extends BBDataBlock {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
 
+        //Format is DATABYTE\u0060Line 1\u0060Line 2\u0060Line 3\u0060Line 4\u0060Line 5 
         String[] lines = data.split("\u0060");
-
-
         Block block = currWorld.getBlockAt(x, y, z);
         block.setTypeId(type);
-        block.setData(Byte.valueOf(lines[0]));
+        try {
+        	block.setData(Byte.valueOf(lines[0]));
+        } catch(NumberFormatException e) {
+        	BBLogging.severe("Encountered invalid SignDestroyed block.  Note that this sign may be unrecoverable.  The bug that produces these blocks has been fixed.");
+        }
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             for (int i = 1; i < lines.length+1; i++) {
                 sign.setLine(i, lines[i]);
             }
         } else {
-            BBLogging.warning("Error when restoring sign");
+            BBLogging.warning("Error when restoring sign: Block is currently a "+block.getState().getClass().getName()+"!");
         }
     }
 
