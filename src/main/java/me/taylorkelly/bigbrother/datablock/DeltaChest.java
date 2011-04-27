@@ -57,12 +57,13 @@ public class DeltaChest extends BBDataBlock {
         return builder.toString();
     }
     
-    public static DeltaEntry[] processDeltaStream(int chestCapacity,String data) {
+    public static DeltaEntry[] processDeltaStream(int chestCapacity, String data) {
         data=data.substring(1);
         DeltaEntry[] de = new DeltaEntry[chestCapacity];
         for(int i = 0;i<chestCapacity;i++) {
             de[i] = new DeltaEntry(i);
         }
+        int numskipped=0;
         for(String chunk : data.split(";")) {
         	// Maybe handle BB-11? (Test)
         	if(chunk.startsWith("{"))
@@ -70,11 +71,15 @@ public class DeltaChest extends BBDataBlock {
             DeltaEntry e = new DeltaEntry(chunk);
             // Check if we have enough room before adding crap to the array.  Solves BB-10.
             if(e.Slot > chestCapacity-1) {
-            	BBLogging.debug("Skipping slot #"+e.Slot+", not enough room in chest.");
+            	BBLogging.debug("Skipping slot #"+e.Slot+", not enough room in chest. ("+e.Slot+" > "+chestCapacity+")");
+            	numskipped++;
             } else {
             	de[e.Slot]=e;
             }
         }
+        if(numskipped>0)
+        	BBLogging.warning("Skipped "+numskipped+" slots because there's not enough room in the chest.");
+        
         return de;
     }
     public static class DeltaEntry {
