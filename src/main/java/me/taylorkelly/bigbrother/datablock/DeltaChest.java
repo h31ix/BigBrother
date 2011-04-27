@@ -65,9 +65,11 @@ public class DeltaChest extends BBDataBlock {
         }
         int numskipped=0;
         for(String chunk : data.split(";")) {
-        	// Maybe handle BB-11? (Test)
+        	// Handle chest deltas where the chest is merely opened and then closed without changing crap.
         	if(chunk.startsWith("{"))
         		chunk=chunk.substring(1);
+        	if(chunk.isEmpty())
+        		continue;
             DeltaEntry e = new DeltaEntry(chunk);
             // Check if we have enough room before adding crap to the array.  Solves BB-10.
             if(e.Slot > chestCapacity-1) {
