@@ -53,6 +53,8 @@ public class BBPlayerListener extends PlayerListener {
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		try {
 			//plugin.processPsuedotick();
+			if(event==null || event.getPlayer()==null)
+				return;
 			Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
@@ -69,7 +71,9 @@ public class BBPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		try {
 			//plugin.processPsuedotick();
-			final Player player = event.getPlayer();
+			if(event==null || event.getPlayer()==null)
+				return;
+			Player player = event.getPlayer();
 
 			BBUsersTable.getInstance().addOrUpdateUser(player);
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -101,6 +105,8 @@ public class BBPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		try {
 			//plugin.processPsuedotick();
+			if(event==null || event.getPlayer()==null)
+				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
@@ -117,6 +123,8 @@ public class BBPlayerListener extends PlayerListener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		try {
 			//plugin.processPsuedotick();
+			if(event==null || event.getPlayer()==null)
+				return;
 			Location from = event.getFrom();
 			Location to = event.getTo();
 
@@ -136,6 +144,8 @@ public class BBPlayerListener extends PlayerListener {
 	public void onPlayerChat(PlayerChatEvent event) {
 		try {
 			//plugin.processPsuedotick();
+			if(event==null || event.getPlayer()==null)
+				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
@@ -151,6 +161,8 @@ public class BBPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		try {
+			if(event==null || event.getPlayer()==null)
+				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			if (BBSettings.pickupItem && pi.getWatched()) {
@@ -169,6 +181,8 @@ public class BBPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		try {
+			if(event==null || event.getPlayer()==null)
+				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			if (BBSettings.dropItem && pi.getWatched()) {
@@ -183,6 +197,8 @@ public class BBPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		try {
+			if(event==null || event.getPlayer()==null)
+				return;
 			//plugin.processPsuedotick();
 			if(event.isCancelled()) return;
 
