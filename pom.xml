@@ -143,6 +143,11 @@
 				<version>2.3.1</version>
 				<configuration>
 					<archive>
+						<manifestEntries>
+							<Implementation-Title>BigBrother</Implementation-Title>
+							<Implementation-Version>${describe}</Implementation-Version>
+							<Implementation-Vendor>BigBrother Team</Implementation-Vendor>
+						</manifestEntries>
 						<manifestFile>src/main/resources/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>

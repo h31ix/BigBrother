@@ -276,8 +276,13 @@ public class DeltaChest extends BBDataBlock {
                 case ADDED:
                 case REMOVED:
                     ItemStack stack = inv.getItem(i);
-                    stack.setAmount(stack.getAmount()-diff[i].Amount);
-                    stack.setDurability(diff[i].Damage);
+                    if(stack==null)
+                    	stack=diff[i].oldStack;
+                    else
+                    {
+                    	stack.setAmount(stack.getAmount()-diff[i].Amount);
+                    	stack.setDurability(diff[i].Damage);
+                    }
                     inv.setItem(i, stack);
                     break;
                 case REPLACED:
@@ -290,7 +295,7 @@ public class DeltaChest extends BBDataBlock {
         }
     }
 
-    public void do_OldRollback(World currWorld,Block block) {
+    private void do_OldRollback(World currWorld,Block block) {
         String[] changes = data.split(";");
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();

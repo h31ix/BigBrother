@@ -55,11 +55,11 @@ import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -78,6 +78,7 @@ public class BigBrother extends JavaPlugin {
     public WorldManager worldManager;
     public static String name;
     public static String version;
+    public static String build;
     public final static String premessage = ChatColor.AQUA + "[BBROTHER]: " + ChatColor.WHITE;
     private Updater updater;
 
@@ -98,6 +99,7 @@ public class BigBrother extends JavaPlugin {
         // Stuff that was in Constructor
         name = this.getDescription().getName();
         version = this.getDescription().getVersion();
+        build = BigBrother.class.getPackage().getImplementationVersion();
         
         if(version.endsWith("SNAPSHOT")) {
             BBLogging.info("------------------------------------");
@@ -191,7 +193,7 @@ public class BigBrother extends JavaPlugin {
         Cleanser.initialize(this);
 
         // Done!
-        BBLogging.info(name + " " + version + " enabled");
+        BBLogging.info(name + " " + version + " (build "+build+") enabled");
     }
 
     private void updateSettings(File dataFolder) {
@@ -226,8 +228,6 @@ public class BigBrother extends JavaPlugin {
         pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
 
         // These events are used for Super Sticks
-        // Moved to playerListener.  God help us. - N3X15
-        //pm.registerEvent(Event.Type.PLAYER_INTERACT, stickListener, Priority.Low, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, stickListener, Priority.Low, this);
         
         
