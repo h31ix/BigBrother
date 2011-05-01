@@ -69,7 +69,6 @@
 			<groupId>me.taylorkelly</groupId>
 			<artifactId>help</artifactId>
 			<version>0.2-20110501.171848-8</version>
-			<type>pom</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
