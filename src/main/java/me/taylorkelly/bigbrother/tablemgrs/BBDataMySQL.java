@@ -164,8 +164,8 @@ public class BBDataMySQL extends BBDataTable {
 	@Override
 	public String getCleanseByLimit(Long maxRecords, long deletesPerCleansing) {
 		// Fucking MySQL and your lack of subqueries LIMIT support.
-		String cleansql = "CREATE TEMPORARY TABLE top_record SELECT id FROM bbdata ORDER BY id DESC LIMIT "+maxRecords;
-		cleansql+="DELETE FROM bbdata WHERE id NOT IN (SELECT id FROM top_record) LIMIT "+deletesPerCleansing;
+		String cleansql = "CREATE TEMPORARY TABLE top_record SELECT id FROM bbdata ORDER BY id DESC LIMIT "+maxRecords+"; ";
+		cleansql+="DELETE FROM bbdata WHERE id NOT IN (SELECT id FROM top_record) LIMIT "+deletesPerCleansing+"; ";
 		cleansql+="DROP TABLE top_record;";
 
 
