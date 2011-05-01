@@ -78,7 +78,7 @@ public class Cleanser {
             }
 
             if (BBSettings.maxRecords != -1) {
-                //cleanByNumber();
+                cleanByNumber();
             }
             //BBLogging.info("Ending Cleanser thread...");
             done = true; // Wait for cleanup
@@ -114,7 +114,6 @@ public class Cleanser {
             }
         }
 
-        @SuppressWarnings("unused")
         private void cleanByNumber() {
             if (BBSettings.usingDBMS(DBMS.MYSQL) || BBSettings.usingDBMS(DBMS.POSTGRES)) {
                 if (BBSettings.maxRecords < 0) {

@@ -193,7 +193,7 @@ public class BigBrother extends JavaPlugin {
         Cleanser.initialize(this);
 
         // Done!
-        BBLogging.info(name + " " + version + " (build "+build+") enabled");
+        BBLogging.info(name + " " + version + " (build "+build+") enabled!");
     }
 
     private void updateSettings(File dataFolder) {
