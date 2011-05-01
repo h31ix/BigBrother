@@ -129,8 +129,10 @@ public class Cleanser {
                     stmt = conn.createStatement();
                     long start = System.currentTimeMillis() / 1000;
 
-                    cleanedSoFarNumber = stmt.executeUpdate(BBDataTable.getInstance().getCleanseByLimit(Long.valueOf(BBSettings.maxRecords),
-                    		BBSettings.deletesPerCleansing));
+                    String[] stmts = BBDataTable.getInstance().getCleanseByLimit(Long.valueOf(BBSettings.maxRecords),
+                    		BBSettings.deletesPerCleansing).split(";");
+                    for(String sql:stmts)
+                    	cleanedSoFarNumber = stmt.executeUpdate(sql);
 
                     String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
 
