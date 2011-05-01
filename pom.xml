@@ -71,13 +71,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<!-- Grabs from 3rdparty repo -->
-			<groupId>org.anjocaido.groupmanager</groupId>
-			<artifactId>GroupManager</artifactId>
-			<version>1.0-alpha5</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
