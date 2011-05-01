@@ -99,7 +99,9 @@ public class BigBrother extends JavaPlugin {
         // Stuff that was in Constructor
         name = this.getDescription().getName();
         version = this.getDescription().getVersion();
-        build = BigBrother.class.getPackage().getImplementationVersion();
+        //git-BigBrother-jenkins-BigBrother-384
+        String[] buildp = BigBrother.class.getPackage().getImplementationVersion().split("-");
+        build=buildp[buildp.length-1]; // 384
         
         if(version.endsWith("SNAPSHOT")) {
             BBLogging.info("------------------------------------");
@@ -193,7 +195,7 @@ public class BigBrother extends JavaPlugin {
         Cleanser.initialize(this);
 
         // Done!
-        BBLogging.info(name + " " + version + " (build "+build+") enabled!");
+        BBLogging.info(name + " " + version + " (build #"+build+") enabled!");
     }
 
     private void updateSettings(File dataFolder) {
