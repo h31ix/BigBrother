@@ -96,8 +96,9 @@ public abstract class BBDataBlock {
                 return DestroySignText.getBBDataBlock(pi, world, x, y, z, type, data);
             case TELEPORT:
                 return Teleport.getBBDataBlock(pi, world, x, y, z, type, data);
-            case DELTA_CHEST:
-                return DeltaChest.getBBDataBlock(pi, world, x, y, z, type, data);
+            //TODO: Fix DeltaChest
+            //case DELTA_CHEST:
+            //    return DeltaChest.getBBDataBlock(pi, world, x, y, z, type, data);
             case COMMAND:
                 return Command.getBBDataBlock(pi, world, x, y, z, type, data);
             case CHAT:

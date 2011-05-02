@@ -35,10 +35,13 @@ public class BrokenBlock extends BBDataBlock {
     }
 
     private void chestCheck(String player, Block block) {
+    	//TODO: Fix DeltaChest
+    	/*
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             bystanders.add(new DeltaChest(player, chest, chest.getInventory().getContents(),new ItemStack[chest.getInventory().getSize()]));
         }
+        */
     }
 
     public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {

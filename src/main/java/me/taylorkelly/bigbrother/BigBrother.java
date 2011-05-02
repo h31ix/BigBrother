@@ -308,6 +308,8 @@ public class BigBrother extends JavaPlugin {
     }
     
     public void closeChestIfOpen(BBPlayerInfo pi) {
+    	//TODO: Fix DeltaChest.
+    	/*
         if(pi.hasOpenedChest()) {
             if(BBSettings.chestChanges) {
                 World world = pi.getOpenedChest().getWorld();
@@ -324,6 +326,7 @@ public class BigBrother extends JavaPlugin {
             }
             BBUsersTable.getInstance().userOpenedChest(pi.getName(), null, null); // Chest closed.
         }
+        */
     }
     
     //Horrific bug, that took me ages to discover. When Accessing double chest inventory using default bukkit method,

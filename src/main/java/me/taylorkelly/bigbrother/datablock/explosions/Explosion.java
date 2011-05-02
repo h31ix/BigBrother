@@ -38,12 +38,15 @@ public abstract class Explosion extends BBDataBlock {
     }
 
     private void chestCheck(String player, Block block) {
+    	//TODO: Fix DeltaChest
+    	/*
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             ItemStack[] destroyedStack=new ItemStack[chest.getInventory().getSize()];
             ItemStack[] contents = chest.getInventory().getContents();
             bystanders.add(new DeltaChest(player, chest, contents,destroyedStack));
         }
+        */
     }
 
     public void rollback(World wld) {

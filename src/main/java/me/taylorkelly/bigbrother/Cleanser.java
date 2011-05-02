@@ -115,7 +115,7 @@ public class Cleanser {
         }
 
         private void cleanByNumber() {
-        	return; // TODO: BROKEN
+        	return; // TODO: Fix cleanByNumber
         	/*
             if (BBSettings.usingDBMS(DBMS.MYSQL) || BBSettings.usingDBMS(DBMS.POSTGRES)) {
                 if (BBSettings.maxRecords < 0) {
