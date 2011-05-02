@@ -115,6 +115,8 @@ public class Cleanser {
         }
 
         private void cleanByNumber() {
+        	return; // TODO: BROKEN
+        	/*
             if (BBSettings.usingDBMS(DBMS.MYSQL) || BBSettings.usingDBMS(DBMS.POSTGRES)) {
                 if (BBSettings.maxRecords < 0) {
                     // Fix exception caused when trying to delete -1 records.
@@ -164,7 +166,7 @@ public class Cleanser {
                         player.sendMessage(ChatColor.RED + words);
                     }
                 }
-            }
+            }*/
         }
     }
 }
