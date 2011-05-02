@@ -1,7 +1,9 @@
-BigBrother
+BigBrother 2
 ===========
 
-**NOTE:** This is a temporary repository until tkelly910 returns from University.  The changes can be easily merged.
+**BIGBROTHER IS CURRENTLY BEING REDESIGNED** See 2.0 branch.
+
+BigBrother 2 will be licensed under the BSD.
 
 Compilation
 -----------

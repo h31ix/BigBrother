@@ -1,7 +1,7 @@
 name: BigBrother
-version: 1.8-SNAPSHOT
-main: me.taylorkelly.bigbrother.BigBrother
-author: 'tkelly and n3x15'
+version: 2.0-SNAPSHOT
+main: net.nexisonline.BigBrother
+author: 'n3x15'
 latest-release-url: 'http://ci.nexisonline.net:8080/job/BigBrother/Recommended/artifact/target/BigBrother.jar'
 commands:
   bb:
