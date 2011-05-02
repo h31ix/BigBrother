@@ -129,10 +129,8 @@ public class Cleanser {
                     stmt = conn.createStatement();
                     long start = System.currentTimeMillis() / 1000;
 
-                    String[] stmts = BBDataTable.getInstance().getCleanseByLimit(Long.valueOf(BBSettings.maxRecords),
-                    		BBSettings.deletesPerCleansing).split(";");
-                    for(String sql:stmts)
-                    	cleanedSoFarNumber = stmt.executeUpdate(sql);
+                    BBDataTable.getInstance().getCleanseByLimit(stmt,Long.valueOf(BBSettings.maxRecords),
+                    		BBSettings.deletesPerCleansing);
 
                     String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
 
@@ -158,7 +156,7 @@ public class Cleanser {
                 }
 
             } else {
-                String words = "SQLite can't cleanse by # of records.";
+                String words = "H2 can't cleanse by # of records.";
                 if (player == null) {
                     BBLogging.info(words);
                 } else {

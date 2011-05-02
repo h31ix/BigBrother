@@ -44,7 +44,7 @@ public class DataBlockSender {
     private static boolean sendBlocksSQL(Collection<BBDataBlock> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
 
-        //SQLite fix...
+        //H2 fix...
         if (BBSettings.databaseSystem == DBMS.H2) {
             for (BBDataBlock block : collection) {
                 manager.getWorld(block.world);

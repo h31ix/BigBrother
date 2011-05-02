@@ -162,18 +162,13 @@ public class BBDataMySQL extends BBDataTable {
 
 
 	@Override
-	public String getCleanseByLimit(Long maxRecords, long deletesPerCleansing) {
-		// Fucking MySQL and your lack of subqueries LIMIT support.
-		String cleansql = "CREATE TEMPORARY TABLE top_record SELECT id FROM bbdata ORDER BY id DESC LIMIT "+maxRecords+"; ";
-		cleansql+="DELETE FROM bbdata WHERE id NOT IN (SELECT id FROM top_record) LIMIT "+deletesPerCleansing+"; ";
-		cleansql+="DROP TABLE top_record;";
+	public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
+		// Fucking MySQL and your lack of subquery LIMIT support.
+		stmt.executeUpdate("CREATE TEMPORARY TABLE top_record SELECT id FROM bbdata ORDER BY id DESC "+((maxRecords>0) ? "LIMIT "+maxRecords:""));
+		int numUpdates = stmt.executeUpdate("DELETE FROM bbdata WHERE id NOT IN (SELECT id FROM top_record) "+((maxRecords>0) ? "LIMIT "+deletesPerCleansing:""));
+		stmt.executeUpdate("DROP TABLE top_record");
 
-
-	    if (deletesPerCleansing > 0) {
-	        cleansql += " LIMIT " + deletesPerCleansing;
-	    }
-	    cleansql += ";";
-    	return cleansql;
+		return numUpdates;
 	}
 
 

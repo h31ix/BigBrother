@@ -3,6 +3,9 @@
  */
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  * @author N3X15
  *
@@ -56,14 +59,13 @@ public class BBDataH2 extends BBDataTable {
 	}
     
 	@Override
-	public String getCleanseByLimit(Long maxRecords, long deletesPerCleansing) {
+	public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
 		String cleansql = "DELETE FROM `"+getTableName()+"` LEFT OUTER JOIN (SELECT `id` FROM `bbdata` ORDER BY `id` DESC LIMIT 0,"
 	    	+ maxRecords
 	    	+ ") AS `savedValues` ON `savedValues`.`id`=`bbdata`.`id` WHERE `savedValues`.`id` IS NULL";
 	    if (deletesPerCleansing > 0) {
 	        cleansql += " LIMIT " + deletesPerCleansing;
 	    }
-	    cleansql += ";";
-    	return cleansql;
+    	return stmt.executeUpdate(cleansql);
 	}
 }

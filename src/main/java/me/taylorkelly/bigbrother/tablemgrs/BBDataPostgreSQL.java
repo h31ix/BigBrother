@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBLogging;
@@ -85,15 +86,14 @@ public class BBDataPostgreSQL extends BBDataMySQL {
 	}
 	
 	@Override
-	public String getCleanseByLimit(Long maxRecords, long deletesPerCleansing) {
+	public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
 		String cleansql = "DELETE FROM \""+getTableName()+"\" LEFT OUTER JOIN (SELECT \"id\" FROM \"bbdata\" ORDER BY \"id\" DESC LIMIT 0,"
 	    	+ maxRecords
 	    	+ ") AS \"savedValues\" ON \"savedValues.id\" = \"bbdata.id\" WHERE \"savedValues.id\" IS NULL";
 	    if (deletesPerCleansing > 0) {
 	        cleansql += " LIMIT " + deletesPerCleansing;
 	    }
-	    cleansql += ";";
-    	return cleansql;
+    	return stmt.executeUpdate(cleansql);
 	}
 	
 	public ArrayList<BBDataBlock> getBlockHistory(Block block,

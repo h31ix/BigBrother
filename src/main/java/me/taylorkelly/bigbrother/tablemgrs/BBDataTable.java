@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.bukkit.block.Block;
@@ -66,9 +67,23 @@ public abstract class BBDataTable extends DBTable {
                 + " (date, player, action, world, x, y, z, type, data, rbacked) VALUES (?,?,?,?,?,?,?,?,?,0)";
     }
 
+    /**
+     * Cleanse by age
+     * @param timeAgo
+     * @param deletesPerCleansing
+     * @return
+     */
 	public abstract String getCleanseAged(Long timeAgo, long deletesPerCleansing);
 
-	public abstract String getCleanseByLimit(Long maxRecords, long deletesPerCleansing);
+	/**
+	 * Cleanse by number
+	 * @param stmt
+	 * @param maxRecords
+	 * @param deletesPerCleansing
+	 * @return
+	 * @throws SQLException
+	 */
+	public abstract int getCleanseByLimit(Statement stmt,Long maxRecords, long deletesPerCleansing) throws SQLException;
 
 	public ArrayList<BBDataBlock> getBlockHistory(Block block,
 			WorldManager manager) {

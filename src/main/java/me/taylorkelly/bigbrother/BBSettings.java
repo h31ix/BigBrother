@@ -209,7 +209,7 @@ public class BBSettings {
         flatLog = yml.getBoolean("general.personal-log-files", propsPf.getBoolean("flatFileLogs", false, "If true, will also log actions to .logs (one for each player)"));
 
 
-        if (propsPf.getBoolean("MySQL", false, "If true, uses MySQL. If false, uses Sqlite")) {
+        if (propsPf.getBoolean("MySQL", false, "If true, uses MySQL. If false, uses H2")) {
             final String dbms = yml.getString("database.type", DBMS.MYSQL.name());
             setDBMS(dbms);
         } else {
