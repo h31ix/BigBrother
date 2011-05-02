@@ -2,8 +2,5 @@ name: BigBrother
 version: 2.0-SNAPSHOT
 main: net.nexisonline.BigBrother
 author: 'n3x15'
-latest-release-url: 'http://ci.nexisonline.net:8080/job/BigBrother/Recommended/artifact/target/BigBrother.jar'
+latest-release-url: 'http://ci.nexisonline.net:8080/job/BigBrother2/Recommended/artifact/target/BigBrother.jar'
 commands:
-  bb:
-    description: All of the BigBrother commands
-    usage: Command unrecognised by BigBrother. See documentation or use /bb help.
