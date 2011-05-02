@@ -269,7 +269,7 @@ public class DeltaChest extends BBDataBlock {
     private void do_NewRollback(World currWorld, Block block) {
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
-            DeltaEntry[] diff = processDeltaStream(chest.getInventory().getSize(),data);
+            DeltaEntry[] diff = processDeltaStream(chest.getInventory().getContents().length,data);
             Inventory inv = chest.getInventory();
             for(int i = 0;i<chest.getInventory().getSize();i++) {
                 switch(diff[i].Type) {
