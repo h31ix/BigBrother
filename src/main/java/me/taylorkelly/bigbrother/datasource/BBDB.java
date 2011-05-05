@@ -172,9 +172,6 @@ public class BBDB {
         boolean r=true;
         try {
             File f = new File(dataFolder, "DATABASE_VERSION");
-            if (!f.exists()) {
-                return true;
-            }
             PropertiesFile pf = new PropertiesFile(f);
             r=(pf.getInt(table, CurrentVersion, "")<CurrentVersion);
             pf.setInt(table,CurrentVersion,"");
