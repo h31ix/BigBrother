@@ -1,7 +1,5 @@
 package me.taylorkelly.bigbrother.rollback;
 
-import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +14,7 @@ import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,7 +24,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class Rollback {
-
+    
     public final Server server;
     private final ArrayList<Player> recievers;
     public final ArrayList<String> players;
@@ -41,7 +39,7 @@ public class Rollback {
     private final WorldManager manager;
     //private int size; // Number of items to roll back
     private final Plugin plugin;
-
+    
     public Rollback(Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
         this.rollbackAll = false;
@@ -53,17 +51,17 @@ public class Rollback {
         recievers = new ArrayList<Player>();
         listBlocks = new LinkedList<BBDataBlock>();
     }
-
+    
     public void addReciever(Player player) {
         recievers.add(player);
     }
-
+    
     public void rollback() {
         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
         Thread rollbacker = new Rollbacker(plugin, server.getScheduler());
         rollbacker.start();
     }
-
+    
     private String getSimpleString(ArrayList<?> list) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
@@ -74,28 +72,28 @@ public class Rollback {
         }
         return builder.toString();
     }
-
+    
     public void rollbackAll() {
         rollbackAll = true;
     }
-
+    
     public void addPlayers(ArrayList<String> playerList) {
         players.addAll(playerList);
     }
-
+    
     public void setTime(long l) {
         this.time = l;
     }
-
+    
     public void addTypes(ArrayList<Integer> blockTypes) {
         this.blockTypes.addAll(blockTypes);
     }
-
+    
     private void rollbackBlocks() {
         lastRollback.clear();
         new RollbackByTick(plugin.getServer().getScheduler(), plugin);
     }
-
+    
     public static boolean canUndo() {
         if (lastRollback != null) {
             return lastRollback.size() > 0;
@@ -103,7 +101,7 @@ public class Rollback {
             return false;
         }
     }
-
+    
     public static int undoSize() {
         if (lastRollback != null) {
             return lastRollback.size();
@@ -111,7 +109,7 @@ public class Rollback {
             return 0;
         }
     }
-
+    
     public static void undo(Server server, Player player) {
         int i = 0;
         while (lastRollback.size() > 0) {
@@ -122,55 +120,42 @@ public class Rollback {
             }
         }
         if (undoRollback != null) {
-            Connection conn = null;
-            PreparedStatement ps = null;
-            try {
-                conn = ConnectionManager.getConnection();
-                if(conn==null) return;
-                ps = conn.prepareStatement(undoRollback);
-                ps.execute();
-                conn.commit();
+            if(BBDB.tryUpdate(undoRollback)) {
                 undoRollback = null;
                 player.sendMessage(ChatColor.AQUA + "Successfully undid a rollback of " + i + " edits");
-            } catch (SQLException ex) {
-                BBLogging.severe("Rollback undo SQL Exception", ex);
-            } finally {
-                ConnectionManager.cleanup( "Rollback undo",  conn, ps, null );
             }
         }
     }
-
+    
     public void setRadius(int radius, Location center) {
         this.radius = radius;
         this.center = center;
     }
-
+    
     private class Rollbacker extends Thread {
-        // Not used
-        //private final Plugin plugin;
-        //private final BukkitScheduler scheduler;
-
+        
+        private PreparedStatement create_ps=null;
+        private PreparedStatement update_ps=null;
+        
         private Rollbacker(Plugin plugin, BukkitScheduler scheduler) {
-            //this.plugin = plugin;
-            //this.scheduler = scheduler;
-        }
-
-        public void run() {
-            PreparedStatement ps = null;
-            ResultSet set = null;
-            Connection conn = null;
             try {
-                conn = ConnectionManager.getConnection();
-                if(conn==null) return;
-                ps = conn.prepareStatement(RollbackPreparedStatement.getInstance().create(Rollback.this, manager));
-                set = ps.executeQuery();
-                conn.commit();
-
+                create_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().create(Rollback.this, manager));
+                update_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().update(Rollback.this, manager));
+            } catch (SQLException e) {
+                BBLogging.severe("Rollbacker failed to initialize:",e);
+            }
+        }
+        
+        public void run() {
+            ResultSet set = null;
+            try {
+                
+                set = create_ps.executeQuery();
+                BBDB.commit();
+                
                 int rollbackSize = 0;
                 while (set.next()) {
-                	Blob blob = set.getBlob("data");
-                	byte[] bdata = blob.getBytes(1, (int) blob.length());
-                	String data = new String(bdata);
+                    String data = set.getString("data");
                     listBlocks.addLast(BBDataBlock.getBBDataBlock(set.getInt("player"), Action.values()[set.getInt("action")], set.getString("world"), set.getInt("x"),
                             set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;
@@ -193,17 +178,16 @@ public class Rollback {
                         if (radius != 0) {
                             player.sendMessage(ChatColor.BLUE + "Radius: " + ChatColor.WHITE + radius + " blocks");
                         }
-
+                        
                     }
                     try {
-                        ps.close();
                         rollbackBlocks();
                         for (Player player : recievers) {
                             player.sendMessage(BigBrother.premessage + "Successfully rollback'd.");
                         }
-                        ps = conn.prepareStatement(RollbackPreparedStatement.getInstance().update(Rollback.this, manager));
-                        ps.execute();
-                        conn.commit();
+                        
+                        update_ps.execute();
+                        BBDB.commit();
                         undoRollback = RollbackPreparedStatement.getInstance().undoStatement(Rollback.this, manager);
                     } catch (SQLException ex) {
                         BBLogging.severe("Rollback edit SQL Exception: "+RollbackPreparedStatement.getInstance().update(Rollback.this, manager), ex);
@@ -216,23 +200,28 @@ public class Rollback {
             } catch (SQLException ex) {
                 BBLogging.severe("Rollback get SQL Exception", ex);
             } finally {
-                ConnectionManager.cleanup( "Rollback get",  conn, ps, set );
+                try {
+                    if(create_ps!=null)
+                        create_ps.close();
+                    if(update_ps!=null)
+                        update_ps.close();
+                } catch (SQLException e) {}
             }
         }
     }
-
+    
     private class RollbackByTick implements Runnable {
-
+        
         private final int id;
-
+        
         public RollbackByTick(BukkitScheduler scheduler, Plugin plugin) {
             this.id = scheduler.scheduleSyncRepeatingTask(plugin, this, 0, 1);
         }
-
+        
         @Override
         public void run() {
             int count = 0;
-
+            
             while (count < BBSettings.rollbacksPerTick && listBlocks.size() > 0) {
                 BBDataBlock dataBlock = listBlocks.removeFirst();
                 if (dataBlock != null) {
@@ -245,15 +234,15 @@ public class Rollback {
                     count++;
                 }
             }
-
-
+            
+            
             if (listBlocks.size() == 0) {
                 BBLogging.debug("Finished rollback");
-
+                
                 plugin.getServer().getScheduler().cancelTask(id);
             } else {
                 BBLogging.debug("Need to rollback " + listBlocks.size() + " more");
-
+                
             }
         }
     }

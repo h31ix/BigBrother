@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,23 +43,17 @@ public class DataBlockSender {
         // Try to refactor most of these into the table managers.
 
         //H2 fix...
-        if (BBSettings.databaseSystem == DBMS.H2) {
+        if (BBDB.usingDBMS(DBMS.H2)) {
             for (BBDataBlock block : collection) {
                 manager.getWorld(block.world);
             }
         }
-
-        Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            conn = ConnectionManager.getConnection();
-            if (conn == null) {
-                return false;
-            }
             String statementSql = BBDataTable.getInstance().getPreparedDataBlockStatement();
             BBLogging.debug(statementSql);
-            ps = conn.prepareStatement(statementSql);
+            ps = BBDB.prepare(statementSql);
             for (BBDataBlock block : collection) {
                 ps.setLong(1, block.date);
                 ps.setInt(2, block.player.getID());
@@ -77,20 +69,18 @@ public class DataBlockSender {
                 ps.setInt(6, block.y);
                 ps.setInt(7, block.z);
                 ps.setInt(8, block.type);
-                Blob data = conn.createBlob();
-                data.setBytes(1, block.data.getBytes());
-                ps.setBlob(9, data);
+                ps.setString(1, block.data);
                 ps.addBatch();
             }
             ps.executeBatch();
-            conn.commit();
+            BBDB.commit();
             return true;
         } catch (SQLException ex) {
             BBLogging.severe("Data Insert SQL Exception when sending blocks", ex);
             BBLogging.severe("Possible cause of previous SQLException: ", ex.getNextException());
             return false;
         } finally {
-            ConnectionManager.cleanup("Data Insert", conn, ps, rs);
+            BBDB.cleanup("Data Insert", ps, rs);
         }
     }
 

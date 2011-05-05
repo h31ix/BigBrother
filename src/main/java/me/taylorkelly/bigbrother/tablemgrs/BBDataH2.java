@@ -6,8 +6,6 @@ package me.taylorkelly.bigbrother.tablemgrs;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import me.taylorkelly.bigbrother.BBSettings;
-
 /**
  * @author N3X15
  *
@@ -43,7 +41,7 @@ public class BBDataH2 extends BBDataTable {
         + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," 
         + "`z` int NOT NULL DEFAULT '0'," 
         + "`type` smallint NOT NULL DEFAULT '0'," 
-        + "`data` BLOB NOT NULL DEFAULT ''," 
+        + "`data` TEXT NOT NULL DEFAULT ''," 
         + "`rbacked` boolean NOT NULL DEFAULT '0'" 
         + ");" 
         + "CREATE INDEX dateIndex on bbdata (date);" 

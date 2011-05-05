@@ -1,13 +1,9 @@
 package me.taylorkelly.bigbrother;
 
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+
+import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 public class WorldManager {
@@ -66,46 +62,13 @@ public class WorldManager {
 
     private boolean saveWorld(String world, int index) {
     	return BBWorldsTable.getInstance().insertWorld(index, world);
-        
     }
 
-
     private static boolean worldTableExists() {
-        Connection conn = null;
-        ResultSet rs = null;
-        try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return false;
-            DatabaseMetaData dbm = conn.getMetaData();
-            rs = dbm.getTables(null, null, BBWorldsTable.getInstance().getTableName(), null);
-            if (!rs.next()) {
-                return false;
-            }
-            return true;
-        } catch (SQLException ex) {
-            BBLogging.severe("World Table Check SQL Exception", ex);
-            return false;
-        } finally {
-            ConnectionManager.cleanup( "World Table Check",  conn, null, rs );
-        }
+        return BBDB.tableExists(BBWorldsTable.getInstance().getTableName());
     }
 
     private static void createWorldTable() {
-        Connection conn = null;
-        Statement st = null;
-        try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return;
-            st = conn.createStatement();
-            st.executeUpdate(BBWorldsTable.getInstance().getCreateSyntax());
-            conn.commit();
-        } catch (Exception e) {
-            if(!e.getMessage().contains("already exists")) 
-                BBLogging.severe("Can't create the bbworld table", e);
-            else 
-                BBLogging.debug("H2 crying about the table already existing.  You can safely ignore this message.",e);
-        } finally {
-            ConnectionManager.cleanup( "Create World Table",  conn, st, null );
-        }
+        BBDB.executeUpdate(BBWorldsTable.getInstance().getCreateSyntax());
     }
 }

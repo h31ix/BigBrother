@@ -25,23 +25,10 @@ public class JDCConnectionDriver implements Driver {
     private static final int MAJOR_VERSION = 1;
     private static final int MINOR_VERSION = 0;
     private ConnectionService pool;
-    private String user;
-    private String password;
-    private String url;
     
     public JDCConnectionDriver(String driver, String url, String user, String password) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        this.url = url;
-        this.user = user;
-        this.password = password;
         DriverManager.registerDriver(this);
         Class.forName(driver).newInstance();
-        reconnect();
-    }
-    
-    /**
-     * Added to support reconnects.
-     */
-    public void reconnect() {
         pool = new ConnectionService(url, user, password);
     }
     
@@ -49,8 +36,6 @@ public class JDCConnectionDriver implements Driver {
         if (!url.startsWith(JDCConnectionDriver.URL_PREFIX)) {
             return null;
         }
-        if(pool==null)
-            reconnect();
         return pool.getConnection();
     }
     

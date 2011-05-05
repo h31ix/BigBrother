@@ -7,20 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
+import me.taylorkelly.bigbrother.datasource.BBDB;
+import me.taylorkelly.bigbrother.datasource.BBDB.DBFailCallback;
 
 import me.taylorkelly.util.TimeParser;
 import org.bukkit.Server;
 import com.sk89q.worldedit.blocks.ItemType;
 
-// TODO: Split all these vars into seperate classes in anticipation of yamlification.
+// TODO: Split all these vars into separate classes in anticipation of yamlification.
 public class BBSettings {
-    
-    // TODO: Disabled until we can get a way for it to not break rollbacks -
-    // tkelly
-    // public static int maxRollbackRadius; // Maximum rollback radius. - N3X
-    // public static int maxBlocksRolledBackPerPass; // Maximum blocks rolled
-    // back per "pass".
-    // Convert to bitflags?
 
     public static boolean blockBreak;
     public static boolean blockPlace;
@@ -49,29 +44,11 @@ public class BBSettings {
     public static boolean restoreFire = false;
     public static boolean autoWatch = true;
     public static boolean flatLog = false;
-    public static boolean mysqlLowPrioInserts = true;
     public static int defaultSearchRadius = 2;
-    public static DBMS databaseSystem = DBMS.H2;
-    public static String mysqlUser = "minecraft";
-    public static String mysqlPass = "";
-    public static String mysqlHost = "localhost";
-    public static int mysqlPort = 3306;
-    public static String mysqlEngine = "MyISAM";
-    private static String mysqlPrefix = ""; // Table Prefix ("bb_" would turn
-    // bbdata into bb_bbdata)
-    public static String mysqlDatabase = "minecraft";
-    // The presence of mysqlDSN overrides the above (except for password), the
-    // above is a simplified version of this. The option is provided so advanced
-    // users can specify flags via the DSN.
-    public static String mysqlDSN = "jdbc:mysql://localhost:3306/minecraft";
-    // Use persistant connections by default.
-    public static boolean mysqlPersistant = false;
     public static int sendDelay = 4;
     public static int stickItem = 280;
     // TODO: Get long version of this
     public static long cleanseAge = TimeParser.parseInterval("3d");
-    public static long maxRecords = 3000000L;
-    // Maximum records deleted per cleanBy*().
     // Tested with this value, 10000rows = 1-2s on a
     // Pentium 4 MySQL server with 1GB RAM and a SATA MySQL HDD
     public static long deletesPerCleansing = 20000L;
@@ -79,8 +56,10 @@ public class BBSettings {
     private static ArrayList<String> seenList;
     private static ArrayList<Integer> blockExclusionList;
     public static int rollbacksPerTick;
+    private static BigBrother plugin;
 
-    public static void initialize(File dataFolder) {
+    public static void initialize(BigBrother plg, File dataFolder) {
+        BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
         seenList = new ArrayList<String>();
         blockExclusionList = new ArrayList<Integer>();
@@ -90,14 +69,6 @@ public class BBSettings {
         }
         final File yml = new File(dataFolder, "BigBrother.yml");
         BBLogging.debug("Path to BigBrother.yml: " + yml.getPath());
-        final File bbprops = new File(dataFolder, "BigBrother.properties");
-        if (!yml.exists() && bbprops.exists()) {
-            BBLogging.info("Importing properties files to new configuration file!");
-            File watching = new File(dataFolder, "watching.properties");
-            convertPropFile(bbprops, watching, yml);
-            bbprops.delete();
-            watching.delete();
-        }
         loadLists(dataFolder);
         loadYaml(yml);
         BBLogging.debug("Loaded Settings");
@@ -111,7 +82,11 @@ public class BBSettings {
         if(yamlfile.exists())
             yml.load();
 
-        loadDBSettings(yml);
+        BBDB.init(yml,new DBFailCallback() {
+            public void disableMe() {
+                plugin.getServer().getPluginManager().disablePlugin(plugin);
+            }
+        });
         loadWatchSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");
@@ -162,111 +137,6 @@ public class BBSettings {
         dropItem = watched.getBoolean("watched.player.drop-item", false);
         pickupItem = watched.getBoolean("watched.player.pickup-item", false);
         lavaFlow = watched.getBoolean("watched.environment.lava-flow", false);
-    }
-
-    // Database configuration
-    private static void loadDBSettings(BetterConfig yml) {
-        // Database type (Database Management System = DBMS :V)
-        final String dbms = yml.getString("database.type", DBMS.H2.name());
-        setDBMS(dbms);
-
-        deletesPerCleansing = Long.valueOf(yml.getString("database.deletes-per-cleansing", Long.toString(deletesPerCleansing))); // "The maximum number of records to delete per cleansing (0 to disable).");
-        cleanseAge = TimeParser.parseInterval(yml.getString("database.cleanse-age", "3d"));// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
-        maxRecords = Long.valueOf(yml.getString("database.max-records", Long.toString(maxRecords)));// "The maximum number of records that you want in your database (-1 to disable)");
-        sendDelay = yml.getInt("database.send-delay", sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
-        //mysqlPersistant = yml.getBoolean("database.use-persistant-connection", mysqlPersistant);
-        
-        // MySQL/Postgres crap
-            mysqlUser = yml.getString("database.mysql.username", mysqlUser);
-            mysqlPass = yml.getString("database.mysql.password", mysqlPass);
-            mysqlHost = yml.getString("database.mysql.hostname", mysqlHost);
-            mysqlDatabase = yml.getString("database.mysql.database", mysqlDatabase);
-            mysqlPort = yml.getInt("database.mysql.port", mysqlPort);
-            mysqlEngine = yml.getString("database.mysql.engine", mysqlEngine);
-            mysqlPrefix = yml.getString("database.mysql.prefix", mysqlPrefix);
-            mysqlLowPrioInserts = yml.getBoolean("database.mysql.low-priority-insert", mysqlLowPrioInserts);
-       //H2 Crap
-    }
-
-    private static void setDBMS(String name) {
-        try {
-            databaseSystem = DBMS.valueOf(name.toUpperCase());
-        } catch(IllegalArgumentException e) {
-            databaseSystem = DBMS.H2;
-        }
-    }
-
-    private static void convertPropFile(File props, File watching, File yamlfile) {
-        PropertiesFile watchingPf = new PropertiesFile(watching);
-        PropertiesFile propsPf = new PropertiesFile(props);
-
-        final BetterConfig yml = new BetterConfig(yamlfile);
-        yml.load();
-        stickItem = yml.getInt("general.stick-item", propsPf.getInt("stickItem", 280, "The item used for /bb stick"));
-        restoreFire = yml.getBoolean("general.restore-fire", propsPf.getBoolean("restoreFire", false, "Restore fire when rolling back"));
-        autoWatch = yml.getBoolean("general.auto-watch", propsPf.getBoolean("autoWatch", true, "Automatically start watching players"));
-        defaultSearchRadius = yml.getInt("general.default-search-radius", propsPf.getInt("defaultSearchRadius", 2, "Default search radius for bbhere and bbfind"));
-        flatLog = yml.getBoolean("general.personal-log-files", propsPf.getBoolean("flatFileLogs", false, "If true, will also log actions to .logs (one for each player)"));
-
-
-        if (propsPf.getBoolean("MySQL", false, "If true, uses MySQL. If false, uses H2")) {
-            final String dbms = yml.getString("database.type", DBMS.MYSQL.name());
-            setDBMS(dbms);
-        } else {
-            final String dbms = yml.getString("database.type", DBMS.H2.name());
-            setDBMS(dbms);
-        }
-
-        deletesPerCleansing = Long.valueOf(yml.getString("database.deletes-per-cleansing", Long.toString(propsPf.getLong("deletesPerCleansing", 100000L, "The maximum number of records to delete per cleansing (0 to disable).")))); // "The maximum number of records to delete per cleansing (0 to disable).");
-        cleanseAge = TimeParser.parseInterval(yml.getString("database.cleanse-age", "3d"));// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
-        maxRecords = Long.valueOf(yml.getString("database.max-records", Long.toString(3000000l)));// "The maximum number of records that you want in your database (-1 to disable)");
-        sendDelay = yml.getInt("database.send-delay", propsPf.getInt("send-delay", 4, "Delay in seconds to batch send updates to database (4-5 recommended)"));// "Delay in seconds to batch send updates to database (4-5 recommended)");
-
-        if (databaseSystem == DBMS.MYSQL) {
-            mysqlUser = yml.getString("database.mysql.username", propsPf.getString("mysqlUser", "root", "Username for MySQL db (if applicable)"));
-            mysqlPass = yml.getString("database.mysql.password", propsPf.getString("mysqlPass", "root", "Password for MySQL db (if applicable)"));
-            String fullDSN = propsPf.getString("mysqlDB", "jdbc:mysql://localhost:3306/minecraft", "DB for MySQL (if applicable)");
-            fullDSN = fullDSN.substring(13); // cut out the jdbc:mysql stuff
-            if (fullDSN.split(":").length == 2) {
-                mysqlHost = yml.getString("database.mysql.hostname", fullDSN.split(":")[0]);
-                if (fullDSN.split(":")[1].split("/").length == 2) { // lol.
-                    mysqlDatabase = yml.getString("database.mysql.database", fullDSN.split(":")[1].split("/")[1]);
-                    mysqlPort = yml.getInt("database.mysql.port", Integer.parseInt(fullDSN.split(":")[1].split("/")[0]));
-                } else {
-                    mysqlDatabase = yml.getString("database.mysql.database", mysqlDatabase);
-                    mysqlPort = yml.getInt("database.mysql.port", mysqlPort);
-                }
-            } else {
-                mysqlHost = yml.getString("database.mysql.hostname", mysqlHost);
-                mysqlDatabase = yml.getString("database.mysql.database", mysqlDatabase);
-                mysqlPort = yml.getInt("database.mysql.port", mysqlPort);
-            }
-
-            mysqlEngine = yml.getString("database.mysql.engine", mysqlEngine);
-            //mysqlPrefix = yml.getString("database.mysql.prefix", mysqlPrefix);
-            mysqlLowPrioInserts = yml.getBoolean("database.mysql.low-priority-insert", mysqlLowPrioInserts);
-        }
-
-        blockBreak = yml.getBoolean("watched.blocks.block-break", watchingPf.getBoolean("blockBreak", true, "Watch when players break blocks"));// "Watch when players break blocks");
-        blockPlace = yml.getBoolean("watched.blocks.block-place", watchingPf.getBoolean("blockPlace", true, "Watch when players place blocks"));// "Watch when players place blocks");
-        teleport = yml.getBoolean("watched.player.teleport", watchingPf.getBoolean("teleport", true, "Watch when players teleport around"));// "Watch when players teleport around");
-        chestChanges = yml.getBoolean("watched.blocks.chest-changes", watchingPf.getBoolean("chestChanges", true, "Watch when players add/remove items from chests"));// "Watch when players add/remove items from chests");
-        commands = yml.getBoolean("watched.chat.commands", watchingPf.getBoolean("commands", true, "Watch for all player commands"));// "Watch for all player commands");
-        chat = yml.getBoolean("watched.chat.chat", watchingPf.getBoolean("chat", true, "Watch for player chat"));// "Watch for player chat");
-        login = yml.getBoolean("watched.player.login", watchingPf.getBoolean("login", true, "Watch for player logins"));// "Watch for player logins");
-        disconnect = yml.getBoolean("watched.player.disconnect", watchingPf.getBoolean("disconnect", true, "Watch for player disconnects"));// "Watch for player disconnects");
-        doorOpen = yml.getBoolean("watched.misc.door-open", watchingPf.getBoolean("doorOpen", false, "Watch for when player opens doors"));// "Watch for when player opens doors");
-        buttonPress = yml.getBoolean("watched.misc.button-press", watchingPf.getBoolean("buttonPress", false, "Watch for when player pushes buttons"));// "Watch for when player pushes buttons");
-        leverSwitch = yml.getBoolean("watched.misc.lever-switch", watchingPf.getBoolean("leverSwitch", false, "Watch for when player switches levers"));// "Watch for when player switches levers");
-        fire = yml.getBoolean("watched.misc.flint-logging", watchingPf.getBoolean("fireLogging", true, "Watch for when players start fires"));// "Watch for when players start fires");
-        leafDrops = yml.getBoolean("watched.environment.leaf-decay", watchingPf.getBoolean("leafDrops", false, "Watch for when leaves drop"));// "Watch for when leaves drop");
-        tntExplosions = yml.getBoolean("watched.explosions.tnt", watchingPf.getBoolean("tntExplosions", true, "Watch for when TNT explodes"));// "Watch for when TNT explodes");
-        creeperExplosions = yml.getBoolean("watched.explosions.creeper", watchingPf.getBoolean("creeperExplosions", true, "Watch for when Creepers explodes"));// "Watch for when Creepers explodes");
-        miscExplosions = yml.getBoolean("watched.explosions.misc", watchingPf.getBoolean("miscExplosions", true, "Watch for miscellaneous explosions"));// "Watch for miscellaneous explosions");
-        ipPlayer = yml.getBoolean("watched.player.ip-player", watchingPf.getBoolean("ipPlayer", true, "Add player's IP when login"));// "Add player's IP when login");
-        lavaFlow = yml.getBoolean("watched.environment.lava-flow", watchingPf.getBoolean("lavaFlow", false, "Log lava flow (useful for rolling-back lava)"));// "Log lava flow (useful for rolling-back lava)");
-
-        yml.save();
     }
 
     /**
@@ -324,42 +194,7 @@ public class BBSettings {
         return new Watcher(server);
     }
 
-    /**
-     * Are we using a certain Database Management System?
-     * @param system The database system to check against.
-     * @return 
-     */
-    public static boolean usingDBMS(DBMS system) {
-        return databaseSystem == system;
-    }
-
-    /**
-     * Get the JDBC DSN for a specific database system, with included database-specific settings.
-     * @return The DSN we want.
-     */
-    public static String getDSN() {
-        if (usingDBMS(DBMS.MYSQL)) {
-            return String.format("jdbc:mysql://%s:%d/%s", mysqlHost, mysqlPort, mysqlDatabase);
-        } else if (usingDBMS(DBMS.POSTGRES)) {
-        	return String.format("jdbc:postgresql://%s:%d/%s", mysqlHost, mysqlPort, mysqlDatabase);
-        } else if (usingDBMS(DBMS.H2)) {
-            return "jdbc:h2:plugins" + File.separator + "BigBrother" + File.separator + "bigbrother";
-        } else {
-            return "";
-        }
-    }
-    
-    /**
-     * Prefixify table names.
-     * @param tablename
-     * @return
-     */
-    public static String applyPrefix(String tablename) {
-        return BBSettings.mysqlPrefix+tablename;
-    }
-
     public enum DBMS {
-
         H2, 
         MYSQL,
         POSTGRES,
@@ -372,7 +207,7 @@ public class BBSettings {
      * @return
      */
     public static String replaceWithPrefix(String sql, String placeholder) {
-        return sql.replace(placeholder, mysqlPrefix);
+        return sql.replace(placeholder, BBDB.prefix);
     }
     
     /**

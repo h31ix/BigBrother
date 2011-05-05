@@ -1,7 +1,5 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
-import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +10,7 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Block;
 
@@ -46,7 +44,7 @@ public class BBDataPostgreSQL extends BBDataMySQL {
         + "\"y\" smallint NOT NULL DEFAULT '0'," 
         + "\"z\" int NOT NULL DEFAULT '0'," 
         + "\"type\" smallint NOT NULL DEFAULT '0',"
-        + "\"data\" BLOB NOT NULL DEFAULT '',"
+        + "\"data\" TEXT NOT NULL DEFAULT '',"
         + "\"rbacked\" boolean NOT NULL DEFAULT '0',"
         + "PRIMARY KEY (\"id\"));"
         + "CREATE INDEX \""+getTableName()+"_index_world\""
@@ -96,18 +94,14 @@ public class BBDataPostgreSQL extends BBDataMySQL {
     	return stmt.executeUpdate(cleansql);
 	}
 	
-	public ArrayList<BBDataBlock> getBlockHistory(Block block,
-			WorldManager manager) {
+	public ArrayList<BBDataBlock> getBlockHistory(Block block,WorldManager manager) {
 		PreparedStatement ps = null;
         ResultSet rs = null;
-        Connection conn = null;
         ArrayList<BBDataBlock> blockList = new ArrayList<BBDataBlock>();
 
         try {
-            conn = ConnectionManager.getConnection();
-            if(conn!=null) {
                 // TODO maybe more customizable actions?
-                ps = conn.prepareStatement("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world"
+                ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world"
                 		+ " FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata"
                 		+ " INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds"
                 		+ " ON bbworlds.id = bbdata.world"
@@ -118,21 +112,18 @@ public class BBDataPostgreSQL extends BBDataMySQL {
                 ps.setInt(3, block.getZ());
                 ps.setInt(4, manager.getWorld(block.getWorld().getName()));
                 rs = ps.executeQuery();
-                conn.commit();
+                BBDB.commit();
                 
                 while (rs.next()) {
-                	Blob blob = rs.getBlob("data");
-                	byte[] bdata = blob.getBytes(1, (int) blob.length());
-                	String data = new String(bdata);
+                	String data = rs.getString("data");
                     BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
                     newBlock.date = rs.getLong("date");
                     blockList.add(newBlock);
                 }
-            }
         } catch (SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
-            ConnectionManager.cleanup( "Find",  conn, ps, rs );
+            BBDB.cleanup( "Find",  ps, rs );
         }
         return blockList;
 

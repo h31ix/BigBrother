@@ -4,6 +4,7 @@ import java.io.File;
 
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.util.config.Configuration;
 import org.junit.*;
@@ -21,7 +22,7 @@ public class TestBigBrother {
         File dataFolder = new File(testFolder,"configGeneration");
         dataFolder.mkdirs();
         File settingsFile =new File(dataFolder,"BigBrother.yml");
-        BBSettings.initialize(dataFolder);
+        BBSettings.initialize(null, dataFolder);
         Assert.assertTrue("Coonfiguration didn't generate.",settingsFile.exists());
     }
     
@@ -35,8 +36,8 @@ public class TestBigBrother {
         cfg.setProperty("database.type", "MYSQL");
         cfg.save();
 
-        BBSettings.initialize(dataFolder);
+        BBSettings.initialize(null, dataFolder);
         
-        Assert.assertTrue("Configuration didn't get saved.",BBSettings.usingDBMS(DBMS.MYSQL));
+        Assert.assertTrue("Configuration didn't get saved.",BBDB.usingDBMS(DBMS.MYSQL));
     }
 }

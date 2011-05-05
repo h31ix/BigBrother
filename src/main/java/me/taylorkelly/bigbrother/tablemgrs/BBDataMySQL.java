@@ -1,12 +1,12 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 
 /**
  * BBDataTable, but for MySQL
@@ -27,7 +27,7 @@ public class BBDataMySQL extends BBDataTable {
      * @return LOW_PRIORITY | ""
      */
     public static String getMySQLIgnore() {
-        if (BBSettings.mysqlLowPrioInserts) {
+        if (BBDB.lowPriority) {
             return " LOW_PRIORITY ";
         } else {
             return " ";
@@ -55,7 +55,7 @@ public class BBDataMySQL extends BBDataTable {
         + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," 
         + "`z` int NOT NULL DEFAULT '0'," 
         + "`type` smallint NOT NULL DEFAULT '0',"
-        + "`data` BLOB NOT NULL,"
+        + "`data` TEXT NOT NULL,"
         + "`rbacked` boolean NOT NULL DEFAULT '0',"
         + "PRIMARY KEY (`id`)," 
         + "INDEX(`world`)," 
@@ -108,30 +108,15 @@ public class BBDataMySQL extends BBDataTable {
     }
 
     private void setEngine(String tableName, String engine) {
-        Connection conn = null;
-        Statement st = null;
-        try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return;
-            st = conn.createStatement();
-            st.executeUpdate("ALTER TABLE " + tableName + " ENGINE = " + engine);
-            conn.commit();
-        } catch (SQLException e) {
-            BBLogging.severe("Altering " + tableName + " to use " + engine + " triggered an exception.", e);
-        } finally {
-            ConnectionManager.cleanup( "setEngine",  conn, st, null );
-        }
+        BBDB.executeUpdate("ALTER TABLE " + tableName + " ENGINE = " + engine);
     }
 
     private String getEngine(String tableName) {
-        Connection conn = null;
         ResultSet rs = null;
         Statement stmt = null;
         String engine = null;
         try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return null;
-            stmt = conn.createStatement();
+            stmt = BBDB.createStatement();
             if (!stmt.execute("SHOW TABLE STATUS WHERE Name = '" + tableName + "'")) {
                 BBLogging.severe("Could not fetch table information for table " + tableName);
                 return null;
@@ -142,7 +127,7 @@ public class BBDataMySQL extends BBDataTable {
         } catch (SQLException e) {
             BBLogging.severe("Could not retreive table information.", e);
         } finally {
-            ConnectionManager.cleanup( "getEngine",  conn, stmt, rs );
+            BBDB.cleanup( "getEngine",  stmt, rs );
         }
         return engine;
     }

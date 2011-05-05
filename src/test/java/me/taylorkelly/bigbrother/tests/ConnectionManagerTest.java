@@ -3,22 +3,19 @@
  */
 package me.taylorkelly.bigbrother.tests;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
+import java.sql.SQLException;
 
 import me.taylorkelly.bigbrother.BBSettings;
-import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class ConnectionManagerTest {
     
@@ -27,29 +24,21 @@ public class ConnectionManagerTest {
      */
     @Before
     public void setUp() throws Exception {
-        BBSettings.initialize(new File("."));
-        BBSettings.databaseSystem=DBMS.H2;
-        BBSettings.mysqlPersistant=true;
+        BBSettings.initialize(null, new File("."));
         Updater updater = new Updater();
         updater.check();
         updater.update();
     }
     
     /**
-     * Test method for {@link me.taylorkelly.bigbrother.datasource.ConnectionManager#getConnection()}.
+     * Test method for
+     * {@link me.taylorkelly.bigbrother.datasource.ConnectionManager#getConnection()}
+     * .
+     * @throws SQLException 
      */
     @Test
-    @Ignore // Broken
-    public void testGetConnection() {
-        createConnection();
-        if(ConnectionManager.getFirstConnection()==null) {
-            fail("Connection is null");
-        }
-    }
-    
-    private void createConnection() {
-        if(!ConnectionManager.setupConnection())
-            fail("Connection failed.");
+    public void testGetConnection() throws SQLException {
+        BBDB.reconnect();
     }
     
 }

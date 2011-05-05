@@ -18,39 +18,19 @@
 package me.taylorkelly.bigbrother;
 
 import java.io.File;
-import java.sql.Connection;
+import java.sql.SQLException;
 
-import me.taylorkelly.bigbrother.commands.CleanseCommand;
-import me.taylorkelly.bigbrother.commands.ConfirmCommand;
-import me.taylorkelly.bigbrother.commands.DeleteCommand;
-import me.taylorkelly.bigbrother.commands.DoneCommand;
-import me.taylorkelly.bigbrother.commands.FindCommand;
-import me.taylorkelly.bigbrother.commands.HelpCommand;
-import me.taylorkelly.bigbrother.commands.HereCommand;
-import me.taylorkelly.bigbrother.commands.LogCommand;
-import me.taylorkelly.bigbrother.commands.RollbackCommand;
-import me.taylorkelly.bigbrother.commands.StickCommand;
-import me.taylorkelly.bigbrother.commands.UndoCommand;
-import me.taylorkelly.bigbrother.commands.UnwatchedCommand;
-import me.taylorkelly.bigbrother.commands.UpdateCommand;
-import me.taylorkelly.bigbrother.commands.VersionCommand;
-import me.taylorkelly.bigbrother.commands.WatchCommand;
-import me.taylorkelly.bigbrother.commands.WatchedCommand;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.commands.*;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
 import me.taylorkelly.bigbrother.finder.Sticker;
-import me.taylorkelly.bigbrother.fixes.Fix;
-import me.taylorkelly.bigbrother.fixes.Fix1;
-import me.taylorkelly.bigbrother.fixes.Fix2;
-import me.taylorkelly.bigbrother.fixes.Fix3;
-import me.taylorkelly.bigbrother.fixes.Fix4;
-import me.taylorkelly.bigbrother.fixes.Fix5;
-import me.taylorkelly.bigbrother.fixes.Fix6;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
 import me.taylorkelly.bigbrother.listeners.BBBlockListener;
 import me.taylorkelly.bigbrother.listeners.BBEntityListener;
 import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
+import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
+import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -110,7 +90,7 @@ public class BigBrother extends JavaPlugin {
         }
 
         // Initialize Settings - Needs to come pretty much first
-        BBSettings.initialize(getDataFolder());
+        BBSettings.initialize(this,getDataFolder());
 
         // Download dependencies...
         if (BBSettings.libraryAutoDownload) {
@@ -125,21 +105,13 @@ public class BigBrother extends JavaPlugin {
             BBLogging.debug("Downloading libraries was skipped");
         }
 
-        // Create Connection
-        if (!ConnectionManager.setupConnection()) {
-            BBLogging.severe("Error getting a connection, disabling BigBrother...");
+        // Get database running.
+        try {
+            BBDB.reconnect();
+        } catch (SQLException e) {
+            BBLogging.severe("Your database settings are probably incorrect:", e);
             getServer().getPluginManager().disablePlugin(this);
-            return;
         }
-        Connection conn = ConnectionManager.getFirstConnection();
-        if (conn == null) {
-            BBLogging.severe("Could not establish SQL connection. Disabling BigBrother");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        } else {
-            ConnectionManager.cleanup("onEnable", conn, null, null);
-        }
-        ConnectionManager.cleanup("onEnable", conn, null, null);
         
 
         // Initialize tables
@@ -161,19 +133,13 @@ public class BigBrother extends JavaPlugin {
             getDataFolder().mkdirs();
         }
 
-        // Apply fixes to DB for old BB
-        Fix fix = new Fix1(getDataFolder());
-        fix.apply();
-        Fix fix2 = new Fix2(getDataFolder());
-        fix2.apply();
-        Fix fix3 = new Fix3(getDataFolder()); // 26 Feb
-        fix3.apply();
-        Fix fix4 = new Fix4(getDataFolder()); // 5 March, 2011 - N3X
-        fix4.apply();
-        Fix fix5 = new Fix5(getDataFolder()); // 24 March, 2011 - N3X
-        fix5.apply();
-        Fix fix6 = new Fix6(getDataFolder()); // 16 April, 2011 - N3X
-        fix6.apply();
+        
+        // Fixes take too long, just delete and start over.
+        if(BBDB.needsUpdate(getDataFolder())) {
+        	BBDataTable.getInstance().drop();
+        	BBWorldsTable.getInstance().drop();
+        	BBUsersTable.getInstance().drop();
+        }
 
         // Initialize Permissions, Help
         BBPermissions.initialize(getServer());

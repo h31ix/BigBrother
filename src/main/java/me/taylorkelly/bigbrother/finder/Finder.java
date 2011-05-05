@@ -1,6 +1,8 @@
 package me.taylorkelly.bigbrother.finder;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +15,14 @@ import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -99,11 +104,8 @@ public class Finder {
     private static final void mysqlFind(final Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Connection conn = null;
         HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
         try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return;
             // TODO maybe more customizable actions?
             String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.LAVA_FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
             
@@ -111,10 +113,10 @@ public class Finder {
              * org.h2.jdbc.JdbcSQLException: Column "ID" must be in the GROUP BY
              * list; SQL statement:
              */
-            if (BBSettings.usingDBMS(DBMS.H2) || BBSettings.usingDBMS(DBMS.POSTGRES)) {
-                ps = conn.prepareStatement("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = "+(BBSettings.usingDBMS(DBMS.POSTGRES)?"false":"0")+" AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY player DESC");
+            if (BBDB.usingDBMS(DBMS.H2) || BBDB.usingDBMS(DBMS.POSTGRES)) {
+                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = "+(BBDB.usingDBMS(DBMS.POSTGRES)?"false":"0")+" AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY player DESC");
             } else {
-                ps = conn.prepareStatement("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = '0' AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY id DESC");
+                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = '0' AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY id DESC");
             }
             ps.setInt(1, location.getBlockX() + radius);
             ps.setInt(2, location.getBlockX() - radius);
@@ -124,7 +126,7 @@ public class Finder {
             ps.setInt(6, location.getBlockZ() - radius);
             ps.setInt(7, manager.getWorld(location.getWorld().getName()));
             rs = ps.executeQuery();
-            conn.commit();
+            BBDB.commit();
 
             int size = 0;
             while (rs.next()) {
@@ -160,7 +162,7 @@ public class Finder {
         } catch (SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
-            ConnectionManager.cleanup("Find SQL", conn, ps, rs);
+            BBDB.cleanup("Find SQL", ps, rs);
         }
     }
 
@@ -176,18 +178,15 @@ public class Finder {
         HashMap<Integer, Integer> explosions = new HashMap<Integer, Integer>();
         HashMap<Integer, Integer> burns = new HashMap<Integer, Integer>();
 
-        Connection conn = null;
 
         try {
-            conn = ConnectionManager.getConnection();
-            if(conn==null) return;
             // TODO Centralize action list SQL generation.
             String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.LAVA_FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
-            if(BBSettings.usingDBMS(DBMS.POSTGRES))
-            	ps = conn.prepareStatement("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
+            if(BBDB.usingDBMS(DBMS.POSTGRES))
+            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
             			+ " AND rbacked = false AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
             else
-            	ps = conn.prepareStatement("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
+            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
             			+ " AND rbacked = 0 AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
 
             ps.setInt(1, location.getBlockX() + radius);
@@ -199,7 +198,7 @@ public class Finder {
             ps.setInt(7, hunted.getID());
             ps.setInt(8, manager.getWorld(location.getWorld().getName()));
             rs = ps.executeQuery();
-            conn.commit();
+            BBDB.commit();
 
             int size = 0;
             while (rs.next()) {
@@ -335,7 +334,7 @@ public class Finder {
         } catch (SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
-            ConnectionManager.cleanup("Find SQL", conn, ps, rs);
+            BBDB.cleanup("Find SQL", ps, rs);
         }
     }
 }

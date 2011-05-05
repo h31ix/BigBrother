@@ -2,15 +2,15 @@ package me.taylorkelly.bigbrother.tablemgrs;
 
 import java.util.Hashtable;
 
+import me.taylorkelly.bigbrother.BBLogging;
+import me.taylorkelly.bigbrother.BBPlayerInfo;
+import me.taylorkelly.bigbrother.BBSettings.DBMS;
+import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datasource.BBDB;
+
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import me.taylorkelly.bigbrother.BBLogging;
-import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.BBSettings;
-import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 
 /**
  * Handle the user tracking table.
@@ -35,10 +35,10 @@ public abstract class BBUsersTable extends DBTable {
     }
     public static BBUsersTable getInstance() {
         if(instance==null) {
-            BBLogging.debug("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
-            if(BBSettings.usingDBMS(DBMS.MYSQL))
+            BBLogging.debug("BBDB.dbms="+BBDB.dbms.toString());
+            if(BBDB.usingDBMS(DBMS.MYSQL))
                 instance=new BBUsersMySQL();
-            else if(BBSettings.usingDBMS(DBMS.POSTGRES))
+            else if(BBDB.usingDBMS(DBMS.POSTGRES))
                 instance=new BBUsersPostgreSQL();
             else
                 instance=new BBUsersH2();
@@ -61,7 +61,6 @@ public abstract class BBUsersTable extends DBTable {
         onLoad();
     }
     
-    public abstract boolean importRecords();
 
     public BBPlayerInfo getUserByName(String name) {
         if(name.equalsIgnoreCase(BBDataBlock.ENVIRONMENT))

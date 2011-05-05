@@ -1,22 +1,19 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
-import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.bukkit.block.Block;
-
 import me.taylorkelly.bigbrother.BBLogging;
-import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
-import me.taylorkelly.bigbrother.datasource.ConnectionManager;
+import me.taylorkelly.bigbrother.datasource.BBDB;
+
+import org.bukkit.block.Block;
 
 /**
  * Handler class for the bbdata table
@@ -40,9 +37,9 @@ public abstract class BBDataTable extends DBTable {
     public static BBDataTable getInstance() {
         if(instance==null) {
             //BBLogging.info("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
-            if(BBSettings.usingDBMS(DBMS.MYSQL))
+            if(BBDB.usingDBMS(DBMS.MYSQL))
                 instance=new BBDataMySQL();
-            else if(BBSettings.usingDBMS(DBMS.POSTGRES))
+            else if(BBDB.usingDBMS(DBMS.POSTGRES))
                 instance=new BBDataPostgreSQL();
             else
                 instance=new BBDataH2();
@@ -89,38 +86,33 @@ public abstract class BBDataTable extends DBTable {
 			WorldManager manager) {
 		PreparedStatement ps = null;
         ResultSet rs = null;
-        Connection conn = null;
         ArrayList<BBDataBlock> blockList = new ArrayList<BBDataBlock>();
 
         try {
-            conn = ConnectionManager.getConnection();
-            if(conn!=null) {
                 // TODO maybe more customizable actions?
-            	if(BBSettings.usingDBMS(DBMS.POSTGRES)) // TODO: Someone made rbacked a BOOLEAN, which screws up the logic.
-            		ps = conn.prepareStatement("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = false AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+            	if(BBDB.usingDBMS(DBMS.POSTGRES)) // TODO: Someone made rbacked a BOOLEAN, which screws up the logic.
+            		ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = false AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
             	else
-            		ps = conn.prepareStatement("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = 0 AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+            		ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = 0 AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
                 
                 ps.setInt(1, block.getX());
                 ps.setInt(2, block.getY());
                 ps.setInt(3, block.getZ());
                 ps.setInt(4, manager.getWorld(block.getWorld().getName()));
                 rs = ps.executeQuery();
-                conn.commit();
+                BBDB.commit();
                 
                 while (rs.next()) {
-                	Blob blob = rs.getBlob("data");
-                	byte[] bdata = blob.getBytes(1, (int) blob.length());
-                	String data = new String(bdata);
+                	
+                	String data = rs.getString("data");
                     BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
                     newBlock.date = rs.getLong("date");
                     blockList.add(newBlock);
                 }
-            }
         } catch (SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
-            ConnectionManager.cleanup( "Find",  conn, ps, rs );
+            BBDB.cleanup( "Find",  ps, rs );
         }
         return blockList;
 
