@@ -29,8 +29,8 @@ public abstract class BBUsersTable extends DBTable {
         BBLogging.info("Dropping table "+getTableName());
         BBDB.executeUpdate("DROP TABLE IF EXISTS "+((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
         createTable();
-        instance.knownPlayers.clear();
-        instance.knownNames.clear();
+        getInstance().knownPlayers.clear();
+        getInstance().knownNames.clear();
     }
     
     // Singletons :D

@@ -23,7 +23,6 @@ public abstract class BBWorldsTable extends DBTable {
             createTable();
         } else {
             BBLogging.debug("`"+getTableName()+"` table already exists");
-
         }
     }
     

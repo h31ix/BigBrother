@@ -12,13 +12,6 @@ public class WorldManager {
     private HashMap<String, Integer> worldMap;
 
     public WorldManager() {
-        if (!worldTableExists()) {
-            createWorldTable();
-        } else {
-            if (BBSettings.debugMode) {
-                BBLogging.debug("`" + BBWorldsTable.getInstance().getTableName() + "` table already exists");
-            }
-        }
         worldMap = BBWorldsTable.getInstance().getWorlds();
     }
 
