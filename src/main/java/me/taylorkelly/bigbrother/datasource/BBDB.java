@@ -303,7 +303,7 @@ public class BBDB {
         } catch (SQLException e) {
             BBLogging.severe("executeQuery failed (" + sql + "):", e);
         } finally {
-            BBDB.cleanup(sql, stmt, null);
+            //BBDB.cleanup(sql, stmt, null);
         }
         return rs;
     }
