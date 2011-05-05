@@ -234,23 +234,21 @@ public class BBDB {
      * @throws
      */
     public static int executeUpdate(String sql, Object... params) {
-        Statement stmt = null;
-        
-        // Convert params to string
-        String[] sqlParams = new String[params.length];
-        for (int i = 0; i < params.length; i++) {
-            sqlParams[i] = params[i].toString();
-        }
+        PreparedStatement stmt = null;
         
         int r = Statement.EXECUTE_FAILED;
         try {
-            stmt = conn.createStatement();
-            r = stmt.executeUpdate(sql, sqlParams);
+            stmt = conn.prepareStatement(sql);
+
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i, params[i]);
+            }
+            r = stmt.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
             BBLogging.severe("executeUpdate failed (" + sql + "):", e);
         } finally {
-            BBDB.cleanup(sql, stmt, null);
+            //BBDB.cleanup(sql, stmt, null);
         }
         return r;
     }
@@ -286,18 +284,17 @@ public class BBDB {
      * @return
      */
     public static ResultSet executeQuery(String sql, Object... params) {
-        Statement stmt = null;
-        
-        // Convert params to string
-        String[] sqlParams = new String[params.length];
-        for (int i = 0; i < params.length; i++) {
-            sqlParams[i] = params[i].toString();
-        }
+        PreparedStatement stmt = null;
         
         ResultSet rs = null;
         try {
-            stmt = conn.createStatement();
-            if (!stmt.execute(sql, sqlParams))
+            stmt = conn.prepareStatement(sql);
+
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i, params[i]);
+            }
+            
+            if (!stmt.execute())
                 return null;
             rs = stmt.getResultSet();
         } catch (SQLException e) {
