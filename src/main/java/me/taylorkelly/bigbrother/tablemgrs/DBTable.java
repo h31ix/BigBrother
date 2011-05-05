@@ -31,7 +31,7 @@ public abstract class DBTable {
         return BBDB.tableExists(getTableName());
     }
 
-    protected void createTable() {
+    public void createTable() {
         BBDB.executeUpdate(getCreateSyntax());
     }
 
@@ -48,5 +48,6 @@ public abstract class DBTable {
     public void drop() {
     	BBLogging.info("Dropping table "+getTableName());
     	BBDB.executeUpdate("DROP TABLE IF EXISTS "+((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
+    	createTable();
     }
 }

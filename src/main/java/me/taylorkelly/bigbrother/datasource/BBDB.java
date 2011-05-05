@@ -19,6 +19,7 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BetterConfig;
+import me.taylorkelly.bigbrother.PropertiesFile;
 import me.taylorkelly.util.TimeParser;
 
 /**
@@ -167,21 +168,21 @@ public class BBDB {
      * @param dataFolder
      * @return
      */
-    public static boolean needsUpdate(File dataFolder) {
+    public static boolean needsUpdate(File dataFolder, String table, int CurrentVersion) {
+        boolean r=true;
         try {
             File f = new File(dataFolder, "DATABASE_VERSION");
             if (!f.exists()) {
                 return true;
             }
-            Scanner scan = new Scanner(f);
-            int versionDetected = -1;
-            if (scan.hasNextInt()) {
-                versionDetected = scan.nextInt();
-            }
-            return (VERSION > versionDetected);
+            PropertiesFile pf = new PropertiesFile(f);
+            r=(pf.getInt(table, CurrentVersion, "")<CurrentVersion);
+            pf.setInt(table,CurrentVersion,"");
+            pf.save();
         } catch (Exception e) {
             return true;
         }
+        return r;
     }
     
     /**

@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
+import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datasource.BBDB;
@@ -20,8 +21,17 @@ import org.bukkit.inventory.ItemStack;
  */
 public abstract class BBUsersTable extends DBTable {
     
+    private static final int VERSION = 6;
     public Hashtable<Integer,BBPlayerInfo> knownPlayers = new Hashtable<Integer,BBPlayerInfo>();
     public Hashtable<String,Integer> knownNames = new Hashtable<String,Integer>();
+    
+    public void drop() {
+        BBLogging.info("Dropping table "+getTableName());
+        BBDB.executeUpdate("DROP TABLE IF EXISTS "+((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
+        createTable();
+        instance.knownPlayers.clear();
+        instance.knownNames.clear();
+    }
     
     // Singletons :D
     private static BBUsersTable instance=null;
@@ -50,6 +60,8 @@ public abstract class BBUsersTable extends DBTable {
     protected abstract void loadCache();
     
     public BBUsersTable() {
+        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+            drop();
         if (!tableExists()) {
             BBLogging.info("Building `"+getTableName()+"` table...");
             createTable();

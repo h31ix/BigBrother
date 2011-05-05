@@ -174,4 +174,19 @@ public class PropertiesFile {
             this.comment = comment;
         }
     }
+
+    /**
+     * @param table
+     * @param currentVersion
+     * @param string
+     */
+    public void setInt(String key, int globalMemory, String defaultComment) {
+        if (map.containsKey(key)) {
+            PropertiesEntry entry = map.get(key);
+            entry.value = Integer.valueOf(globalMemory).toString();
+        } else {
+            map.put(key, new PropertiesEntry(Integer.valueOf(globalMemory).toString(), defaultComment));
+        }
+        modified = true;
+    }
 }

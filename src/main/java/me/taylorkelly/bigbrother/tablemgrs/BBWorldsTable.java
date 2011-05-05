@@ -5,13 +5,27 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import me.taylorkelly.bigbrother.BBLogging;
+import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 public abstract class BBWorldsTable extends DBTable {
     
+    private static final int VERSION = 6;
     // Singletons :D
     private static BBWorldsTable instance = null;
+    
+    public BBWorldsTable() {
+        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+            drop();
+        if (!tableExists()) {
+            BBLogging.info("Building `"+getTableName()+"` table...");
+            createTable();
+        } else {
+            BBLogging.debug("`"+getTableName()+"` table already exists");
+
+        }
+    }
     
     @Override
     protected String getActualTableName() {

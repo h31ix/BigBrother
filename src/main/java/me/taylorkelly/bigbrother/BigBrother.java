@@ -29,8 +29,6 @@ import me.taylorkelly.bigbrother.listeners.BBBlockListener;
 import me.taylorkelly.bigbrother.listeners.BBEntityListener;
 import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
-import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
-import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -130,13 +128,6 @@ public class BigBrother extends JavaPlugin {
             updateSettings(getDataFolder());
         } else if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
-        }
-        
-        // Fixes take too long, just delete and start over.
-        if (BBDB.needsUpdate(getDataFolder())) {
-            BBDataTable.getInstance().drop();
-            BBWorldsTable.getInstance().drop();
-            BBUsersTable.getInstance().drop();
         }
         
         // Initialize Permissions, Help

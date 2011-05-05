@@ -1,5 +1,6 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBLogging;
+import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
@@ -23,6 +25,7 @@ import org.bukkit.block.Block;
  */
 public abstract class BBDataTable extends DBTable {
 
+    private static final int VERSION = 6;
     // Singletons :D
     private static BBDataTable instance=null;
 
@@ -48,6 +51,8 @@ public abstract class BBDataTable extends DBTable {
     }
     
     public BBDataTable() {
+        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+            drop();
         if (!tableExists()) {
             BBLogging.info("Building `"+getTableName()+"` table...");
             createTable();

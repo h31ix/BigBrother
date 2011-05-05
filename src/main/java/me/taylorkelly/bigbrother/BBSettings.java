@@ -57,8 +57,10 @@ public class BBSettings {
     private static ArrayList<Integer> blockExclusionList;
     public static int rollbacksPerTick;
     private static BigBrother plugin;
+    public static File dataFolder;
 
     public static void initialize(BigBrother plg, File dataFolder) {
+        BBSettings.dataFolder=dataFolder;
         BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
         seenList = new ArrayList<String>();
