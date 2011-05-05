@@ -241,7 +241,7 @@ public class BBDB {
             stmt = conn.prepareStatement(sql);
 
             for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i, params[i]);
+                stmt.setObject(i+1, params[i]);
             }
             r = stmt.executeUpdate();
             conn.commit();
@@ -291,7 +291,7 @@ public class BBDB {
             stmt = conn.prepareStatement(sql);
 
             for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i, params[i]);
+                stmt.setObject(i+1, params[i]);
             }
             
             if (!stmt.execute())
