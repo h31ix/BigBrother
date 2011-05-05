@@ -3,13 +3,13 @@ package me.taylorkelly.bigbrother;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
-import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.ConnectionManager;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.util.Time;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 // Rule 1 - If you end up using ResultSet, you're doing it wrong.
 public class Cleanser {
