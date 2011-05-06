@@ -69,7 +69,7 @@ public class DataBlockSender {
                 ps.setInt(6, block.y);
                 ps.setInt(7, block.z);
                 ps.setInt(8, block.type);
-                ps.setString(1, block.data);
+                ps.setString(9, block.data);
                 ps.addBatch();
             }
             ps.executeBatch();
