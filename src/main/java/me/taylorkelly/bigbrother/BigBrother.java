@@ -185,6 +185,7 @@ public class BigBrother extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE, stickListener, Priority.Low, this);
         
         BBCommand bbc = new BBCommand(this);
+        bbc.registerExecutor("debug", new DebugCommand(this));
         bbc.registerExecutor("version", new VersionCommand(this));
         bbc.registerExecutor("update", new UpdateCommand(this));
         bbc.registerExecutor("watch", new WatchCommand(this));
