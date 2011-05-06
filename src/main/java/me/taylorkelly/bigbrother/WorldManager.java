@@ -3,7 +3,6 @@ package me.taylorkelly.bigbrother;
 import java.util.Collection;
 import java.util.HashMap;
 
-import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 public class WorldManager {
@@ -55,13 +54,5 @@ public class WorldManager {
 
     private boolean saveWorld(String world, int index) {
     	return BBWorldsTable.getInstance().insertWorld(index, world);
-    }
-
-    private static boolean worldTableExists() {
-        return BBDB.tableExists(BBWorldsTable.getInstance().getTableName());
-    }
-
-    private static void createWorldTable() {
-        BBDB.executeUpdate(BBWorldsTable.getInstance().getCreateSyntax());
     }
 }
