@@ -20,7 +20,7 @@ public class BBUsersH2 extends BBUsersTable {
     
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE `" + getActualTableName() + "` (" 
+        return "CREATE TABLE IF NOT EXISTS `" + getActualTableName() + "` (" 
         + "`id` INT AUTO_INCREMENT PRIMARY KEY," 
         + "`name` varchar(32) NOT NULL DEFAULT 'Player'," 
         + "`flags` INT NOT NULL DEFAULT '0');" 

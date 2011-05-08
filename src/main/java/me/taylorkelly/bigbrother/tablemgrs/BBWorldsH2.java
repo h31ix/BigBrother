@@ -6,6 +6,7 @@ public class BBWorldsH2 extends BBWorldsTable {
 	protected void onLoad() {
 	}
 
+	@Override
 	public String getCreateSyntax() {
 		return "CREATE TABLE IF NOT EXISTS `"+getTableName()+"` ("
         + "`id` INTEGER PRIMARY KEY,"

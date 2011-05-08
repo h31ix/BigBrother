@@ -31,7 +31,7 @@ public class BBDataH2 extends BBDataTable {
     public String getCreateSyntax() {
         // TODO Auto-generated method stub
         return 
-        "CREATE TABLE `"+getTableName()+"` (" 
+        "CREATE TABLE IF NOT EXISTS `"+getTableName()+"` (" 
         + "`id` INTEGER AUTO_INCREMENT PRIMARY KEY," 
         + "`date` INT UNSIGNED NOT NULL DEFAULT '0'," 
         + "`player` INT UNSIGNED NOT NULL DEFAULT '0'," 
