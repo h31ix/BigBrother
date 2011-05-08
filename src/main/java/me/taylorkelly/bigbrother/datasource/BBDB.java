@@ -71,9 +71,11 @@ public class BBDB {
         username = yml.getString("database.username", username);
         password = yml.getString("database.password", password);
         hostname = yml.getString("database.hostname", hostname);
-        schema = yml.getString("database.database", schema);
         port = yml.getInt("database.port", port);
+        schema = yml.getString("database.database", schema);
         prefix = yml.getString("database.prefix", prefix);
+        
+        // MySQL-specific crap
         engine = yml.getString("database.mysql.engine", engine);
         lowPriority = yml.getBoolean("database.mysql.low-priority-insert", lowPriority);
     }

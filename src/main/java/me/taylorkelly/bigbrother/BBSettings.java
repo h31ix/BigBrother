@@ -83,7 +83,23 @@ public class BBSettings {
         // If the file's not there, don't load it
         if(yamlfile.exists())
             yml.load();
-
+        
+        // Import old settings into new config defaults and remove the old versions.
+        if(yml.getProperty("database.mysql.username")!=null) {
+            BBDB.username = yml.getString("database.mysql.username", BBDB.username);
+            yml.removeProperty("database.mysql.username");
+            BBDB.password= yml.getString("database.mysql.password", BBDB.password);
+            yml.removeProperty("database.mysql.password");
+            BBDB.hostname = yml.getString("database.mysql.hostname", BBDB.hostname);
+            yml.removeProperty("database.mysql.hostname");
+            BBDB.schema = yml.getString("database.mysql.database", BBDB.schema);
+            yml.removeProperty("database.mysql.database");
+            BBDB.port = yml.getInt("database.mysql.port", BBDB.port);
+            yml.removeProperty("database.mysql.port");
+            BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
+            yml.removeProperty("database.mysql.prefix"); 
+        }
+        
         BBDB.init(yml,new DBFailCallback() {
             public void disableMe() {
                 plugin.getServer().getPluginManager().disablePlugin(plugin);
