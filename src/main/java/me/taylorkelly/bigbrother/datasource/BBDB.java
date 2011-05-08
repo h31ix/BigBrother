@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
@@ -23,14 +22,12 @@ import me.taylorkelly.bigbrother.PropertiesFile;
 import me.taylorkelly.util.TimeParser;
 
 /**
- * Persistant database link
+ * Persistent database link
  * 
  * @author Rob
  * 
  */
 public class BBDB {
-    private static final int           VERSION     = 6;
-    
     public static String               prefix      = "";
     public static DBMS                 dbms        = DBMS.H2;
     public static String               username    = "";

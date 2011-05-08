@@ -9,9 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.inventory.ItemStack;
 
 public class BrokenBlock extends BBDataBlock {
 

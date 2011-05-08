@@ -1,6 +1,5 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
