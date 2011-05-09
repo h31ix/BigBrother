@@ -11,6 +11,8 @@ public class BetterConfig extends Configuration {
     public BetterConfig(File file) {
         super(file);
     }
+    
+    
 
     /**
      * Casts a value to a long. May return null.

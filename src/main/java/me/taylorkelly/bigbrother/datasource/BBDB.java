@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
@@ -28,6 +30,29 @@ import me.taylorkelly.util.TimeParser;
  * 
  */
 public class BBDB {
+    /**
+     * For tracing potential left-open statements.
+     * @author Rob
+     *
+     */
+    public static class StatementInfo {
+        public Object stmt;
+        public StackTraceElement[] stack;
+        
+        public StatementInfo(Object stmt) {
+            this.stmt=stmt;
+            stack=Thread.currentThread().getStackTrace();
+        }
+        
+        public void close() throws SQLException {
+            if(stmt instanceof Statement) {
+                ((Statement) stmt).close();
+            }
+            if(stmt instanceof PreparedStatement) {
+                ((PreparedStatement) stmt).close();
+            }
+        }
+    }
     public static String               prefix      = "";
     public static DBMS                 dbms        = DBMS.H2;
     public static String               username    = "";
@@ -41,6 +66,7 @@ public class BBDB {
     private static Connection          conn;
     @SuppressWarnings("unused")
     private static JDCConnectionDriver driver;
+    private static Map<ResultSet,StatementInfo> statements = new HashMap<ResultSet,StatementInfo>();
     
     public interface DBFailCallback {
         void disableMe();
@@ -147,6 +173,10 @@ public class BBDB {
         try {
             if (null != rs) {
                 rs.close();
+                if(statements.containsKey(rs)) {
+                    statements.get(rs).close();
+                    statements.remove(rs);
+                }
             }
         } catch (SQLException e) {
             BBLogging.severe("Error closing recordset from '" + caller + "':", e);
@@ -244,8 +274,6 @@ public class BBDB {
             conn.commit();
         } catch (SQLException e) {
             BBLogging.severe("executeUpdate failed (" + sql + "):", e);
-        } finally {
-            //BBDB.cleanup(sql, stmt, null);
         }
         return r;
     }
@@ -294,6 +322,7 @@ public class BBDB {
             if (!stmt.execute())
                 return null;
             rs = stmt.getResultSet();
+            statements.put(rs,new StatementInfo(stmt));
         } catch (SQLException e) {
             BBLogging.severe("executeQuery failed (" + sql + "):", e);
         } finally {
