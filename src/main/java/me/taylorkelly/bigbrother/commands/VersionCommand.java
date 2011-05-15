@@ -1,6 +1,7 @@
 package me.taylorkelly.bigbrother.commands;
 
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,6 +16,7 @@ public class VersionCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
         player.sendMessage("You're running: " + ChatColor.AQUA.toString() + BigBrother.name + " " + BigBrother.version);
+        player.sendMessage("# open statements: "+BBDB.statements.size());
         return true;
     }
     

@@ -66,7 +66,7 @@ public class BBDB {
     private static Connection          conn;
     @SuppressWarnings("unused")
     private static JDCConnectionDriver driver;
-    private static Map<ResultSet,StatementInfo> statements = new HashMap<ResultSet,StatementInfo>();
+    public static Map<ResultSet,StatementInfo> statements = new HashMap<ResultSet,StatementInfo>();
     
     public interface DBFailCallback {
         void disableMe();
