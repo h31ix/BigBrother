@@ -15,7 +15,7 @@ public class VersionCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
-        player.sendMessage("You're running: " + ChatColor.AQUA.toString() + BigBrother.name + " " + BigBrother.version);
+        player.sendMessage("You're running: " + ChatColor.AQUA.toString() + BigBrother.name + " " + BigBrother.version + " (#"+BigBrother.build+")");
         player.sendMessage("# open statements: "+BBDB.statements.size());
         return true;
     }
