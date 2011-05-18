@@ -9,7 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.inventory.ItemStack;
 
 public class BrokenBlock extends BBDataBlock {
 
@@ -33,13 +35,10 @@ public class BrokenBlock extends BBDataBlock {
     }
 
     private void chestCheck(String player, Block block) {
-    	//TODO: Fix DeltaChest
-    	/*
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             bystanders.add(new DeltaChest(player, chest, chest.getInventory().getContents(),new ItemStack[chest.getInventory().getSize()]));
         }
-        */
     }
 
     public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {

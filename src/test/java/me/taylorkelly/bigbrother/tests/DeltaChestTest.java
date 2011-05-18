@@ -26,8 +26,7 @@ public class DeltaChestTest {
     public void setUp() {
         //this.world = TestUtils.createSimpleWorld();
     }
-    
-    @Ignore
+
     @Test
     public void testDelta() {
         ItemStack[] stackOrig,stackNew;

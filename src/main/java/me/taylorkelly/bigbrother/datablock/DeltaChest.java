@@ -23,9 +23,9 @@ public class DeltaChest extends BBDataBlock {
         REPLACED
     }
 
-    /*public DeltaChest(String player, Chest chest, String changes) {
+    public DeltaChest(String player, Chest chest, String changes) {
         super(player, Action.DELTA_CHEST, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), changes);
-    }*/
+    }
 
     private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, Action.DELTA_CHEST, world, x, y, z, type, data);

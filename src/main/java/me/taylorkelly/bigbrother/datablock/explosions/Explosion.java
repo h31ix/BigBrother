@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.SignDestroyed;
 
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.inventory.ItemStack;
 
 public abstract class Explosion extends BBDataBlock {
 
@@ -35,15 +38,12 @@ public abstract class Explosion extends BBDataBlock {
     }
 
     private void chestCheck(String player, Block block) {
-    	//TODO: Fix DeltaChest
-    	/*
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             ItemStack[] destroyedStack=new ItemStack[chest.getInventory().getSize()];
             ItemStack[] contents = chest.getInventory().getContents();
             bystanders.add(new DeltaChest(player, chest, contents,destroyedStack));
         }
-        */
     }
 
     public void rollback(World wld) {

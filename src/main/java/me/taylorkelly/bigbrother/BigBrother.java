@@ -21,6 +21,7 @@ import java.io.File;
 import java.sql.SQLException;
 
 import me.taylorkelly.bigbrother.commands.*;
+import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
 import me.taylorkelly.bigbrother.finder.Sticker;
@@ -29,9 +30,11 @@ import me.taylorkelly.bigbrother.listeners.BBBlockListener;
 import me.taylorkelly.bigbrother.listeners.BBEntityListener;
 import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
+import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -262,26 +265,24 @@ public class BigBrother extends JavaPlugin {
     }
     
     public void closeChestIfOpen(BBPlayerInfo pi) {
-        // TODO: Fix DeltaChest.
-        /*
-         * if(pi.hasOpenedChest()) {
-         * if(BBSettings.chestChanges) {
-         * World world = pi.getOpenedChest().getWorld();
-         * int x = pi.getOpenedChest().getX();
-         * int y = pi.getOpenedChest().getY();
-         * int z = pi.getOpenedChest().getZ();
-         * if(world.getBlockAt(x, y, z).getState() instanceof Chest) {
-         * Chest chest = (Chest)world.getBlockAt(x, y, z).getState();
-         * ItemStack[] orig = pi.getOldChestContents();
-         * ItemStack[] latest = getChestContents(chest);
-         * DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
-         * dc.send();
-         * }
-         * }
-         * BBUsersTable.getInstance().userOpenedChest(pi.getName(), null, null);
-         * // Chest closed.
-         * }
-         */
+        if (pi.hasOpenedChest()) {
+            if (BBSettings.chestChanges) {
+                World world = pi.getOpenedChest().getWorld();
+                int x = pi.getOpenedChest().getX();
+                int y = pi.getOpenedChest().getY();
+                int z = pi.getOpenedChest().getZ();
+                if (world.getBlockAt(x, y, z).getState() instanceof Chest) {
+                    Chest chest = (Chest) world.getBlockAt(x, y, z).getState();
+                    ItemStack[] orig = pi.getOldChestContents();
+                    ItemStack[] latest = getChestContents(chest);
+                    DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
+                    dc.send();
+                }
+            }
+            BBUsersTable.getInstance().userOpenedChest(pi.getName(), null, null);
+            // Chest closed.
+        }
+         
     }
     
     // Horrific bug, that took me ages to discover. When Accessing double chest
@@ -292,6 +293,7 @@ public class BigBrother extends JavaPlugin {
     // we must manually search, whether
     // current chest is double chest, and then eventually return merged
     // inventories.
+    // TODO: Is this fixed?
     public ItemStack[] getChestContents(Chest chest) {
         Chest second = null;
         
