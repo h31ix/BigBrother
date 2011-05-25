@@ -9,7 +9,7 @@ public class BBHelp {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("Help");
         if (test != null) {
             if (!plugin.getServer().getPluginManager().isPluginEnabled(test)) {
-                BBLogging.warning("Help plugin detected but disabled. Enable plugin 'Help'");
+                BBLogging.info("Help plugin detected but disabled. Enable plugin 'Help' (v"+test.getDescription().getVersion()+")");
                 plugin.getServer().getPluginManager().enablePlugin(test);                
             }
             
