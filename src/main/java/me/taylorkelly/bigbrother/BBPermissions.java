@@ -36,7 +36,7 @@ public class BBPermissions {
             String version = permissions.getDescription().getVersion();
             
             if (!Bukkit.getServer().getPluginManager().isPluginEnabled(permissionPlugin)) {
-                BBLogging.info("Permissions plugin was found but disabled. Enable 'Permissions' (v"+version+")");
+                BBLogging.info("Permissions plugin was found but disabled. Enabling 'Permissions' (v"+version+") now.");
                 Bukkit.getServer().getPluginManager().enablePlugin(permissionPlugin);
             }
             
