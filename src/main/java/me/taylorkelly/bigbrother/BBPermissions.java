@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
+import org.bukkit.Bukkit;
 // import org.anjocaido.groupmanager.GroupManager; // Inactive and Essentials screwed up their maven repo
 
 public class BBPermissions {
@@ -21,7 +22,7 @@ public class BBPermissions {
     public static void initialize(Server server) {
         //Plugin groupManager = server.getPluginManager().getPlugin("GroupManager");
         Plugin permissions = server.getPluginManager().getPlugin("Permissions");
-
+        
         /* Use FakePermissions 
          if (groupManager != null) {
             permissionPlugin = groupManager;
@@ -33,6 +34,12 @@ public class BBPermissions {
             permissionPlugin = permissions;
             handler = PermissionHandler.PERMISSIONS;
             String version = permissions.getDescription().getVersion();
+            
+            if (!Bukkit.getServer().getPluginManager().isPluginEnabled(permissionPlugin)) {
+                BBLogging.warning("Permissions plugin was found but disabled. Enabling 'Permissions' (v"+version+")");
+                Bukkit.getServer().getPluginManager().enablePlugin(permissionPlugin);
+            }
+            
             BBLogging.info("Permissions enabled using: Permissions v" + version);
         } else {
             handler = PermissionHandler.NONE;

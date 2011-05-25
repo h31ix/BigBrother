@@ -8,6 +8,11 @@ public class BBHelp {
     public static void initialize(Plugin plugin) {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("Help");
         if (test != null) {
+            if (!plugin.getServer().getPluginManager().isPluginEnabled(test)) {
+                BBLogging.warning("Help plugin detected but disabled. Enable plugin 'Help'");
+                plugin.getServer().getPluginManager().enablePlugin(test);                
+            }
+            
             Help helpPlugin = ((Help) test);
             String[] permissions = new String[]{"bb.admin.watch", "bb.admin.info", "bb.admin.rollback", "bb.admin.cleanse"};
             helpPlugin.registerCommand("bb help", "Help for all BigBrother commands", plugin, permissions);
