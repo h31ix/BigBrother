@@ -25,7 +25,7 @@ public class BBUsersH2 extends BBUsersTable {
         + "`id` INT AUTO_INCREMENT PRIMARY KEY," 
         + "`name` varchar(32) NOT NULL DEFAULT 'Player'," 
         + "`flags` INT NOT NULL DEFAULT '0');" 
-        + "CREATE UNIQUE INDEX idxUsername ON `" + getActualTableName() + "` (`name`)"; // ANSI
+        + "CREATE UNIQUE INDEX IF NOT EXISTS idxUsername ON `" + getActualTableName() + "` (`name`)"; // ANSI
     }
 
     @Override
