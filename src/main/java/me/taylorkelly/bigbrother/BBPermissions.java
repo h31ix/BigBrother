@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
-import org.bukkit.Bukkit;
 // import org.anjocaido.groupmanager.GroupManager; // Inactive and Essentials screwed up their maven repo
 
 public class BBPermissions {
@@ -35,9 +34,9 @@ public class BBPermissions {
             handler = PermissionHandler.PERMISSIONS;
             String version = permissions.getDescription().getVersion();
             
-            if (!Bukkit.getServer().getPluginManager().isPluginEnabled(permissionPlugin)) {
-                BBLogging.info("Permissions plugin was found but disabled. Enabling 'Permissions' (v"+version+") now.");
-                Bukkit.getServer().getPluginManager().enablePlugin(permissionPlugin);
+            if (!server.getPluginManager().isPluginEnabled(permissionPlugin)) {
+                BBLogging.info("Permissions plugin found but disabled. Enabling 'Permissions' (v"+version+").");
+                server.getPluginManager().enablePlugin(permissionPlugin);
             }
             
             BBLogging.info("Permissions enabled using: Permissions v" + version);
