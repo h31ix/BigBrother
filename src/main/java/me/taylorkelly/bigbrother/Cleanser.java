@@ -32,7 +32,7 @@ public class Cleanser {
             cleanupThread.start();
         } else {
             if (player != null) {
-                player.chat(BigBrother.premessage + " Cleaner already busy.  Try again later.");
+                player.chat(BigBrother.premessage + " The cleaner is already busy.  Try again later.");
             }
         }
     }
@@ -95,7 +95,7 @@ public class Cleanser {
                 return;
             String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
             
-            String words = String.format("Cleaned out %d records because of age in %s.", cleanedSoFarAge, timespent);
+            String words = String.format("Removed %d old records because of age in %s.", cleanedSoFarAge, timespent);
             if (player == null) {
                 BBLogging.info(words);
             } else {
