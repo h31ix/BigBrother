@@ -24,18 +24,19 @@ import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 public class DataBlockSender {
 
     public static final LinkedBlockingQueue<BBDataBlock> SENDING = new LinkedBlockingQueue<BBDataBlock>();
+    private static int sendingTask;
 
-    public static void disable(BigBrother bb) {
-        bb.getServer().getScheduler().cancelTasks(bb);
+    public static void shutdown(BigBrother bb) {
+        if(sendingTask>=0)
+            bb.getServer().getScheduler().cancelTask(sendingTask);
     }
 
     public static void initialize(BigBrother bb, File dataFolder, WorldManager manager) {
-        int result = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
-        if (result < 0) {
+        sendingTask = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
+        if (sendingTask < 0) {
             BBLogging.severe("Unable to schedule sending of blocks");
         }
     }
-
     public static void offer(BBDataBlock dataBlock) {
         SENDING.add(dataBlock);
     }

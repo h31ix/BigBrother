@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 public class Cleanser {
     
     private static CleanupThread cleanupThread = null;
+    private static int cleanupTask;
     
     public static boolean needsCleaning() {
         return BBSettings.cleanseAge != -1;
@@ -37,10 +38,18 @@ public class Cleanser {
     }
     
     public static void initialize(BigBrother bigbrother) {
-        bigbrother.getServer().getScheduler().scheduleAsyncRepeatingTask(bigbrother, new CleanupTask(), 50, 26000);
+        cleanupTask = bigbrother.getServer().getScheduler().scheduleAsyncRepeatingTask(bigbrother, new CleanupTask(), 50, 26000);
+        if(cleanupTask<0) {
+            BBLogging.severe("Cannot schedule the cleanup task.");
+        }
     }
     
-    private static class CleanupTask implements Runnable {
+    public static void shutdown(BigBrother bb) {
+        if(cleanupTask>=0)
+            bb.getServer().getScheduler().cancelTask(cleanupTask);
+    }
+    
+    public static class CleanupTask implements Runnable {
         @Override
         public void run() {
             clean(null);
