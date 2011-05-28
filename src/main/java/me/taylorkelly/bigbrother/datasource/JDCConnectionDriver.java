@@ -32,6 +32,10 @@ public class JDCConnectionDriver implements Driver {
         pool = new ConnectionService(url, user, password);
     }
     
+    public void shutdown() {
+        pool.closeConnections();
+    }
+    
     public Connection connect(String url, Properties props) throws SQLException {
         if (!url.startsWith(JDCConnectionDriver.URL_PREFIX)) {
             return null;

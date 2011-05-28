@@ -69,6 +69,7 @@ public class BigBrother extends JavaPlugin {
     public void onDisable() {
         DataBlockSender.shutdown(this);
         Cleanser.shutdown(this);
+        BBDB.shutdown();
     }
     
     @Override

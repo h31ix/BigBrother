@@ -106,6 +106,26 @@ public class BBDB {
         lowPriority = yml.getBoolean("database.mysql.low-priority-insert", lowPriority);
     }
     
+    public static void shutdown() {
+        // Close open statements
+        for(StatementInfo stmt : statements.values()) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+            }
+        }
+        
+        // Close connection
+        try {
+            conn.close();
+        } catch (SQLException e) {
+        }
+        
+        // Shutdown driver
+        driver.shutdown();
+        
+    }
+    
     public static void setDBMS(String name) {
         try {
             dbms = DBMS.valueOf(name.toUpperCase());
