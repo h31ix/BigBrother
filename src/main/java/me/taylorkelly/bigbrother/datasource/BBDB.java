@@ -88,10 +88,16 @@ public class BBDB {
     public static void init(BetterConfig yml, DBFailCallback fcb) {
         // Database type (Database Management System = DBMS :V)
         final String dbms = yml.getString("database.type", DBMS.H2.name());
+        final String cleanse_age=yml.getString("database.cleanser.age", "3d");
         setDBMS(dbms);
         
         BBSettings.deletesPerCleansing = yml.getLong("database.cleanser.deletes-per-operation", BBSettings.deletesPerCleansing); // "The maximum number of records to delete per cleansing (0 to disable).");
-        BBSettings.cleanseAge = TimeParser.parseInterval(yml.getString("database.cleanser.age", "3d"));// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
+        
+        if(cleanse_age.equals("0s") || cleanse_age.equalsIgnoreCase("off"))
+            BBSettings.cleanseAge=-1;
+        else
+            BBSettings.cleanseAge = TimeParser.parseInterval(cleanse_age);// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
+        
         BBSettings.sendDelay = yml.getInt("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
         
         username = yml.getString("database.username", username);

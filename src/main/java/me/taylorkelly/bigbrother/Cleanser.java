@@ -88,7 +88,6 @@ public class Cleanser {
         
         private void cleanByAge() {
             long start = System.currentTimeMillis() / 1000;
-            
             cleanedSoFarAge = BBDB.executeUpdate(BBDataTable.getInstance().getCleanseAged(Long.valueOf(Time.ago(BBSettings.cleanseAge)),
                     BBSettings.deletesPerCleansing));
             if(cleanedSoFarAge==Statement.EXECUTE_FAILED)
