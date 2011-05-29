@@ -64,7 +64,6 @@ public class BBDB {
     public static String               engine      = "INNODB";
     
     private static Connection          conn;
-    @SuppressWarnings("unused")
     private static JDCConnectionDriver driver;
     public static Map<ResultSet,StatementInfo> statements = new HashMap<ResultSet,StatementInfo>();
     
@@ -76,14 +75,11 @@ public class BBDB {
      * Set up the connection
      * 
      * @param plugin
-     * @param system
-     *            DBMS in use
-     * @param hostname
-     *            Address of the server
+     * @param system DBMS in use
+     * @param hostname Address of the server
      * @param username
      * @param password
-     * @param schema
-     *            Database
+     * @param schema Database
      */
     public static void init(BetterConfig yml, DBFailCallback fcb) {
         // Database type (Database Management System = DBMS :V)
