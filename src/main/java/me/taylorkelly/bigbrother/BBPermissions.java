@@ -56,7 +56,7 @@ public class BBPermissions {
     private static boolean permission(Player player, String string) {
         switch (handler) {
             case PERMISSIONS:
-                return ((Permissions)permissionsPlugin).getHandler().permission(player, string);
+                return permissionHandler.has(player, string);
             //case GROUP_MANAGER:
             //    return ((GroupManager)permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, string);
             case NONE:
