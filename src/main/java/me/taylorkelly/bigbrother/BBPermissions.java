@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
-// import org.anjocaido.groupmanager.GroupManager; // Inactive and Essentials screwed up their maven repo
 
 public class BBPermissions {
 
@@ -15,12 +14,13 @@ public class BBPermissions {
         GROUP_MANAGER, 
         NONE
     }
+
+    private static com.nijiko.permissions.PermissionHandler permissionHandler;
+    private static Plugin permissionsPlugin;
     private static PermissionHandler handler;
-    private static Plugin permissionPlugin;
 
     public static void initialize(Server server) {
         //Plugin groupManager = server.getPluginManager().getPlugin("GroupManager");
-        Plugin permissions = server.getPluginManager().getPlugin("Permissions");
         
         /* Use FakePermissions 
          if (groupManager != null) {
@@ -28,28 +28,35 @@ public class BBPermissions {
             handler = PermissionHandler.GROUP_MANAGER;
             String version = groupManager.getDescription().getVersion();
             BBLogging.info("Permissions enabled using: GroupManager v" + version);
-        } else*/ 
-        if (permissions != null) {
-            permissionPlugin = permissions;
+        } else*/
+        if(setupPermissions(server)) {
             handler = PermissionHandler.PERMISSIONS;
-            String version = permissions.getDescription().getVersion();
-            
-            if (!server.getPluginManager().isPluginEnabled(permissionPlugin)) {
-                BBLogging.info("Permissions plugin found but disabled. Enabling 'Permissions' (v"+version+").");
-                server.getPluginManager().enablePlugin(permissionPlugin);
-            }
-            
-            BBLogging.info("Permissions enabled using: Permissions v" + version);
         } else {
             handler = PermissionHandler.NONE;
             BBLogging.severe("A permission plugin isn't loaded, only OPs can use commands");
         }
     }
+    
+    private static boolean setupPermissions(Server server) {
+        permissionsPlugin = server.getPluginManager().getPlugin("Permissions");
+
+        if (permissionHandler == null) {
+            if (permissionsPlugin != null) {
+                permissionHandler = ((Permissions) permissionsPlugin).getHandler();
+                String version = permissionsPlugin.getDescription().getVersion();
+                BBLogging.info("Permissions enabled using: Permissions v" + version);
+                return true;
+            } else {
+                BBLogging.warning("Permission system not detected, defaulting to OP");
+            }
+        }
+        return false;
+    }
 
     private static boolean permission(Player player, String string) {
         switch (handler) {
             case PERMISSIONS:
-                return ((Permissions)permissionPlugin).getHandler().permission(player, string);
+                return permissionHandler.has(player, string);
             //case GROUP_MANAGER:
             //    return ((GroupManager)permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, string);
             case NONE:
