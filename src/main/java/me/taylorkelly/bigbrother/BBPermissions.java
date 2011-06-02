@@ -5,9 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import org.bukkit.plugin.Plugin;
 
 public class BBPermissions {
 
@@ -19,7 +16,7 @@ public class BBPermissions {
     }
 
     private static com.nijiko.permissions.PermissionHandler permissionHandler;
-    private static Plugin permissionPlugin;
+    private static Plugin permissionsPlugin;
     private static PermissionHandler handler;
 
     public static void initialize(Server server) {
@@ -41,7 +38,7 @@ public class BBPermissions {
     }
     
     private static boolean setupPermissions(Server server) {
-        Plugin permissionsPlugin = server.getPluginManager().getPlugin("Permissions");
+        permissionsPlugin = server.getPluginManager().getPlugin("Permissions");
 
         if (permissionHandler == null) {
             if (permissionsPlugin != null) {
@@ -59,7 +56,7 @@ public class BBPermissions {
     private static boolean permission(Player player, String string) {
         switch (handler) {
             case PERMISSIONS:
-                return ((Permissions)permissionPlugin).getHandler().permission(player, string);
+                return ((Permissions)permissionsPlugin).getHandler().permission(player, string);
             //case GROUP_MANAGER:
             //    return ((GroupManager)permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, string);
             case NONE:
