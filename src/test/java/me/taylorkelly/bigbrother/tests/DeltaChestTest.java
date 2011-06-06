@@ -3,7 +3,9 @@
  */
 package me.taylorkelly.bigbrother.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaType;
@@ -14,7 +16,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
