@@ -23,13 +23,13 @@ import org.junit.Test;
  *
  */
 public class DeltaChestTest {
-    private World world;
+    //private World world;
     private ItemStack[] stateA;
     private BBPlayerInfo douchebag;
 
     @Before
     public void setUp() {
-        this.world = TestUtils.createSimpleWorld();
+        //this.world = TestUtils.createSimpleWorld();
     }
 
     @Test
@@ -64,6 +64,7 @@ public class DeltaChestTest {
     /**
      * Test method for {@link me.taylorkelly.bigbrother.datablock.DeltaChest#rollback(org.bukkit.Server)}.
      */
+    /*
     @Test
     public void testRollback() {
         // Create chest
@@ -100,7 +101,7 @@ public class DeltaChestTest {
         
         assertArrayEquals("Rollback failed",stateA,c.getInventory().getContents());
     }
-    
+    */
     
     /**
      * Test method for {@link me.taylorkelly.bigbrother.datablock.DeltaChest#redo(org.bukkit.Server)}.
