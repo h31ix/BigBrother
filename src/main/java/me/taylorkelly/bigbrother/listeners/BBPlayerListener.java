@@ -23,6 +23,7 @@ import me.taylorkelly.bigbrother.datablock.PickupItem;
 import me.taylorkelly.bigbrother.datablock.PlacedBlock;
 import me.taylorkelly.bigbrother.datablock.Teleport;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
+import me.taylorkelly.util.ChestTools;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -242,7 +243,7 @@ public class BBPlayerListener extends PlayerListener {
 					if(block.getState() instanceof Chest) {
 						Chest chest = ((Chest)block.getState());
 						// OH SHI-
-						BBUsersTable.getInstance().userOpenedChest(player.getName(),chest,plugin.getChestContents(chest));
+						BBUsersTable.getInstance().userOpenedChest(player.getName(),chest,ChestTools.getChestContents(chest));
 						return;
 					}
 					switch (event.getMaterial()) {

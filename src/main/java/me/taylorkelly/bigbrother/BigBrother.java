@@ -31,12 +31,11 @@ import me.taylorkelly.bigbrother.listeners.BBEntityListener;
 import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
+import me.taylorkelly.util.ChestTools;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -276,7 +275,7 @@ public class BigBrother extends JavaPlugin {
                 if (world.getBlockAt(x, y, z).getState() instanceof Chest) {
                     Chest chest = (Chest) world.getBlockAt(x, y, z).getState();
                     ItemStack[] orig = pi.getOldChestContents();
-                    ItemStack[] latest = getChestContents(chest);
+                    ItemStack[] latest = ChestTools.getChestContents(chest);
                     DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
                     dc.send();
                 }
@@ -285,64 +284,5 @@ public class BigBrother extends JavaPlugin {
             // Chest closed.
         }
          
-    }
-    
-    // Horrific bug, that took me ages to discover. When Accessing double chest
-    // inventory using default bukkit method,
-    // the getInventory() method returns only half of the contents, depending on
-    // what block was right-clicked.
-    // According to forums, there is no appropriate solution in bukkit API, so
-    // we must manually search, whether
-    // current chest is double chest, and then eventually return merged
-    // inventories.
-    // TODO: Is this fixed?
-    public ItemStack[] getChestContents(Chest chest) {
-        Chest second = null;
-        
-        // iterate through nearby blocks.
-        
-        if (chest.getBlock().getRelative(BlockFace.NORTH).getType() == Material.CHEST)
-            second = (Chest) chest.getBlock().getRelative(BlockFace.NORTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.CHEST)
-            second = (Chest) chest.getBlock().getRelative(BlockFace.SOUTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.EAST).getType() == Material.CHEST)
-            second = (Chest) chest.getBlock().getRelative(BlockFace.EAST).getState();
-        else if (chest.getBlock().getRelative(BlockFace.WEST).getType() == Material.CHEST)
-            second = (Chest) chest.getBlock().getRelative(BlockFace.WEST).getState();
-        
-        if (second == null) {
-            // no problem here
-            return chest.getInventory().getContents();
-        } else {
-            // I think it would be good, to consitently return same chest
-            // contents, regardless of what
-            // block was clicked on. That means, we must determine, which part
-            // of chest comes first, and which second.
-            // I choose the one, which has lower X coordinate. If they are same,
-            // than it's the one with lower Z coordinate.
-            // I believe it can be easily checked with this trick:
-            
-            ItemStack[] result = new ItemStack[54];
-            ItemStack[] firstHalf;
-            ItemStack[] secondHalf;
-            
-            if ((chest.getX() + chest.getZ()) < (second.getX() + second.getZ())) {
-                firstHalf = chest.getInventory().getContents();
-                secondHalf = second.getInventory().getContents();
-            } else {
-                firstHalf = second.getInventory().getContents();
-                secondHalf = chest.getInventory().getContents();
-            }
-            
-            // now merge them
-            // possibly unsafe number 27?
-            for (int i = 0; i < 27; i++) {
-                result[i] = firstHalf[i];
-                result[i + 27] = secondHalf[i];
-            }
-            
-            return result;
-        }
-        
     }
 }

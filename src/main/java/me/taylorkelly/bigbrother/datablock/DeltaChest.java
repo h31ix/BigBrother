@@ -2,6 +2,7 @@ package me.taylorkelly.bigbrother.datablock;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
+import me.taylorkelly.util.ChestTools;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -269,13 +270,13 @@ public class DeltaChest extends BBDataBlock {
     private void do_NewRollback(World currWorld, Block block) {
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
-            DeltaEntry[] diff = processDeltaStream(chest.getInventory().getContents().length,data);
-            Inventory inv = chest.getInventory();
+            ItemStack[] inv = ChestTools.getChestContents(chest);
+            DeltaEntry[] diff = processDeltaStream(inv.length,data);
             for(int i = 0;i<chest.getInventory().getSize();i++) {
                 switch(diff[i].Type) {
                 case ADDED:
                 case REMOVED:
-                    ItemStack stack = inv.getItem(i);
+                    ItemStack stack = inv[i];
                     if(stack==null)
                     	stack=diff[i].oldStack;
                     else
@@ -283,18 +284,19 @@ public class DeltaChest extends BBDataBlock {
                     	stack.setAmount(stack.getAmount()-diff[i].Amount);
                     	stack.setDurability(diff[i].Damage);
                     }
-                    inv.setItem(i, stack);
+                    inv[i]=stack;
                     break;
                 case REPLACED:
-                    inv.setItem(i, diff[i].oldStack);
+                    inv[i]=diff[i].oldStack;
                     break;
                 case NO_CHANGE:
                     break;
                 }
             }
+            ChestTools.setChestContents(chest, inv);
         }
     }
-
+    
     private void do_OldRollback(World currWorld,Block block) {
         String[] changes = data.split(";");
         if (block.getState() instanceof Chest) {
