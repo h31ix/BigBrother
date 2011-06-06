@@ -3,11 +3,15 @@
  */
 package me.taylorkelly.bigbrother.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaType;
 
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,13 +22,13 @@ import org.junit.Test;
  *
  */
 public class DeltaChestTest {
-    //private World world;
-    //private ItemStack[] stateA;
-    //private BBPlayerInfo douchebag;
+    private World world;
+    private ItemStack[] stateA;
+    private BBPlayerInfo douchebag;
 
     @Before
     public void setUp() {
-        //this.world = TestUtils.createSimpleWorld();
+        this.world = TestUtils.createSimpleWorld();
     }
 
     @Test
@@ -59,7 +63,7 @@ public class DeltaChestTest {
     /**
      * Test method for {@link me.taylorkelly.bigbrother.datablock.DeltaChest#rollback(org.bukkit.Server)}.
      */
-    /*@Test
+    @Test
     public void testRollback() {
         // Create chest
         Block blockA = world.getBlockAt(0,0,0);
@@ -95,7 +99,7 @@ public class DeltaChestTest {
         
         assertArrayEquals("Rollback failed",stateA,c.getInventory().getContents());
     }
-    */
+    
     
     /**
      * Test method for {@link me.taylorkelly.bigbrother.datablock.DeltaChest#redo(org.bukkit.Server)}.
