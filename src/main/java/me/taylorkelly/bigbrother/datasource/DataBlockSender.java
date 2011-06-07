@@ -44,6 +44,12 @@ public class DataBlockSender {
     private static boolean sendBlocksSQL(Collection<BBDataBlock> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
 
+        // Perform a NOP if nothing's happened.
+        if(SENDING.size()==0) {
+            // Hopefully this'll work with all DBMSes or I'll start choking bitches.
+            BBDB.executeQuery("SELECT 1");
+            return true;
+        }
         //H2 fix...
         if (BBDB.usingDBMS(DBMS.H2)) {
             for (BBDataBlock block : collection) {
