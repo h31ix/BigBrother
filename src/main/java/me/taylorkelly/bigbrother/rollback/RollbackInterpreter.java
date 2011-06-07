@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import me.taylorkelly.bigbrother.WorldManager;
+import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
 import me.taylorkelly.util.TimeParser;
 
 import org.bukkit.ChatColor;
@@ -24,6 +26,7 @@ public class RollbackInterpreter {
     private WorldManager manager;
     private int radius = 0;
     private Plugin plugin;
+    private List<Action> allowedActions;
     
     public RollbackInterpreter(Player player, String[] split, Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
@@ -43,6 +46,8 @@ public class RollbackInterpreter {
                 parseId(argument.substring(3));
             } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("r:")) {
                 parseRadius(argument.substring(2));
+            } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("a:")) {
+                parseAction(argument.substring(2));
             } else if (argument.equalsIgnoreCase("*")) {
                 all = true;
             } else {
@@ -56,6 +61,32 @@ public class RollbackInterpreter {
         }
     }
     
+    /**
+     * actions to roll back
+     * a:10,!BLOCK_PLACE
+     * @author N3X15
+     */
+    private void parseAction(String actstr) {
+        allowedActions = new ArrayList<Action>();
+        for(String act:actstr.split(",")) {
+            if(act.startsWith("!") && allowedActions.size()==0) {
+                // Populate list
+                for(Action a:BBDataBlock.Action.values())
+                    allowedActions.add(a);
+            }
+            Action ca;
+            if(act.startsWith("!")) {
+                ca = Action.valueOf(act.substring(1));
+                if(allowedActions.contains(ca))
+                    allowedActions.remove(ca);
+            }else{
+                ca = Action.valueOf(act);
+                if(!allowedActions.contains(ca))
+                    allowedActions.add(ca);
+            }
+        }
+    }
+
     private void parseRadius(String radius) {
         try {
             int radInt = Integer.parseInt(radius);
@@ -112,6 +143,7 @@ public class RollbackInterpreter {
         if (!blockTypes.isEmpty()) {
             rollback.addTypes(blockTypes);
         }
+        rollback.allowedActions=allowedActions;
         rollback.setRadius(radius, player.getLocation());
         if (radius == 0 && dateSearch == null) {
             return false;

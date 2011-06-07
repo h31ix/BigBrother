@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
@@ -39,6 +40,7 @@ public class Rollback {
     private final WorldManager manager;
     //private int size; // Number of items to roll back
     private final Plugin plugin;
+    public List<Action> allowedActions;
     
     public Rollback(Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
@@ -50,6 +52,7 @@ public class Rollback {
         players = new ArrayList<String>();
         recievers = new ArrayList<Player>();
         listBlocks = new LinkedList<BBDataBlock>();
+        allowedActions=new ArrayList<Action>();
     }
     
     public void addReciever(Player player) {
@@ -167,6 +170,9 @@ public class Rollback {
                         player.sendMessage(ChatColor.BLUE + "Player(s): " + ChatColor.WHITE + playersString);
                         if (blockTypes.size() > 0) {
                             player.sendMessage(ChatColor.BLUE + "Block Type(s): " + ChatColor.WHITE + getSimpleString(blockTypes));
+                        }
+                        if (allowedActions.size() > 0) {
+                            player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getSimpleString((ArrayList<?>) allowedActions));
                         }
                         if (time != 0) {
                             Calendar cal = Calendar.getInstance();
