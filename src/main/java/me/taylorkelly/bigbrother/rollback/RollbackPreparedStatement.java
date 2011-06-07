@@ -35,7 +35,8 @@ public abstract class RollbackPreparedStatement {
         statement.append(", "+BBUsersTable.getInstance().getTableName()+" AS usr ");
         statement.append(" WHERE ");
         statement.append(" bbworlds.id = bbdata.world AND bbdata.player = usr.id AND ");
-        statement.append(getActionString());
+        statement.append(getActionString(rollback));
+        
         if (!rollback.rollbackAll) {
             statement.append(" AND ");
             statement.append(getPlayerString(rollback.players));
@@ -124,31 +125,19 @@ public abstract class RollbackPreparedStatement {
         return ret;
     }
 
-    private StringBuilder getActionString() {
-        // TODO maybe more customizable actions?
+    private StringBuilder getActionString(Rollback rollback) {
         StringBuilder ret = new StringBuilder("action IN(");
-        ret.append("'");
-        ret.append(Action.BLOCK_BROKEN.ordinal());
-        ret.append("','");
-        ret.append(Action.BLOCK_PLACED.ordinal());
-        ret.append("','");
-        ret.append(Action.DELTA_CHEST.ordinal());
-        ret.append("','");
-        ret.append(Action.CREATE_SIGN_TEXT.ordinal());
-        ret.append("','");
-        ret.append(Action.DESTROY_SIGN_TEXT.ordinal());
-        ret.append("','");
-        ret.append(Action.LEAF_DECAY.ordinal());
-        ret.append("','");
-        ret.append(Action.TNT_EXPLOSION.ordinal());
-        ret.append("','");
-        ret.append(Action.CREEPER_EXPLOSION.ordinal());
-        ret.append("','");
-        ret.append(Action.MISC_EXPLOSION.ordinal());
-        ret.append("','");
-        ret.append(Action.BLOCK_BURN.ordinal());
-        ret.append("','");
-        ret.append(Action.LAVA_FLOW.ordinal());
+        boolean first=true;
+        for(Action act:rollback.allowedActions) {
+            if(first) {
+                first=false;
+            } else {
+                ret.append(",");
+            }
+            ret.append("'");
+            ret.append(act.ordinal());
+            ret.append("'");
+        }
         ret.append("')");
         return ret;
     }
@@ -161,7 +150,7 @@ public abstract class RollbackPreparedStatement {
         else
         	statement.append(" SET rbacked = '1'");
         statement.append(" WHERE ");
-        statement.append(getActionString());
+        statement.append(getActionString(rollback));
         if (!rollback.rollbackAll) {
             statement.append(" AND ");
             statement.append(getPlayerString(rollback.players));
@@ -236,7 +225,7 @@ public abstract class RollbackPreparedStatement {
         	statement.append(" SET rbacked = '0'");
         statement.append(" WHERE ");
         statement.append(" bbdata.player = usr.id AND ");
-        statement.append(getActionString());
+        statement.append(getActionString(rollback));
         if (!rollback.rollbackAll) {
             statement.append(" AND ");
             statement.append(getPlayerString(rollback.players));

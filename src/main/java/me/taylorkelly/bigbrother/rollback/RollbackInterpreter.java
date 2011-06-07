@@ -3,15 +3,15 @@ package me.taylorkelly.bigbrother.rollback;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
 import me.taylorkelly.util.TimeParser;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class RollbackInterpreter {
@@ -71,8 +71,17 @@ public class RollbackInterpreter {
         for(String act:actstr.split(",")) {
             if(act.startsWith("!") && allowedActions.size()==0) {
                 // Populate list
-                for(Action a:BBDataBlock.Action.values())
-                    allowedActions.add(a);
+                allowedActions.add(Action.BLOCK_BROKEN);
+                allowedActions.add(Action.BLOCK_PLACED);
+                allowedActions.add(Action.DELTA_CHEST);
+                allowedActions.add(Action.CREATE_SIGN_TEXT);
+                allowedActions.add(Action.DESTROY_SIGN_TEXT);
+                allowedActions.add(Action.LEAF_DECAY);
+                allowedActions.add(Action.TNT_EXPLOSION);
+                allowedActions.add(Action.CREEPER_EXPLOSION);
+                allowedActions.add(Action.MISC_EXPLOSION);
+                allowedActions.add(Action.BLOCK_BURN);
+                allowedActions.add(Action.LAVA_FLOW);
             }
             Action ca;
             if(act.startsWith("!")) {
