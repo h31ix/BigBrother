@@ -35,6 +35,20 @@ public class RollbackInterpreter {
         this.plugin = plugin;
         playerList = new ArrayList<String>();
         blockTypes = new ArrayList<Integer>();
+        // Populate list
+        allowedActions = new ArrayList<Action>();
+        allowedActions.add(Action.BLOCK_BROKEN);
+        allowedActions.add(Action.BLOCK_PLACED);
+        allowedActions.add(Action.DELTA_CHEST);
+        allowedActions.add(Action.CREATE_SIGN_TEXT);
+        allowedActions.add(Action.DESTROY_SIGN_TEXT);
+        allowedActions.add(Action.LEAF_DECAY);
+        allowedActions.add(Action.TNT_EXPLOSION);
+        allowedActions.add(Action.CREEPER_EXPLOSION);
+        allowedActions.add(Action.MISC_EXPLOSION);
+        allowedActions.add(Action.BLOCK_BURN);
+        allowedActions.add(Action.LAVA_FLOW);
+        
         for (int i = 1; i < split.length; i++) {
             String argument = split[i].trim();
             if (argument.equals("") || argument.equals(" ")) {
@@ -69,19 +83,8 @@ public class RollbackInterpreter {
     private void parseAction(String actstr) {
         allowedActions = new ArrayList<Action>();
         for(String act:actstr.split(",")) {
-            if(act.startsWith("!") && allowedActions.size()==0) {
-                // Populate list
-                allowedActions.add(Action.BLOCK_BROKEN);
-                allowedActions.add(Action.BLOCK_PLACED);
-                allowedActions.add(Action.DELTA_CHEST);
-                allowedActions.add(Action.CREATE_SIGN_TEXT);
-                allowedActions.add(Action.DESTROY_SIGN_TEXT);
-                allowedActions.add(Action.LEAF_DECAY);
-                allowedActions.add(Action.TNT_EXPLOSION);
-                allowedActions.add(Action.CREEPER_EXPLOSION);
-                allowedActions.add(Action.MISC_EXPLOSION);
-                allowedActions.add(Action.BLOCK_BURN);
-                allowedActions.add(Action.LAVA_FLOW);
+            if(!act.startsWith("!") && allowedActions.size()==0) {
+                allowedActions.clear();
             }
             Action ca;
             if(act.startsWith("!")) {
