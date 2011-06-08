@@ -3,6 +3,7 @@ package me.taylorkelly.bigbrother.rollback;
 import java.util.ArrayList;
 
 
+import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
@@ -139,6 +140,7 @@ public abstract class RollbackPreparedStatement {
             ret.append("'");
         }
         ret.append("')");
+        BBLogging.info(ret.toString());
         return ret;
     }
 
