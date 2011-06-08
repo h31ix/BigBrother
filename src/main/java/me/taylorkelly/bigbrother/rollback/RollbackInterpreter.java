@@ -81,7 +81,6 @@ public class RollbackInterpreter {
      * @author N3X15
      */
     private void parseAction(String actstr) {
-        allowedActions = new ArrayList<Action>();
         for(String act:actstr.split(",")) {
             if(!act.startsWith("!") && allowedActions.size()==0) {
                 allowedActions.clear();
