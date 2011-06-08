@@ -16,6 +16,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mysql.jdbc.CommunicationsException;
+
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
@@ -345,6 +347,13 @@ public class BBDB {
                 return null;
             rs = stmt.getResultSet();
             statements.put(rs,new StatementInfo(stmt));
+        } catch(CommunicationsException e) {
+            BBLogging.severe("Communications failure, attempting to reconnect.",e);
+            try {
+                reconnect();
+            } catch (SQLException e1) {
+                BBLogging.severe("Failed to reconnect.",e1);
+            }
         } catch (SQLException e) {
             BBLogging.severe("executeQuery failed (" + sql + "):", e);
         } finally {
