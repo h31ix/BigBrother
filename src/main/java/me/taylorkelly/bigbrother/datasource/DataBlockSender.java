@@ -45,7 +45,7 @@ public class DataBlockSender {
         // Try to refactor most of these into the table managers.
 
         // Perform a NOP if nothing's happened.
-        if(SENDING.size()==0) {
+        if(collection.size()==0) {
             // Hopefully this'll work with all DBMSes or I'll start choking bitches.
             BBDB.executeQuery("SELECT 1");
             return true;
