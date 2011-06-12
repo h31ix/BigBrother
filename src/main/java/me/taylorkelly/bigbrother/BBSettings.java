@@ -1,8 +1,13 @@
 package me.taylorkelly.bigbrother;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -69,6 +74,10 @@ public class BBSettings {
 
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
+        }
+        final File exampleYml = new File(dataFolder,"BigBrother.example.yml");
+        if(!exampleYml.exists()) {
+            saveDefaultConfig(exampleYml);
         }
         final File yml = new File(dataFolder, "BigBrother.yml");
         BBLogging.debug("Path to BigBrother.yml: " + yml.getPath());
@@ -236,5 +245,23 @@ public class BBSettings {
      */
     public static boolean isBlockIgnored(int type) {
         return blockExclusionList.contains(type);
+    }
+    
+
+    private static void saveDefaultConfig(File f) {
+        try{
+            InputStream is = BigBrother.class.getResourceAsStream("BigBrother.example.yml");
+            BufferedReader in = new BufferedReader(new InputStreamReader(is));
+            FileWriter fstream = new FileWriter(f);
+            BufferedWriter out = new BufferedWriter(fstream);
+            String line;
+            while((line=in.readLine())!=null){
+                out.write(line+"\n");
+            }
+            //Close the output stream
+            out.close();
+        }catch (Exception e){//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 }
