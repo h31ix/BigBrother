@@ -139,7 +139,7 @@ public abstract class RollbackPreparedStatement {
             ret.append(act.ordinal());
             ret.append("'");
         }
-        ret.append("')");
+        ret.append(")");
         BBLogging.info(ret.toString());
         return ret;
     }

@@ -24,8 +24,17 @@ public abstract class BBDataBlock {
     public long date;
 
     public static enum Action {
-
+        /**
+         * A block has been broken.
+         * 
+         * @author tkelly910
+         * @since Unknown
+         */
         BLOCK_BROKEN,
+        
+        /**
+         * 
+         */
         BLOCK_PLACED,
         DESTROY_SIGN_TEXT,
         TELEPORT,
