@@ -104,6 +104,7 @@
 					<encoding>UTF-8</encoding>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
+					<optimize>true</optimize>
 				</configuration>
 			</plugin>
 			<plugin>

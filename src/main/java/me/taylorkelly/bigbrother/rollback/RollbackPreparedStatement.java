@@ -126,6 +126,7 @@ public abstract class RollbackPreparedStatement {
         return ret;
     }
 
+    // @QA-Tested andrewkm  6/12/2011
     private StringBuilder getActionString(Rollback rollback) {
         StringBuilder ret = new StringBuilder("action IN(");
         boolean first=true;
@@ -140,7 +141,6 @@ public abstract class RollbackPreparedStatement {
             ret.append("'");
         }
         ret.append(")");
-        BBLogging.info(ret.toString());
         return ret;
     }
 
