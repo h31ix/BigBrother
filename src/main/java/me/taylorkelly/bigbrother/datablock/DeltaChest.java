@@ -187,7 +187,7 @@ public class DeltaChest extends BBDataBlock {
             if(orig.getTypeId()==0 || latest.getTypeId()==0)
                 return false;
             
-            if(!orig.getType().equals(latest.getType()))
+            if(orig.getTypeId() != latest.getTypeId())
                 return true;
             else {
                 return(ItemType.usesDamageValue(orig.getTypeId()) && orig.getDurability()!=latest.getDurability());
