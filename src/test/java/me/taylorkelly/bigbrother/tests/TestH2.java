@@ -22,7 +22,7 @@ import org.junit.Test;
  * @author Rob
  * 
  */
-public class H2Tests {
+public class TestH2 {
     
     private static final String BBDATA_TABLE_NAME = "bbdata";
     private static final String BBUSERS_TABLE_NAME = "bbusers";
