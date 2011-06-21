@@ -44,6 +44,10 @@ public abstract class BBWorldsTable extends DBTable {
         return instance;
     }
     
+    public static void cleanup() {
+        instance=null;
+    }
+    
     @Override
     public String getCreateSyntax() {
         return "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("

@@ -49,6 +49,10 @@ public abstract class BBDataTable extends DBTable {
         return instance;
     }
     
+    public static void cleanup() {
+        instance=null;
+    }
+    
     public BBDataTable() {
         if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
             drop();

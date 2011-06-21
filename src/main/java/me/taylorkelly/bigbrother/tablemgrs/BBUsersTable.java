@@ -57,6 +57,10 @@ public abstract class BBUsersTable extends DBTable {
         return instance;
     }
     
+    public static void cleanup() {
+        instance=null;
+    }
+    
     protected abstract void loadCache();
     
     public BBUsersTable() {
