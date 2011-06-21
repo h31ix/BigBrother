@@ -25,7 +25,7 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
-			<url>http://ci.nexisonline.net:8080/nexus/content/groups/public/</url>
+			<url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
