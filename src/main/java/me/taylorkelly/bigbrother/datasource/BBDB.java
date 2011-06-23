@@ -71,20 +71,10 @@ public class BBDB {
         void disableMe();
     }
     
-    /**
-     * Set up the connection
-     * 
-     * @param plugin
-     * @param system DBMS in use
-     * @param hostname Address of the server
-     * @param username
-     * @param password
-     * @param schema Database
-     */
-    public static void init(BetterConfig yml, DBFailCallback fcb) {
+    public static void initSettings(BetterConfig yml) {
         // Database type (Database Management System = DBMS :V)
         final String dbms = yml.getString("database.type", DBMS.H2.name());
-        final String cleanse_age=yml.getString("database.cleanser.age", "3d");
+        final String cleanse_age=yml.getString("database.cleanser.age", "7d");
         setDBMS(dbms);
         
         BBSettings.deletesPerCleansing = yml.getLong("database.cleanser.deletes-per-operation", BBSettings.deletesPerCleansing); // "The maximum number of records to delete per cleansing (0 to disable).");
@@ -107,6 +97,18 @@ public class BBDB {
         engine = yml.getString("database.mysql.engine", engine);
         lowPriority = yml.getBoolean("database.mysql.low-priority-insert", lowPriority);
     }
+    
+    /**
+     * Set up the connection
+     * 
+     * @param plugin
+     * @param system DBMS in use
+     * @param hostname Address of the server
+     * @param username
+     * @param password
+     * @param schema Database
+     */
+    public static void init() {}
     
     public static void shutdown() {
         // Close open statements
@@ -181,7 +183,7 @@ public class BBDB {
         } catch (IllegalAccessException e) {
             BBLogging.severe("Cannot access the " + driverClass + " driver!", e);
         } catch (ClassNotFoundException e) {
-            BBLogging.severe("Cannot find the " + driverClass + " driver!", e);
+            BBLogging.severe("Cannot find the " + driverClass + " driver!  Restart the server and try again.", e);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

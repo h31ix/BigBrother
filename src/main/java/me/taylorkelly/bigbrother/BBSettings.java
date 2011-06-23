@@ -11,13 +11,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.datasource.BBDB;
-import me.taylorkelly.bigbrother.datasource.BBDB.DBFailCallback;
-
 import me.taylorkelly.util.TimeParser;
 
 import org.bukkit.Server;
+
 import com.sk89q.worldedit.blocks.ItemType;
 
 // TODO: Split all these vars into separate classes in anticipation of yamlification.
@@ -110,11 +110,6 @@ public class BBSettings {
             yml.removeProperty("database.mysql.prefix"); 
         }
         
-        BBDB.init(yml,new DBFailCallback() {
-            public void disableMe() {
-                plugin.getServer().getPluginManager().disablePlugin(plugin);
-            }
-        });
         loadWatchSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");
