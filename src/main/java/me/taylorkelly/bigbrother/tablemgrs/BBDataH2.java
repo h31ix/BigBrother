@@ -38,7 +38,7 @@ public class BBDataH2 extends BBDataTable {
         + "`action` tinyint NOT NULL DEFAULT '0'," 
         + "`world` tinyint NOT NULL DEFAULT '0'," 
         + "`x` int NOT NULL DEFAULT '0'," 
-        + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," 
+        + "`y` int UNSIGNED NOT NULL DEFAULT '0'," 
         + "`z` int NOT NULL DEFAULT '0'," 
         + "`type` smallint NOT NULL DEFAULT '0'," 
         + "`data` TEXT NOT NULL DEFAULT ''," 
