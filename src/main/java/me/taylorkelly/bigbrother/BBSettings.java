@@ -109,7 +109,7 @@ public class BBSettings {
             BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
             yml.removeProperty("database.mysql.prefix"); 
         }
-        
+        BBDB.initSettings(yml);
         loadWatchSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");

@@ -21,9 +21,9 @@ public class TestBigBrother {
     public void configGeneration() {
         File dataFolder = new File(testFolder,"configGeneration");
         dataFolder.mkdirs();
-        File settingsFile =new File(dataFolder,"BigBrother.yml");
+        File settingsFile = new File(dataFolder,"BigBrother.yml");
         BBSettings.initialize(null, dataFolder);
-        Assert.assertTrue("Coonfiguration didn't generate.",settingsFile.exists());
+        Assert.assertTrue("Configuration didn't generate.",settingsFile.exists());
     }
     
     @Test
