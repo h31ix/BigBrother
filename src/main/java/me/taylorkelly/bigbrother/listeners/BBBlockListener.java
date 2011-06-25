@@ -5,12 +5,12 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.BlockBurnLogger;
-import me.taylorkelly.bigbrother.LavaFlowLogger;
+import me.taylorkelly.bigbrother.FlowLogger;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.CreateSignText;
 import me.taylorkelly.bigbrother.datablock.FlintAndSteel;
-import me.taylorkelly.bigbrother.datablock.LavaFlow;
+import me.taylorkelly.bigbrother.datablock.Flow;
 import me.taylorkelly.bigbrother.datablock.LeafDecay;
 import me.taylorkelly.bigbrother.datablock.PlacedBlock;
 import me.taylorkelly.bigbrother.datablock.SignDestroyed;
@@ -72,7 +72,7 @@ public class BBBlockListener extends BlockListener {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
             if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA) {
-                LavaFlowLogger.log(block, player.getName());
+                FlowLogger.log(block, player.getName());
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
             dataBlock.send();
@@ -152,7 +152,7 @@ public class BBBlockListener extends BlockListener {
         Block blockTo = event.getToBlock();
         boolean lava = blockFrom.getType() == Material.LAVA || blockFrom.getType() == Material.STATIONARY_LAVA;
         if (!event.isCancelled() && lava && BBSettings.lavaFlow) {
-            LavaFlow dataBlock = LavaFlowLogger.getFlow(blockFrom, blockTo);
+            Flow dataBlock = FlowLogger.getFlow(blockFrom, blockTo);
             dataBlock.send();
         }
     }

@@ -138,7 +138,7 @@ public abstract class BBDataBlock {
             case BLOCK_BURN:
                 return BlockBurn.getBBDataBlock(pi, world, x, y, z, type, data);
             case LAVA_FLOW:
-                return LavaFlow.getBBDataBlock(pi, world, x, y, z, type, data);
+                return Flow.getBBDataBlock(pi, world, x, y, z, type, data);
             case DROP_ITEM:
                 return DropItem.getBBDataBlock(pi, world, x, y, z, type, data);
             case PICKUP_ITEM:

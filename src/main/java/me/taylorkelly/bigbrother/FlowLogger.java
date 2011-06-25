@@ -2,19 +2,20 @@ package me.taylorkelly.bigbrother;
 
 import java.util.HashMap;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
-import me.taylorkelly.bigbrother.datablock.LavaFlow;
+import me.taylorkelly.bigbrother.datablock.Flow;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 /**
- * This class is used to track the placement of lava so that flows can be
- * properly associated with a specific player
+ * This class is used to track the movement of blocks so that flows can be
+ * properly associated with a specific player.
+ * @author tkelly910
  */
-public class LavaFlowLogger {
+public class FlowLogger {
     public static double THRESHOLD = 3.0;
     private static HashMap<Location, String> lavaMap = new HashMap<Location, String>();
 
-    public static LavaFlow getFlow(Block blockFrom, Block blockTo) {
+    public static Flow getFlow(Block blockFrom, Block blockTo) {
         String player = BBDataBlock.ENVIRONMENT;
         Location bestLocation = null;
         double bestDistance = THRESHOLD;
@@ -30,7 +31,7 @@ public class LavaFlowLogger {
             player = lavaMap.get(bestLocation);
             log(blockTo.getLocation(), player);
         }
-        return new LavaFlow(player, blockFrom.getWorld().getName(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockFrom.getTypeId(), (byte) 0);
+        return new Flow(player, blockFrom.getWorld().getName(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockFrom.getTypeId(), (byte) 0);
     }
 
     public static void log(Block sourceBlock, String player) {

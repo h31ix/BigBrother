@@ -8,17 +8,17 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class LavaFlow extends BBDataBlock {
+public class Flow extends BBDataBlock {
 
     private ArrayList<BBDataBlock> bystanders;
 
-    public LavaFlow(String player, Block block, String world) {
+    public Flow(String player, Block block, String world) {
         super(player, Action.LAVA_FLOW, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBDataBlock>();
         // TODO can't lava flow break blocks?
     }
 
-    public LavaFlow(String player, String world, int x, int y, int z, int type, byte data) {
+    public Flow(String player, String world, int x, int y, int z, int type, byte data) {
         super(player, Action.LAVA_FLOW, world, x, y, z, type, Byte.toString(data));
         bystanders = new ArrayList<BBDataBlock>();
     }
@@ -30,7 +30,7 @@ public class LavaFlow extends BBDataBlock {
         super.send();
     }
 
-    private LavaFlow(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Flow(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, Action.LAVA_FLOW, world, x, y, z, type, data);
     }
 
@@ -47,6 +47,6 @@ public class LavaFlow extends BBDataBlock {
     }
 
     public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
-        return new LavaFlow(pi, world, x, y, z, type, data);
+        return new Flow(pi, world, x, y, z, type, data);
     }
 }
