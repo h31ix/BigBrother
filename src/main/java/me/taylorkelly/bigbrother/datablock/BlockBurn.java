@@ -70,6 +70,20 @@ public class BlockBurn extends BBDataBlock {
         super(player, Action.BLOCK_BURN, world, x, y, z, type, data);
     }
 
+    /**
+     * @param findOwner
+     * @param block
+     * @param world
+     */
+    public BlockBurn(BBPlayerInfo player, Block block, World world) {
+        super(player.getName(), Action.BLOCK_BURN, world.getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
+        bystanders = new ArrayList<BBDataBlock>();
+        torchCheck(player.getName(), block);
+        surroundingSignChecks(player.getName(), block);
+        signCheck(player.getName(), block);
+        checkGnomesLivingOnTop(player.getName(), block);
+    }
+
     private void torchCheck(String player, Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50);

@@ -23,12 +23,16 @@ import java.util.Map.Entry;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BlockBurn;
 import me.taylorkelly.bigbrother.datablock.Flow;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.bigbrother.tablemgrs.OwnersTable;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 /**
  * This tracks ownership of blocks.
@@ -40,6 +44,14 @@ public class OwnershipManager {
      * How long to cache ownership data in-memory.
      */
     public static final long MAX_SECONDS_UNACCESSED = 10;
+    private static final BlockFace[] cardinalFaces = new BlockFace[]{
+        BlockFace.UP,
+        BlockFace.NORTH,
+        BlockFace.EAST,
+        BlockFace.WEST,
+        BlockFace.SOUTH,
+        BlockFace.DOWN
+    };
     protected static class OwnershipData {
         public int owner;
         public long time;
@@ -144,6 +156,55 @@ public class OwnershipManager {
         ownershipMap.put(loc, dat);
         OwnersTable.set(plugin.worldManager.getWorld(loc.getWorld().getName()),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ(),p.getID());
         cleanup();
+    }
+    /**
+     * @param block
+     * @return
+     */
+    public static BBDataBlock trackBurn(Block block) {
+        Block fire = getBurnSource(block);
+        BBPlayerInfo player = BBPlayerInfo.ENVIRONMENT;
+        if(fire!=null) {
+            player=findOwner(fire);
+        }
+        return new BlockBurn(player,block,block.getWorld());
+    }
+    /**
+     * @param block
+     * @return
+     */
+    private static Block getBurnSource(Block block) {
+        // Fire can be attached to any face of the block,
+        // but we should check the top, first.
+        for(BlockFace bf:cardinalFaces) {
+            if(isFireSource(block.getFace(bf))) {
+                return block.getFace(bf);
+            }
+        }
+        return null;
+    }
+    /**
+     * @param face
+     * @return
+     */
+    private static boolean isFireSource(Block block) {
+        Material mat = block.getType();
+        return mat.equals(Material.LAVA) ||
+                mat.equals(Material.STATIONARY_LAVA) ||
+                mat.equals(Material.FIRE);
+    }
+    /**
+     * @param block
+     */
+    public static void removeOwner(Block block) {
+        removeOwnerByLocation(block.getLocation());
+    }
+    /**
+     * @param location
+     */
+    public static void removeOwnerByLocation(Location loc) {
+        if(ownershipMap.containsKey(loc))
+            ownershipMap.remove(loc);
     }
     
 }

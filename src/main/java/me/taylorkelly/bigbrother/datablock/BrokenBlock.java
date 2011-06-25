@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
+import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -19,6 +21,7 @@ public class BrokenBlock extends BBDataBlock {
 
     public BrokenBlock(String player, Block block, String world) {
         this(player, block, world, true);
+        OwnershipManager.removeOwner(block);
     }
 
     public BrokenBlock(String player, Block block, String world, boolean checks) {
@@ -32,6 +35,7 @@ public class BrokenBlock extends BBDataBlock {
             checkGnomesLivingOnTop(player, block);
             bedCheck(player, block);
         }
+        OwnershipManager.removeOwner(block);
     }
 
     private void chestCheck(String player, Block block) {
@@ -169,6 +173,11 @@ public class BrokenBlock extends BBDataBlock {
         gnomes.add(78); // Snow
         gnomes.add(81); // Cactus
         gnomes.add(83); // Reeds
+        gnomes.add(Material.LONG_GRASS.getId());
+        gnomes.add(Material.DIODE_BLOCK_ON.getId());
+        gnomes.add(Material.DIODE_BLOCK_OFF.getId());
+        gnomes.add(Material.FENCE.getId());
+        gnomes.add(Material.DEAD_BUSH.getId());
 
         int x = block.getX();
         int y = block.getY();

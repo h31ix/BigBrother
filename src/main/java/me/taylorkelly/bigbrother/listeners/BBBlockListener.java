@@ -63,7 +63,7 @@ public class BBBlockListener extends BlockListener {
         if (BBSettings.blockPlace && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
-            if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA) {
+            if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.FIRE) {
                 OwnershipManager.setOwner(block, pi);
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
@@ -116,6 +116,7 @@ public class BBBlockListener extends BlockListener {
             // TODO try to find a player that did it.
             final Block block = event.getBlock();
             BBDataBlock dataBlock = LeafDecay.create(block, block.getWorld().getName());
+            OwnershipManager.removeOwner(block);
             dataBlock.send();
         }
     }
@@ -129,15 +130,22 @@ public class BBBlockListener extends BlockListener {
         }
     }
 
+    /**
+     * Called whenever a block is destroyed by fire
+     */
     @Override
     public void onBlockBurn(BlockBurnEvent event) {
         if (BBSettings.fire && !event.isCancelled()) {
             final Block block = event.getBlock();
-            BBDataBlock dataBlock = BlockBurnLogger.create(block, block.getWorld().getName());
+            BBDataBlock dataBlock = OwnershipManager.trackBurn(block);
+            OwnershipManager.removeOwner(block);
             dataBlock.send();
         }
     }
 
+    /**
+     * Called whenever something flows from one block to another.
+     */
     @Override
     public void onBlockFromTo(BlockFromToEvent event) {
         Block blockFrom = event.getBlock();

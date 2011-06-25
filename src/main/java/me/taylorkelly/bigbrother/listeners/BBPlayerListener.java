@@ -244,6 +244,7 @@ public class BBPlayerListener extends PlayerListener {
 						type = Material.WATER.getId();
 						world = event.getClickedBlock().getWorld();
 						dataBlock = new PlacedBlock(event.getPlayer().getName(), world.getName(), x, y, z, type, (byte) 0);
+						OwnershipManager.setOwnerLocation(new Location(world, x, y, z), pi);
 						dataBlock.send();
 						break;
 					case SIGN:
@@ -290,6 +291,7 @@ public class BBPlayerListener extends PlayerListener {
 							z = event.getClickedBlock().getZ();
 							type = Material.LAVA.getId();
 							dataBlock2 = new BrokenBlock(BBUsersTable.getInstance().getUserByName(event.getPlayer().getName()), world.getName(), x, y, z, type, (byte) 0);
+							OwnershipManager.removeOwnerByLocation(event.getClickedBlock().getLocation());
 							dataBlock2.send();
 							break;
 						case STATIONARY_WATER:
@@ -299,6 +301,7 @@ public class BBPlayerListener extends PlayerListener {
 							z = event.getClickedBlock().getZ();
 							type = Material.WATER.getId();
 							dataBlock2 = new BrokenBlock(BBUsersTable.getInstance().getUserByName(event.getPlayer().getName()), world.getName(), x, y, z, type, (byte) 0);
+							OwnershipManager.removeOwnerByLocation(event.getClickedBlock().getLocation());
 							dataBlock2.send();
 						}
 						break;
