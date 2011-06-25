@@ -7,23 +7,10 @@ import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.FlowLogger;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
-import me.taylorkelly.bigbrother.datablock.BrokenBlock;
-import me.taylorkelly.bigbrother.datablock.ButtonPress;
-import me.taylorkelly.bigbrother.datablock.Chat;
-import me.taylorkelly.bigbrother.datablock.ChestOpen;
-import me.taylorkelly.bigbrother.datablock.Command;
-import me.taylorkelly.bigbrother.datablock.Disconnect;
-import me.taylorkelly.bigbrother.datablock.DoorOpen;
-import me.taylorkelly.bigbrother.datablock.DropItem;
-import me.taylorkelly.bigbrother.datablock.LeverSwitch;
-import me.taylorkelly.bigbrother.datablock.Login;
-import me.taylorkelly.bigbrother.datablock.PickupItem;
-import me.taylorkelly.bigbrother.datablock.PlacedBlock;
-import me.taylorkelly.bigbrother.datablock.Teleport;
+import me.taylorkelly.bigbrother.datablock.*;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.util.ChestTools;
+import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -247,7 +234,7 @@ public class BBPlayerListener extends PlayerListener {
 						type = Material.LAVA.getId();
 						world = event.getClickedBlock().getWorld();
 						dataBlock = new PlacedBlock(event.getPlayer().getName(), world.getName(), x, y, z, type, (byte) 0);
-						FlowLogger.log(new Location(world, x, y, z), event.getPlayer().getName());
+						OwnershipManager.setOwnerLocation(new Location(world, x, y, z), pi);
 						dataBlock.send();
 						break;
 					case WATER_BUCKET:

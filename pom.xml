@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.taylorkelly</groupId>
 	<artifactId>bigbrother</artifactId>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.9-SNAPSHOT</version>
 	<name>BigBrother</name>
 	<url>http://www.bukkit.org</url>
 	<repositories>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.nijikokun.bukkit</groupId>
 			<artifactId>Permissions</artifactId>
-			<version>3.1.3</version>
+			<version>3.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

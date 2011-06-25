@@ -6,6 +6,9 @@ import java.util.Calendar;
 import me.taylorkelly.bigbrother.WorldManager;
 
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.DeltaChest;
+import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaEntry;
+import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaType;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
@@ -14,6 +17,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.sk89q.worldedit.blocks.ItemType;
 
 public class HistoryLog extends StickMode {
     private ItemStack oldItem;
@@ -59,11 +64,29 @@ public class HistoryLog extends StickMode {
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
                 msg.append(DataBlockSender.getAction(dataBlock.action));
-                if (dataBlock.type != 0) {
+                if (dataBlock.type != 0 && dataBlock instanceof DeltaChest) {
                     msg.append(" ");
                     msg.append(Material.getMaterial(dataBlock.type));
                 }
                 msgs.add(msg.toString());
+                if(dataBlock instanceof DeltaChest) {
+                    DeltaChest changes = (DeltaChest) dataBlock;
+                    for(DeltaEntry de : changes.getChanges(block.getWorld())) {
+                        // TODO: Pretty colors
+                        switch(de.Type) {
+                            case ADDED:
+                                msgs.add(String.format(" + Added {0} {1}",de.Amount, ItemType.toName(de.ID)));
+                                break;
+                            case REMOVED:
+                                msgs.add(String.format(" - Removed {0} {1}",de.Amount, ItemType.toName(de.ID)));
+                                break;
+                            case REPLACED:
+                                msgs.add(String.format(" - Replaced slot #{0} with {1} {2}",
+                                        de.Slot,de.Amount, ItemType.toName(de.ID)));
+                                break;
+                        }
+                    }
+                }
             }
         }
         return msgs;

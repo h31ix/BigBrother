@@ -419,4 +419,20 @@ public class DeltaChest extends BBDataBlock {
     public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DeltaChest(pi, world, x, y, z, type, data);
     }
+
+    /**
+     * @return
+     */
+    public DeltaEntry[] getChanges(World currWorld) {
+        if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
+            currWorld.loadChunk(x >> 4, z >> 4);
+        }
+        Block block = currWorld.getBlockAt(x, y, z);
+        if (block.getState() instanceof Chest) {
+            Chest chest = (Chest) block.getState();
+            ItemStack[] inv = ChestTools.getChestContents(chest);
+            return processDeltaStream(inv.length,data);
+        }
+        else return new DeltaEntry[0];
+    }
 }

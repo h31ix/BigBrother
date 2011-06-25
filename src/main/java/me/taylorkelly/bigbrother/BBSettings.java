@@ -54,7 +54,7 @@ public class BBSettings {
     public static int sendDelay = 4;
     public static int stickItem = 280;
     // TODO: Get long version of this
-    public static long cleanseAge = TimeParser.parseInterval("3d");
+    public static long cleanseAge = TimeParser.parseInterval("7d");
     // Tested with this value, 10000rows = 1-2s on a
     // Pentium 4 MySQL server with 1GB RAM and a SATA MySQL HDD
     public static long deletesPerCleansing = 20000L;
@@ -62,12 +62,13 @@ public class BBSettings {
     private static ArrayList<String> seenList;
     private static ArrayList<Integer> blockExclusionList;
     public static int rollbacksPerTick;
-    private static BigBrother plugin;
+    //private static BigBrother plugin;
     public static File dataFolder;
+    public static boolean storeOwners=true;
 
     public static void initialize(BigBrother plg, File dataFolder) {
         BBSettings.dataFolder=dataFolder;
-        BBSettings.plugin=plg;
+        //BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
         seenList = new ArrayList<String>();
         blockExclusionList = new ArrayList<Integer>();
@@ -127,6 +128,7 @@ public class BBSettings {
                 blockExclusionList.add(id);
             }
         }
+        storeOwners=yml.getBoolean("general.store-owners",storeOwners);
         stickItem = yml.getInt("general.stick-item", 280);// "The item used for /bb stick");
         restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
         autoWatch = yml.getBoolean("general.auto-watch", true);// "Automatically start watching players");

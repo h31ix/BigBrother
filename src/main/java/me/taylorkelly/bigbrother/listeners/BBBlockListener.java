@@ -5,7 +5,6 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.BlockBurnLogger;
-import me.taylorkelly.bigbrother.FlowLogger;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.CreateSignText;
@@ -16,21 +15,14 @@ import me.taylorkelly.bigbrother.datablock.PlacedBlock;
 import me.taylorkelly.bigbrother.datablock.SignDestroyed;
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
+import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
-import org.bukkit.event.block.BlockListener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.block.SignChangeEvent;
 
 public class BBBlockListener extends BlockListener {
 
@@ -72,7 +64,7 @@ public class BBBlockListener extends BlockListener {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
             if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA) {
-                FlowLogger.log(block, player.getName());
+                OwnershipManager.setOwner(block, pi);
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
             dataBlock.send();
@@ -150,9 +142,8 @@ public class BBBlockListener extends BlockListener {
     public void onBlockFromTo(BlockFromToEvent event) {
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
-        boolean lava = blockFrom.getType() == Material.LAVA || blockFrom.getType() == Material.STATIONARY_LAVA;
-        if (!event.isCancelled() && lava && BBSettings.lavaFlow) {
-            Flow dataBlock = FlowLogger.getFlow(blockFrom, blockTo);
+        if (!event.isCancelled()) {
+            Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
             dataBlock.send();
         }
     }
