@@ -109,5 +109,13 @@ public class OwnersH2 extends OwnersTable {
         +"PRIMARY KEY (wldID,x,y,z)"
         +")";
     }
+    
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#removeBlockOwner(int, int, int, int)
+     */
+    @Override
+    protected void removeBlockOwner(int wldID, int x, int y, int z) {
+        BBDB.executeUpdate("DELETE FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?", wldID, x, y, z);
+    }
 
 }

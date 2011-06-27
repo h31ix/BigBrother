@@ -105,4 +105,23 @@ public abstract class OwnersTable extends DBTable {
      * @return
      */
     protected abstract int getBlockOwner(int world, int x, int y, int z);
+
+    /**
+     * @param i
+     * @param blockX
+     * @param blockY
+     * @param blockZ
+     */
+    public static void remove(int wldID, int x, int y, int z) {
+        getInstance().removeBlockOwner(wldID,x,y,z);
+    }
+
+    /**
+     * @param wldID
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    protected abstract void removeBlockOwner(int wldID, int x, int y, int z);
 }

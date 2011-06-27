@@ -213,6 +213,7 @@ public class OwnershipManager {
             if(ownershipMap.containsKey(loc))
                 ownershipMap.remove(loc);
         }
+        OwnersTable.remove(plugin.worldManager.getWorld(loc.getWorld().getName()),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
     }
     
 }
