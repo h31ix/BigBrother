@@ -32,6 +32,7 @@ import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.util.ChestTools;
+import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -133,6 +134,9 @@ public class BigBrother extends JavaPlugin {
         } else if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
+        
+        // Fire up the ownership system.
+        OwnershipManager.init(this);
         
         // Initialize Permissions, Help
         BBPermissions.initialize(getServer());
