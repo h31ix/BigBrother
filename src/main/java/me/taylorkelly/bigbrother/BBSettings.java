@@ -245,9 +245,13 @@ public class BBSettings {
     }
     
 
+    /**
+     * Save example to file.
+     * @param f dataFolder.
+     */
     private static void saveDefaultConfig(File f) {
         try{
-            InputStream is = BigBrother.class.getResourceAsStream("BigBrother.example.yml");
+            InputStream is = BigBrother.class.getResourceAsStream("/BigBrother.example.yml");
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
             FileWriter fstream = new FileWriter(f);
             BufferedWriter out = new BufferedWriter(fstream);

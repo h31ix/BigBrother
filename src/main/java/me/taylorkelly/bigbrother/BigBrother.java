@@ -235,11 +235,8 @@ public class BigBrother extends JavaPlugin {
     
     /**
      * Tell the user what mode their stick is.
-     * 
      * Better than having this copypasted 8 times
-     * 
-     * @param player
-     *            Player to talk to about their stick/log
+     * @param player Player to talk to about their stick/log
      * @author N3X15
      */
     public void reportStickMode(Player player, int stickLevel) {
@@ -269,11 +266,9 @@ public class BigBrother extends JavaPlugin {
         if (pi.hasOpenedChest()) {
             if (BBSettings.chestChanges) {
                 World world = pi.getOpenedChest().getWorld();
-                int x = pi.getOpenedChest().getX();
-                int y = pi.getOpenedChest().getY();
-                int z = pi.getOpenedChest().getZ();
-                if (world.getBlockAt(x, y, z).getState() instanceof Chest) {
-                    Chest chest = (Chest) world.getBlockAt(x, y, z).getState();
+                Block b = world.getBlockAt(pi.getOpenedChest().getX(),pi.getOpenedChest().getY(),pi.getOpenedChest().getZ());
+                if (b.getState() instanceof Chest) {
+                    Chest chest = (Chest) b.getState();
                     ItemStack[] orig = pi.getOldChestContents();
                     ItemStack[] latest = ChestTools.getChestContents(chest);
                     DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
