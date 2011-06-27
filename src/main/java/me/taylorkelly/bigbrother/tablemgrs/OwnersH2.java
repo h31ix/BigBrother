@@ -44,7 +44,7 @@ public class OwnersH2 extends OwnersTable {
     protected boolean trySetBlockOwnerUpdate(int world,int x,int y, int z, int playerID) {
         PreparedStatement stmt=null;
         try {
-            stmt = BBDB.prepare("UPDATE "+getTableName()+" SET plyID=? WHERE wldID=? AND x=? AND y=? AND z=?");
+            stmt = BBDB.prepare("UPDATE "+getTableName()+" SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?");
             stmt.setInt(0, playerID);
             stmt.setInt(1, world);
             stmt.setInt(2, x);
@@ -83,7 +83,7 @@ public class OwnersH2 extends OwnersTable {
         PreparedStatement stmt=null;
         ResultSet rs = null;
         try {
-            stmt = BBDB.prepare("SELECT FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
+            stmt = BBDB.prepare("SELECT usrID FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
             stmt.setInt(0, world);
             stmt.setInt(1, x);
             stmt.setInt(2, y);

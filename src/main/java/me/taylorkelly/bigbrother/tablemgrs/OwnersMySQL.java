@@ -39,7 +39,7 @@ public class OwnersMySQL extends OwnersTable {
     protected void setBlockOwner(int world, int x, int y, int z, int playerID) {
         PreparedStatement stmt=null;
         try {
-            stmt = BBDB.prepare("REPLACE INTO "+getTableName()+" (wldID,x,y,z,plyID) VALUES (?,?,?,?,?)");
+            stmt = BBDB.prepare("REPLACE INTO "+getTableName()+" (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
             stmt.setInt(0, world);
             stmt.setInt(1, x);
             stmt.setInt(2, y);
@@ -61,7 +61,7 @@ public class OwnersMySQL extends OwnersTable {
         PreparedStatement stmt=null;
         ResultSet rs = null;
         try {
-            stmt = BBDB.prepare("SELECT FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
+            stmt = BBDB.prepare("SELECT usrID FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
             stmt.setInt(0, world);
             stmt.setInt(1, x);
             stmt.setInt(2, y);
