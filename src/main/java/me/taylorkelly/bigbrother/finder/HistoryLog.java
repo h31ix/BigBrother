@@ -64,7 +64,7 @@ public class HistoryLog extends StickMode {
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
                 msg.append(DataBlockSender.getAction(dataBlock.action));
-                if (dataBlock.type != 0 && dataBlock instanceof DeltaChest) {
+                if (dataBlock.type != 0 && !(dataBlock instanceof DeltaChest)) {
                     msg.append(" ");
                     msg.append(Material.getMaterial(dataBlock.type));
                 }
