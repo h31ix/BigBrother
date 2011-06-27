@@ -118,13 +118,7 @@ public class OwnershipManager {
      * @param p Player
      */
     public static void setOwner(Block b, BBPlayerInfo p) {
-        if(!BBSettings.storeOwners) return;
-        OwnershipData dat = new OwnershipData(p.getID());
-        synchronized(ownershipMap) {
-            ownershipMap.put(b.getLocation(), dat);
-        }
-        OwnersTable.set(plugin.worldManager.getWorld(b.getWorld().getName()),b.getX(),b.getY(),b.getZ(),p.getID());
-        cleanup();
+        setOwnerLocation(b.getLocation(),p);
     }
     
     /**
@@ -132,7 +126,9 @@ public class OwnershipManager {
      */
     private static void cleanup() {
         synchronized(ownershipMap) {
-            for(Entry<Location,OwnershipData> es : ownershipMap.entrySet()) {
+            @SuppressWarnings("unchecked")
+            HashMap<Location,OwnershipData> lom = (HashMap<Location, OwnershipData>) ownershipMap.clone();
+            for(Entry<Location,OwnershipData> es : lom.entrySet()) {
                 if(es.getValue().isTimeToGo()) {
                     ownershipMap.remove(es.getKey());
                 }
@@ -160,6 +156,8 @@ public class OwnershipManager {
         if(!BBSettings.storeOwners) return;
         OwnershipData dat = new OwnershipData(p.getID());
         synchronized(ownershipMap) {
+            if(ownershipMap.containsKey(loc))
+                ownershipMap.remove(loc); // Replace.
             ownershipMap.put(loc, dat);
         }
         OwnersTable.set(plugin.worldManager.getWorld(loc.getWorld().getName()),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ(),p.getID());
