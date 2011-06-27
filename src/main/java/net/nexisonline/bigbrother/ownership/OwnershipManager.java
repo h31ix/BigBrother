@@ -1,20 +1,20 @@
 /**
-* Track ownership of burning blocks and flowing liquids.
-* Copyright (C) 2011 BigBrother Contributors
-* 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Track ownership of burning blocks and flowing liquids.
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package net.nexisonline.bigbrother.ownership;
 
 import java.util.HashMap;
@@ -98,17 +98,19 @@ public class OwnershipManager {
         }
         return BBUsersTable.getInstance().getUserByID(ownerID);
     }
-
+    
     /**
      * @param loc
      * @return
      */
     private static int getFromMap(Location loc) {
-        OwnershipData dat = ownershipMap.get(loc);
-        dat.time=System.currentTimeMillis();
-        ownershipMap.remove(loc);
-        ownershipMap.put(loc, dat);
-        return dat.owner;
+        synchronized(ownershipMap) {
+            OwnershipData dat = ownershipMap.get(loc);
+            dat.time=System.currentTimeMillis();
+            ownershipMap.remove(loc);
+            ownershipMap.put(loc, dat);
+            return dat.owner;
+        }
     }
     /**
      * Try to set a block's owner
@@ -118,22 +120,26 @@ public class OwnershipManager {
     public static void setOwner(Block b, BBPlayerInfo p) {
         if(!BBSettings.storeOwners) return;
         OwnershipData dat = new OwnershipData(p.getID());
-        ownershipMap.put(b.getLocation(), dat);
+        synchronized(ownershipMap) {
+            ownershipMap.put(b.getLocation(), dat);
+        }
         OwnersTable.set(plugin.worldManager.getWorld(b.getWorld().getName()),b.getX(),b.getY(),b.getZ(),p.getID());
         cleanup();
     }
-
+    
     /**
      * Remove old cache.
      */
     private static void cleanup() {
-        for(Entry<Location,OwnershipData> es : ownershipMap.entrySet()) {
-            if(es.getValue().isTimeToGo()) {
-                ownershipMap.remove(es.getKey());
+        synchronized(ownershipMap) {
+            for(Entry<Location,OwnershipData> es : ownershipMap.entrySet()) {
+                if(es.getValue().isTimeToGo()) {
+                    ownershipMap.remove(es.getKey());
+                }
             }
         }
     }
-
+    
     /**
      * Determine ownership data for water or lava flows.
      * @param blockFrom
@@ -153,7 +159,9 @@ public class OwnershipManager {
     public static void setOwnerLocation(Location loc, BBPlayerInfo p) {
         if(!BBSettings.storeOwners) return;
         OwnershipData dat = new OwnershipData(p.getID());
-        ownershipMap.put(loc, dat);
+        synchronized(ownershipMap) {
+            ownershipMap.put(loc, dat);
+        }
         OwnersTable.set(plugin.worldManager.getWorld(loc.getWorld().getName()),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ(),p.getID());
         cleanup();
     }
@@ -190,8 +198,8 @@ public class OwnershipManager {
     private static boolean isFireSource(Block block) {
         Material mat = block.getType();
         return mat.equals(Material.LAVA) ||
-                mat.equals(Material.STATIONARY_LAVA) ||
-                mat.equals(Material.FIRE);
+            mat.equals(Material.STATIONARY_LAVA) ||
+            mat.equals(Material.FIRE);
     }
     /**
      * @param block
@@ -203,8 +211,10 @@ public class OwnershipManager {
      * @param location
      */
     public static void removeOwnerByLocation(Location loc) {
-        if(ownershipMap.containsKey(loc))
-            ownershipMap.remove(loc);
+        synchronized(ownershipMap) {
+            if(ownershipMap.containsKey(loc))
+                ownershipMap.remove(loc);
+        }
     }
     
 }
