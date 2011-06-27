@@ -47,7 +47,7 @@ public class RollbackInterpreter {
         allowedActions.add(Action.CREEPER_EXPLOSION);
         allowedActions.add(Action.MISC_EXPLOSION);
         allowedActions.add(Action.BLOCK_BURN);
-        allowedActions.add(Action.LAVA_FLOW);
+        allowedActions.add(Action.FLOW);
         
         for (int i = 1; i < split.length; i++) {
             String argument = split[i].trim();

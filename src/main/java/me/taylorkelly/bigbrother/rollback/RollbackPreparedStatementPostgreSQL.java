@@ -128,7 +128,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         ret.append("','");
         ret.append(Action.BLOCK_BURN.ordinal());
         ret.append("','");
-        ret.append(Action.LAVA_FLOW.ordinal());
+        ret.append(Action.FLOW.ordinal());
         ret.append("')");
         return ret;
     }

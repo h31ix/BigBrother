@@ -184,8 +184,8 @@ public class DataBlockSender {
                 return "opened chest";
             case BLOCK_BURN:
                 return "burned block";
-            case LAVA_FLOW:
-                return "flowed lava";
+            case FLOW:
+                return "flowed";
             case DROP_ITEM:
                 return "dropped item";
             case PICKUP_ITEM:

@@ -4,7 +4,6 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.BlockBurnLogger;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.CreateSignText;
@@ -63,7 +62,11 @@ public class BBBlockListener extends BlockListener {
         if (BBSettings.blockPlace && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
-            if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.FIRE) {
+            if (block.getType() == Material.WATER 
+                    || block.getType() == Material.STATIONARY_WATER 
+                    || block.getType() == Material.LAVA 
+                    || block.getType() == Material.STATIONARY_LAVA 
+                    || block.getType() == Material.FIRE) {
                 OwnershipManager.setOwner(block, pi);
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());

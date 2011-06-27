@@ -54,7 +54,7 @@ public abstract class BBDataBlock {
         MISC_EXPLOSION,
         OPEN_CHEST,
         BLOCK_BURN,
-        LAVA_FLOW,
+        FLOW,
         DROP_ITEM,
         PICKUP_ITEM, 
         SIGN_DESTROYED
@@ -137,7 +137,7 @@ public abstract class BBDataBlock {
                 return ChestOpen.getBBDataBlock(pi, world, x, y, z, type, data);
             case BLOCK_BURN:
                 return BlockBurn.getBBDataBlock(pi, world, x, y, z, type, data);
-            case LAVA_FLOW:
+            case FLOW:
                 return Flow.getBBDataBlock(pi, world, x, y, z, type, data);
             case DROP_ITEM:
                 return DropItem.getBBDataBlock(pi, world, x, y, z, type, data);

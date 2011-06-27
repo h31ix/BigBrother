@@ -107,7 +107,7 @@ public class Finder {
         HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
         try {
             // TODO maybe more customizable actions?
-            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.LAVA_FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
+            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
             
             /*
              * org.h2.jdbc.JdbcSQLException: Column "ID" must be in the GROUP BY
@@ -181,7 +181,7 @@ public class Finder {
 
         try {
             // TODO Centralize action list SQL generation.
-            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.LAVA_FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
+            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
             if(BBDB.usingDBMS(DBMS.POSTGRES))
             	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
             			+ " AND rbacked = false AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
@@ -244,7 +244,7 @@ public class Finder {
                             size++;
                         }
                         break;
-                    case LAVA_FLOW:
+                    case FLOW:
                         if (creations.containsKey(type)) {
                             creations.put(type, creations.get(type) + 1);
                             size++;
