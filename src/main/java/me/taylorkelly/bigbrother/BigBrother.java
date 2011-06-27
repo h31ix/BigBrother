@@ -1,6 +1,6 @@
 /*
  * BigBrother (http://github.com/tkelly910/BigBrother)
- * Copyright (C) 2010 Taylor Kelly (tkelly), OniTux, N3X15
+ * Copyright (C) 2011 Taylor Kelly (tkelly), OniTux, N3X15
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

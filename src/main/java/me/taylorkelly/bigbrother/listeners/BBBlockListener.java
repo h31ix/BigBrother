@@ -1,3 +1,20 @@
+/**
+ * Block Listener
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package me.taylorkelly.bigbrother.listeners;
 
 import me.taylorkelly.bigbrother.BBLogging;
@@ -73,45 +90,6 @@ public class BBBlockListener extends BlockListener {
             dataBlock.send();
         }
     }
-
-    /*
-    @Override
-    public void onBlockInteract(BlockInteractEvent event) {
-        Block block = event.getBlock();
-        LivingEntity entity = event.getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            if (pi.getWatched() && !event.isCancelled()) {
-                switch (block.getType()) {
-                    case WOODEN_DOOR:
-                        if (BBSettings.doorOpen) {
-                            DoorOpen doorDataBlock = new DoorOpen(player.getName(), block, block.getWorld().getName());
-                            doorDataBlock.send();
-                        }
-                        break;
-                    case LEVER:
-                        if (BBSettings.leverSwitch) {
-                            LeverSwitch leverDataBlock = new LeverSwitch(player.getName(), block, block.getWorld().getName());
-                            leverDataBlock.send();
-                        }
-                        break;
-                    case STONE_BUTTON:
-                        if (BBSettings.buttonPress) {
-                            ButtonPress buttonDataBlock = new ButtonPress(player.getName(), block, block.getWorld().getName());
-                            buttonDataBlock.send();
-                        }
-                        break;
-                    case CHEST:
-                        if (BBSettings.chestChanges) {
-                            BBDataBlock chestDataBlock = new ChestOpen(player.getName(), block, block.getWorld().getName());
-                            chestDataBlock.send();
-                        }
-                        break;
-                }
-            }
-        }
-    }
-    */
     
     @Override
     public void onLeavesDecay(LeavesDecayEvent event) {
@@ -154,8 +132,11 @@ public class BBBlockListener extends BlockListener {
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
         if (!event.isCancelled()) {
-            Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
-            dataBlock.send();
+            // Only record a change if the owner is different (avoids duplicates)
+            if(OwnershipManager.findOwner(blockFrom).getID()!=OwnershipManager.findOwner(blockTo).getID()) {
+                Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
+                dataBlock.send();
+            }
         }
     }
 
