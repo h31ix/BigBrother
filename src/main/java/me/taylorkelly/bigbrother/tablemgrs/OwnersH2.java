@@ -45,11 +45,11 @@ public class OwnersH2 extends OwnersTable {
         PreparedStatement stmt=null;
         try {
             stmt = BBDB.prepare("UPDATE "+getTableName()+" SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?");
-            stmt.setInt(0, playerID);
-            stmt.setInt(1, world);
-            stmt.setInt(2, x);
-            stmt.setInt(3, y);
-            stmt.setInt(4, z);
+            stmt.setInt(1, playerID);
+            stmt.setInt(2, world);
+            stmt.setInt(3, x);
+            stmt.setInt(4, y);
+            stmt.setInt(5, z);
             return stmt.execute();
         } catch (SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
@@ -62,11 +62,11 @@ public class OwnersH2 extends OwnersTable {
         PreparedStatement stmt=null;
         try {
             stmt = BBDB.prepare("INSERT INTO "+getTableName()+" (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
-            stmt.setInt(0, world);
-            stmt.setInt(1, x);
-            stmt.setInt(2, y);
-            stmt.setInt(3, z);
-            stmt.setInt(4, playerID);
+            stmt.setInt(1, world);
+            stmt.setInt(2, x);
+            stmt.setInt(3, y);
+            stmt.setInt(4, z);
+            stmt.setInt(5, playerID);
             stmt.execute();
         } catch (SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
@@ -84,10 +84,10 @@ public class OwnersH2 extends OwnersTable {
         ResultSet rs = null;
         try {
             stmt = BBDB.prepare("SELECT usrID FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
-            stmt.setInt(0, world);
-            stmt.setInt(1, x);
-            stmt.setInt(2, y);
-            stmt.setInt(3, z);
+            stmt.setInt(1, world);
+            stmt.setInt(2, x);
+            stmt.setInt(3, y);
+            stmt.setInt(4, z);
             rs = stmt.executeQuery();
             if(rs.next())
                 return rs.getInt("usrID");

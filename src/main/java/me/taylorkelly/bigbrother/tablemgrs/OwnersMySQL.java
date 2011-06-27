@@ -39,12 +39,13 @@ public class OwnersMySQL extends OwnersTable {
     protected void setBlockOwner(int world, int x, int y, int z, int playerID) {
         PreparedStatement stmt=null;
         try {
+            // I love REPLACE INTO.  It makes my job so much easier ._.
             stmt = BBDB.prepare("REPLACE INTO "+getTableName()+" (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
-            stmt.setInt(0, world);
-            stmt.setInt(1, x);
-            stmt.setInt(2, y);
-            stmt.setInt(3, z);
-            stmt.setInt(4, playerID);
+            stmt.setInt(1, world);
+            stmt.setInt(2, x);
+            stmt.setInt(3, y);
+            stmt.setInt(4, z);
+            stmt.setInt(5, playerID);
             stmt.execute();
         } catch (SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersMySQL: ",e);
@@ -62,10 +63,10 @@ public class OwnersMySQL extends OwnersTable {
         ResultSet rs = null;
         try {
             stmt = BBDB.prepare("SELECT usrID FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
-            stmt.setInt(0, world);
-            stmt.setInt(1, x);
-            stmt.setInt(2, y);
-            stmt.setInt(3, z);
+            stmt.setInt(1, world);
+            stmt.setInt(2, x);
+            stmt.setInt(3, y);
+            stmt.setInt(4, z);
             rs = stmt.executeQuery();
             if(rs.next())
                 return rs.getInt("usrID");
