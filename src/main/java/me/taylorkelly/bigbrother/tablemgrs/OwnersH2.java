@@ -42,21 +42,7 @@ public class OwnersH2 extends OwnersTable {
         }
     }
     protected boolean trySetBlockOwnerUpdate(int world,int x,int y, int z, int playerID) {
-        PreparedStatement stmt=null;
-        try {
-            stmt = BBDB.prepare("UPDATE "+getTableName()+" SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?");
-            stmt.setInt(1, playerID);
-            stmt.setInt(2, world);
-            stmt.setInt(3, x);
-            stmt.setInt(4, y);
-            stmt.setInt(5, z);
-            return stmt.execute();
-        } catch (SQLException e) {
-            BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
-        } finally {
-            BBDB.cleanup("OwnersH2.setBlockOwner", stmt, null);
-        }
-        return false;
+        return BBDB.tryUpdate("UPDATE "+getTableName()+" SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?", playerID, world, x, y, z);
     }
     protected void setBlockOwnerInsert(int world,int x,int y, int z, int playerID) {
         PreparedStatement stmt=null;
@@ -67,7 +53,8 @@ public class OwnersH2 extends OwnersTable {
             stmt.setInt(3, y);
             stmt.setInt(4, z);
             stmt.setInt(5, playerID);
-            stmt.execute();
+            stmt.executeUpdate();
+            BBDB.commit();
         } catch (SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
         } finally {
