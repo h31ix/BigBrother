@@ -1,5 +1,5 @@
 name: BigBrother
-version: 1.8-SNAPSHOT
+version: 1.9-SNAPSHOT
 main: me.taylorkelly.bigbrother.BigBrother
 authors: ['tkelly','n3x15']
 latest-release-url: 'http://ci.nexisonline.net:8080/job/BigBrother/Recommended/artifact/target/BigBrother.jar'
