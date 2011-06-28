@@ -20,6 +20,13 @@ For installation procedure, please view the [Wiki](https://github.com/tkelly910/
 Bugs
 ----
 
-Please report bugs via our new bug tracking system at http://bugs.nexisonline.net/bb/.  *Please search for the problem you are having first so we don't get duplicates!*
+Please report bugs via our new bug tracking system at http://bugs.nexisonline.net/bb.  *Please search for the problem you are having first so we don't get duplicates!*
 
 You can also file any ideas or suggestions through the same system.
+
+Contributors
+------------
+
+* Taylor Kelly (tkelly)
+* OniTux
+* Rob "N3X15" Nelson
