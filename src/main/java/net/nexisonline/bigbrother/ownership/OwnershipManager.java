@@ -146,7 +146,7 @@ public class OwnershipManager {
         // Try to determine owner.
         BBPlayerInfo player = findOwner(blockFrom);
         setOwner(blockTo,player);
-        return new Flow(player.getName(), blockFrom.getWorld().getName(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockFrom.getTypeId(), (byte) 0);
+        return new Flow(player.getName(), blockFrom.getWorld().getName(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getTypeId(), (byte) 0);
     }
     /**
      * @param location
