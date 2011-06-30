@@ -26,6 +26,8 @@ public class UnwatchedCommand implements CommandExecutor {
                 player.sendMessage(BigBrother.premessage + "Currently not watching:");
                 player.sendMessage(unwatchedPlayers);
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

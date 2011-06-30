@@ -29,7 +29,8 @@ public class ConfirmCommand implements CommandExecutor {
             } else {
                 player.sendMessage(BigBrother.premessage + "usage is " + ChatColor.RED + "/bb confirm");
             }
-            
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

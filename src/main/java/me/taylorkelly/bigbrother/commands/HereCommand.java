@@ -59,6 +59,8 @@ public class HereCommand implements CommandExecutor {
                 player.sendMessage("or " + ChatColor.RED + "/bb here <name>");
                 player.sendMessage("or " + ChatColor.RED + "/bb here <name> <radius>");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

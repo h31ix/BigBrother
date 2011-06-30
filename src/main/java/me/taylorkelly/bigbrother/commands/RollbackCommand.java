@@ -39,6 +39,8 @@ public class RollbackCommand implements CommandExecutor {
                 player.sendMessage(BigBrother.premessage + "Usage is: " + ChatColor.RED + "/bb rollback name1 [name2] [options]");
                 player.sendMessage(BigBrother.premessage + "Please read the full command documentation at https://github.com/tkelly910/BigBrother/wiki/Commands");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

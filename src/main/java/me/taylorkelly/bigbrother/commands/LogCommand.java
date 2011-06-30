@@ -27,6 +27,8 @@ public class LogCommand implements CommandExecutor {
             } else {
                 player.sendMessage(BigBrother.premessage + "Usage is " + ChatColor.RED + "/bb log");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

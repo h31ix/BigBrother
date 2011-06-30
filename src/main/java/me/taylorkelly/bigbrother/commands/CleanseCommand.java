@@ -23,6 +23,8 @@ public class CleanseCommand implements CommandExecutor {
             } else {
                 player.sendMessage(ChatColor.RED + "No need to cleanse. Check your settings.");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

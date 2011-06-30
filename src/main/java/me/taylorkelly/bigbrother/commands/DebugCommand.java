@@ -34,6 +34,8 @@ public class DebugCommand extends BBCommand {
                 BBSettings.debugMode=(split[1].equalsIgnoreCase("on"));
                 player.sendMessage(BigBrother.premessage + " DEBUG "+((BBSettings.debugMode) ? "ON":"OFF"));
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

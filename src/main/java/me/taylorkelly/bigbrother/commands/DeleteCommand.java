@@ -29,6 +29,8 @@ public class DeleteCommand implements CommandExecutor {
                 player.sendMessage(BigBrother.premessage + "usage is " + ChatColor.RED + "/bb delete");
             }
             // Undo rollback.
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

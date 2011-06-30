@@ -31,6 +31,8 @@ public class StickCommand implements CommandExecutor {
             } else {
                 player.sendMessage(BigBrother.premessage + "Usage is " + ChatColor.RED + "/bb stick [#]");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

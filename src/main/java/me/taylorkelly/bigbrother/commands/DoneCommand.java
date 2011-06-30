@@ -18,11 +18,13 @@ public class DoneCommand implements CommandExecutor {
     
     @Override
     public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] arg3) {
-
+        
         Player player=(Player) send;
         if(BBPermissions.info(player)) {
-                plugin.sticker.setMode(player, 0);
-                plugin.reportStickMode(player, 0);
+            plugin.sticker.setMode(player, 0);
+            plugin.reportStickMode(player, 0);
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

@@ -33,6 +33,8 @@ public class UndoCommand implements CommandExecutor {
             } else {
                 player.sendMessage(BigBrother.premessage + "Usage is " + ChatColor.RED + "/bb undo");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

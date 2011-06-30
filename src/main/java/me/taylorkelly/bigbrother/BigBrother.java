@@ -58,6 +58,7 @@ public class BigBrother extends JavaPlugin {
     public static String       version;
     public static String       build;
     public final static String premessage = ChatColor.AQUA + "[BBROTHER]: " + ChatColor.WHITE;
+    public static final String permissionDenied = ChatColor.RED + "[BBROTHER] PERMISSION DENIED.";
     private Updater            updater;
     
     @Override

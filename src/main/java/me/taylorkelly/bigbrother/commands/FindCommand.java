@@ -69,6 +69,8 @@ public class FindCommand implements CommandExecutor {
                 player.sendMessage("or " + ChatColor.RED + "/bb find <x> <y> <z> <name>");
                 player.sendMessage("or " + ChatColor.RED + "/bb find <x> <y> <z> <name> <radius>");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

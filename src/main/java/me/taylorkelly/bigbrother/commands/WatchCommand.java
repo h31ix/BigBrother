@@ -38,6 +38,8 @@ public class WatchCommand implements CommandExecutor {
             } else {
                 player.sendMessage(BigBrother.premessage + "usage is " + ChatColor.RED + "/bb watch <player>");
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }

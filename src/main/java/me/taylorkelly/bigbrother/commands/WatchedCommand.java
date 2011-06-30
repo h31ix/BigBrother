@@ -24,6 +24,8 @@ public class WatchedCommand implements CommandExecutor {
                 player.sendMessage(BigBrother.premessage + "Now watching:");
                 player.sendMessage(watchedPlayers);
             }
+        } else {
+            player.sendMessage(BigBrother.permissionDenied);
         }
         return true;
     }
