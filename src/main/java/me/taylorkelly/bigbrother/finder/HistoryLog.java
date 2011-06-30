@@ -3,12 +3,11 @@ package me.taylorkelly.bigbrother.finder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import me.taylorkelly.bigbrother.WorldManager;
 
+import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.BBDataBlock;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaEntry;
-import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaType;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 

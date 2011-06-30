@@ -210,6 +210,7 @@ public class BigBrother extends JavaPlugin {
         bbc.registerExecutor("here", new HereCommand(this));
         bbc.registerExecutor("find", new FindCommand(this));
         bbc.registerExecutor("help", new HelpCommand(this));
+        bbc.registerExecutor("mowlawn", new MowlawnCommand(this));
         getCommand("bb").setExecutor(bbc);
     }
     

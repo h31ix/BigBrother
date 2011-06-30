@@ -6,7 +6,6 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
