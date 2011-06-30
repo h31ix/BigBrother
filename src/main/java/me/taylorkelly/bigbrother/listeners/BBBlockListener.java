@@ -47,6 +47,17 @@ public class BBBlockListener extends BlockListener {
     public BBBlockListener(BigBrother plugin) {
         this.plugin=plugin;
     }
+    
+    @Override
+    public void onBlockSpread(BlockSpreadEvent event) {
+        if (!event.isCancelled()) {
+            Block to = event.getBlock();
+            Block from = event.getSource();
+            if(to.getType() == Material.FIRE) {
+                OwnershipManager.trackFlow(from, to);
+            }
+        }
+    }
 
     @Override
     public void onBlockDamage(BlockDamageEvent event) {
