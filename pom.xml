@@ -25,6 +25,7 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+			<name>Nexis Entertainment M2 Repo</name>
 			<url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
@@ -65,7 +66,7 @@
 		<dependency>
 			<groupId>me.taylorkelly</groupId>
 			<artifactId>help</artifactId>
-			<version>0.2-20110501.171848-8</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -73,6 +74,19 @@
 		<system>Bug Genie</system>
 		<url>http://bugs.nexisonline.net/bb</url>
 	</issueManagement>
+	<developers>
+		<developer>
+			<id>N3X15</id>
+			<name>Rob Nelson</name>
+			<email>nexis@7chan.org</email>
+			<url>http://nexisonline.net</url>
+			<timezone>Pacific</timezone>
+		</developer>
+		<developer>
+			<id>tkelly910</id>
+			<name>Taylor Kelly</name>
+		</developer>
+	</developers>
 	<build>
 		<finalName>${project.name}</finalName>
 		<plugins>
