@@ -39,7 +39,7 @@ public class MowlawnCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
-        arg0.sendMessage(plugin.premessage+" I hope you realize that I was joking what I said that BigBrother can mow your lawn, you big dummy.");
+        arg0.sendMessage(BigBrother.premessage+" I hope you realize that I was joking what I said that BigBrother can mow your lawn, you big dummy.");
         return true;
     }
     
