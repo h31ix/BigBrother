@@ -74,13 +74,13 @@ public class HistoryLog extends StickMode {
                         // TODO: Pretty colors
                         switch(de.Type) {
                             case ADDED:
-                                msgs.add(String.format(" + Added {0} {1}",de.Amount, ItemType.toName(de.ID)));
+                                msgs.add(String.format(" + Added %d %s",de.Amount, ItemType.toName(de.ID)));
                                 break;
                             case REMOVED:
-                                msgs.add(String.format(" - Removed {0} {1}",de.Amount, ItemType.toName(de.ID)));
+                                msgs.add(String.format(" - Removed %d %s",de.Amount, ItemType.toName(de.ID)));
                                 break;
                             case REPLACED:
-                                msgs.add(String.format(" - Replaced slot #{0} with {1} {2}",
+                                msgs.add(String.format(" - Replaced slot #%d with %d %s",
                                         de.Slot,de.Amount, ItemType.toName(de.ID)));
                                 break;
                         }
