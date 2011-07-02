@@ -196,7 +196,7 @@ public class BigBrother extends JavaPlugin {
         BBCommand bbc = new BBCommand(this);
         bbc.registerExecutor("debug", new DebugCommand(this));
         bbc.registerExecutor("version", new VersionCommand(this));
-        bbc.registerExecutor("update", new UpdateCommand(this));
+        //bbc.registerExecutor("update", new UpdateCommand(this));
         bbc.registerExecutor("watch", new WatchCommand(this));
         bbc.registerExecutor("watched", new WatchedCommand(this));
         bbc.registerExecutor("unwatched", new UnwatchedCommand(this));
