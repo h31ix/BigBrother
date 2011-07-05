@@ -10,6 +10,7 @@ import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
+import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
@@ -29,6 +30,7 @@ public class TestH2 {
     private static final String BBUSERS_TABLE_NAME = "bbusers";
     private static final String BBWORLDS_TABLE_NAME = "bbworlds";
     private static final String OWNERS_TABLE_NAME = "owners";
+    private static final String ACTION_TABLE_NAME = "actions";
 
     /**
      * @throws java.lang.Exception
@@ -66,6 +68,21 @@ public class TestH2 {
 
         // Clean up singleton for next test.
         BBDataTable.cleanup();
+    }
+    
+    /**
+     * Test method for creating data tables.
+     */
+    @Test
+    public void testActionTableCreation() {
+        //DROP first.
+        BBDB.executeUpdate("DROP TABLE IF EXISTS "+ACTION_TABLE_NAME);
+        
+        // getInstance performs init, getCreateSyntax is a NOP in this instance.
+        ActionTable.getInstance().getCreateSyntax();
+
+        // Clean up singleton for next test.
+        ActionTable.cleanup();
     }
     
 
