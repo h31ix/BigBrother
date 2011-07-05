@@ -143,6 +143,21 @@ public class BBBlockListener extends BlockListener {
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
         if (!event.isCancelled()) {
+            int fromID = blockFrom.getTypeId();
+            int toID = blockTo.getTypeId();
+            if(BBSettings.isBlockIgnored(fromID) 
+                    || (fromID == Material.WATER.getId() && !BBSettings.waterFlow)
+                    || (fromID == Material.STATIONARY_WATER.getId() && !BBSettings.waterFlow)
+                    || (fromID == Material.LAVA.getId() && !BBSettings.lavaFlow)
+                    || (fromID == Material.STATIONARY_LAVA.getId() && !BBSettings.lavaFlow)
+                    || (fromID == Material.FIRE.getId() && !BBSettings.fire)
+                    || BBSettings.isBlockIgnored(toID)
+                    || (toID == Material.WATER.getId() && !BBSettings.waterFlow)
+                    || (toID == Material.STATIONARY_WATER.getId() && !BBSettings.waterFlow)
+                    || (toID == Material.LAVA.getId() && !BBSettings.lavaFlow)
+                    || (toID == Material.STATIONARY_LAVA.getId() && !BBSettings.lavaFlow)
+                    || (toID == Material.FIRE.getId() && !BBSettings.fire))
+                return;
             // Only record a change if the owner is different (avoids duplicates)
             if(OwnershipManager.findOwner(blockFrom).getID()!=OwnershipManager.findOwner(blockTo).getID()) {
                 Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);

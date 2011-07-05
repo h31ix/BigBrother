@@ -40,6 +40,7 @@ import com.sk89q.worldedit.blocks.ItemType;
 // TODO: Split all these vars into separate classes in anticipation of yamlification.
 public class BBSettings {
 
+    public static List<String> watchedActions = new ArrayList<String>();
     public static boolean blockBreak;
     public static boolean blockPlace;
     public static boolean teleport;
@@ -58,6 +59,8 @@ public class BBSettings {
     public static boolean miscExplosions;
     public static boolean ipPlayer;
     public static boolean lavaFlow;
+    public static boolean waterFlow;
+    public static boolean fireSpread;
     public static boolean pickupItem;
     public static boolean dropItem;
 
@@ -178,7 +181,9 @@ public class BBSettings {
         ipPlayer = watched.getBoolean("watched.player.ip-player", true);
         dropItem = watched.getBoolean("watched.player.drop-item", false);
         pickupItem = watched.getBoolean("watched.player.pickup-item", false);
-        lavaFlow = watched.getBoolean("watched.environment.lava-flow", false);
+        lavaFlow = watched.getBoolean("watched.environment.lava-flow", true);
+        waterFlow = watched.getBoolean("watched.environment.water-flow", true);
+        fireSpread = watched.getBoolean("watched.environment.fire-spread", true);
     }
 
     /**
