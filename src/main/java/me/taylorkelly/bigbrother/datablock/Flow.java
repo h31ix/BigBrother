@@ -35,6 +35,13 @@ public class Flow extends BBAction {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public Flow() {
+        // TODO Auto-generated constructor stub
+    }
+
     public void rollback(World wld) {
         World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {

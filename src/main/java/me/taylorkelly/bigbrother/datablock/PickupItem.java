@@ -27,6 +27,13 @@ public class PickupItem extends BBAction {
 		super(player, world, x, y, z, type, data);
 	}
     
+    /**
+     * 
+     */
+    public PickupItem() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public String toString() {
         return "picked up an item of type "+Material.getMaterial(type);

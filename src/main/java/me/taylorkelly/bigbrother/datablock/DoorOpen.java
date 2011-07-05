@@ -26,6 +26,13 @@ public class DoorOpen extends BBAction {
         super(player, world, x, y, z, type, data);
     }
     
+    /**
+     * 
+     */
+    public DoorOpen() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public String toString() {
         return "opened a door";

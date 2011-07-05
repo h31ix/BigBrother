@@ -43,6 +43,13 @@ public class CreateSignText extends BBAction {
     }
 
 
+    /**
+     * 
+     */
+    public CreateSignText() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);

@@ -24,6 +24,13 @@ public class LeverSwitch extends BBAction {
 		super(player, world, x, y, z, type, data);
 	}
     
+    /**
+     * 
+     */
+    public LeverSwitch() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public String toString() {
         return "toggled a lever";

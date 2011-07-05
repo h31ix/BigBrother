@@ -37,6 +37,13 @@ public class DeltaChest extends BBAction {
         DeltaChest.getInventoryDelta(orig, latest));
     }
 
+    /**
+     * 
+     */
+    public DeltaChest() {
+        // TODO Auto-generated constructor stub
+    }
+
     // NEW FORMAT TO SUPPORT DAMAGE TRACKING (Wool, etc)
     // {SLOT:ID:[+|-]COUNT:DATA:DAMAGE[;...]
     // 0:1:15:20:0;

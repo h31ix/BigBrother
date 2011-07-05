@@ -16,6 +16,13 @@ public class FlintAndSteel extends BBAction {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public FlintAndSteel() {
+        // TODO Auto-generated constructor stub
+    }
+
     public void rollback(World wld) {
     }
 

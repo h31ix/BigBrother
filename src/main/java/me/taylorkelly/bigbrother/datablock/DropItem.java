@@ -27,6 +27,13 @@ public class DropItem extends BBAction {
         super(player, world, x, y, z, type, data);
     }
     
+    /**
+     * 
+     */
+    public DropItem() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public String toString() {
         return "dropped some "+Material.getMaterial(type);

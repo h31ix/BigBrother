@@ -16,6 +16,13 @@ public class ChestOpen extends BBAction {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public ChestOpen() {
+        // TODO Auto-generated constructor stub
+    }
+
     public void rollback(World wld) {
         
     }

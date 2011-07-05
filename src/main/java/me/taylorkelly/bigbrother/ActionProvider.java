@@ -27,22 +27,25 @@ import me.taylorkelly.bigbrother.datablock.ActionCategory;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Rob
  *
  */
-public abstract class ActionProvider implements Plugin {
+public abstract class ActionProvider{
     public static class ActionData {
-        public ActionProvider plugin=null;
+        public Plugin plugin=null;
         public String pluginName;
         public Action action=null;
         public String actionName;
         public ActionCategory category;
+        private ActionProvider provider;
 
-        public ActionData(ActionProvider plugin, Action action) {
+        public ActionData(Plugin plugin, ActionProvider ap, Action action) {
             this(plugin.getDescription().getFullName(),action.getCategory(),action.getName());
             this.plugin=plugin;
+            this.provider=ap;
             this.action=action;
         }
         public ActionData(String plugin, ActionCategory category, String action) {
@@ -63,11 +66,26 @@ public abstract class ActionProvider implements Plugin {
     }
     
     public static Map<Integer,ActionData> Actions = new HashMap<Integer,ActionData>();
+    private Plugin plugin;
     
     public abstract Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data);
     
-    protected final void registerAction(ActionProvider plugin, Action action) {
-        ActionData dat = new ActionData(plugin,action);
+    public ActionProvider(Plugin p) {
+        this.plugin=p;
+    }
+    
+    public final void disable() {
+        Map<Integer,ActionData> copy = new HashMap<Integer,ActionData>();
+        copy.putAll(Actions);
+        for(Entry<Integer, ActionData> e:copy.entrySet()) {
+            if(e.getValue().plugin == plugin) {
+                Actions.remove(e.getKey());
+            }
+        }
+    }
+    
+    protected final void registerAction(Plugin plugin,ActionProvider provider, Action action) {
+        ActionData dat = new ActionData(plugin, provider,action);
         if(!Actions.containsValue(dat)) {
             int id=ActionTable.add(plugin.getDescription().getFullName(),action.getName(),action.getCategory().ordinal());
             Actions.put(id, dat);
@@ -98,7 +116,8 @@ public abstract class ActionProvider implements Plugin {
      */
     public static Action findAndProvide(int actionID, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         if(!Actions.containsKey(actionID)) return null;
-        ActionProvider provider = Actions.get(actionID).plugin;
+        ActionProvider provider = Actions.get(actionID).provider;
+        if(provider==null) return null;
         return provider.getAction(Actions.get(actionID).actionName, player, world, x, y, z, type, data);
     }
 

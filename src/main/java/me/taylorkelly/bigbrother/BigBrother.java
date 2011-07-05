@@ -18,9 +18,11 @@
 package me.taylorkelly.bigbrother;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 import me.taylorkelly.bigbrother.commands.*;
+import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
@@ -46,7 +48,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BigBrother extends JavaPlugin {
-    
+    private ActionProvider      actionProvider;
     private BBPlayerListener   playerListener;
     private BBBlockListener    blockListener;
     private BBEntityListener   entityListener;
@@ -78,6 +80,7 @@ public class BigBrother extends JavaPlugin {
         BBLogging.debug("Debug Mode enabled");
         
         // Stuff that was in Constructor
+        actionProvider = new BBActionProvider(this);
         name = this.getDescription().getName();
         version = this.getDescription().getVersion();
         // git-BigBrother-jenkins-BigBrother-384

@@ -13,6 +13,8 @@ import org.bukkit.block.Sign;
 public class BlockBurn extends BBAction {
 
     private ArrayList<BBAction> bystanders;
+    
+    public BlockBurn(){super();}
 
     public BlockBurn(String player, Block block, String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));

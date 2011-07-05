@@ -38,6 +38,13 @@ public class DestroySignText extends BBAction {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
 
+    /**
+     * 
+     */
+    public DestroySignText() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public void rollback(World wld) {
         World currWorld = wld;//server.getWorld(world);

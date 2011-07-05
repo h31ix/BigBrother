@@ -48,6 +48,13 @@ public class SignDestroyed extends BBAction {
     }
 
 
+    /**
+     * 
+     */
+    public SignDestroyed() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public void rollback(World wld) {
         World currWorld = wld;//server.getWorld(world);

@@ -19,7 +19,14 @@ public class Disconnect extends BBAction {
 		super(player, world, x, y, z, type, data);
 	}
 
-	public void rollback(World wld) {}
+	/**
+     * 
+     */
+    public Disconnect() {
+        // TODO Auto-generated constructor stub
+    }
+
+    public void rollback(World wld) {}
 	public void redo(Server server) {}
     
     @Override

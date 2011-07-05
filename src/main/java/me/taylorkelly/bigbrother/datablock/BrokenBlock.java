@@ -87,6 +87,13 @@ public class BrokenBlock extends BBAction {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public BrokenBlock() {
+        // TODO Auto-generated constructor stub
+    }
+
     private void torchCheck(String player, Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50); // Torch

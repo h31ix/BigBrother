@@ -1,8 +1,9 @@
 <?php
-/** bbStatsPlus Action Processing Class
+/** BBWeb Action Processing Class
 
 Blah blah blah BSD License.
 */
+
 require('constants.php');
 
 require('actions/block_modified.php');
@@ -48,9 +49,9 @@ class Action
 	public function LoadData($row){
 		$this->id=intval($row[0]);
 		$this->date=intval($row[1]);
-		$this->player=$row[2];
+		$this->player=intval($row[2]);
 		$this->actionID=intval($row[3]);
-		$this->world=$actionID=intval($row[4]);
+		$this->world=intval($row[4]);
 		$this->X=intval($row[5]); 	
 		$this->Y=intval($row[6]); 	
 		$this->Z=intval($row[7]);
@@ -61,75 +62,9 @@ class Action
 	
 	public static function FromData($row)
 	{
-		
+		global $gActionHandlers;
 		$aID=intval($row[3]);
-		$act=null;
-		switch($aID)
-		{
-		case BLOCK_BROKEN: 
-			$act=new BlockModified($row,true);
-		break;
-		case BLOCK_PLACED:
-			$act=new BlockModified($row,false);
-		break;
-		case DESTROY_SIGN_TEXT:
-			$act=new SignModified($row,true);
-		break;
-		case TELEPORT:
-			$act=new Teleported($row);
-		break;
-		case DELTA_CHEST:
-			$act=new ChestChanged($row);
-		break;
-		case COMMAND:
-			$act=new CommandSent($row);
-		break;
-		case CHAT:
-			$act=new Chatted($row);
-		break;
-		case DISCONNECT:
-			$act=new Disconnected($row);
-		break;
-		case LOGIN:
-			$act=new LoggedIn($row);
-		break;
-		case DOOR_OPEN:
-			$act=new DoorOpened($row);
-		break;
-		case BUTTON_PRESS:
-			$act=new ButtonPressed($row);
-		break;
-		case LEVER_SWITCH:
-			$act=new LeverSwitched($row);
-		break;
-		case CREATE_SIGN_TEXT:
-			$act=new SignModified($row,false);
-		break;
-		/*
-		case LEAF_DECAY:
-			$act=new LeavesDecayed($row);
-		break;
-		*/
-		case FLINT_AND_STEEL:
-			$act=new FireLit($row);
-		break;
-		case TNT_EXPLOSION:
-			$act=new Exploded($row,1);
-		break;
-		case CREEPER_EXPLOSION:
-			$act=new Exploded($row,0);
-		break;
-		case MISC_EXPLOSION:
-			$act=new Exploded($row,-1);
-		break;
-		case OPEN_CHEST:
-			$act=new ChestOpened($row);
-		break;
-		case BLOCK_BURN:
-			$act=new BlockBurnt($row);
-		break;
-		}
-		return $act;
+		return $gActionHandlers[$aID]($row);
 	}
 	
 	public static function toWidget($stats)
@@ -159,24 +94,17 @@ class Action
 	
 	public function getWorldName()
 	{
-		switch($this->world)
-		{
-			case 0:
-				return 'Normal';
-			case 1:
-				return 'Nether';
-			default:
-				return $this->world;
-		}
-	}
-	
-	public function getUserLink()
-	{
-		return '<a href="player.php?'.$this->player.'">'.$this->player.'</a>';
+		global $gWorlds;
+		return $gWorlds[$this->world];
 	}
 	
 	public function getPos()
 	{
-		return sprintf('World %d - &lt;%d,%d,%d&gt;',$this->world,$this->X,$this->Y,$this->Z);
+		return sprintf('World (#%d) - &lt;%d,%d,%d&gt;',$this->getWorldName(), $this->world,$this->X,$this->Y,$this->Z);
 	}
+}
+
+public function registerAction($id,$action) {
+	global $gActionHandlers;
+	$gActionHandlers[$id]=$action;
 }

@@ -23,6 +23,13 @@ public class ButtonPress extends BBAction {
 		super(player, world, x, y, z, type, data);
 	}
     
+    /**
+     * 
+     */
+    public ButtonPress() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public String toString() {
         return "pressed button";

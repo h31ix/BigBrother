@@ -9,7 +9,7 @@ class ChestOpened extends Action
 	
 	public function __toString()
 	{
-		return sprintf("%s opened a chest at World %d - &lt;%d,%d,%d&gt;",$this->getUserLink(),$this->data, $this->world,$this->X,$this->Y,$this->Z);
+		return sprintf("%s opened a chest at World %s - &lt;%d,%d,%d&gt;",$this->getUserLink(),$this->data, $this->getWorldName(),$this->X,$this->Y,$this->Z);
 	}
 	
 	public function getActionString()

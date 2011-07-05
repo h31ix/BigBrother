@@ -40,6 +40,8 @@ public abstract class Action {
     public int type;
     public String data;
     public long date;
+    
+    public Action(){}
     public Action(String player, String world, int x, int y, int z, int type, String data) {
         this.date = System.currentTimeMillis() / 1000;
         this.player = BBUsersTable.getInstance().getUserByName(player);
