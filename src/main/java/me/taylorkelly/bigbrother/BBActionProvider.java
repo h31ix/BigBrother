@@ -18,8 +18,6 @@
 
 package me.taylorkelly.bigbrother;
 
-import java.lang.reflect.InvocationTargetException;
-
 import me.taylorkelly.bigbrother.datablock.*;
 
 /**
@@ -69,24 +67,8 @@ public class BBActionProvider extends ActionProvider {
         }
         try {
             return c.getConstructor(BBPlayerInfo.class,String.class,int.class,int.class,int.class,int.class,String.class).newInstance(player,world,  x,  y,  z,  type,  data);
-        } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            BBLogging.severe("Error loading me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
         }
         return null;
     }

@@ -28,6 +28,7 @@ import org.bukkit.command.*;
  */
 public class MowlawnCommand implements CommandExecutor {
     
+    @SuppressWarnings("unused")
     private BigBrother plugin;
 
     public MowlawnCommand(BigBrother p) {

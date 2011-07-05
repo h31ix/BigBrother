@@ -6,11 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.ActionProvider;
+import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
-import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Block;

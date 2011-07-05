@@ -3,17 +3,12 @@
  */
 package me.taylorkelly.bigbrother.tests;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.DeltaChest.DeltaType;
 
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +19,9 @@ import org.junit.Test;
  */
 public class DeltaChestTest {
     //private World world;
+    @SuppressWarnings("unused")
     private ItemStack[] stateA;
+    @SuppressWarnings("unused")
     private BBPlayerInfo douchebag;
 
     @Before
