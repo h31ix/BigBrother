@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -128,14 +127,14 @@ public abstract class RollbackPreparedStatement {
     private StringBuilder getActionString(Rollback rollback) {
         StringBuilder ret = new StringBuilder("action IN(");
         boolean first=true;
-        for(Action act:rollback.allowedActions) {
+        for(Integer act:rollback.allowedActions) {
             if(first) {
                 first=false;
             } else {
                 ret.append(",");
             }
             ret.append("'");
-            ret.append(act.ordinal());
+            ret.append(act);
             ret.append("'");
         }
         ret.append(")");

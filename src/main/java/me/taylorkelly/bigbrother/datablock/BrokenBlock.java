@@ -14,9 +14,9 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-public class BrokenBlock extends BBDataBlock {
+public class BrokenBlock extends BBAction {
 
-    private ArrayList<BBDataBlock> bystanders;
+    private ArrayList<BBAction> bystanders;
 
     public BrokenBlock(String player, Block block, String world) {
         this(player, block, world, true);
@@ -24,8 +24,8 @@ public class BrokenBlock extends BBDataBlock {
     }
 
     public BrokenBlock(String player, Block block, String world, boolean checks) {
-        super(player, Action.BLOCK_BROKEN, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
+        bystanders = new ArrayList<BBAction>();
         if (checks) {
             torchCheck(player, block);
             surroundingSignChecks(player, block);
@@ -45,13 +45,13 @@ public class BrokenBlock extends BBDataBlock {
     }
 
     public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {
-        super(pi, Action.BLOCK_BROKEN, world, x, y, z, type, Byte.toString(data));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(pi, world, x, y, z, type, Byte.toString(data));
+        bystanders = new ArrayList<BBAction>();
     }
 
     @Override
     public void send() {
-        for (BBDataBlock block : bystanders) {
+        for (BBAction block : bystanders) {
             block.send();
         }
         super.send();
@@ -79,12 +79,12 @@ public class BrokenBlock extends BBDataBlock {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new BrokenBlock(pi, world, x, y, z, type, data);
     }
 
     private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.BLOCK_BROKEN, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     private void torchCheck(String player, Block block) {
@@ -232,5 +232,27 @@ public class BrokenBlock extends BBDataBlock {
                 }
             }
         }
+    }
+    
+    @Override
+    public String toString() {
+        return "broke block "+Material.getMaterial(type);
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

@@ -4,17 +4,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import me.taylorkelly.bigbrother.ActionProvider;
+import me.taylorkelly.bigbrother.ActionProvider.ActionData;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
+import me.taylorkelly.bigbrother.datablock.ActionCategory;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -33,13 +36,30 @@ public class Finder {
     private final ArrayList<Player> players;
     private final WorldManager manager;
     private final Plugin plugin;
+    private static List<Integer> allowedActions;
 
-    public Finder(Location location, List<World> worlds, WorldManager manager, Plugin plugin) {
+    public Finder(Location location, List<World> worlds, WorldManager manager, Plugin plugin, Collection<Integer> actions) {
         this.manager = manager;
         this.location = location;
         this.radius = BBSettings.defaultSearchRadius;
         players = new ArrayList<Player>();
         this.plugin = plugin;
+        if(actions!=null)
+            allowedActions = new ArrayList<Integer>(actions);
+        else {
+            allowedActions = new ArrayList<Integer>();
+            allowedActions.add(ActionProvider.findActionID("BrokenBlock"));
+            allowedActions.add(ActionProvider.findActionID("PlacedBlock"));
+            allowedActions.add(ActionProvider.findActionID("DeltaChest"));
+            allowedActions.add(ActionProvider.findActionID("CreateSignText"));
+            allowedActions.add(ActionProvider.findActionID("DestroySignText"));
+            allowedActions.add(ActionProvider.findActionID("LeafDecay"));
+            allowedActions.add(ActionProvider.findActionID("TNTExplosion"));
+            allowedActions.add(ActionProvider.findActionID("CreeperExplosion"));
+            allowedActions.add(ActionProvider.findActionID("MiscExplosion"));
+            allowedActions.add(ActionProvider.findActionID("BlockBurn"));
+            allowedActions.add(ActionProvider.findActionID("Flow"));
+        }
     }
 
     public void setRadius(double radius) {
@@ -107,16 +127,15 @@ public class Finder {
         HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
         try {
             // TODO maybe more customizable actions?
-            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
             
             /*
              * org.h2.jdbc.JdbcSQLException: Column "ID" must be in the GROUP BY
              * list; SQL statement:
              */
             if (BBDB.usingDBMS(DBMS.H2) || BBDB.usingDBMS(DBMS.POSTGRES)) {
-                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = "+(BBDB.usingDBMS(DBMS.POSTGRES)?"false":"0")+" AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY player DESC");
+                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = "+(BBDB.usingDBMS(DBMS.POSTGRES)?"false":"0")+" AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY player DESC");
             } else {
-                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString + " AND rbacked = '0' AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY id DESC");
+                ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = '0' AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY id DESC");
             }
             ps.setInt(1, location.getBlockX() + radius);
             ps.setInt(2, location.getBlockX() - radius);
@@ -166,6 +185,23 @@ public class Finder {
         }
     }
 
+    /**
+     * @return
+     */
+    private static String getActionString() {
+        String act="action IN(";
+        boolean first=true;
+        for(int actID:allowedActions) {
+            if(first){
+                first=false;
+            } else {
+                act+=",";
+            }
+            act+=Integer.toString(actID);
+        }
+        return act+")";
+    }
+
     private static final void mysqlFind(final Plugin plugin, final String playerName, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         
         BBPlayerInfo hunted = BBUsersTable.getInstance().getUserByName(playerName);
@@ -173,20 +209,19 @@ public class Finder {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        HashMap<Integer, Integer> creations = new HashMap<Integer, Integer>();
-        HashMap<Integer, Integer> destructions = new HashMap<Integer, Integer>();
-        HashMap<Integer, Integer> explosions = new HashMap<Integer, Integer>();
-        HashMap<Integer, Integer> burns = new HashMap<Integer, Integer>();
-
+        HashMap<ActionCategory,HashMap<Integer, Integer>> mods = new HashMap<ActionCategory,HashMap<Integer,Integer>>();
+        for(ActionCategory ac:ActionCategory.values()) {
+            mods.put(ac, new HashMap<Integer,Integer>());
+        }
 
         try {
             // TODO Centralize action list SQL generation.
-            String actionString = "action IN('" + Action.BLOCK_BROKEN.ordinal() + "', '" + Action.BLOCK_PLACED.ordinal() + "', '" + Action.LEAF_DECAY.ordinal() + "', '" + Action.TNT_EXPLOSION.ordinal() + "', '" + Action.CREEPER_EXPLOSION.ordinal() + "', '" + Action.MISC_EXPLOSION.ordinal() + "', '" + Action.FLOW.ordinal() + "', '" + Action.BLOCK_BURN.ordinal() + "')";
+            
             if(BBDB.usingDBMS(DBMS.POSTGRES))
-            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
+            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString()
             			+ " AND rbacked = false AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
             else
-            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + actionString
+            	ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString()
             			+ " AND rbacked = 0 AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
 
             ps.setInt(1, location.getBlockX() + radius);
@@ -202,127 +237,38 @@ public class Finder {
 
             int size = 0;
             while (rs.next()) {
-                Action action = Action.values()[rs.getInt("action")];
+                ActionData dat = ActionProvider.Actions.get(rs.getInt("action"));
                 int type = rs.getInt("type");
-
-                switch (action) {
-                    case BLOCK_BROKEN:
-                    case LEAF_DECAY:
-                        if (destructions.containsKey(type)) {
-                            destructions.put(type, destructions.get(type) + 1);
-                            size++;
-                        } else {
-                            destructions.put(type, 1);
-                            size++;
-                        }
-                        break;
-                    case BLOCK_PLACED:
-                        if (creations.containsKey(type)) {
-                            creations.put(type, creations.get(type) + 1);
-                            size++;
-                        } else {
-                            creations.put(type, 1);
-                            size++;
-                        }
-                        break;
-                    case TNT_EXPLOSION:
-                    case CREEPER_EXPLOSION:
-                    case MISC_EXPLOSION:
-                        if (explosions.containsKey(type)) {
-                            explosions.put(type, explosions.get(type) + 1);
-                            size++;
-                        } else {
-                            explosions.put(type, 1);
-                            size++;
-                        }
-                    case BLOCK_BURN:
-                        if (burns.containsKey(type)) {
-                            burns.put(type, burns.get(type) + 1);
-                            size++;
-                        } else {
-                            burns.put(type, 1);
-                            size++;
-                        }
-                        break;
-                    case FLOW:
-                        if (creations.containsKey(type)) {
-                            creations.put(type, creations.get(type) + 1);
-                            size++;
-                        } else {
-                            creations.put(type, 1);
-                            size++;
-                        }
-                        break;
+                HashMap<Integer,Integer> wc = mods.get(dat.category);
+                if (wc.containsKey(type)) {
+                    wc.put(type, wc.get(type) + 1);
+                    size++;
+                } else {
+                    wc.put(type, 1);
+                    size++;
                 }
-
+                mods.remove(dat.category);
+                mods.put(dat.category,wc);
             }
             if (size > 0) {
-                StringBuilder creationList = new StringBuilder();
-                creationList.append(ChatColor.AQUA.toString());
-                creationList.append("Placed Blocks: ");
-                creationList.append(ChatColor.WHITE.toString());
-                for (Entry<Integer, Integer> entry : creations.entrySet()) {
-                    creationList.append(Material.getMaterial(entry.getKey()));
-                    creationList.append(" (");
-                    creationList.append(entry.getValue());
-                    creationList.append("), ");
-                }
-                if (creationList.toString().contains(",")) {
-                    creationList.delete(creationList.lastIndexOf(","), creationList.length());
-                }
-                StringBuilder brokenList = new StringBuilder();
-                brokenList.append(ChatColor.RED.toString());
-                brokenList.append("Broken Blocks: ");
-                brokenList.append(ChatColor.WHITE.toString());
-                for (Entry<Integer, Integer> entry : destructions.entrySet()) {
-                    brokenList.append(Material.getMaterial(entry.getKey()));
-                    brokenList.append(" (");
-                    brokenList.append(entry.getValue());
-                    brokenList.append("), ");
-                }
-                if (brokenList.toString().contains(",")) {
-                    brokenList.delete(brokenList.lastIndexOf(","), brokenList.length());
-                }
-                StringBuilder explodeList = new StringBuilder();
-                explodeList.append(ChatColor.RED.toString());
-                explodeList.append("Exploded Blocks: ");
-                explodeList.append(ChatColor.WHITE.toString());
-                for (Entry<Integer, Integer> entry : explosions.entrySet()) {
-                    explodeList.append(Material.getMaterial(entry.getKey()));
-                    explodeList.append(" (");
-                    explodeList.append(entry.getValue());
-                    explodeList.append("), ");
-                }
-                if (explodeList.toString().contains(",")) {
-                    explodeList.delete(explodeList.lastIndexOf(","), explodeList.length());
-                }
-
-                StringBuilder burnList = new StringBuilder();
-                burnList.append(ChatColor.RED.toString());
-                burnList.append("Burned Blocks: ");
-                burnList.append(ChatColor.WHITE.toString());
-                for (Entry<Integer, Integer> entry : burns.entrySet()) {
-                    burnList.append(Material.getMaterial(entry.getKey()));
-                    burnList.append(" (");
-                    burnList.append(entry.getValue());
-                    burnList.append("), ");
-                }
-                if (burnList.toString().contains(",")) {
-                    burnList.delete(burnList.lastIndexOf(","), burnList.length());
-                }
                 for (Player player : players) {
                     player.sendMessage(BigBrother.premessage + playerName + " has made " + size + " modifications");
-                    if (creations.entrySet().size() > 0) {
-                        player.sendMessage(creationList.toString());
-                    }
-                    if (destructions.entrySet().size() > 0) {
-                        player.sendMessage(brokenList.toString());
-                    }
-                    if (explosions.entrySet().size() > 0) {
-                        player.sendMessage(explodeList.toString());
-                    }
-                    if (burns.entrySet().size() > 0) {
-                        player.sendMessage(burnList.toString());
+                    for(ActionCategory category:ActionCategory.values()) {
+                        if(mods.get(category).size()==0) continue;
+                        StringBuilder list = new StringBuilder();
+                        list.append(ChatColor.AQUA.toString());
+                        list.append(category+": ");
+                        list.append(ChatColor.WHITE.toString());
+                        for (Entry<Integer, Integer> entry : mods.get(category).entrySet()) {
+                            list.append(Material.getMaterial(entry.getKey()));
+                            list.append(" (");
+                            list.append(entry.getValue());
+                            list.append("), ");
+                        }
+                        if (list.toString().contains(",")) {
+                            list.delete(list.lastIndexOf(","), list.length());
+                        }
+                        player.sendMessage(list.toString());
                     }
                 }
             } else {

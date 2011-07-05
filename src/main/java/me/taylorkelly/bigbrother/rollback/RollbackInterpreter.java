@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
 import me.taylorkelly.util.TimeParser;
 
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ public class RollbackInterpreter {
     private WorldManager manager;
     private int radius = 0;
     private Plugin plugin;
-    private List<Action> allowedActions;
+    private List<Integer> allowedActions;
     
     public RollbackInterpreter(Player player, String[] split, Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
@@ -36,18 +36,18 @@ public class RollbackInterpreter {
         playerList = new ArrayList<String>();
         blockTypes = new ArrayList<Integer>();
         // Populate list
-        allowedActions = new ArrayList<Action>();
-        allowedActions.add(Action.BLOCK_BROKEN);
-        allowedActions.add(Action.BLOCK_PLACED);
-        allowedActions.add(Action.DELTA_CHEST);
-        allowedActions.add(Action.CREATE_SIGN_TEXT);
-        allowedActions.add(Action.DESTROY_SIGN_TEXT);
-        allowedActions.add(Action.LEAF_DECAY);
-        allowedActions.add(Action.TNT_EXPLOSION);
-        allowedActions.add(Action.CREEPER_EXPLOSION);
-        allowedActions.add(Action.MISC_EXPLOSION);
-        allowedActions.add(Action.BLOCK_BURN);
-        allowedActions.add(Action.FLOW);
+        allowedActions = new ArrayList<Integer>();
+        allowedActions.add(find("BrokenBlock"));
+        allowedActions.add(find("PlacedBlock"));
+        allowedActions.add(find("DeltaChest"));
+        allowedActions.add(find("CreateSignText"));
+        allowedActions.add(find("DestroySignText"));
+        allowedActions.add(find("LeafDecay"));
+        allowedActions.add(find("TNTExplosion"));
+        allowedActions.add(find("CreeperExplosion"));
+        allowedActions.add(find("MiscExplosion"));
+        allowedActions.add(find("BlockBurn"));
+        allowedActions.add(find("Flow"));
         
         for (int i = 1; i < split.length; i++) {
             String argument = split[i].trim();
@@ -76,6 +76,14 @@ public class RollbackInterpreter {
     }
     
     /**
+     * @param string
+     * @return
+     */
+    private Integer find(String string) {
+        return ActionProvider.findActionID(string);
+    }
+
+    /**
      * actions to roll back
      * a:10,!BLOCK_PLACE
      * @author N3X15
@@ -85,14 +93,14 @@ public class RollbackInterpreter {
             if(!act.startsWith("!") && allowedActions.size()==0) {
                 allowedActions.clear();
             }
-            Action ca;
+            int ca;
             if(act.startsWith("!")) {
-                ca = Action.valueOf(act.substring(1));
-                if(allowedActions.contains(ca))
+                ca = find(act.substring(1));
+                if(ca>-1 && allowedActions.contains(ca))
                     allowedActions.remove(ca);
             }else{
-                ca = Action.valueOf(act);
-                if(!allowedActions.contains(ca))
+                ca = find(act);
+                if(ca>-1 && !allowedActions.contains(ca))
                     allowedActions.add(ca);
             }
         }

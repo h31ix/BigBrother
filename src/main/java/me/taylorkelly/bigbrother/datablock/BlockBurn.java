@@ -10,13 +10,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-public class BlockBurn extends BBDataBlock {
+public class BlockBurn extends BBAction {
 
-    private ArrayList<BBDataBlock> bystanders;
+    private ArrayList<BBAction> bystanders;
 
     public BlockBurn(String player, Block block, String world) {
-        super(player, Action.BLOCK_BURN, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
+        bystanders = new ArrayList<BBAction>();
         torchCheck(player, block);
         surroundingSignChecks(player, block);
         signCheck(player, block);
@@ -24,8 +24,8 @@ public class BlockBurn extends BBDataBlock {
     }
 
     public BlockBurn(Block block, String world) {
-        super(ENVIRONMENT, Action.BLOCK_BURN, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(ENVIRONMENT, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
+        bystanders = new ArrayList<BBAction>();
         torchCheck(block);
         surroundingSignChecks(block);
         signCheck(block);
@@ -34,7 +34,7 @@ public class BlockBurn extends BBDataBlock {
 
     @Override
     public void send() {
-        for (BBDataBlock block : bystanders) {
+        for (BBAction block : bystanders) {
             block.send();
         }
         super.send();
@@ -62,12 +62,12 @@ public class BlockBurn extends BBDataBlock {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new BlockBurn(pi, world, x, y, z, type, data);
     }
 
     private BlockBurn(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.BLOCK_BURN, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     /**
@@ -76,8 +76,8 @@ public class BlockBurn extends BBDataBlock {
      * @param world
      */
     public BlockBurn(BBPlayerInfo player, Block block, World world) {
-        super(player.getName(), Action.BLOCK_BURN, world.getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
-        bystanders = new ArrayList<BBDataBlock>();
+        super(player.getName(), world.getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
+        bystanders = new ArrayList<BBAction>();
         torchCheck(player.getName(), block);
         surroundingSignChecks(player.getName(), block);
         signCheck(player.getName(), block);
@@ -274,5 +274,27 @@ public class BlockBurn extends BBDataBlock {
         if (gnomes.contains(mrGnome.getTypeId())) {
             bystanders.add(new BlockBurn(mrGnome, world));
         }
+    }
+    
+    @Override
+    public String toString() {
+        return "burnt up a block";
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

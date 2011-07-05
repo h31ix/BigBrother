@@ -6,14 +6,14 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class FlintAndSteel extends BBDataBlock {
+public class FlintAndSteel extends BBAction {
 
     public FlintAndSteel(String player, Block block, String world) {
-        super(player, Action.FLINT_AND_STEEL, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
+        super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
     }
 
     private FlintAndSteel(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.FLINT_AND_STEEL, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     public void rollback(World wld) {
@@ -22,8 +22,30 @@ public class FlintAndSteel extends BBDataBlock {
     public void redo(Server server) {
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new FlintAndSteel(pi, world, x, y, z, type, data);
     }
 
+    
+    @Override
+    public String toString() {
+        return "ignited something with a flint and steel";
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
+    }
 }

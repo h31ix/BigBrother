@@ -2,8 +2,8 @@ package me.taylorkelly.bigbrother.rollback;
 
 import java.util.ArrayList;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
@@ -108,27 +108,27 @@ public class RollbackPreparedStatementPostgreSQL extends
         // TODO maybe more customizable actions?
         StringBuilder ret = new StringBuilder("action IN(");
         ret.append("'");
-        ret.append(Action.BLOCK_BROKEN.ordinal());
+        ret.append(ActionProvider.findActionID("BrokenBlock"));
         ret.append("','");
-        ret.append(Action.BLOCK_PLACED.ordinal());
+        ret.append(ActionProvider.findActionID("PlacedBlock"));
         ret.append("','");
-        ret.append(Action.DELTA_CHEST.ordinal());
+        ret.append(ActionProvider.findActionID("DeltaChest"));
         ret.append("','");
-        ret.append(Action.CREATE_SIGN_TEXT.ordinal());
+        ret.append(ActionProvider.findActionID("CreateSignText"));
         ret.append("','");
-        ret.append(Action.DESTROY_SIGN_TEXT.ordinal());
+        ret.append(ActionProvider.findActionID("DestroySignText"));
         ret.append("','");
-        ret.append(Action.LEAF_DECAY.ordinal());
+        ret.append(ActionProvider.findActionID("LeafDecay"));
         ret.append("','");
-        ret.append(Action.TNT_EXPLOSION.ordinal());
+        ret.append(ActionProvider.findActionID("TNTExplosion"));
         ret.append("','");
-        ret.append(Action.CREEPER_EXPLOSION.ordinal());
+        ret.append(ActionProvider.findActionID("CreeperExplosion"));
         ret.append("','");
-        ret.append(Action.MISC_EXPLOSION.ordinal());
+        ret.append(ActionProvider.findActionID("MiscExplosion"));
         ret.append("','");
-        ret.append(Action.BLOCK_BURN.ordinal());
+        ret.append(ActionProvider.findActionID("BlockBurn"));
         ret.append("','");
-        ret.append(Action.FLOW.ordinal());
+        ret.append(ActionProvider.findActionID("Flow"));
         ret.append("')");
         return ret;
     }

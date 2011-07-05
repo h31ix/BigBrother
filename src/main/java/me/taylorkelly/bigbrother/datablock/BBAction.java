@@ -1,101 +1,31 @@
 package me.taylorkelly.bigbrother.datablock;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.datablock.explosions.CreeperExplosion;
-import me.taylorkelly.bigbrother.datablock.explosions.MiscExplosion;
-import me.taylorkelly.bigbrother.datablock.explosions.TNTExplosion;
-import me.taylorkelly.bigbrother.datasource.DataBlockSender;
-import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
-import org.bukkit.Server;
-import org.bukkit.World;
-
-public abstract class BBDataBlock {
-
-    public final static String ENVIRONMENT = "Environment";
-    public BBPlayerInfo player;
-    public Action action;
-    public int x;
-    public int y;
-    public int z;
-    public String world;
-    public int type;
-    public String data;
-    public long date;
-
-    public static enum Action {
-        /**
-         * A block has been broken.
-         * 
-         * @author tkelly910
-         * @since Unknown
-         */
-        BLOCK_BROKEN,
-        
-        /**
-         * 
-         */
-        BLOCK_PLACED,
-        DESTROY_SIGN_TEXT,
-        TELEPORT,
-        DELTA_CHEST,
-        COMMAND,
-        CHAT,
-        DISCONNECT,
-        LOGIN,
-        DOOR_OPEN,
-        BUTTON_PRESS,
-        LEVER_SWITCH,
-        CREATE_SIGN_TEXT,
-        LEAF_DECAY,
-        FLINT_AND_STEEL,
-        TNT_EXPLOSION,
-        CREEPER_EXPLOSION,
-        MISC_EXPLOSION,
-        OPEN_CHEST,
-        BLOCK_BURN,
-        FLOW,
-        DROP_ITEM,
-        PICKUP_ITEM, 
-        SIGN_DESTROYED
+public abstract class BBAction extends Action {
+    
+    /**
+     * @param player
+     * @param action
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param type
+     * @param data
+     */
+    public BBAction(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+        super(player, world, x, y, z, type, data);
     }
 
-    public BBDataBlock(String player, Action action, String world, int x, int y, int z, int type, String data) {
-        this.date = System.currentTimeMillis() / 1000;
-        this.player = BBUsersTable.getInstance().getUserByName(player);
-        this.action = action;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.type = type;
-        this.data = data;
+    public BBAction(String player, String world, int x, int y, int z, int type, String data) {
+        super(player,world,x,y,z,type,data);
     }
-    public BBDataBlock(BBPlayerInfo player, Action action, String world, int x, int y, int z, int type, String data) {
-        this.date = System.currentTimeMillis() / 1000;
-        this.player = player;
-        this.action = action;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.type = type;
-        this.data = data;
-    }
-
-    public void send() {
-        DataBlockSender.offer(this);
-    }
-
-    public abstract void rollback(World world);
-
-    public abstract void redo(Server server);
-
-    public static BBDataBlock getBBDataBlock(String player, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return null;
     }
-
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, Action action, String world, int x, int y, int z, int type, String data) {
+/*
+    public static Action getDataBlock(BBPlayerInfo pi, int action, String actionName, String world, int x, int y, int z, int type, String data) {
         switch (action) {
             case BLOCK_BROKEN:
                 return BrokenBlock.getBBDataBlock(pi, world, x, y, z, type, data);
@@ -149,7 +79,9 @@ public abstract class BBDataBlock {
                 return null;
         }
     }
-    public static BBDataBlock getBBDataBlock(int plyID, Action action, String world, int x, int y, int z, int type, String data) {
-        return getBBDataBlock(BBUsersTable.getInstance().getUserByID(plyID),action,world,x,y,z,type,data);
+    
+    public static Action getBBDataBlock(int plyID, String world, int x, int y, int z, int type, String data) {
+        return getDataBlock(BBUsersTable.getInstance().getUserByID(plyID),world,x,y,z,type,data);
     }
+    */
 }

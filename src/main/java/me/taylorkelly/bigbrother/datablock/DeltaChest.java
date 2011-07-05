@@ -15,7 +15,7 @@ import org.bukkit.material.MaterialData;
 
 import com.sk89q.worldedit.blocks.ItemType;
 
-public class DeltaChest extends BBDataBlock {
+public class DeltaChest extends BBAction {
 
     public enum DeltaType {
         NO_CHANGE,
@@ -25,15 +25,15 @@ public class DeltaChest extends BBDataBlock {
     }
 
     public DeltaChest(String player, Chest chest, String changes) {
-        super(player, Action.DELTA_CHEST, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), changes);
+        super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), changes);
     }
 
     private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.DELTA_CHEST, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
     
     public DeltaChest(String player, Chest chest, ItemStack[] orig, ItemStack[] latest) {
-        super(player, Action.DELTA_CHEST, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), 
+        super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), 
         DeltaChest.getInventoryDelta(orig, latest));
     }
 
@@ -416,7 +416,7 @@ public class DeltaChest extends BBDataBlock {
         }
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DeltaChest(pi, world, x, y, z, type, data);
     }
 
@@ -434,5 +434,27 @@ public class DeltaChest extends BBDataBlock {
             return processDeltaStream(inv.length,data);
         }
         else return new DeltaEntry[0];
+    }
+    
+    @Override
+    public String toString() {
+        return "changed a chest:\n";
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

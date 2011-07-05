@@ -6,7 +6,7 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Chest;
@@ -79,7 +79,7 @@ public abstract class BBUsersTable extends DBTable {
     
 
     public BBPlayerInfo getUserByName(String name) {
-        if(name.equalsIgnoreCase(BBDataBlock.ENVIRONMENT))
+        if(name.equalsIgnoreCase(BBAction.ENVIRONMENT))
             return BBPlayerInfo.ENVIRONMENT;
         
         // Check cache first.

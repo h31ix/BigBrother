@@ -8,10 +8,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-public class DestroySignText extends BBDataBlock {
+public class DestroySignText extends BBAction {
 
     public DestroySignText(String name, Sign sign, String world) {
-        super(name, Action.DESTROY_SIGN_TEXT, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
+        super(name, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
 
     private static String getText(Sign sign) {
@@ -26,16 +26,16 @@ public class DestroySignText extends BBDataBlock {
         return message.toString();
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DestroySignText(pi, world, x, y, z, type, data);
     }
 
     private DestroySignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.DESTROY_SIGN_TEXT, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     public DestroySignText(BBPlayerInfo player, Sign sign, String world) {
-        super(player, Action.DESTROY_SIGN_TEXT, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
+        super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
 
     @Override
@@ -75,5 +75,32 @@ public class DestroySignText extends BBDataBlock {
         } else {
             BBLogging.warning("Error when restoring sign");
         }
+    }
+    
+    @Override
+    public String toString() {
+        String[] lines = data.split("\u0060");
+        String out = "destroyed a sign with text: ";
+        for(String line:lines){
+            out+="\n"+line;
+        }
+        return out;
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.MISC;
     }
 }

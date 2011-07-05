@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
+import me.taylorkelly.bigbrother.datablock.Action;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Block;
@@ -90,11 +91,11 @@ public abstract class BBDataTable extends DBTable {
 	 */
 	public abstract int getCleanseByLimit(Statement stmt,Long maxRecords, long deletesPerCleansing) throws SQLException;
 
-	public ArrayList<BBDataBlock> getBlockHistory(Block block,
+	public ArrayList<Action> getBlockHistory(Block block,
 			WorldManager manager) {
 		PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<BBDataBlock> blockList = new ArrayList<BBDataBlock>();
+        ArrayList<Action> blockList = new ArrayList<Action>();
 
         try {
                 // TODO maybe more customizable actions?
@@ -113,7 +114,7 @@ public abstract class BBDataTable extends DBTable {
                 while (rs.next()) {
                 	
                 	String data = rs.getString("data");
-                    BBDataBlock newBlock = BBDataBlock.getBBDataBlock(BBUsersTable.getInstance().getUserByID(rs.getInt("player")), Action.values()[rs.getInt("action")], rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
+                    Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
                     newBlock.date = rs.getLong("date");
                     blockList.add(newBlock);
                 }

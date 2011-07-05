@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datablock.BlockBurn;
 import me.taylorkelly.bigbrother.datablock.Flow;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -167,7 +167,7 @@ public class OwnershipManager {
      * @param block
      * @return
      */
-    public static BBDataBlock trackBurn(Block block) {
+    public static BBAction trackBurn(Block block) {
         Block fire = getBurnSource(block);
         BBPlayerInfo player = BBPlayerInfo.ENVIRONMENT;
         if(fire!=null) {

@@ -11,19 +11,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
-
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
+import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
 public class DataBlockSender {
 
-    public static final LinkedBlockingQueue<BBDataBlock> SENDING = new LinkedBlockingQueue<BBDataBlock>();
+    public static final LinkedBlockingQueue<Action> SENDING = new LinkedBlockingQueue<Action>();
     private static int sendingTask;
 
     public static void shutdown(BigBrother bb) {
@@ -37,11 +36,11 @@ public class DataBlockSender {
             BBLogging.severe("Unable to schedule sending of blocks");
         }
     }
-    public static void offer(BBDataBlock dataBlock) {
+    public static void offer(Action dataBlock) {
         SENDING.add(dataBlock);
     }
 
-    private static boolean sendBlocksSQL(Collection<BBDataBlock> collection, WorldManager manager) {
+    private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
 
         // Perform a NOP if nothing's happened.
@@ -52,7 +51,7 @@ public class DataBlockSender {
         }
         //H2 fix...
         if (BBDB.usingDBMS(DBMS.H2)) {
-            for (BBDataBlock block : collection) {
+            for (Action block : collection) {
                 manager.getWorld(block.world);
             }
         }
@@ -62,10 +61,10 @@ public class DataBlockSender {
             String statementSql = BBDataTable.getInstance().getPreparedDataBlockStatement();
             BBLogging.debug(statementSql);
             ps = BBDB.prepare(statementSql);
-            for (BBDataBlock block : collection) {
+            for (Action block : collection) {
                 ps.setLong(1, block.date);
                 ps.setInt(2, block.player.getID());
-                ps.setInt(3, block.action.ordinal());
+                ps.setInt(3, ActionProvider.getActionID(block));
                 ps.setInt(4, manager.getWorld(block.world));
                 ps.setInt(5, block.x);
                 if (block.y < 0) {
@@ -92,7 +91,7 @@ public class DataBlockSender {
         }
     }
 
-    private static void sendBlocksFlatFile(File dataFolder, Collection<BBDataBlock> collection) {
+    private static void sendBlocksFlatFile(File dataFolder, Collection<Action> collection) {
         File dir = new File(dataFolder, "logs");
         if (!dir.exists()) {
             dir.mkdir();
@@ -100,11 +99,11 @@ public class DataBlockSender {
         BufferedWriter bwriter = null;
         FileWriter fwriter = null;
         try {
-            for (BBDataBlock block : collection) {
+            for (Action block : collection) {
                 File file = new File(dir, fixName(block.player.getName()) + ".log");
                 StringBuilder builder = new StringBuilder(Long.toString(System.currentTimeMillis()));
                 builder.append(" - ");
-                builder.append(getAction(block.action));
+                builder.append(block.toString());
                 builder.append(" ");
                 builder.append(block.world);
                 builder.append("@(");
@@ -141,62 +140,7 @@ public class DataBlockSender {
             }
         }
     }
-
-    public static String getAction(Action action) {
-        switch (action) {
-            case BLOCK_BROKEN:
-                return "broke block";
-            case BLOCK_PLACED:
-                return "placed block";
-            case DESTROY_SIGN_TEXT:
-                return "destroyed sign text";
-            case TELEPORT:
-                return "teleport";
-            case DELTA_CHEST:
-                return "changed chest";
-            case COMMAND:
-                return "exec'd command";
-            case CHAT:
-                return "chat";
-            case DISCONNECT:
-                return "disconnect";
-            case LOGIN:
-                return "login";
-            case DOOR_OPEN:
-                return "door";
-            case BUTTON_PRESS:
-                return "button";
-            case LEVER_SWITCH:
-                return "lever";
-            case CREATE_SIGN_TEXT:
-                return "set sign text";
-            case LEAF_DECAY:
-                return "decayed leaf";
-            case FLINT_AND_STEEL:
-                return "ignited";
-            case TNT_EXPLOSION:
-                return "detonated TNT";
-            case CREEPER_EXPLOSION:
-                return "Creeper'd";
-            case MISC_EXPLOSION:
-                return "Misc-exploded";
-            case OPEN_CHEST:
-                return "opened chest";
-            case BLOCK_BURN:
-                return "burned block";
-            case FLOW:
-                return "flowed";
-            case DROP_ITEM:
-                return "dropped item";
-            case PICKUP_ITEM:
-                return "picked up item";
-            case SIGN_DESTROYED:
-                return "broke a sign";
-            default:
-                return action.name();
-        }
-    }
-
+    
     public static String fixName(String player) {
         return player.replace(".", "").replace(":", "").replace("<", "").replace(">", "").replace("*", "").replace("\\", "").replace("/", "").replace("?", "").replace("\"", "").replace("|", "");
     }
@@ -216,7 +160,7 @@ public class DataBlockSender {
             if (SENDING.size() == 0) {
                 return;
             }
-            Collection<BBDataBlock> collection = new ArrayList<BBDataBlock>();
+            Collection<Action> collection = new ArrayList<Action>();
             SENDING.drainTo(collection);
 
             boolean worked = sendBlocksSQL(collection, manager);

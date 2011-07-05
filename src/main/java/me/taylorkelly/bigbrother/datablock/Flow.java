@@ -4,34 +4,35 @@ import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class Flow extends BBDataBlock {
+public class Flow extends BBAction {
 
-    private ArrayList<BBDataBlock> bystanders;
+    private ArrayList<BBAction> bystanders;
 
     public Flow(String player, Block block, String world) {
-        super(player, Action.FLOW, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
+        bystanders = new ArrayList<BBAction>();
         // TODO can't lava flow break blocks?
     }
 
     public Flow(String player, String world, int x, int y, int z, int type, byte data) {
-        super(player, Action.FLOW, world, x, y, z, type, Byte.toString(data));
-        bystanders = new ArrayList<BBDataBlock>();
+        super(player, world, x, y, z, type, Byte.toString(data));
+        bystanders = new ArrayList<BBAction>();
     }
 
     public void send() {
-        for (BBDataBlock block : bystanders) {
+        for (BBAction block : bystanders) {
             block.send();
         }
         super.send();
     }
 
     private Flow(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.FLOW, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     public void rollback(World wld) {
@@ -46,7 +47,29 @@ public class Flow extends BBDataBlock {
     public void redo(Server server) {
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new Flow(pi, world, x, y, z, type, data);
+    }
+    
+    @Override
+    public String toString() {
+        return "flowed "+Material.getMaterial(type).name();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

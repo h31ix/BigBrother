@@ -21,7 +21,7 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.CreateSignText;
 import me.taylorkelly.bigbrother.datablock.FlintAndSteel;
@@ -107,7 +107,7 @@ public class BBBlockListener extends BlockListener {
         if (BBSettings.leafDrops && !event.isCancelled()) {
             // TODO try to find a player that did it.
             final Block block = event.getBlock();
-            BBDataBlock dataBlock = LeafDecay.create(block, block.getWorld().getName());
+            BBAction dataBlock = LeafDecay.create(block, block.getWorld().getName());
             OwnershipManager.removeOwner(block);
             dataBlock.send();
         }
@@ -117,7 +117,7 @@ public class BBBlockListener extends BlockListener {
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (BBSettings.fire && event.getCause() == IgniteCause.FLINT_AND_STEEL && !event.isCancelled()) {
             final Block block = event.getBlock();
-            BBDataBlock dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
+            BBAction dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
             dataBlock.send();
         }
     }
@@ -129,7 +129,7 @@ public class BBBlockListener extends BlockListener {
     public void onBlockBurn(BlockBurnEvent event) {
         if (BBSettings.fire && !event.isCancelled()) {
             final Block block = event.getBlock();
-            BBDataBlock dataBlock = OwnershipManager.trackBurn(block);
+            BBAction dataBlock = OwnershipManager.trackBurn(block);
             OwnershipManager.removeOwner(block);
             dataBlock.send();
         }

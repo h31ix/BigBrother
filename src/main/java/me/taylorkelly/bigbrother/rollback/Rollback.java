@@ -12,10 +12,11 @@ import java.util.List;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock.Action;
+import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datasource.BBDB;
+import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,13 +35,13 @@ public class Rollback {
     public final ArrayList<Integer> blockTypes;
     public int radius;
     public Location center;
-    private final LinkedList<BBDataBlock> listBlocks;
-    private static final LinkedList<BBDataBlock> lastRollback = new LinkedList<BBDataBlock>();
+    private final LinkedList<Action> listBlocks;
+    private static final LinkedList<Action> lastRollback = new LinkedList<Action>();
     private static String undoRollback = null;
     private final WorldManager manager;
     //private int size; // Number of items to roll back
     private final Plugin plugin;
-    public List<Action> allowedActions;
+    public List<Integer> allowedActions;
     
     public Rollback(Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
@@ -51,8 +52,8 @@ public class Rollback {
         blockTypes = new ArrayList<Integer>();
         players = new ArrayList<String>();
         recievers = new ArrayList<Player>();
-        listBlocks = new LinkedList<BBDataBlock>();
-        allowedActions=new ArrayList<Action>();
+        listBlocks = new LinkedList<Action>();
+        allowedActions=new ArrayList<Integer>();
     }
     
     public void addReciever(Player player) {
@@ -116,7 +117,7 @@ public class Rollback {
     public static void undo(Server server, Player player) {
         int i = 0;
         while (lastRollback.size() > 0) {
-            BBDataBlock dataBlock = lastRollback.removeFirst();
+            Action dataBlock = lastRollback.removeFirst();
             if (dataBlock != null) {
                 dataBlock.redo(server);
                 i++;
@@ -159,7 +160,8 @@ public class Rollback {
                 int rollbackSize = 0;
                 while (set.next()) {
                     String data = set.getString("data");
-                    listBlocks.addLast(BBDataBlock.getBBDataBlock(set.getInt("player"), Action.values()[set.getInt("action")], set.getString("world"), set.getInt("x"),
+                    listBlocks.addLast(
+ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().getUserByID(set.getInt("player")), set.getString("world"), set.getInt("x"),
                             set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;
                 }
@@ -229,13 +231,13 @@ public class Rollback {
             int count = 0;
             
             while (count < BBSettings.rollbacksPerTick && listBlocks.size() > 0) {
-                BBDataBlock dataBlock = listBlocks.removeFirst();
+                Action dataBlock = listBlocks.removeFirst();
                 if (dataBlock != null) {
                     lastRollback.addFirst(dataBlock);
                     try {
                         dataBlock.rollback(server.getWorld(dataBlock.world));
                     } catch (Exception e) {
-                        BBLogging.warning("Caught exception when rolling back a " + dataBlock.action, e);
+                        BBLogging.warning("Caught exception when rolling back a " + dataBlock.getName(), e);
                     }
                     count++;
                 }

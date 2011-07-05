@@ -26,16 +26,16 @@ public class HereCommand implements CommandExecutor {
         Player player = (Player) send;
         if (BBPermissions.info(player)) {
             if (split.length == 1) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin);
+                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
                 finder.addReciever(player);
                 finder.find();
             } else if (Numbers.isNumber(split[1]) && split.length == 2) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin);
+                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
                 finder.setRadius(Double.parseDouble(split[1]));
                 finder.addReciever(player);
                 finder.find();
             } else if (split.length == 2) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin);
+                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
                 finder.addReciever(player);
                 List<Player> targets = plugin.getServer().matchPlayer(split[1]);
                 Player findee = null;
@@ -44,7 +44,7 @@ public class HereCommand implements CommandExecutor {
                 }
                 finder.find((findee == null) ? split[1] : findee.getName());
             } else if (Numbers.isNumber(split[2]) && split.length == 3) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin);
+                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
                 finder.setRadius(Double.parseDouble(split[2]));
                 finder.addReciever(player);
                 List<Player> targets = plugin.getServer().matchPlayer(split[1]);

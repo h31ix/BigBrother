@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.SignDestroyed;
 
@@ -15,13 +15,13 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class Explosion extends BBDataBlock {
+public abstract class Explosion extends BBAction {
 
-    private ArrayList<BBDataBlock> bystanders;
+    private ArrayList<BBAction> bystanders;
 
-    public Explosion(Action dataBlockType, String name, Block block, String world) {
-        super(name, dataBlockType, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
-        bystanders = new ArrayList<BBDataBlock>();
+    public Explosion(String name, Block block, String world) {
+        super(name, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
+        bystanders = new ArrayList<BBAction>();
         torchCheck(name, block);
         surroundingSignChecks(name, block);
         signCheck(name, block);
@@ -31,7 +31,7 @@ public abstract class Explosion extends BBDataBlock {
 
     @Override
     public void send() {
-        for (BBDataBlock block : bystanders) {
+        for (BBAction block : bystanders) {
             block.send();
         }
         super.send();
@@ -166,7 +166,7 @@ public abstract class Explosion extends BBDataBlock {
 
     protected abstract Explosion newInstance(String player, Block block);
 
-    protected Explosion(BBPlayerInfo player, Action dataType, String world, int x, int y, int z, int type, String data) {
-        super(player, dataType, world, x, y, z, type, data);
+    protected Explosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+        super(player, world, x, y, z, type, data);
     }
 }

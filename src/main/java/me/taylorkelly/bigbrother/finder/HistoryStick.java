@@ -6,7 +6,8 @@ import java.util.Calendar;
 
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.WorldManager;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.Action;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 import me.taylorkelly.bigbrother.datasource.DataBlockSender;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
@@ -42,14 +43,14 @@ public class HistoryStick extends StickMode {
 
     @Override
     public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean ignored) {
-        ArrayList<BBDataBlock> history = BBDataTable.getInstance().getBlockHistory(block, manager);
+        ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager);
 
         ArrayList<String> msgs = new ArrayList<String>();
         if (history.isEmpty()) {
             msgs.add(ChatColor.RED + "No edits on this block");
         } else {
             msgs.add(ChatColor.AQUA.toString() + history.size() + " edits on this block");
-            for (BBDataBlock dataBlock : history) {
+            for (Action dataBlock : history) {
                 Calendar cal = Calendar.getInstance();
                 String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -59,11 +60,7 @@ public class HistoryStick extends StickMode {
                 msg.append(dataBlock.player);
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
-                msg.append(DataBlockSender.getAction(dataBlock.action));
-                if (dataBlock.type != 0) {
-                    msg.append(" ");
-                    msg.append(Material.getMaterial(dataBlock.type));
-                }
+                msg.append(dataBlock.toString());
                 msgs.add(msg.toString());
             }
         }

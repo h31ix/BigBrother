@@ -329,7 +329,7 @@ public class BBPlayerListener extends PlayerListener {
 							break;
 						case CHEST:
 							if (BBSettings.chestChanges) {
-								BBDataBlock chestDataBlock = new ChestOpen(event.getPlayer().getName(), block, block.getWorld().getName());
+								BBAction chestDataBlock = new ChestOpen(event.getPlayer().getName(), block, block.getWorld().getName());
 								chestDataBlock.send();
 							}
 							break;

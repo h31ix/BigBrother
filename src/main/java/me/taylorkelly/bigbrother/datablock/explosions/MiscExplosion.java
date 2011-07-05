@@ -3,7 +3,8 @@ package me.taylorkelly.bigbrother.datablock.explosions;
 import java.util.List;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.ActionCategory;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,11 +13,11 @@ import org.bukkit.block.Block;
 public class MiscExplosion extends Explosion {
 
     public MiscExplosion(String player, Block block, String world) {
-        super(Action.MISC_EXPLOSION, player, block, world);
+        super(player, block, world);
     }
 
     public MiscExplosion(Block block, String world) {
-        super(Action.MISC_EXPLOSION, ENVIRONMENT, block, world);
+        super(ENVIRONMENT, block, world);
     }
 
     protected Explosion newInstance(String player, Block block) {
@@ -25,7 +26,7 @@ public class MiscExplosion extends Explosion {
 
     public static void create(Location location, List<Block> blockList, String world) {
         for (Block block : blockList) {
-            BBDataBlock dataBlock = new MiscExplosion(ENVIRONMENT, block, world);
+            BBAction dataBlock = new MiscExplosion(ENVIRONMENT, block, world);
             dataBlock.send();
             if (block.getType() == Material.TNT) {
                 TNTLogger.log(ENVIRONMENT, block);
@@ -34,10 +35,32 @@ public class MiscExplosion extends Explosion {
     }
 
     private MiscExplosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.MISC_EXPLOSION, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         return new MiscExplosion(player, world, x, y, z, type, data);
+    }
+    
+    @Override
+    public String toString() {
+        return "detonated something unknown";
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

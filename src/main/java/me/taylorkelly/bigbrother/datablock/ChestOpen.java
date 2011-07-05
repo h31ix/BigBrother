@@ -6,14 +6,14 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class ChestOpen extends BBDataBlock {
+public class ChestOpen extends BBAction {
 
     public ChestOpen(String player, Block block, String world) {
-        super(player, Action.OPEN_CHEST, world, block.getX(), block.getY(), block.getZ(), 54, "");
+        super(player, world, block.getX(), block.getY(), block.getZ(), 54, "");
     }
 
     private ChestOpen(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.OPEN_CHEST, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
     public void rollback(World wld) {
@@ -23,8 +23,30 @@ public class ChestOpen extends BBDataBlock {
     public void redo(Server server) {
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new ChestOpen(pi, world, x, y, z, type, data);
+    }
+    
+    @Override
+    public String toString() {
+        return "opened";
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 
 }

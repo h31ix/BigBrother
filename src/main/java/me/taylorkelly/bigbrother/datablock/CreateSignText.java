@@ -8,14 +8,14 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-public class CreateSignText extends BBDataBlock {
+public class CreateSignText extends BBAction {
 
     public CreateSignText(String player, Sign sign, String world) {
-        super(player, Action.CREATE_SIGN_TEXT, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
+        super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
 
     public CreateSignText(String player, String[] lines, Block block) {
-        super(player, Action.CREATE_SIGN_TEXT, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, getText(lines));
+        super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, getText(lines));
     }
 
     private static String getText(Sign sign) {
@@ -34,12 +34,12 @@ public class CreateSignText extends BBDataBlock {
         return message.toString();
     }
 
-    public static BBDataBlock getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new CreateSignText(pi, world, x, y, z, type, data);
     }
 
     private CreateSignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
-        super(player, Action.CREATE_SIGN_TEXT, world, x, y, z, type, data);
+        super(player, world, x, y, z, type, data);
     }
 
 
@@ -80,5 +80,27 @@ public class CreateSignText extends BBDataBlock {
         } else {
             BBLogging.warning("Error when restoring sign");
         }
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("created a sign with text: %s",data);
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getName()
+     */
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
+     */
+    @Override
+    public ActionCategory getCategory() {
+        // TODO Auto-generated method stub
+        return ActionCategory.BLOCKS;
     }
 }

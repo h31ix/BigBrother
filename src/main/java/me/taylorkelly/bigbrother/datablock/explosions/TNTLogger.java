@@ -2,7 +2,7 @@ package me.taylorkelly.bigbrother.datablock.explosions;
 
 import java.util.HashMap;
 import java.util.List;
-import me.taylorkelly.bigbrother.datablock.BBDataBlock;
+import me.taylorkelly.bigbrother.datablock.BBAction;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ public class TNTLogger {
     }
 
     public static void createTNTDataBlock(List<Block> blockList, Location location) {
-        String player = BBDataBlock.ENVIRONMENT;
+        String player = BBAction.ENVIRONMENT;
         Location bestLocation = null;
         double bestDistance = THRESHOLD;
         for (Location loc : tntMap.keySet()) {
@@ -33,7 +33,7 @@ public class TNTLogger {
             player = tntMap.remove(bestLocation);
         }
         for (Block block : blockList) {
-            BBDataBlock dataBlock = new TNTExplosion(player, block, location.getWorld().getName());
+            BBAction dataBlock = new TNTExplosion(player, block, location.getWorld().getName());
             dataBlock.send();
             if (block.getType() == Material.TNT) {
                 TNTLogger.log(player, block);
