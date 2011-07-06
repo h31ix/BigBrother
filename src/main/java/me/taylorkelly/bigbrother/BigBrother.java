@@ -79,7 +79,6 @@ public class BigBrother extends JavaPlugin {
         BBLogging.debug("Debug Mode enabled");
         
         // Stuff that was in Constructor
-        actionProvider = new BBActionProvider(this);
         name = this.getDescription().getName();
         version = this.getDescription().getVersion();
         // git-BigBrother-jenkins-BigBrother-384
@@ -130,6 +129,7 @@ public class BigBrother extends JavaPlugin {
         entityListener = new BBEntityListener(this);
         stickListener = new StickListener(this);
         sticker = new Sticker(getServer(), worldManager);
+        actionProvider = new BBActionProvider(this);
         
         // Update settings from old versions of BB
         if (new File("BigBrother").exists()) {
