@@ -46,7 +46,7 @@ public class ActionH2 extends ActionTable {
             ps.setString(2, pluginName);
             ps.setInt(3, catID);
             ps.executeUpdate();
-            
+            BBDB.commit();
         } catch (SQLException e) {
             BBLogging.severe("Can't add a new action: ",e);
         } finally {
@@ -56,6 +56,8 @@ public class ActionH2 extends ActionTable {
         ResultSet rs = null;
         try {
             rs = BBDB.executeQuery("SELECT LAST_INSERT_ID()");
+            if(!rs.next())
+                return -1;
             return rs.getInt(1);
         } catch (SQLException e) {
             BBLogging.severe("Can't add a new action: ",e);
