@@ -42,7 +42,7 @@ public abstract class ActionProvider {
         private ActionProvider provider;
         
         public ActionData(Plugin plugin, ActionProvider ap, Action action) {
-            this(plugin.getDescription().getFullName(), action.getCategory(), action.getName());
+            this(plugin.getDescription().getName(), action.getCategory(), action.getName());
             this.plugin = plugin;
             this.provider = ap;
             this.action = action;
@@ -87,7 +87,7 @@ public abstract class ActionProvider {
     protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsValue(dat)) {
-            int id = ActionTable.add(plugin.getDescription().getFullName(), action.getName(), action.getCategory().ordinal());
+            int id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal());
             Actions.put(id, dat);
         }
     }
