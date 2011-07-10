@@ -41,36 +41,36 @@ public class BBActionProvider extends ActionProvider {
          * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
          *****************************************************/
         //BEGIN LEGACY ACTIONS
-        registerAction(plugin, this, new BrokenBlock());    //0
-        registerAction(plugin, this, new PlacedBlock());    //1
-        registerAction(plugin, this, new DestroySignText());//2
-        registerAction(plugin, this, new Teleport());       //3
-        registerAction(plugin, this, new DeltaChest());     //4
-        registerAction(plugin, this, new Command());        //5
-        registerAction(plugin, this, new Chat());           //6
-        registerAction(plugin, this, new Disconnect());     //7
-        registerAction(plugin, this, new Login());          //8
-        registerAction(plugin, this, new DoorOpen());       //9
-        registerAction(plugin, this, new ButtonPress());    //10
-        registerAction(plugin, this, new LeverSwitch());    //11
-        registerAction(plugin, this, new CreateSignText()); //12
-        registerAction(plugin, this, new LeafDecay());      //13
-        registerAction(plugin, this, new FlintAndSteel());  //14
+        registerActionForceID(plugin, this, new BrokenBlock(), 0);
+        registerActionForceID(plugin, this, new PlacedBlock(), 1);
+        registerActionForceID(plugin, this, new DestroySignText(), 2);
+        registerActionForceID(plugin, this, new Teleport(), 3);
+        registerActionForceID(plugin, this, new DeltaChest(), 4);
+        registerActionForceID(plugin, this, new Command(), 5);
+        registerActionForceID(plugin, this, new Chat(), 6);
+        registerActionForceID(plugin, this, new Disconnect(), 7);
+        registerActionForceID(plugin, this, new Login(), 8);
+        registerActionForceID(plugin, this, new DoorOpen(), 9);
+        registerActionForceID(plugin, this, new ButtonPress(), 10);
+        registerActionForceID(plugin, this, new LeverSwitch(), 11);
+        registerActionForceID(plugin, this, new CreateSignText(), 12);
+        registerActionForceID(plugin, this, new LeafDecay(), 13);
+        registerActionForceID(plugin, this, new FlintAndSteel(), 14);
 
-        registerAction(plugin, this, new TNTExplosion());   //15
-        registerAction(plugin, this, new CreeperExplosion());//16
-        registerAction(plugin, this, new MiscExplosion());  //17
+        registerActionForceID(plugin, this, new TNTExplosion(), 15);
+        registerActionForceID(plugin, this, new CreeperExplosion(), 16);
+        registerActionForceID(plugin, this, new MiscExplosion(), 17);
         
-        registerAction(plugin, this, new ChestOpen());      //18
-        registerAction(plugin, this, new BlockBurn());      //19
-        registerAction(plugin, this, new Flow());           //20
-        registerAction(plugin, this, new DropItem());       //21
-        registerAction(plugin, this, new PickupItem());     //22
-        registerAction(plugin, this, new SignDestroyed());  //23
+        registerActionForceID(plugin, this, new ChestOpen(), 18);
+        registerActionForceID(plugin, this, new BlockBurn(), 19);
+        registerActionForceID(plugin, this, new Flow(), 20);
+        registerActionForceID(plugin, this, new DropItem(), 21);
+        registerActionForceID(plugin, this, new PickupItem(), 22);
+        registerActionForceID(plugin, this, new SignDestroyed(), 23);
         //END LEGACY ACTIONS
         
     }
-    
+
     /* (non-Javadoc)
      * @see me.taylorkelly.bigbrother.ActionProvider#getAction(java.lang.String, me.taylorkelly.bigbrother.BBPlayerInfo, java.lang.String, int, int, int, int, java.lang.String)
      */

@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datablock.ActionCategory;
+import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
 import org.bukkit.plugin.Plugin;
@@ -135,5 +136,20 @@ public abstract class ActionProvider {
             }
         }
         return -1;
+    }
+    
+    /**
+     * Only for use by BigBrother!  Use registerAction instead!
+     * @param plugin
+     * @param bbActionProvider
+     * @param deltaChest
+     * @param i
+     */
+    protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
+        ActionData dat = new ActionData(plugin, provider, action);
+        if (!Actions.containsValue(dat) && !Actions.containsKey(id)) {
+            ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id);
+            Actions.put(id, dat);
+        }
     }
 }

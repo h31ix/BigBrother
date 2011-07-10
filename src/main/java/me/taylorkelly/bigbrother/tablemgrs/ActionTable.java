@@ -54,7 +54,7 @@ public abstract class ActionTable extends DBTable {
     protected String getActualTableName() {
         return "actions";
     }
-    
+
     public static ActionTable getInstance() {
         if(instance==null) {
             //BBLogging.info("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
@@ -81,10 +81,32 @@ public abstract class ActionTable extends DBTable {
     }
 
     /**
-     * @param act
+     * 
+     * @param pluginName
+     * @param actionName
+     * @param catID
      * @return
      */
     protected abstract int addAction(String pluginName,String actionName,int catID);
     
     public abstract void init();
+
+    /**
+     * Only for use with BB IDs.
+     * @param pluginName
+     * @param actionName
+     * @param catID
+     * @param ID
+     */
+    protected abstract void addActionForceID(String pluginName, String actionName, int catID, int ID);
+
+    /**
+     * @param pluginName
+     * @param actionName
+     * @param catID
+     * @param actID
+     */
+    public static void addForcedID(String pluginName, String actionName, int catID, int actID) {
+        getInstance().addActionForceID(pluginName,actionName,catID,actID);
+    }
 }

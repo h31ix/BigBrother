@@ -66,6 +66,26 @@ public class ActionH2 extends ActionTable {
         }
         return -1;
     }
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
+     */
+    @Override
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID) {
+        PreparedStatement ps = null;
+        try {
+            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory) VALUES (?,?,?,?)");
+            ps.setInt(1,ID);
+            ps.setString(2, actionName);
+            ps.setString(3, pluginName);
+            ps.setInt(4, catID);
+            ps.executeUpdate();
+            BBDB.commit();
+        } catch (SQLException e) {
+            BBLogging.severe("Can't add a new action: ",e);
+        } finally {
+            BBDB.cleanup("ActionMySQL", ps, null);
+        }
+    }
     
     /* (non-Javadoc)
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#onLoad()

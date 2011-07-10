@@ -59,5 +59,13 @@ public class ActionPostgreSQL extends ActionTable {
         // TODO Auto-generated method stub
         
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
+     */
+    @Override
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID) {
+        // TODO Auto-generated method stub
+    }
     
 }
