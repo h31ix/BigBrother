@@ -298,6 +298,8 @@ public class BBDB {
             conn.commit();
         } catch (SQLException e) {
             BBLogging.severe("executeUpdate failed (" + sql + "):", e);
+        } finally {
+            BBDB.cleanup("executeUpdate (" + sql + ")", stmt, null);
         }
         return r;
     }
