@@ -9,13 +9,7 @@
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<url>http://artifacts.lukegb.com/artifactory/repo/</url>
+			<url>http://repo.bukkit.org/artifactory/repo</url>
 		</repository>
 		<repository>
 			<id>nexisonline-repo</id>
