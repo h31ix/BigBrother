@@ -1,5 +1,5 @@
 /**
-* Category of BBDataBlock
+* Category of Action
 * Copyright (C) 2011 BigBrother Contributors
 * 
 * This program is free software: you can redistribute it and/or modify

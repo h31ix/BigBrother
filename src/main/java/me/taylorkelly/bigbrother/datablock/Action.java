@@ -1,5 +1,5 @@
 /**
-* <A line to describe this file>
+* Action class
 * Copyright (C) 2011 BigBrother Contributors
 * 
 * This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@ import org.bukkit.Server;
 import org.bukkit.World;
 
 /**
- * @author Rob
- *
+ * An action that occured on a world at a certain location.
+ * @author N3X15
  */
 public abstract class Action {
     public final static String ENVIRONMENT = "Environment";
@@ -67,8 +67,16 @@ public abstract class Action {
         DataBlockSender.offer(this);
     }
 
+    /**
+     * Perform a rollback of this action in world.
+     * @param world
+     */
     public abstract void rollback(World world);
 
+    /**
+     * Redo the action (undo the rollback)
+     * @param server
+     */
     public abstract void redo(Server server);
     
     /**
