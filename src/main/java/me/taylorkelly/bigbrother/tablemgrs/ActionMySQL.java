@@ -79,12 +79,14 @@ public class ActionMySQL extends ActionTable {
     @Override
     public String getCreateSyntax() {
         return "CREATE TABLE "+getTableName()+" (" +
-        		"actID INTEGER PRIMARY KEY AUTO_INCREMENT," +
-        		"actName TEXT UNIQUE INDEX," +
-        		"actPlugin TEXT," +
-        		"actCategory INTEGER," +
-        		"actDecription TEXT"+
-        		") ENGINE="+BBDB.engine;
+        "actID int(11) NOT NULL AUTO_INCREMENT,"+
+        "actName varchar(25) NOT NULL,"+
+        "actPlugin text NOT NULL,"+
+        "actCategory int(11) NOT NULL,"+
+        "actDescription longtext NOT NULL,"+
+        "PRIMARY KEY (actID),"+
+        "UNIQUE KEY actName (actName)"+
+        ") ENGINE="+BBDB.engine+" AUTO_INCREMENT=0";
     }
 
     /* (non-Javadoc)
