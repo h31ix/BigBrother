@@ -169,4 +169,11 @@ public abstract class Explosion extends BBAction {
     protected Explosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
+
+    /**
+     * 
+     */
+    public Explosion() {
+        // TODO Auto-generated constructor stub
+    }
 }

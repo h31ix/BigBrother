@@ -25,6 +25,12 @@ public class TNTExplosion extends Explosion {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public TNTExplosion() {
+    }
+
     public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new TNTExplosion(pi, world, x, y, z, type, data);
     }

@@ -38,6 +38,13 @@ public class MiscExplosion extends Explosion {
         super(player, world, x, y, z, type, data);
     }
 
+    /**
+     * 
+     */
+    public MiscExplosion() {
+        // TODO Auto-generated constructor stub
+    }
+
     public static BBAction getBBDataBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         return new MiscExplosion(player, world, x, y, z, type, data);
     }
