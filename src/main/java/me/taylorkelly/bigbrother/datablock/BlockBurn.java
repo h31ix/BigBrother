@@ -2,6 +2,7 @@ package me.taylorkelly.bigbrother.datablock;
 
 import java.util.ArrayList;
 
+import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 
@@ -48,10 +49,16 @@ public class BlockBurn extends BBAction {
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
-
-            byte blockData = Byte.parseByte(data);
-            currWorld.getBlockAt(x, y, z).setTypeId(type);
-            currWorld.getBlockAt(x, y, z).setData(blockData);
+            try
+            {
+                byte blockData = Byte.valueOf(data);
+                currWorld.getBlockAt(x, y, z).setTypeId(type);
+                currWorld.getBlockAt(x, y, z).setData(blockData);
+            }
+            catch(NumberFormatException e) {
+                BBLogging.severe("Erroneous BlockBurn action:  Data value is unparsable.  Your ActionID datatable table may have become scrambled and may not match up with legacy actionIDs.  You may need to rebuild your database.");
+                BBLogging.severe("SKIPPED!");
+            }
         }
     }
 
