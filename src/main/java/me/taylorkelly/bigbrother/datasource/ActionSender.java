@@ -11,15 +11,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
+/**
+ * Sends Action data to the Action table in intervals.
+ * 
+ * @author Rob
+ *
+ */
 public class ActionSender {
 
     public static final LinkedBlockingQueue<Action> SENDING = new LinkedBlockingQueue<Action>();
@@ -39,7 +45,7 @@ public class ActionSender {
     public static void offer(Action dataBlock) {
         SENDING.add(dataBlock);
     }
-
+    
     private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
 

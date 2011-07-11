@@ -21,7 +21,9 @@ import java.io.File;
 import java.sql.SQLException;
 
 import me.taylorkelly.bigbrother.commands.*;
+import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
+import me.taylorkelly.bigbrother.datablock.PlacedBlock;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.datasource.ActionSender;
 import me.taylorkelly.bigbrother.finder.Sticker;
@@ -286,6 +288,30 @@ public class BigBrother extends JavaPlugin {
             BBUsersTable.getInstance().userOpenedChest(pi.getName(), null, null);
             // Chest closed.
         }
-         
+    }
+    
+/*///////////////////////////////////////////////////////////////
+ BIGBROTHER COMMON API FUNCTIONS
+/*///////////////////////////////////////////////////////////////
+
+    /**
+     * Tell BigBrother that a block has been broken/removed.
+     * @param player Player making the change
+     * @param block The block being removed
+     * @param world The world in which this action occurred
+     */
+    public void onBlockBroken(String player, Block block, String world) {
+        BrokenBlock bb = new BrokenBlock(player,block,world);
+        bb.send();
+    }
+    /**
+     * Tell BigBrother that a block has been placed/created.
+     * @param player Player making the change
+     * @param block The block being added
+     * @param world The world in which this action occurred
+     */
+    public void onBlockPlaced(String player, Block block, String world) {
+        PlacedBlock bb = new PlacedBlock(player,block,world);
+        bb.send();
     }
 }
