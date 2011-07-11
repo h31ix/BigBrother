@@ -24,7 +24,6 @@ import java.util.Map.Entry;
 
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datablock.ActionCategory;
-import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
 import org.bukkit.plugin.Plugin;
