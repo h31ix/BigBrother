@@ -96,7 +96,10 @@ public class OwnershipManager {
             int wldID = plugin.worldManager.getWorld(b.getWorld().getName());
             ownerID = OwnersTable.get(wldID,b.getX(),b.getY(),b.getZ());
         }
-        return BBUsersTable.getInstance().getUserByID(ownerID);
+        BBPlayerInfo pi= BBUsersTable.getInstance().getUserByID(ownerID);
+        if(pi==null)
+            return BBPlayerInfo.ENVIRONMENT;
+        return pi;
     }
     
     /**
