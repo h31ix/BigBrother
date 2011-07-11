@@ -68,6 +68,18 @@ public abstract class ActionProvider {
     public static Map<Integer, ActionData> Actions = new HashMap<Integer, ActionData>();
     private Plugin                         plugin;
     
+    /**
+     * Override this to provide custom Actions.
+     * @param actionName
+     * @param player
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param type
+     * @param data
+     * @return
+     */
     public abstract Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data);
     
     public ActionProvider(Plugin p) {
@@ -84,6 +96,12 @@ public abstract class ActionProvider {
         }
     }
     
+    /**
+     * Called to register custom Actions with BigBrother.
+     * @param plugin
+     * @param provider
+     * @param action
+     */
     protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsValue(dat)) {
@@ -92,6 +110,11 @@ public abstract class ActionProvider {
         }
     }
     
+    /**
+     * Get the ID # of an action.
+     * @param action
+     * @return
+     */
     public static int getActionID(Action action) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
             if (e.getValue().action == action) {
@@ -125,12 +148,13 @@ public abstract class ActionProvider {
     }
     
     /**
-     * @param string
+     * Find the ID of the provided action name
+     * @param actionName
      * @return
      */
-    public static int findActionID(String string) {
+    public static int findActionID(String actionName) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
-            if (e.getValue().action.getName().equalsIgnoreCase(string) || e.getValue().action.getName().contains(string)) {
+            if (e.getValue().action.getName().equalsIgnoreCase(actionName) || e.getValue().action.getName().contains(actionName)) {
                 return e.getKey();
             }
         }

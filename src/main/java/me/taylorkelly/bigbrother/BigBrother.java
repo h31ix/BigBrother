@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import me.taylorkelly.bigbrother.commands.*;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datasource.BBDB;
-import me.taylorkelly.bigbrother.datasource.DataBlockSender;
+import me.taylorkelly.bigbrother.datasource.ActionSender;
 import me.taylorkelly.bigbrother.finder.Sticker;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
 import me.taylorkelly.bigbrother.listeners.BBBlockListener;
@@ -69,7 +69,7 @@ public class BigBrother extends JavaPlugin {
     
     @Override
     public void onDisable() {
-        DataBlockSender.shutdown(this);
+        ActionSender.shutdown(this);
         Cleanser.shutdown(this);
         BBDB.shutdown();
     }
@@ -152,7 +152,7 @@ public class BigBrother extends JavaPlugin {
         watcher = BBSettings.getWatcher(getServer(), getDataFolder());
         
         // Initialize DataBlockSender
-        DataBlockSender.initialize(this, getDataFolder(), worldManager);
+        ActionSender.initialize(this, getDataFolder(), worldManager);
         
         // Initialize Cleanser
         Cleanser.initialize(this);

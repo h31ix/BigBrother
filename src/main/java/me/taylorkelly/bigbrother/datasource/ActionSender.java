@@ -20,7 +20,7 @@ import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
-public class DataBlockSender {
+public class ActionSender {
 
     public static final LinkedBlockingQueue<Action> SENDING = new LinkedBlockingQueue<Action>();
     private static int sendingTask;

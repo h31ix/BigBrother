@@ -19,7 +19,7 @@
 package me.taylorkelly.bigbrother.datablock;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.datasource.DataBlockSender;
+import me.taylorkelly.bigbrother.datasource.ActionSender;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
 import org.bukkit.Server;
@@ -64,7 +64,7 @@ public abstract class Action {
     }
 
     public void send() {
-        DataBlockSender.offer(this);
+        ActionSender.offer(this);
     }
 
     /**
