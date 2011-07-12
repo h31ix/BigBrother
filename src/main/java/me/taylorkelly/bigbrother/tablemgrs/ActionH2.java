@@ -72,6 +72,7 @@ public class ActionH2 extends ActionTable {
      */
     @Override
     protected void addActionForceID(String pluginName, String actionName, int catID, int ID,String description) {
+        BBDB.executeUpdate("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'");
         PreparedStatement ps = null;
         try {
             ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?,?)");
@@ -87,6 +88,7 @@ public class ActionH2 extends ActionTable {
         } finally {
             BBDB.cleanup("ActionMySQL", ps, null);
         }
+        BBDB.executeUpdate("SET SESSION sql_mode=''");
     }
     
     /* (non-Javadoc)
