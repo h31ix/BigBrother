@@ -70,4 +70,12 @@ public class MiscExplosion extends Explosion {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "An explosion with an unknown cause.";
+    }
 }

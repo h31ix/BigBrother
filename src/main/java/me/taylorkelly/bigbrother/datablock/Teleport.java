@@ -51,4 +51,12 @@ public class Teleport extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.PLAYER;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A player teleporting";
+    }
 }

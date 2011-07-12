@@ -306,4 +306,12 @@ public class BlockBurn extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A block destroyed by fire.";
+    }
 }

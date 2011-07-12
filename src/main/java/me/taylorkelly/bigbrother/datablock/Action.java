@@ -90,4 +90,10 @@ public abstract class Action {
      * @return
      */
     public abstract ActionCategory getCategory();
+    
+    /**
+     * Returns a description of the Action.
+     * @return
+     */
+    public abstract String getDescription();
 }

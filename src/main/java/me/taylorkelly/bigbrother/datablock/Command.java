@@ -53,4 +53,12 @@ public class Command extends BBAction {
         return ActionCategory.COMMUNICATION;
     }
 
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A player using a command.";
+    }
 }

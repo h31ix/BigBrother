@@ -110,4 +110,12 @@ public class DestroySignText extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.MISC;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A sign destroyed, including text.";
+    }
 }

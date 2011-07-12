@@ -54,4 +54,12 @@ public class DoorOpen extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.MISC;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "An opened door.";
+    }
 }

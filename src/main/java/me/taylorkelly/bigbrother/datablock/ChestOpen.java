@@ -56,4 +56,12 @@ public class ChestOpen extends BBAction {
         return ActionCategory.BLOCKS;
     }
 
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A chest opened by a player.";
+    }
+
 }

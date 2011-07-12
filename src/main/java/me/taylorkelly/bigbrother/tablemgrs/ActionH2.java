@@ -38,13 +38,14 @@ public class ActionH2 extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID) {
+    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory) VALUES (?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
             ps.setString(1, actionName);
             ps.setString(2, pluginName);
             ps.setInt(3, catID);
+            ps.setString(4, actionDesc);
             ps.executeUpdate();
             BBDB.commit();
         } catch (SQLException e) {
@@ -70,14 +71,15 @@ public class ActionH2 extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName, int catID, int ID) {
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID,String description) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory) VALUES (?,?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory) VALUES (?,?,?,?,?)");
             ps.setInt(1,ID);
             ps.setString(2, actionName);
             ps.setString(3, pluginName);
             ps.setInt(4, catID);
+            ps.setString(5, description);
             ps.executeUpdate();
             BBDB.commit();
         } catch (SQLException e) {

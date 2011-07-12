@@ -51,4 +51,12 @@ public class Disconnect extends BBAction {
         return ActionCategory.PLAYER;
     }
 
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A disconnected player.";
+    }
 }

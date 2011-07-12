@@ -76,8 +76,8 @@ public abstract class ActionTable extends DBTable {
      * @param act Action to add to the database
      * @return int ID of the Action
      */
-    public static int add(String pluginName,String actionName,int catID) {
-        return getInstance().addAction(pluginName,actionName,catID);
+    public static int add(String pluginName,String actionName,int catID,String description) {
+        return getInstance().addAction(pluginName,actionName,catID,description);
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class ActionTable extends DBTable {
      * @param catID
      * @return
      */
-    protected abstract int addAction(String pluginName,String actionName,int catID);
+    protected abstract int addAction(String pluginName,String actionName,int catID,String description);
     
     public abstract void init();
 
@@ -97,8 +97,9 @@ public abstract class ActionTable extends DBTable {
      * @param actionName
      * @param catID
      * @param ID
+     * @param description 
      */
-    protected abstract void addActionForceID(String pluginName, String actionName, int catID, int ID);
+    protected abstract void addActionForceID(String pluginName, String actionName, int catID, int ID, String description);
 
     /**
      * @param pluginName
@@ -106,7 +107,7 @@ public abstract class ActionTable extends DBTable {
      * @param catID
      * @param actID
      */
-    public static void addForcedID(String pluginName, String actionName, int catID, int actID) {
-        getInstance().addActionForceID(pluginName,actionName,catID,actID);
+    public static void addForcedID(String pluginName, String actionName, int catID, int actID,String description) {
+        getInstance().addActionForceID(pluginName,actionName,catID,actID,description);
     }
 }

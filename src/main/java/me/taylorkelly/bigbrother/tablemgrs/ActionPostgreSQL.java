@@ -18,6 +18,12 @@
 
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import me.taylorkelly.bigbrother.BBLogging;
+import me.taylorkelly.bigbrother.datasource.BBDB;
+
 /**
  * @author Rob
  *
@@ -28,8 +34,21 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID) {
-        // TODO Auto-generated method stub
+    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
+        PreparedStatement ps = null;
+        try {
+            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
+            ps.setString(1, actionName);
+            ps.setString(2, pluginName);
+            ps.setInt(3, catID);
+            ps.setString(4, actionDesc);
+            ps.executeUpdate();
+            BBDB.commit();
+        } catch (SQLException e){
+            BBLogging.severe("ActionPostgreSQL.addAction",e);
+        } finally {
+            BBDB.cleanup("ActionPostgreSQL.addAction", ps, null);
+        }
         return 0;
     }
     
@@ -64,7 +83,7 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName, int catID, int ID) {
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID, String description) {
         // TODO Auto-generated method stub
     }
     

@@ -92,4 +92,12 @@ public class PlacedBlock extends Action {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
+
+    /* (non-Javadoc)
+     * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return "A block placed by a player";
+    }
 }
