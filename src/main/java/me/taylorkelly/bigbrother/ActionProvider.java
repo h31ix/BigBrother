@@ -159,7 +159,7 @@ public abstract class ActionProvider {
      */
     public static int findActionID(String actionName) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
-            if (e.getValue().action.getName().equalsIgnoreCase(actionName) || e.getValue().action.getName().contains(actionName)) {
+            if (e.getValue().actionName.equalsIgnoreCase(actionName)) {
                 return e.getKey();
             }
         }
