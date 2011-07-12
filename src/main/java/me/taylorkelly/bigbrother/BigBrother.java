@@ -31,6 +31,7 @@ import me.taylorkelly.bigbrother.griefcraft.util.Updater;
 import me.taylorkelly.bigbrother.listeners.BBBlockListener;
 import me.taylorkelly.bigbrother.listeners.BBEntityListener;
 import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
+import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.util.ChestTools;
@@ -123,6 +124,7 @@ public class BigBrother extends JavaPlugin {
         // Initialize tables
         BBLogging.info(BBDataTable.getInstance().toString() + " loaded!");
         worldManager = new WorldManager();
+        ActionTable.getInstance().init();
         BBPlayerInfo.ENVIRONMENT = new BBPlayerInfo("Environment");
         
         // Initialize Listeners
