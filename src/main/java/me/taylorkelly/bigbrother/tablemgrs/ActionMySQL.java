@@ -117,7 +117,9 @@ public class ActionMySQL extends ActionTable {
             rs = BBDB.executeQuery("SELECT * FROM "+getTableName());
             while(rs.next()) {
                 ActionData dat = new ActionData(rs.getString("actPlugin"), ActionCategory.values()[rs.getInt("actCategory")], rs.getString("actName"));
-                ActionProvider.Actions.put(rs.getInt("actID"),dat);
+                int id = rs.getInt("actID");
+                BBLogging.info(String.format("Action #%d - %s",id,dat.actionName));
+                ActionProvider.Actions.put(id,dat);
             }
         } catch (SQLException e) {
             BBLogging.severe("Can't add a new action: ",e);
