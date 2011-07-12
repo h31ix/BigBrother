@@ -104,9 +104,13 @@ public abstract class ActionProvider {
      */
     protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
-        if (!Actions.containsValue(dat)) {
-            int id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(),action.getDescription());
+        int id = findActionID(action.getName());
+        if (id==-1) {
+            id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(),action.getDescription());
             BBLogging.info("Action #"+id+" - "+action.getName());
+            Actions.put(id, dat);
+        } else {
+            Actions.remove(id);
             Actions.put(id, dat);
         }
     }
@@ -171,9 +175,12 @@ public abstract class ActionProvider {
      */
     protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
         ActionData dat = new ActionData(plugin, provider, action);
-        if (!Actions.containsValue(dat) && !Actions.containsKey(id)) {
+        if (!Actions.containsKey(id)) {
             ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id,action.getDescription());
             Actions.put(id, dat);
+        } else {
+            Actions.remove(id);
+            Actions.put(id,dat);
         }
     }
 }
