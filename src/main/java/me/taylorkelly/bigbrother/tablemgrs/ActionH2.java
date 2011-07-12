@@ -41,7 +41,7 @@ public class ActionH2 extends ActionTable {
     protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?)");
             ps.setString(1, actionName);
             ps.setString(2, pluginName);
             ps.setInt(3, catID);
@@ -74,7 +74,7 @@ public class ActionH2 extends ActionTable {
     protected void addActionForceID(String pluginName, String actionName, int catID, int ID,String description) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory) VALUES (?,?,?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?,?)");
             ps.setInt(1,ID);
             ps.setString(2, actionName);
             ps.setString(3, pluginName);

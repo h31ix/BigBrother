@@ -74,7 +74,7 @@ public class ActionMySQL extends ActionTable {
     protected void addActionForceID(String pluginName, String actionName, int catID, int ID,String description) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory) VALUES (?,?,?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actID,actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?,?)");
             ps.setInt(1,ID);
             ps.setString(2, actionName);
             ps.setString(3, pluginName);
