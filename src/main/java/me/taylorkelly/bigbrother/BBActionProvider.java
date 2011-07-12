@@ -18,6 +18,8 @@
 
 package me.taylorkelly.bigbrother;
 
+import java.lang.reflect.Constructor;
+
 import me.taylorkelly.bigbrother.datablock.*;
 import me.taylorkelly.bigbrother.datablock.explosions.CreeperExplosion;
 import me.taylorkelly.bigbrother.datablock.explosions.MiscExplosion;
@@ -82,13 +84,14 @@ public class BBActionProvider extends ActionProvider {
         try {
             c=(Class<? extends Action>) Class.forName("me.taylorkelly.bigbrother.datablock."+actionName);
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            BBLogging.severe("Cannot find class me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
+            return null;
         }
         try {
-            return c.getConstructor(BBPlayerInfo.class,String.class,int.class,int.class,int.class,int.class,String.class).newInstance(player,world,  x,  y,  z,  type,  data);
+            Constructor<? extends Action> con = c.getConstructor(BBPlayerInfo.class,String.class, int.class, int.class, int.class, int.class,String.class);
+            return con.newInstance(player, world,  x,  y,  z,  type,  data);
         } catch (Exception e) {
-            BBLogging.severe("Error loading me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
+            BBLogging.severe("Error constructing me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
         }
         return null;
     }

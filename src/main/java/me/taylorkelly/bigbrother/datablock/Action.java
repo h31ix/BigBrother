@@ -92,7 +92,7 @@ public abstract class Action {
     public abstract ActionCategory getCategory();
     
     /**
-     * Returns a description of the Action.
+     * Category of this action
      * @return
      */
     public abstract String getDescription();
