@@ -33,7 +33,7 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
  *
  */
 public abstract class ActionTable extends DBTable {
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static ActionTable instance=null;
     
     public ActionTable() {

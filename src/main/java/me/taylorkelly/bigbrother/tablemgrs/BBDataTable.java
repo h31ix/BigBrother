@@ -24,7 +24,7 @@ import org.bukkit.block.Block;
  */
 public abstract class BBDataTable extends DBTable {
 
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     // Singletons :D
     private static BBDataTable instance=null;
 
