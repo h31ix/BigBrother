@@ -106,6 +106,7 @@ public abstract class ActionProvider {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsValue(dat)) {
             int id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(),action.getDescription());
+            BBLogging.info("Action #"+id+" - "+action.getName());
             Actions.put(id, dat);
         }
     }
@@ -117,7 +118,7 @@ public abstract class ActionProvider {
      */
     public static int getActionID(Action action) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
-            if (e.getValue().action == action) {
+            if (e.getValue().action.getName().equalsIgnoreCase(action.getName())) {
                 return e.getKey();
             }
         }
