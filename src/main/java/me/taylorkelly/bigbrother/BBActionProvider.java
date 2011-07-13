@@ -18,7 +18,6 @@
 
 package me.taylorkelly.bigbrother;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import me.taylorkelly.bigbrother.datablock.*;
