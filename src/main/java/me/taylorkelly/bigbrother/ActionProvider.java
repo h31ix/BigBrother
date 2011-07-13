@@ -18,7 +18,9 @@
 
 package me.taylorkelly.bigbrother;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -65,11 +67,13 @@ public abstract class ActionProvider {
         }
     }
     
-    public static Map<Integer, ActionData> Actions = new HashMap<Integer, ActionData>();
+    public static Map<Integer, ActionData> Actions         = new HashMap<Integer, ActionData>();
+    public static List<Integer>            disabledActions = new ArrayList<Integer>();
     private Plugin                         plugin;
     
     /**
      * Override this to provide custom Actions.
+     * 
      * @param actionName
      * @param player
      * @param world
@@ -98,6 +102,7 @@ public abstract class ActionProvider {
     
     /**
      * Called to register custom Actions with BigBrother.
+     * 
      * @param plugin
      * @param provider
      * @param action
@@ -105,9 +110,9 @@ public abstract class ActionProvider {
     protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
         int id = findActionID(action.getName());
-        if (id==-1) {
-            id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(),action.getDescription());
-            BBLogging.info("Action #"+id+" - "+action.getName());
+        if (id == -1) {
+            id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), action.getDescription());
+            BBLogging.info("Action #" + id + " - " + action.getName());
             Actions.put(id, dat);
         } else {
             Actions.remove(id);
@@ -117,6 +122,7 @@ public abstract class ActionProvider {
     
     /**
      * Get the ID # of an action.
+     * 
      * @param action
      * @return
      */
@@ -154,6 +160,7 @@ public abstract class ActionProvider {
     
     /**
      * Find the ID of the provided action name
+     * 
      * @param actionName
      * @return
      */
@@ -167,7 +174,8 @@ public abstract class ActionProvider {
     }
     
     /**
-     * Only for use by BigBrother!  Use registerAction instead!
+     * Only for use by BigBrother! Use registerAction instead!
+     * 
      * @param plugin
      * @param bbActionProvider
      * @param deltaChest
@@ -176,11 +184,85 @@ public abstract class ActionProvider {
     protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsKey(id)) {
-            ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id,action.getDescription());
+            ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id, action.getDescription());
             Actions.put(id, dat);
         } else {
             Actions.remove(id);
-            Actions.put(id,dat);
+            Actions.put(id, dat);
         }
+    }
+    
+    /**
+     * For loading the disabledActions list.
+     */
+    public static void loadDisabled(BetterConfig cfg) {
+        List<String> actions;
+        if(cfg.getProperty("general.disabled-actions")==null) {
+            actions = new ArrayList<String>();
+            if(!cfg.getBoolean("watched.blocks.block-break", true))
+                actions.add("BrokenBlock");
+            if(!cfg.getBoolean("watched.blocks.block-place", true))
+                actions.add("PlacedBlock");
+            if(!cfg.getBoolean("watched.player.teleport", true))
+                actions.add("Teleport");
+            if(!cfg.getBoolean("watched.blocks.chest-changes", true))
+                actions.add("DeltaChest");
+            if(!cfg.getBoolean("watched.chat.commands", true))
+                actions.add("Command");
+            if(!cfg.getBoolean("watched.chat.chat", true))
+                actions.add("Chat");
+            if(!cfg.getBoolean("watched.player.login", true))
+                actions.add("Login");
+            if(!cfg.getBoolean("watched.player.disconnect", true))
+                actions.add("Disconnect");
+            if(!cfg.getBoolean("watched.misc.door-open", false))
+                actions.add("DoorOpen");
+            if(!cfg.getBoolean("watched.misc.button-press", false))
+                actions.add("ButtonPress");
+            if(!cfg.getBoolean("watched.misc.lever-switch", false))
+                actions.add("LeverSwitch");
+            if(!cfg.getBoolean("watched.misc.flint-logging", true))
+                actions.add("FlintAndSteel");
+            if(!cfg.getBoolean("watched.environment.leaf-decay", false))
+                actions.add("LeafDecay");
+            if(!cfg.getBoolean("watched.explosions.tnt", true))
+                actions.add("TNTExplosion");
+            if(!cfg.getBoolean("watched.explosions.creeper", true))
+                actions.add("CreeperExplosion");
+            if(!cfg.getBoolean("watched.explosions.misc", true))
+                actions.add("MiscExplosion");
+            if(!cfg.getBoolean("watched.player.drop-item", false))
+                actions.add("DropItem");
+            if(!cfg.getBoolean("watched.player.pickup-item", false))
+                actions.add("PickupItem");
+            if(!cfg.getBoolean("watched.environment.lava-flow", true))
+                actions.add("Flow");
+            
+            cfg.setProperty("general.disabled-actions", actions);
+        } else {
+            actions=cfg.getStringList("general.disabled-actions",new ArrayList<String>());
+        }
+        for(String act : actions) {
+            int id = ActionProvider.findActionID(act);
+            if(id==-1) {
+                BBLogging.severe(String.format("Cannot disable action \"%s\", because it doesn't exist!",act));
+            } else {
+                disabledActions.add(id);
+            }
+        }
+    }
+
+    /**
+     * @param class1
+     * @return
+     */
+    public static boolean isDisabled(Class<? extends Action> c) {
+        // TODO Auto-generated method stub
+        try {
+            return c.newInstance().isDisabled();
+        } catch (Exception e) {
+            BBLogging.severe("When determining status of "+c.getName()+":",e);
+        }
+        return true;
     }
 }

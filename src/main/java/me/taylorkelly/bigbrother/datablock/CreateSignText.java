@@ -91,7 +91,7 @@ public class CreateSignText extends BBAction {
     
     @Override
     public String toString() {
-        return String.format("created a sign with text: %s",data);
+        return String.format("created a sign with text: %s",data.replace("\u0060", "\n"));
     }
 
     /* (non-Javadoc)

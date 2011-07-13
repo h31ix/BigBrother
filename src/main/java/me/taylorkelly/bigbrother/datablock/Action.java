@@ -18,6 +18,7 @@
 
 package me.taylorkelly.bigbrother.datablock;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.datasource.ActionSender;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -64,7 +65,12 @@ public abstract class Action {
     }
 
     public void send() {
-        ActionSender.offer(this);
+        if(!isDisabled())
+            ActionSender.offer(this);
+    }
+    
+    public final boolean isDisabled() {
+        return ActionProvider.disabledActions.contains(ActionProvider.getActionID(this));
     }
 
     /**

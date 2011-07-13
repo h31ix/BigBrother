@@ -2,7 +2,6 @@ package me.taylorkelly.bigbrother.datablock;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.util.ChestTools;
 
 import org.bukkit.ChatColor;

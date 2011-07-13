@@ -2,10 +2,10 @@ package me.taylorkelly.bigbrother.listeners;
 
 import java.util.ArrayList;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
-import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.datablock.*;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -46,7 +46,7 @@ public class BBPlayerListener extends PlayerListener {
 			Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
-			if (BBSettings.commands && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(Command.class) && pi.getWatched()) {
 				Command dataBlock = new Command(player, event.getMessage(), player.getWorld().getName());
 				dataBlock.send();
 			}
@@ -66,7 +66,7 @@ public class BBPlayerListener extends PlayerListener {
 			BBUsersTable.getInstance().addOrUpdateUser(player);
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 
-			if (BBSettings.login && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(Login.class) && pi.getWatched()) {
 				Login dataBlock = new Login(player, player.getWorld().getName());
 				dataBlock.send();
 			}
@@ -90,7 +90,7 @@ public class BBPlayerListener extends PlayerListener {
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
-			if (BBSettings.disconnect && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(Disconnect.class) && pi.getWatched()) {
 				Disconnect dataBlock = new Disconnect(player.getName(), player.getLocation(), player.getWorld().getName());
 				dataBlock.send();
 			}
@@ -111,7 +111,7 @@ public class BBPlayerListener extends PlayerListener {
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
-			if (BBSettings.teleport && pi.getWatched() && distance(from, to) > 5 && !event.isCancelled()) {
+			if (!ActionProvider.isDisabled(Teleport.class) && pi.getWatched() && distance(from, to) > 5 && !event.isCancelled()) {
 				Teleport dataBlock = new Teleport(player.getName(), event.getTo());
 				dataBlock.send();
 			}
@@ -129,7 +129,7 @@ public class BBPlayerListener extends PlayerListener {
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
 			plugin.closeChestIfOpen(pi);
-			if (BBSettings.chat && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(Chat.class) && pi.getWatched()) {
 				Chat dataBlock = new Chat(player, event.getMessage(), player.getWorld().getName());
 				dataBlock.send();
 			}
@@ -145,7 +145,7 @@ public class BBPlayerListener extends PlayerListener {
 				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-			if (BBSettings.pickupItem && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(PickupItem.class) && pi.getWatched()) {
 				// It should not be null, but I have no other way to explain the NPEs.  Bukkit Bug?
 				if(event.getItem() != null && event.getItem().getItemStack() != null)
 				{
@@ -165,7 +165,7 @@ public class BBPlayerListener extends PlayerListener {
 				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-			if (BBSettings.dropItem && pi.getWatched()) {
+			if (!ActionProvider.isDisabled(DropItem.class) && pi.getWatched()) {
 				DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
 				dataBlock.send();
 			}
@@ -209,7 +209,7 @@ public class BBPlayerListener extends PlayerListener {
 						event.setCancelled(true);
 					}
 					// Otherwise...
-				} else if (BBSettings.blockPlace && pi.getWatched()) {
+				} else if (!ActionProvider.isDisabled(PlacedBlock.class) && pi.getWatched()) {
 					int x;
 					int y;
 					int z;
@@ -310,25 +310,25 @@ public class BBPlayerListener extends PlayerListener {
 						switch (event.getClickedBlock().getType()) {
 						case WOODEN_DOOR:
 							//case IRON_DOOR:
-							if (BBSettings.doorOpen) {
+							if (!ActionProvider.isDisabled(DoorOpen.class)) {
 								DoorOpen doorDataBlock = new DoorOpen(event.getPlayer().getName(), block, block.getWorld().getName());
 								doorDataBlock.send();
 							}
 							break;
 						case LEVER:
-							if (BBSettings.leverSwitch) {
+							if (!ActionProvider.isDisabled(LeverSwitch.class)) {
 								LeverSwitch leverDataBlock = new LeverSwitch(event.getPlayer().getName(), block, block.getWorld().getName());
 								leverDataBlock.send();
 							}
 							break;
 						case STONE_BUTTON:
-							if (BBSettings.buttonPress) {
+							if (!ActionProvider.isDisabled(ButtonPress.class)) {
 								ButtonPress buttonDataBlock = new ButtonPress(event.getPlayer().getName(), block, block.getWorld().getName());
 								buttonDataBlock.send();
 							}
 							break;
 						case CHEST:
-							if (BBSettings.chestChanges) {
+							if (!ActionProvider.isDisabled(ChestOpen.class)) {
 								BBAction chestDataBlock = new ChestOpen(event.getPlayer().getName(), block, block.getWorld().getName());
 								chestDataBlock.send();
 							}

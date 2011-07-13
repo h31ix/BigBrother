@@ -11,7 +11,7 @@ import org.bukkit.block.Sign;
 public class DestroySignText extends BBAction {
 
     public DestroySignText(String name, Sign sign, String world) {
-        super(name, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
+        super(name, world, sign.getX(), sign.getY(), sign.getZ(), sign.getTypeId(), getText(sign));
     }
 
     private static String getText(Sign sign) {
@@ -62,7 +62,7 @@ public class DestroySignText extends BBAction {
                 sign.setLine(i, lines[i]);
             }
         } else {
-            BBLogging.warning("Error when restoring sign");
+            BBLogging.severe("Error when restoring sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
         }
     }
 
@@ -88,8 +88,8 @@ public class DestroySignText extends BBAction {
     public String toString() {
         String[] lines = data.split("\u0060");
         String out = "destroyed a sign with text: ";
-        for(String line:lines){
-            out+="\n"+line;
+        for(int i = 0;i<lines.length;i++){
+            out+="\n    "+lines[i];
         }
         return out;
     }
@@ -107,7 +107,6 @@ public class DestroySignText extends BBAction {
      */
     @Override
     public ActionCategory getCategory() {
-        // TODO Auto-generated method stub
         return ActionCategory.MISC;
     }
 

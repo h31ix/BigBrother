@@ -17,6 +17,7 @@
  */
 package me.taylorkelly.bigbrother.listeners;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
@@ -74,7 +75,7 @@ public class BBBlockListener extends BlockListener {
             Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
-            if (BBSettings.blockBreak && pi.getWatched()) {
+            if (!ActionProvider.isDisabled(BrokenBlock.class) && pi.getWatched()) {
                 Block block = event.getBlock();
                 BrokenBlock dataBlock = new BrokenBlock(player.getName(), block, block.getWorld().getName());
                 dataBlock.send();
@@ -87,7 +88,7 @@ public class BBBlockListener extends BlockListener {
         Player player = event.getPlayer();
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         plugin.closeChestIfOpen(pi);
-        if (BBSettings.blockPlace && pi.getWatched() && !event.isCancelled()) {
+        if (!ActionProvider.isDisabled(PlacedBlock.class) && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
             if (block.getType() == Material.WATER 
@@ -104,7 +105,7 @@ public class BBBlockListener extends BlockListener {
     
     @Override
     public void onLeavesDecay(LeavesDecayEvent event) {
-        if (BBSettings.leafDrops && !event.isCancelled()) {
+        if (!ActionProvider.isDisabled(LeafDecay.class) && !event.isCancelled()) {
             // TODO try to find a player that did it.
             final Block block = event.getBlock();
             BBAction dataBlock = LeafDecay.create(block, block.getWorld().getName());
@@ -115,7 +116,7 @@ public class BBBlockListener extends BlockListener {
 
     @Override
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (BBSettings.fire && event.getCause() == IgniteCause.FLINT_AND_STEEL && !event.isCancelled()) {
+        if (!ActionProvider.isDisabled(FlintAndSteel.class) && event.getCause() == IgniteCause.FLINT_AND_STEEL && !event.isCancelled()) {
             final Block block = event.getBlock();
             BBAction dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
             dataBlock.send();
@@ -127,7 +128,7 @@ public class BBBlockListener extends BlockListener {
      */
     @Override
     public void onBlockBurn(BlockBurnEvent event) {
-        if (BBSettings.fire && !event.isCancelled()) {
+        if (!ActionProvider.isDisabled(Flow.class) && !event.isCancelled()) {
             final Block block = event.getBlock();
             BBAction dataBlock = OwnershipManager.trackBurn(block);
             OwnershipManager.removeOwner(block);
@@ -140,23 +141,25 @@ public class BBBlockListener extends BlockListener {
      */
     @Override
     public void onBlockFromTo(BlockFromToEvent event) {
+        if(ActionProvider.isDisabled(Flow.class))
+            return;
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
         if (!event.isCancelled()) {
             int fromID = blockFrom.getTypeId();
             int toID = blockTo.getTypeId();
             if(BBSettings.isBlockIgnored(fromID) 
-                    || (fromID == Material.WATER.getId() && !BBSettings.waterFlow)
-                    || (fromID == Material.STATIONARY_WATER.getId() && !BBSettings.waterFlow)
-                    || (fromID == Material.LAVA.getId() && !BBSettings.lavaFlow)
-                    || (fromID == Material.STATIONARY_LAVA.getId() && !BBSettings.lavaFlow)
-                    || (fromID == Material.FIRE.getId() && !BBSettings.fire)
+                    || fromID == Material.WATER.getId()
+                    || fromID == Material.STATIONARY_WATER.getId()
+                    || fromID == Material.LAVA.getId()
+                    || fromID == Material.STATIONARY_LAVA.getId()
+                    || fromID == Material.FIRE.getId()
                     || BBSettings.isBlockIgnored(toID)
-                    || (toID == Material.WATER.getId() && !BBSettings.waterFlow)
-                    || (toID == Material.STATIONARY_WATER.getId() && !BBSettings.waterFlow)
-                    || (toID == Material.LAVA.getId() && !BBSettings.lavaFlow)
-                    || (toID == Material.STATIONARY_LAVA.getId() && !BBSettings.lavaFlow)
-                    || (toID == Material.FIRE.getId() && !BBSettings.fire))
+                    || toID == Material.WATER.getId()
+                    || toID == Material.STATIONARY_WATER.getId()
+                    || toID == Material.LAVA.getId()
+                    || toID == Material.STATIONARY_LAVA.getId()
+                    || toID == Material.FIRE.getId())
                 return;
             // Only record a change if the owner is different (avoids duplicates)
             if(OwnershipManager.findOwner(blockFrom).getID()!=OwnershipManager.findOwner(blockTo).getID()) {
@@ -181,7 +184,7 @@ public class BBBlockListener extends BlockListener {
                 dataBlock.send();
             }
         }
-        if (!event.isCancelled() && BBSettings.blockPlace) {
+        if (!event.isCancelled() && !ActionProvider.isDisabled(CreateSignText.class)) {
             CreateSignText dataBlock = new CreateSignText(event.getPlayer().getName(), event.getLines(), event.getBlock());
             dataBlock.send();
         }

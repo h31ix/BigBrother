@@ -134,6 +134,7 @@ public class BigBrother extends JavaPlugin {
         stickListener = new StickListener(this);
         sticker = new Sticker(getServer(), worldManager);
         actionProvider = new BBActionProvider(this);
+        BBSettings.loadPostponed();
         
         // Update settings from old versions of BB
         if (new File("BigBrother").exists()) {
@@ -276,7 +277,7 @@ public class BigBrother extends JavaPlugin {
     
     public void closeChestIfOpen(BBPlayerInfo pi) {
         if (pi.hasOpenedChest()) {
-            if (BBSettings.chestChanges) {
+            if (!ActionProvider.isDisabled(DeltaChest.class)) {
                 World world = pi.getOpenedChest().getWorld();
                 Block b = world.getBlockAt(pi.getOpenedChest().getX(),pi.getOpenedChest().getY(),pi.getOpenedChest().getZ());
                 if (b.getState() instanceof Chest) {

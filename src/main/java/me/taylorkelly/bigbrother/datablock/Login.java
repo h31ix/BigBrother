@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class Login extends BBAction {
 	public Login(Player player, String world) {
         super(BBUsersTable.getInstance().getUserByName(player.getName()), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0,
-                BBSettings.ipPlayer ? player.getAddress().getAddress().toString().substring(1) : "");
+                BBSettings.logPlayerIPs ? player.getAddress().getAddress().toString().substring(1) : "");
 	}
 
 	public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {

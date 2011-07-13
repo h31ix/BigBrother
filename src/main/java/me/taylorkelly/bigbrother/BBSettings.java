@@ -31,16 +31,16 @@ import java.util.Scanner;
 
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.datasource.BBDB;
-import me.taylorkelly.util.TimeParser;
 
+import org.bukkit.Material;
 import org.bukkit.Server;
 
 import com.sk89q.worldedit.blocks.ItemType;
 
-// TODO: Split all these vars into separate classes in anticipation of yamlification.
 public class BBSettings {
 
     public static List<String> watchedActions = new ArrayList<String>();
+    /*
     public static boolean blockBreak;
     public static boolean blockPlace;
     public static boolean teleport;
@@ -63,24 +63,26 @@ public class BBSettings {
     public static boolean fireSpread;
     public static boolean pickupItem;
     public static boolean dropItem;
+    */
 
 
+    public static boolean logPlayerIPs=true;
     public static boolean libraryAutoDownload;
     public static boolean debugMode;
     public static boolean restoreFire = false;
     public static boolean autoWatch = true;
     public static boolean flatLog = false;
-    public static int defaultSearchRadius = 2;
-    public static int sendDelay = 4;
-    public static int stickItem = 280;
-    // TODO: Get long version of this
-    public static long cleanseAge = TimeParser.parseInterval("7d");
+    public static int defaultSearchRadius = 2; // 2 blocks
+    public static int sendDelay = 4; // 4s
+    public static int stickItem = 280; // A stick
+    public static long cleanseAge = 604800; // 7d
     // Tested with this value, 10000rows = 1-2s on a
     // Pentium 4 MySQL server with 1GB RAM and a SATA MySQL HDD
     public static long deletesPerCleansing = 20000L;
     private static ArrayList<String> watchList;
     private static ArrayList<String> seenList;
     private static ArrayList<Integer> blockExclusionList;
+    private static ArrayList<Integer> gnomes; 
     public static int rollbacksPerTick;
     //private static BigBrother plugin;
     public static File dataFolder;
@@ -92,6 +94,29 @@ public class BBSettings {
         watchList = new ArrayList<String>();
         seenList = new ArrayList<String>();
         blockExclusionList = new ArrayList<Integer>();
+        
+        gnomes = new ArrayList<Integer>();
+        gnomes.add(6); // Sapling
+        gnomes.add(37); // Yellow Flower
+        gnomes.add(38); // Red Flower
+        gnomes.add(39); // Brown Mushroom
+        gnomes.add(40); // Red Mushroom
+        gnomes.add(55); // Redstone
+        gnomes.add(59); // Crops
+        gnomes.add(64); // Wood Door
+        gnomes.add(66); // Tracks
+        gnomes.add(69); // Lever
+        gnomes.add(70); // Stone pressure plate
+        gnomes.add(71); // Iron Door
+        gnomes.add(72); // Wood pressure ePlate
+        gnomes.add(78); // Snow
+        gnomes.add(81); // Cactus
+        gnomes.add(83); // Reeds
+        gnomes.add(Material.LONG_GRASS.getId());
+        gnomes.add(Material.DIODE_BLOCK_ON.getId());
+        gnomes.add(Material.DIODE_BLOCK_OFF.getId());
+        //gnomes.add(Material.FENCE.getId());
+        gnomes.add(Material.DEAD_BUSH.getId());
 
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
@@ -107,6 +132,19 @@ public class BBSettings {
         BBLogging.debug("Loaded Settings");
 
     }
+    
+    public static void loadPostponed() {
+        final File yamlfile = new File(dataFolder, "BigBrother.yml");
+        final BetterConfig yml = new BetterConfig(yamlfile);
+        
+        // If the file's not there, don't load it
+        if(yamlfile.exists())
+            yml.load();
+        
+        ActionProvider.loadDisabled(yml);
+        
+        yml.save();
+    }
 
     private static void loadYaml(File yamlfile) {
         final BetterConfig yml = new BetterConfig(yamlfile);
@@ -114,6 +152,8 @@ public class BBSettings {
         // If the file's not there, don't load it
         if(yamlfile.exists())
             yml.load();
+        
+        logPlayerIPs = yml.getBoolean("general.log-ips", true);
         
         // Import old settings into new config defaults and remove the old versions.
         if(yml.getProperty("database.mysql.username")!=null) {
@@ -131,7 +171,7 @@ public class BBSettings {
             yml.removeProperty("database.mysql.prefix"); 
         }
         BBDB.initSettings(yml);
-        loadWatchSettings(yml);
+        //loadWatchSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");
         // Dodge NPE reported by Mineral (and set a default)
@@ -160,7 +200,7 @@ public class BBSettings {
         TNTLogger.THRESHOLD = yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
         yml.save();
     }
-
+/*
     private static void loadWatchSettings(BetterConfig watched) {
         blockBreak = watched.getBoolean("watched.blocks.block-break", true);// "Watch when players break blocks");
         blockPlace = watched.getBoolean("watched.blocks.block-place", true);// "Watch when players place blocks");
@@ -178,14 +218,15 @@ public class BBSettings {
         tntExplosions = watched.getBoolean("watched.explosions.tnt", true);// "Watch for when TNT explodes");
         creeperExplosions = watched.getBoolean("watched.explosions.creeper", true);// "Watch for when Creepers explodes");
         miscExplosions = watched.getBoolean("watched.explosions.misc", true);// "Watch for miscellaneous explosions");
-        ipPlayer = watched.getBoolean("watched.player.ip-player", true);
+        
         dropItem = watched.getBoolean("watched.player.drop-item", false);
         pickupItem = watched.getBoolean("watched.player.pickup-item", false);
         lavaFlow = watched.getBoolean("watched.environment.lava-flow", true);
         waterFlow = watched.getBoolean("watched.environment.water-flow", true);
         fireSpread = watched.getBoolean("watched.environment.fire-spread", true);
     }
-
+    */
+    
     /**
      * @todo Move to SQL tables.
      * @param dataFolder
