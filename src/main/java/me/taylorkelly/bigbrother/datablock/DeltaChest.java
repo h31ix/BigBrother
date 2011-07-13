@@ -454,22 +454,42 @@ public class DeltaChest extends BBAction {
     
     @Override
     public String toString() {
-        String o = "changed a chest:\n";
+        //String o = "changed a chest:\n";
+        StringBuilder msg = new StringBuilder("changed a chest ");
+        int added=0;
+        int removed=0;
+        int replaced=0;
         for(DeltaEntry de : getChanges()) {
             switch(de.Type) {
                 case ADDED:
-                    o+=String.format("%s + Added %d %s%s\n",ChatColor.GREEN.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    added++;
+                    //o+=String.format("%s + Added %d %s%s\n",ChatColor.GREEN.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
                     break;
                 case REMOVED:
-                    o+=String.format("%s - Removed %d %s%s\n",ChatColor.RED.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    removed++;
+                    //o+=String.format("%s - Removed %d %s%s\n",ChatColor.RED.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
                     break;
                 case REPLACED:
-                    o+=String.format("%s ! Replaced slot #%d with %d %s%s\n",
-                            ChatColor.YELLOW.toString(),de.Slot,de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    replaced++;
+                    //o+=String.format("%s ! Replaced slot #%d with %d %s%s\n",
+                    //        ChatColor.YELLOW.toString(),de.Slot,de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
                     break;
             }
         }
-        return o;
+        msg.append(ChatColor.GREEN);
+        msg.append("(+");
+        msg.append(added);
+        msg.append(") ");
+        msg.append(ChatColor.YELLOW);
+        msg.append("(=");
+        msg.append(replaced);
+        msg.append(") ");
+        msg.append(ChatColor.RED);
+        msg.append("(-");
+        msg.append(removed);
+        msg.append(") ");
+        msg.append(ChatColor.YELLOW);
+        return msg.toString();
     }
 
     /* (non-Javadoc)
@@ -485,7 +505,6 @@ public class DeltaChest extends BBAction {
      */
     @Override
     public ActionCategory getCategory() {
-        // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
 
