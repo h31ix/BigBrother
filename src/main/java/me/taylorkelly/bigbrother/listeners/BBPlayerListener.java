@@ -141,7 +141,7 @@ public class BBPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		try {
-			if(event==null || event.getPlayer()==null)
+			if(event==null || event.getPlayer()==null || event.getItem()==null)
 				return;
 			final Player player = event.getPlayer();
 			BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
