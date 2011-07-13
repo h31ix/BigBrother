@@ -237,7 +237,7 @@ public abstract class ActionProvider {
                 actions.add("PickupItem");
             if(!cfg.getBoolean("watched.environment.lava-flow", true))
                 actions.add("Flow");
-            
+            cfg.removeProperty("watched");
             cfg.setProperty("general.disabled-actions", actions);
         } else {
             actions=cfg.getStringList("general.disabled-actions",new ArrayList<String>());
