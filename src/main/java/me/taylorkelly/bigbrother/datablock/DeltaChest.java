@@ -2,8 +2,10 @@ package me.taylorkelly.bigbrother.datablock;
 
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
+import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.util.ChestTools;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -356,7 +358,7 @@ public class DeltaChest extends BBAction {
                 }
             }
         } else {
-            BBLogging.warning("Error when restoring chest");
+            BBLogging.severe("Error when restoring chest: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Chest!");
         }
     }
 
@@ -419,7 +421,7 @@ public class DeltaChest extends BBAction {
                 }
             }
         } else {
-            BBLogging.warning("Error when restoring chest");
+            BBLogging.severe("Error when redoing chest: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Chest!");
         }
     }
 
@@ -442,10 +444,32 @@ public class DeltaChest extends BBAction {
         }
         else return new DeltaEntry[0];
     }
+
+    /**
+     * @return
+     */
+    public DeltaEntry[] getChanges() {
+        return processDeltaStream(54,data);
+    }
     
     @Override
     public String toString() {
-        return "changed a chest:\n";
+        String o = "changed a chest:\n";
+        for(DeltaEntry de : getChanges()) {
+            switch(de.Type) {
+                case ADDED:
+                    o+=String.format("%s + Added %d %s%s\n",ChatColor.GREEN.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    break;
+                case REMOVED:
+                    o+=String.format("%s - Removed %d %s%s\n",ChatColor.RED.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    break;
+                case REPLACED:
+                    o+=String.format("%s ! Replaced slot #%d with %d %s%s\n",
+                            ChatColor.YELLOW.toString(),de.Slot,de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
+                    break;
+            }
+        }
+        return o;
     }
 
     /* (non-Javadoc)

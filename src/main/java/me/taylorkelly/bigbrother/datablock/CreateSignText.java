@@ -67,7 +67,7 @@ public class CreateSignText extends BBAction {
                 sign.setLine(i, lines[i]);
             }
         } else {
-            BBLogging.warning("Error when restoring sign");
+            BBLogging.severe("Error when redoing sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
         }
     }
 
@@ -85,7 +85,7 @@ public class CreateSignText extends BBAction {
                 sign.setLine(i, "");
             }
         } else {
-            BBLogging.warning("Error when restoring sign");
+            BBLogging.severe("Error when restoring sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
         }
     }
     
