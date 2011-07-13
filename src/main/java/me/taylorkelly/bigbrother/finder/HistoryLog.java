@@ -57,8 +57,13 @@ public class HistoryLog extends StickMode {
                 msg.append(dataBlock.player);
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
-                msg.append(dataBlock.toString());
+                String[] lines=dataBlock.toString().split("\n");
+                msg.append(lines[0]);
                 msgs.add(msg.toString());
+                if(lines.length>1) {
+                    for(int l = 1;l<lines.length;l++)
+                        msgs.add(lines[l]);
+                }
             }
         }
         return msgs;
