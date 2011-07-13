@@ -5,6 +5,7 @@ import java.io.File;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
+import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
 import org.bukkit.util.config.Configuration;
 import org.junit.*;
@@ -37,7 +38,8 @@ public class TestBigBrother {
         cfg.save();
 
         BBSettings.initialize(null, dataFolder);
-        
+        ActionTable.getInstance().init();
+        BBSettings.loadPostponed();
         Assert.assertTrue("Configuration didn't get saved.",BBDB.usingDBMS(DBMS.MYSQL));
     }
 }
