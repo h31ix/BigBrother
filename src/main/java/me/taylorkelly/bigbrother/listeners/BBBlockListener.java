@@ -145,6 +145,10 @@ public class BBBlockListener extends BlockListener {
             return;
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
+        BBLogging.debug(String.format("BlockFromTo: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)",
+                blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(),
+                blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()
+                ));
         if (!event.isCancelled()) {
             int fromID = blockFrom.getTypeId();
             int toID = blockTo.getTypeId();
