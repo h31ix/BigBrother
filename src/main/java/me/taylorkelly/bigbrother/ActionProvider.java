@@ -265,4 +265,14 @@ public abstract class ActionProvider {
         }
         return true;
     }
+
+    /**
+     * @param actID
+     * @return
+     */
+    public static String findActionName(int actID) {
+        if (!Actions.containsKey(actID))
+            return "UNKNOWN ACTION #"+actID;
+        return Actions.get(actID).actionName;
+    }
 }

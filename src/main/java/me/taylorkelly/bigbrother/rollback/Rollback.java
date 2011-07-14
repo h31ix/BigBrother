@@ -174,7 +174,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                             player.sendMessage(ChatColor.BLUE + "Block Type(s): " + ChatColor.WHITE + getSimpleString(blockTypes));
                         }
                         if (allowedActions.size() > 0) {
-                            player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getSimpleString((ArrayList<?>) allowedActions));
+                            player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getActionString((ArrayList<?>) allowedActions));
                         }
                         if (time != 0) {
                             Calendar cal = Calendar.getInstance();
@@ -214,6 +214,22 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                     if(update_ps!=null)
                         update_ps.close();
                 } catch (SQLException e) {}
+            }
+        }
+
+        /**
+         * @param allowedActions
+         * @return
+         */
+        private String getActionString(ArrayList<Integer> allowedActions) {
+            String o = "";
+            boolean first=true;
+            for (int actID : allowedActions) {
+                if(!first) {
+                    o+=",";
+                }
+                first=false;
+                o+=ActionProvider.findActionName(actID);
             }
         }
     }

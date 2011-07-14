@@ -37,17 +37,10 @@ public class RollbackInterpreter {
         blockTypes = new ArrayList<Integer>();
         // Populate list
         allowedActions = new ArrayList<Integer>();
-        allowedActions.add(find("BrokenBlock"));
-        allowedActions.add(find("PlacedBlock"));
-        allowedActions.add(find("DeltaChest"));
-        allowedActions.add(find("CreateSignText"));
-        allowedActions.add(find("DestroySignText"));
-        allowedActions.add(find("LeafDecay"));
-        allowedActions.add(find("TNTExplosion"));
-        allowedActions.add(find("CreeperExplosion"));
-        allowedActions.add(find("MiscExplosion"));
-        allowedActions.add(find("BlockBurn"));
-        allowedActions.add(find("Flow"));
+        for(int actID : ActionProvider.Actions.keySet()) {
+            if(!ActionProvider.disabledActions.contains(actID))
+                allowedActions.add(actID);
+        }
         
         for (int i = 1; i < split.length; i++) {
             String argument = split[i].trim();
