@@ -21,8 +21,7 @@ public class DoneCommand implements CommandExecutor {
         
         Player player=(Player) send;
         if(BBPermissions.info(player)) {
-            plugin.sticker.setMode(player, 0);
-            plugin.reportStickMode(player, 0);
+            plugin.sticker.removeLog(player);
         } else {
             player.sendMessage(BigBrother.permissionDenied);
         }

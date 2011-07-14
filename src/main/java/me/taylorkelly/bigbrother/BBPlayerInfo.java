@@ -17,6 +17,7 @@
  */
 package me.taylorkelly.bigbrother;
 
+import me.taylorkelly.bigbrother.finder.StickMode;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 
 import org.bukkit.block.Chest;
@@ -28,7 +29,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class BBPlayerInfo {
     enum PlayerField {
-        WATCHED
+        WATCHED,
+        HAS_LOG
     }
 
     public static BBPlayerInfo ENVIRONMENT;
@@ -46,6 +48,8 @@ public class BBPlayerInfo {
     private String name = "";
     private int flags = 0; // bitfield flags
     private int id = -1;
+
+    public StickMode historyTool;
 
     private Chest myOpenChest=null;
     
@@ -138,18 +142,34 @@ public class BBPlayerInfo {
     }
     
     /**
-     * @param b
+     * @param isWatched
      */
-    public void setWatched(boolean b) {
-        setFlag(PlayerField.WATCHED, true);
+    public void setWatched(boolean isWatched) {
+        setFlag(PlayerField.WATCHED, isWatched);
     }
     
     /**
      * Are we tracking this user?
      * @return
      */
-    public boolean getWatched() {
+    public boolean getWatched() { 
         return getFlag(PlayerField.WATCHED);
+    }
+    
+    /**
+     * Tell the system whether the player has a log in their possession or not.
+     * @param logInPossession
+     */
+    public void setHasLog(boolean logInPossession) {
+        setFlag(PlayerField.WATCHED, logInPossession);
+    }
+    
+    /**
+     * Does this user have the SuperLog?
+     * @return
+     */
+    public boolean hasLog() { 
+        return getFlag(PlayerField.HAS_LOG); 
     }
     
     /**

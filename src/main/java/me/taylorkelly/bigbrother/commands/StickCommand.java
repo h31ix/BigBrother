@@ -22,15 +22,7 @@ public class StickCommand implements CommandExecutor {
     public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] split) {
         Player player=(Player) arg0;
         if(BBPermissions.info(player)) {
-            if (split.length == 1) {
-                plugin.sticker.setMode(player, 1);
-                plugin.reportStickMode(player, 1);
-            } else if (split.length == 2 && Numbers.isInteger(split[1])) {
-                plugin.sticker.setMode(player, Integer.parseInt(split[1]));
-                plugin.reportStickMode(player, Integer.parseInt(split[1]));
-            } else {
-                player.sendMessage(BigBrother.premessage + "Usage is " + ChatColor.RED + "/bb stick [#]");
-            }
+            player.sendMessage(BigBrother.premessage + "/bb stick is no longer used.  Please use /bb log.");
         } else {
             player.sendMessage(BigBrother.permissionDenied);
         }

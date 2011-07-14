@@ -22,8 +22,7 @@ public class LogCommand implements CommandExecutor {
         Player player=(Player) send;
         if(BBPermissions.info(player)) {
             if (split.length == 1) {
-                plugin.sticker.setMode(player, 2);
-                plugin.reportStickMode(player, 2);
+                plugin.sticker.giveLog(player);
             } else {
                 player.sendMessage(BigBrother.premessage + "Usage is " + ChatColor.RED + "/bb log");
             }

@@ -41,7 +41,7 @@ public class ActionH2 extends ActionTable {
     protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
         PreparedStatement ps = null;
         try {
-            ps=BBDB.prepare("INSERT INTO "+getActualTableName()+" (actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?)");
+            ps=BBDB.prepare("INSERT INTO "+getTableName()+" (actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?)");
             ps.setString(1, actionName);
             ps.setString(2, pluginName);
             ps.setInt(3, catID);
@@ -102,7 +102,7 @@ public class ActionH2 extends ActionTable {
      */
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE IF NOT EXISTS "+getActualTableName()+" (" +
+        return "CREATE TABLE IF NOT EXISTS "+getTableName()+" (" +
                 "actID INTEGER AUTO_INCREMENT PRIMARY KEY," +
                 "actName TEXT," +
                 "actPlugin TEXT," +
@@ -110,7 +110,7 @@ public class ActionH2 extends ActionTable {
                 "actDescription TEXT," +
                 "PRIMARY KEY(actID)"+
                 ");" +
-                "CREATE UNIQUE INDEX IF NOT EXISTS idxActionName ON "+getActualTableName()+"(actName)";
+                "CREATE UNIQUE INDEX IF NOT EXISTS idxActionName ON "+getTableName()+"(actName)";
     }
 
     /* (non-Javadoc)
