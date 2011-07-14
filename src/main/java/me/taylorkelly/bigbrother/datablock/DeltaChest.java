@@ -247,7 +247,7 @@ public class DeltaChest extends BBAction {
             StringBuilder b = new StringBuilder();
             b.append(a.getTypeId());
             b.append(":");
-            b.append(a.getAmount());
+            b.append(Math.abs(a.getAmount()));
             b.append(":");
             byte dat;
             // Why do you do this
