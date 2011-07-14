@@ -21,11 +21,11 @@ public class BBUsersH2 extends BBUsersTable {
     
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE IF NOT EXISTS `" + getActualTableName() + "` (" 
+        return "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (" 
         + "`id` INT AUTO_INCREMENT PRIMARY KEY," 
         + "`name` varchar(32) NOT NULL DEFAULT 'Player'," 
         + "`flags` INT NOT NULL DEFAULT '0');" 
-        + "CREATE UNIQUE INDEX IF NOT EXISTS idxUsername ON `" + getActualTableName() + "` (`name`)"; // ANSI
+        + "CREATE UNIQUE INDEX IF NOT EXISTS idxUsername ON `" + getTableName() + "` (`name`)"; // ANSI
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BBUsersH2 extends BBUsersTable {
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
-            String sql = "SELECT id,name,flags FROM "+getActualTableName()+" WHERE `name`=?";
+            String sql = "SELECT id,name,flags FROM "+getTableName()+" WHERE `name`=?";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql,name);
             
@@ -55,11 +55,11 @@ public class BBUsersH2 extends BBUsersTable {
         PreparedStatement ps = null;
         try {
             if(pi.getNew() && getUserFromDB(pi.getName())==null) {
-                ps = BBDB.prepare("INSERT INTO "+getActualTableName()+" (name,flags) VALUES (?,?)");
+                ps = BBDB.prepare("INSERT INTO "+getTableName()+" (name,flags) VALUES (?,?)");
                 ps.setString(1,pi.getName());
                 ps.setInt(2,pi.getFlags());
             } else {
-                ps = BBDB.prepare("UPDATE "+getActualTableName()+" SET flags = ? WHERE id=?");
+                ps = BBDB.prepare("UPDATE "+getTableName()+" SET flags = ? WHERE id=?");
                 ps.setInt(1, pi.getFlags());
                 ps.setInt(2, pi.getID());
             }
@@ -77,7 +77,7 @@ public class BBUsersH2 extends BBUsersTable {
     public BBPlayerInfo getUserFromDB(int id) {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getActualTableName() + " WHERE `id`=?";
+            String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE `id`=?";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql, id);
             if(!rs.next())
@@ -100,7 +100,7 @@ public class BBUsersH2 extends BBUsersTable {
     protected void loadCache() {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM "+getActualTableName();
+            String sql = "SELECT id,name,flags FROM "+getTableName();
             BBLogging.debug(sql);
             rs=BBDB.executeQuery(sql);
             
