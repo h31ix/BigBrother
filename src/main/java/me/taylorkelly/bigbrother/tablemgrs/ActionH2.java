@@ -107,7 +107,7 @@ public class ActionH2 extends ActionTable {
                 "actName TEXT," +
                 "actPlugin TEXT," +
                 "actCategory INTEGER," +
-                "actDecription TEXT," +
+                "actDescription TEXT," +
                 "PRIMARY KEY(actID)"+
                 ");" +
                 "CREATE UNIQUE INDEX IF NOT EXISTS idxActionName ON "+getActualTableName()+"(actName)";
