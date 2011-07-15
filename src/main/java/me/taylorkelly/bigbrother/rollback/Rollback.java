@@ -174,7 +174,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                             player.sendMessage(ChatColor.BLUE + "Block Type(s): " + ChatColor.WHITE + getSimpleString(blockTypes));
                         }
                         if (allowedActions.size() > 0) {
-                            player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getActionString((ArrayList<?>) allowedActions));
+                            player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getActionString(allowedActions));
                         }
                         if (time != 0) {
                             Calendar cal = Calendar.getInstance();
@@ -221,7 +221,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
          * @param allowedActions
          * @return
          */
-        private String getActionString(ArrayList<Integer> allowedActions) {
+        private String getActionString(List<Integer> allowedActions) {
             String o = "";
             boolean first=true;
             for (int actID : allowedActions) {
@@ -231,6 +231,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                 first=false;
                 o+=ActionProvider.findActionName(actID);
             }
+            return o;
         }
     }
     
