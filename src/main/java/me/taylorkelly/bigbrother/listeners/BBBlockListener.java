@@ -52,10 +52,15 @@ public class BBBlockListener extends BlockListener {
     @Override
     public void onBlockSpread(BlockSpreadEvent event) {
         if (!event.isCancelled()) {
-            Block to = event.getBlock();
-            Block from = event.getSource();
-            if(to.getType() == Material.FIRE) {
-                OwnershipManager.trackFlow(from, to);
+            Block blockTo = event.getBlock();
+            Block blockFrom = event.getSource();
+            BBLogging.debug(String.format("BlockSpread: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)",
+                    blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(),
+                    blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()
+                    ));
+            if(blockTo.getType() == Material.FIRE 
+                    || blockFrom.getType() == Material.FIRE) {
+                OwnershipManager.trackFlow(blockFrom, blockTo);
             }
         }
     }
@@ -157,13 +162,11 @@ public class BBBlockListener extends BlockListener {
                     || fromID == Material.STATIONARY_WATER.getId()
                     || fromID == Material.LAVA.getId()
                     || fromID == Material.STATIONARY_LAVA.getId()
-                    || fromID == Material.FIRE.getId()
                     || BBSettings.isBlockIgnored(toID)
                     || toID == Material.WATER.getId()
                     || toID == Material.STATIONARY_WATER.getId()
                     || toID == Material.LAVA.getId()
-                    || toID == Material.STATIONARY_LAVA.getId()
-                    || toID == Material.FIRE.getId())
+                    || toID == Material.STATIONARY_LAVA.getId())
                 return;
             // Only record a change if the owner is different (avoids duplicates)
             if(OwnershipManager.findOwner(blockFrom).getID()!=OwnershipManager.findOwner(blockTo).getID()) {
