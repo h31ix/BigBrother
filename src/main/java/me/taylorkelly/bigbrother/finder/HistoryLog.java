@@ -80,7 +80,7 @@ public class HistoryLog extends StickMode {
 
     @Override
     public void update(Player player) {
-        player.getInventory().setItem(slot, new ItemStack(Material.LOG, 1));
+        //player.getInventory().setItem(slot, new ItemStack(Material.LOG, 1));
     }
 
     @Override
