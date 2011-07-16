@@ -71,6 +71,10 @@ public class BBPlayerListener extends PlayerListener {
 				dataBlock.send();
 			}
 
+			if(BBPermissions.info(player)) {
+			    plugin.sticker.onPlayerJoin(player, pi);
+			}
+			
 			BBLogging.debug(player.getName() + " has Permissions: ");
 			BBLogging.debug("- Watching privileges: " + BBPermissions.watch(player));
 			BBLogging.debug("- Info privileges: " + BBPermissions.info(player));

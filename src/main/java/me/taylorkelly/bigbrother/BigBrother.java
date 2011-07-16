@@ -192,6 +192,7 @@ public class BigBrother extends JavaPlugin {
         pm.registerEvent(Event.Type.LEAVES_DECAY, blockListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.BLOCK_FROMTO, blockListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.BLOCK_SPREAD, blockListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Monitor, this);
@@ -244,19 +245,6 @@ public class BigBrother extends JavaPlugin {
     
     public String getUnwatchedPlayers() {
         return watcher.getUnwatchedPlayers();
-    }
-    
-    /**
-     * Tell the user what mode their stick is.
-     * Better than having this copypasted 8 times
-     * @param player Player to talk to about their stick/log
-     * @author N3X15
-     */
-    public void reportStickMode(Player player, int stickLevel) {
-        if (stickLevel > 0) {
-            player.sendMessage(BigBrother.premessage + "Your current stick mode is " + sticker.descMode(player));
-            player.sendMessage("Use " + ChatColor.RED + "/bb stick 0" + ChatColor.WHITE + " to turn it off");
-        }
     }
     
     public boolean hasStick(Player player, ItemStack itemStack) {

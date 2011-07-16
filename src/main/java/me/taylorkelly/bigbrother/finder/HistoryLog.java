@@ -16,9 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class HistoryLog extends StickMode {
-    private ItemStack oldItem;
-    private int slot;
-
     /**
      * This used to just give people logs.
      * The new version will simply tell them that they must have a log
