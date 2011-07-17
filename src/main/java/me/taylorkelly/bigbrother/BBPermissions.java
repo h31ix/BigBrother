@@ -18,6 +18,7 @@
 package me.taylorkelly.bigbrother;
 
 import org.bukkit.Server;
+import org.bukkit.permissions.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -29,12 +30,16 @@ public class BBPermissions {
     private enum BBPermPlugin 
     {
         PERMISSIONS,
-        GROUP_MANAGER, 
+        BUKKIT_PERMS, 
         NONE
     }
     public static PermissionHandler permissionHandler;
     private static BBPermPlugin handler;
     private static Plugin permissionPlugin;
+    private static Permission info;
+    private static Permission rollback;
+    private static Permission watch;
+    private static Permission cleanse;
 
     public static void initialize(Server server) {
         if(setupPermissions(server)) {
@@ -48,8 +53,14 @@ public class BBPermissions {
             
             BBLogging.info("Permissions enabled using: Permissions v" + version);
         } else {
-            handler = BBPermPlugin.NONE;
-            BBLogging.severe("A permission plugin isn't loaded, only OPs can use commands");
+            handler = BBPermPlugin.BUKKIT_PERMS;
+            
+            info = new Permission("bb.admin.info", "User can use /bb log, /bb here, etc.",PermissionDefault.OP);
+            rollback = new Permission("bb.admin.rollback", "User can perform rollbacks.",PermissionDefault.OP);
+            watch = new Permission("bb.admin.watch", "User can modify the list of watched users.",PermissionDefault.OP);
+            cleanse = new Permission("bb.admin.cleanse", "User can perform database trimming operations.",PermissionDefault.OP);
+            
+            BBLogging.severe("A permission plugin isn't loaded, patching into BukkitPerms.");
         }
     }
 
@@ -75,8 +86,8 @@ public class BBPermissions {
         switch (handler) {
             case PERMISSIONS:
                 return ((Permissions)permissionPlugin).getHandler().has(player, string);
-            //case GROUP_MANAGER:
-            //    return ((GroupManager)permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, string);
+            case BUKKIT_PERMS:
+                return player.hasPermission(string);
             case NONE:
                 return player.isOp();
             default:

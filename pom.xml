@@ -9,6 +9,12 @@
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 			<url>http://repo.bukkit.org/artifactory/repo</url>
 		</repository>
 		<repository>
@@ -47,13 +53,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>terracraftbukkit</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
