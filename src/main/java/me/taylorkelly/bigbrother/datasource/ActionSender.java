@@ -18,6 +18,7 @@ import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
+import me.taylorkelly.bigbrother.datablock.Heartbeat;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
 /**
@@ -30,6 +31,7 @@ public class ActionSender {
 
     public static final LinkedBlockingQueue<Action> SENDING = new LinkedBlockingQueue<Action>();
     private static int sendingTask;
+    private static BigBrother plugin;
 
     public static void shutdown(BigBrother bb) {
         if(sendingTask>=0)
@@ -37,6 +39,7 @@ public class ActionSender {
     }
 
     public static void initialize(BigBrother bb, File dataFolder, WorldManager manager) {
+        plugin=bb;
         sendingTask = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
         if (sendingTask < 0) {
             BBLogging.severe("Unable to schedule sending of blocks");
@@ -48,13 +51,11 @@ public class ActionSender {
     
     private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
-
-        // Perform a NOP if nothing's happened.
-        if(collection.size()==0) {
-            // Hopefully this'll work with all DBMSes or I'll start choking bitches.
-            BBDB.executeQuery("SELECT 1");
-            return true;
-        }
+        
+        // Send a heartbeat after sending blocks.
+        Heartbeat hb = new Heartbeat(plugin);
+        hb.send();
+            
         //H2 fix...
         if (BBDB.usingDBMS(DBMS.H2)) {
             for (Action block : collection) {

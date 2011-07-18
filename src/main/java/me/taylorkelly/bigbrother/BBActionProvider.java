@@ -69,6 +69,9 @@ public class BBActionProvider extends ActionProvider {
         registerAction(plugin, this, new DropItem());
         registerAction(plugin, this, new PickupItem());
         registerAction(plugin, this, new SignDestroyed());
+        
+        registerAction(plugin, this, new Heartbeat());
+        registerAction(plugin, this, new BlockPistoned());
         //END LEGACY ACTIONS
         
     }

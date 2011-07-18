@@ -43,6 +43,26 @@ public class BlockPistoned extends BBAction {
         super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData())+"\t"+direction.name());
     }
 
+    /**
+     * 
+     */
+    public BlockPistoned() {
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @param pi
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param type
+     * @param data
+     */
+    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+        super(pi,world,x,y,z,type,data);
+    }
+
     /* (non-Javadoc)
      * @see me.taylorkelly.bigbrother.datablock.Action#rollback(org.bukkit.World)
      */
@@ -123,6 +143,10 @@ public class BlockPistoned extends BBAction {
     @Override
     public String getDescription() {
         return "A block moved by a piston";
+    }
+
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+        return new BlockPistoned(pi,world,x,y,z,type,data);
     }
     
 }
