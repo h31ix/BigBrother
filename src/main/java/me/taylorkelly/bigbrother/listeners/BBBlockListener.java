@@ -23,6 +23,7 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.datablock.BBAction;
+import me.taylorkelly.bigbrother.datablock.BlockPistoned;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.CreateSignText;
 import me.taylorkelly.bigbrother.datablock.FlintAndSteel;
@@ -34,7 +35,9 @@ import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import net.nexisonline.bigbrother.ownership.OwnershipManager;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -62,6 +65,44 @@ public class BBBlockListener extends BlockListener {
                     || blockFrom.getType() == Material.FIRE) {
                 OwnershipManager.trackFlow(blockFrom, blockTo);
             }
+        }
+    }
+    
+    /**
+     * Basically: 
+     *  * Update ownership of all the blocks moved
+     *  * Extend ownership of the piston in the direction it is pushing
+     *  * Generate a new log item for every block moved
+     *  * Kill james bond
+     * @author N3X15
+     */
+    @Override
+    public void onBlockPistonExtend(BlockPistonExtendEvent e) {
+        World w = e.getBlock().getWorld();
+        // Determine direction of move
+        int xo = e.getDirection().getModX();
+        int yo = e.getDirection().getModY();
+        int zo = e.getDirection().getModZ();
+        BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
+        //Extend piston ownership one block outward
+        int x = e.getBlock().getX();
+        int y = e.getBlock().getY();
+        int z = e.getBlock().getZ();
+        
+        OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),opi);
+        for(Block b : e.getBlocks()) {
+            //Get ownership information
+            BBPlayerInfo pi = OwnershipManager.findOwner(b);
+            x = b.getX();
+            y = b.getY();
+            z = b.getZ();
+            pi=OwnershipManager.findOwner(b);
+            OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),pi);
+            
+            // Generate action
+            BlockPistoned action = new BlockPistoned(opi,b,e.getDirection());
+            if(pi.getWatched())
+                action.send();
         }
     }
 

@@ -41,7 +41,7 @@ public class BBPermissions {
     private static Permission watch;
     private static Permission cleanse;
 
-    public static void initialize(Server server) {
+    public static void initialize(BigBrother bb, Server server) {
         if(setupPermissions(server)) {
             handler = BBPermPlugin.PERMISSIONS;
             String version = permissionPlugin.getDescription().getVersion();

@@ -147,7 +147,7 @@ public class BigBrother extends JavaPlugin {
         OwnershipManager.init(this);
         
         // Initialize Permissions, Help
-        BBPermissions.initialize(getServer());
+        BBPermissions.initialize(this,getServer());
         BBHelp.initialize(this);
         
         // Register Events
