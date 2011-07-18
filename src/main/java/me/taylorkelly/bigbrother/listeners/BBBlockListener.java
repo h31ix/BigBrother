@@ -105,6 +105,48 @@ public class BBBlockListener extends BlockListener {
                 action.send();
         }
     }
+    
+    /**
+     * Basically: 
+     *  * Remove the piston's "pusher" ownership
+     *  * Move the stickied block's ownership back to where it was
+     * @author N3X15
+     */
+    @Override
+    public void onBlockPistonRetract(BlockPistonRetractEvent e) {
+        if(!e.isSticky() && !e.isCancelled()) {
+            return;
+        }
+        World w = e.getBlock().getWorld();
+        // Determine direction of move
+        int xo = e.getDirection().getModX();
+        int yo = e.getDirection().getModY();
+        int zo = e.getDirection().getModZ();
+        BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
+        //Extend piston ownership one block outward
+        int x = e.getBlock().getX();
+        int y = e.getBlock().getY();
+        int z = e.getBlock().getZ();
+        
+        OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),BBPlayerInfo.ENVIRONMENT);
+        Block pistonShaft = w.getBlockAt(x+xo,y+yo,z+zo);
+        // <N3X15_> EvilSeph, Dinnerbone, whoever is available:  How am I supposed to track blocks retracted by a piston?  BlockPistonRetractEvent doesn't have a getBlocks() method, so I can't determine what blocks will be affected by sticky pistons.
+        // <EvilSeph> rudimentary, sorry
+        //for(Block b : e.getBlocks()) {
+        Block b = w.getBlockAt(x+(xo*2), y+(yo*2), z+(zo*2));
+        BBPlayerInfo pi = OwnershipManager.findOwner(b);
+        
+        // Clear the moved block's ownership
+        OwnershipManager.setOwner(b, BBPlayerInfo.ENVIRONMENT);
+        
+        // Update the new position with updated ownership
+        OwnershipManager.setOwner(pistonShaft, pi);
+       
+        // Generate action
+        BlockPistoned action = new BlockPistoned(opi,b,e.getDirection());
+        if(pi.getWatched())
+            action.send();
+    }
 
     @Override
     public void onBlockDamage(BlockDamageEvent event) {
