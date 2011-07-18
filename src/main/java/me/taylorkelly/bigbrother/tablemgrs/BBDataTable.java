@@ -15,6 +15,7 @@ import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 /**
  * Handler class for the bbdata table
@@ -125,4 +126,41 @@ public abstract class BBDataTable extends DBTable {
         return blockList;
 
 	}
+
+    /**
+     * @param name
+     * @param worldManager
+     * @return
+     */
+    public ArrayList<Action> getPlayerHistory(Player sender, String name, WorldManager manager) {
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Action> blockList = new ArrayList<Action>();
+
+        try {
+                // TODO maybe more customizable actions?
+                if(BBDB.usingDBMS(DBMS.POSTGRES)) // TODO: Someone made rbacked a BOOLEAN, which screws up the logic.
+                    ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = false AND player=? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+                else
+                    ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = 0 AND player=?  AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+                
+                ps.setInt(1, BBUsersTable.getInstance().getUserByName(name).getID());
+                ps.setInt(2, manager.getWorld(sender.getWorld().getName()));
+                rs = ps.executeQuery();
+                BBDB.commit();
+                
+                while (rs.next()) {
+                    String data = rs.getString("data");
+                    Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
+                    newBlock.date = rs.getLong("date");
+                    blockList.add(newBlock);
+                }
+        } catch (SQLException ex) {
+            BBLogging.severe("Find SQL Exception", ex);
+        } finally {
+            BBDB.cleanup( "Find",  ps, rs );
+        }
+        return blockList;
+    }
 }

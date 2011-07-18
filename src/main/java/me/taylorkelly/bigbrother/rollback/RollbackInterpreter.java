@@ -35,13 +35,7 @@ public class RollbackInterpreter {
         this.plugin = plugin;
         playerList = new ArrayList<String>();
         blockTypes = new ArrayList<Integer>();
-        // Populate list
-        allowedActions = new ArrayList<Integer>();
-        for(int actID : ActionProvider.Actions.keySet()) {
-            if(!ActionProvider.disabledActions.contains(actID))
-                allowedActions.add(actID);
-        }
-        
+        allowedActions = ActionProvider.getDefaultActions();
         for (int i = 1; i < split.length; i++) {
             String argument = split[i].trim();
             if (argument.equals("") || argument.equals(" ")) {
@@ -54,7 +48,7 @@ public class RollbackInterpreter {
             } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("r:")) {
                 parseRadius(argument.substring(2));
             } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("a:")) {
-                parseAction(argument.substring(2));
+                allowedActions = ActionProvider.parseActionSwitch(null,argument.substring(2));
             } else if (argument.equalsIgnoreCase("*")) {
                 all = true;
             } else {
@@ -64,37 +58,6 @@ public class RollbackInterpreter {
                     findee = targets.get(0);
                 }
                 playerList.add((findee == null) ? argument : findee.getName());
-            }
-        }
-    }
-    
-    /**
-     * @param string
-     * @return
-     */
-    private Integer find(String string) {
-        return ActionProvider.findActionID(string);
-    }
-
-    /**
-     * actions to roll back
-     * a:10,!BLOCK_PLACE
-     * @author N3X15
-     */
-    private void parseAction(String actstr) {
-        for(String act:actstr.split(",")) {
-            if(!act.startsWith("!") && allowedActions.size()==0) {
-                allowedActions.clear();
-            }
-            int ca;
-            if(act.startsWith("!")) {
-                ca = find(act.substring(1));
-                if(ca>-1 && allowedActions.contains(ca))
-                    allowedActions.remove(ca);
-            }else{
-                ca = find(act);
-                if(ca>-1 && !allowedActions.contains(ca))
-                    allowedActions.add(ca);
             }
         }
     }

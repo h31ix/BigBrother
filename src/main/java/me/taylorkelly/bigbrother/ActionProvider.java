@@ -275,4 +275,46 @@ public abstract class ActionProvider {
             return "UNKNOWN ACTION #"+actID;
         return Actions.get(actID).actionName;
     }
+    
+
+
+    /**
+     * actions to roll back
+     * a:10,!BLOCK_PLACE
+     * @author N3X15
+     * @return 
+     */
+    public static List<Integer> parseActionSwitch(List<Integer> acts, String actstr) {
+        if(acts==null) {
+            acts=getDefaultActions();
+        }
+        for(String act:actstr.split(",")) {
+            if(!act.startsWith("!") && acts.size()==0) {
+                acts.clear();
+            }
+            int ca;
+            if(act.startsWith("!")) {
+                ca = findActionID(act.substring(1));
+                if(ca>-1 && acts.contains(ca))
+                    acts.remove(ca);
+            }else{
+                ca = findActionID(act);
+                if(ca>-1 && !acts.contains(ca))
+                    acts.add(ca);
+            }
+        }
+        return acts;
+    }
+
+    /**
+     * @return
+     */
+    public static List<Integer> getDefaultActions() {
+        List<Integer> acts = new ArrayList<Integer>();
+        for(int actID : Actions.keySet()) {
+            if(!disabledActions.contains(actID))
+                acts.add(actID);
+        }
+        return acts;
+    }
 }

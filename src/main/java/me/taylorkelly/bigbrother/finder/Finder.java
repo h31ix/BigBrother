@@ -47,7 +47,8 @@ public class Finder {
         if(actions!=null)
             allowedActions = new ArrayList<Integer>(actions);
         else {
-            allowedActions = new ArrayList<Integer>();
+            allowedActions = ActionProvider.getDefaultActions();
+            /*
             allowedActions.add(ActionProvider.findActionID("BrokenBlock"));
             allowedActions.add(ActionProvider.findActionID("PlacedBlock"));
             allowedActions.add(ActionProvider.findActionID("DeltaChest"));
@@ -59,6 +60,7 @@ public class Finder {
             allowedActions.add(ActionProvider.findActionID("MiscExplosion"));
             allowedActions.add(ActionProvider.findActionID("BlockBurn"));
             allowedActions.add(ActionProvider.findActionID("Flow"));
+            */
         }
     }
 

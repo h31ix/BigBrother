@@ -194,6 +194,8 @@ public class BigBrother extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_FROMTO, blockListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.BLOCK_SPREAD, blockListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
@@ -220,6 +222,7 @@ public class BigBrother extends JavaPlugin {
         bbc.registerExecutor("find", new FindCommand(this));
         bbc.registerExecutor("help", new HelpCommand(this));
         bbc.registerExecutor("mowlawn", new MowlawnCommand(this));
+        bbc.registerExecutor("history", new HistoryCommand(this));
         getCommand("bb").setExecutor(bbc);
     }
     
