@@ -13,6 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
+import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
@@ -54,6 +55,7 @@ public class ActionSender {
         
         // Send a heartbeat after sending blocks.
         Heartbeat hb = new Heartbeat(plugin);
+        hb.player = BBPlayerInfo.ENVIRONMENT;
         hb.send();
             
         //H2 fix...
