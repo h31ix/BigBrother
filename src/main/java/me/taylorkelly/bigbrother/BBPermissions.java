@@ -36,10 +36,11 @@ public class BBPermissions {
     public static PermissionHandler permissionHandler;
     private static BBPermPlugin handler;
     private static Plugin permissionPlugin;
-    private static Permission info;
-    private static Permission rollback;
-    private static Permission watch;
-    private static Permission cleanse;
+    
+    public static Permission info;
+    public static Permission rollback;
+    public static Permission watch;
+    public static Permission cleanse;
 
     public static void initialize(BigBrother bb, Server server) {
         if(setupPermissions(server)) {

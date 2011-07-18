@@ -186,8 +186,8 @@ public class OwnershipManager {
         // Fire can be attached to any face of the block,
         // but we should check the top, first.
         for(BlockFace bf:cardinalFaces) {
-            if(isFireSource(block.getFace(bf))) {
-                return block.getFace(bf);
+            if(isFireSource(block.getRelative(bf))) {
+                return block.getRelative(bf);
             }
         }
         return null;
