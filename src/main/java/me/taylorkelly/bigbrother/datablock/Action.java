@@ -27,20 +27,20 @@ import org.bukkit.Server;
 import org.bukkit.World;
 
 /**
- * An action that occured on a world at a certain location.
+ * An action that occurred on a world at a certain location.
  * @author N3X15
  */
 public abstract class Action {
     public final static String ENVIRONMENT = "Environment";
     
-    public BBPlayerInfo player;
-    public int x;
-    public int y;
-    public int z;
-    public String world;
-    public int type;
-    public String data;
-    public long date;
+    public BBPlayerInfo player=BBPlayerInfo.ENVIRONMENT;
+    public int x=0;
+    public int y=0;
+    public int z=0;
+    public String world="BB_GLOBAL";
+    public int type=-1;
+    public String data="";
+    public long date=0;
     
     public Action(){}
     public Action(String player, String world, int x, int y, int z, int type, String data) {

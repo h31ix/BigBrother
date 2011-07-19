@@ -42,7 +42,6 @@ public class Heartbeat extends BBAction {
         type=0;
         x=plugin.getServer().getOnlinePlayers().length;
         y=plugin.getServer().getMaxPlayers();
-        world="BB_GLOBAL";
     }
 
     /**
