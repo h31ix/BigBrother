@@ -61,7 +61,11 @@ public class ActionSender {
         //H2 fix...
         if (BBDB.usingDBMS(DBMS.H2)) {
             for (Action block : collection) {
-                manager.getWorld(block.world);
+                if(block.world == null) {
+                    BBLogging.severe(String.format("%s incorrectly initialized - World is null",block.getClass().getName()));
+                } else {
+                    manager.getWorld(block.world);
+                }
             }
         }
         PreparedStatement ps = null;
