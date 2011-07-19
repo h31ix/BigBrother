@@ -312,7 +312,8 @@ public abstract class ActionProvider {
     public static List<Integer> getDefaultActions() {
         List<Integer> acts = new ArrayList<Integer>();
         for(int actID : Actions.keySet()) {
-            if(!disabledActions.contains(actID))
+            // Not disabled in the config and not hidden.
+            if(!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN))
                 acts.add(actID);
         }
         return acts;
