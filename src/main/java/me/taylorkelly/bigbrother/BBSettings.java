@@ -31,6 +31,7 @@ import java.util.Scanner;
 
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.datasource.BBDB;
+import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -142,6 +143,8 @@ public class BBSettings {
             yml.load();
         
         ActionProvider.loadDisabled(yml);
+        
+        ActionTable.performPostponedUpdates();
         
         yml.save();
     }

@@ -18,6 +18,8 @@
 
 package me.taylorkelly.bigbrother.tablemgrs;
 
+import me.taylorkelly.bigbrother.ActionProvider;
+import me.taylorkelly.bigbrother.BBActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
@@ -36,15 +38,79 @@ public abstract class ActionTable extends DBTable {
     private static final int VERSION = 3;
     private static ActionTable instance=null;
     
+    public static enum LegacyAction {
+        BLOCKBROKEN,
+        BLOCKPLACED,
+        DESTROYSIGNTEXT,
+        TELEPORT,
+        DELTACHEST,
+        COMMAND,
+        CHAT,
+        DISCONNECT,
+        LOGIN,
+        DOOROPEN,
+        BUTTONPRESS,
+        LEVERSWITCH,
+        CREATESIGNTEXT,
+        LEAFDECAY,
+        FLINTANDSTEEL,
+        TNTEXPLOSION,
+        CREEPEREXPLOSION,
+        MISCEXPLOSION,
+        OPENCHEST,
+        BLOCKBURN,
+        FLOW,
+        DROPITEM,
+        PICKUPITEM,
+        SIGNDESTROYED
+    }
+    
     public ActionTable() {
-        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
-            drop();
         if (!tableExists()) {
             BBLogging.info("Building `"+getTableName()+"` table...");
             createTable();
         } else {
             BBLogging.debug("`"+getTableName()+"` table already exists");
         }
+    }
+
+    /**
+     * Recursive function.
+     */
+    private void checkForUpdates() {
+        int actionVersion = BBDB.getVersion(BBSettings.dataFolder, getActualTableName());
+        int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
+        
+        if(actionVersion<3)
+            drop();
+    }
+
+    /**
+     * Convert from legacy static BBDataBlock IDs (which correspond with an enum)
+     * to the new dynamically-allocated system.
+     */
+    private static void doActionIDUpdates() {
+        BBLogging.warning("Preparing to update from legacy action IDs to the newer, dynamically-assigned ones.");
+        BBLogging.warning("This WILL take a long time, so if you do not want to wait, please delete your bbdata table and restart.");
+
+        String tmpTable = "_TMP_"+BBDataTable.getInstance().getActualTableName();
+        String tbl = BBDataTable.getInstance().getTableName();
+        // Create temporary table.
+        BBDB.executeUpdate(BBDataTable.getInstance().getCreateSyntax().replace(tbl,tmpTable));
+        
+        // Begin looping through each legacy ID
+        for(LegacyAction act : LegacyAction.values()) {
+            // Locate an Action that corresponds to each ID, based on name.
+            int id = ActionProvider.findActionID(act.name().toLowerCase());
+            if(id==3) {
+                BBLogging.severe("Unable to locate an action that corresponds with "+act.name()+"!");
+            } else {
+                BBDB.executeUpdate("INSERT INTO "+tmpTable+" (id, date, player, action, world, x, y, z, type, data, rbacked) (SELECT id, date, player,?,world,x,y,z,type,data,rbacked FROM "+tbl+" WHERE id=?)",id,act.ordinal());
+            }
+        }
+        
+        BBDB.executeUpdate("DROP TABLE "+tbl);
+        BBDB.executeUpdate("RENAME TABLE "+tmpTable+" TO "+tbl);
     }
 
     /* (non-Javadoc)
@@ -109,5 +175,16 @@ public abstract class ActionTable extends DBTable {
      */
     public static void addForcedID(String pluginName, String actionName, int catID, int actID,String description) {
         getInstance().addActionForceID(pluginName,actionName,catID,actID,description);
+    }
+
+    /**
+     * Change bbdata table, if needed.
+     */
+    public static void performPostponedUpdates() {
+        int actionVersion = BBDB.getVersion(BBSettings.dataFolder, ActionTable.getInstance().getActualTableName());
+        int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
+        
+        if(dataVersion==6 ) 
+            doActionIDUpdates();
     }
 }

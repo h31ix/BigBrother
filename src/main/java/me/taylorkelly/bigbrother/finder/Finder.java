@@ -48,19 +48,6 @@ public class Finder {
             allowedActions = new ArrayList<Integer>(actions);
         else {
             allowedActions = ActionProvider.getDefaultActions();
-            /*
-            allowedActions.add(ActionProvider.findActionID("BrokenBlock"));
-            allowedActions.add(ActionProvider.findActionID("PlacedBlock"));
-            allowedActions.add(ActionProvider.findActionID("DeltaChest"));
-            allowedActions.add(ActionProvider.findActionID("CreateSignText"));
-            allowedActions.add(ActionProvider.findActionID("DestroySignText"));
-            allowedActions.add(ActionProvider.findActionID("LeafDecay"));
-            allowedActions.add(ActionProvider.findActionID("TNTExplosion"));
-            allowedActions.add(ActionProvider.findActionID("CreeperExplosion"));
-            allowedActions.add(ActionProvider.findActionID("MiscExplosion"));
-            allowedActions.add(ActionProvider.findActionID("BlockBurn"));
-            allowedActions.add(ActionProvider.findActionID("Flow"));
-            */
         }
     }
 

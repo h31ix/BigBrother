@@ -216,18 +216,30 @@ public class BBDB {
     }
     
     /**
+     * Determine the version of the database table currently installed.
+     * @param dataFolder
+     * @param table
+     * @return
+     */
+    public static int getVersion(File dataFolder, String table) {
+        File f = new File(dataFolder, "DATABASE_VERSION");
+        PropertiesFile pf = new PropertiesFile(f);
+        return pf.getInt(table, -1, "");
+    }
+    
+    /**
      * Check DATABASE_VERSION file to see if a database upgrade is needed.
      * 
      * @param dataFolder
      * @return
      */
-    public static boolean needsUpdate(File dataFolder, String table, int CurrentVersion) {
+    public static boolean needsUpdate(File dataFolder, String table, int latestVersion) {
         boolean r=true;
         try {
             File f = new File(dataFolder, "DATABASE_VERSION");
             PropertiesFile pf = new PropertiesFile(f);
-            r=(pf.getInt(table, CurrentVersion, "")<CurrentVersion);
-            pf.setInt(table,CurrentVersion,"");
+            r=(pf.getInt(table, latestVersion, "")<latestVersion);
+            pf.setInt(table,latestVersion,"");
             pf.save();
         } catch (Exception e) {
             return true;
