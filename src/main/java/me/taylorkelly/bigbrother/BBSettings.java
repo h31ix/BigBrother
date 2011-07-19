@@ -210,7 +210,7 @@ public class BBSettings {
         rollbacksPerTick = yml.getInt("general.rollbacks-per-tick", 2000);// "If true, will also log actions to .logs (one for each player)");
         debugMode = yml.getBoolean("general.debug-mode", false);// "If true, will also log actions to .logs (one for each player)");
         libraryAutoDownload = yml.getBoolean("general.library-autodownload", true);// "If true, will also log actions to .logs (one for each player)");
-        TNTLogger.THRESHOLD = yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
+        TNTLogger.THRESHOLD = 10.0;//yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
         yml.save();
     }
 /*
