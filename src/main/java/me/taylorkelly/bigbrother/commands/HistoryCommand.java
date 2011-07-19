@@ -52,13 +52,9 @@ public class HistoryCommand implements CommandExecutor {
         if(BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
-            Integer wldID = null;
             for(String arg : args) {
                 if(arg.startsWith("a:")) {
                     acts=ActionProvider.parseActionSwitch(acts, arg.substring(2));
-                } else
-                if(arg.startsWith("w:")) {
-                    wldID = plugin.worldManager.getWorld(arg.substring(2));
                 } else
                     name = arg;
             }
