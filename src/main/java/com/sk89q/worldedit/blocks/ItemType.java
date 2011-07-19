@@ -1,20 +1,20 @@
 // $Id$
 /*
- * WorldEdit
- * Copyright (C) 2010 sk89q <http://www.sk89q.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+* WorldEdit
+* Copyright (C) 2010 sk89q <http://www.sk89q.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 package com.sk89q.worldedit.blocks;
@@ -27,10 +27,10 @@ import java.util.Map.Entry;
 import com.sk89q.util.StringUtil;
 
 /**
- * ItemType types.
- *
- * @author sk89q
- */
+* ItemType types.
+*
+* @author sk89q
+*/
 public enum ItemType {
     // Blocks
     AIR(0, "Air", "air"),
@@ -62,10 +62,14 @@ public enum ItemType {
     BED(26, "Bed", "bed"),
     POWERED_RAIL(27, "Powered Rail", "poweredrail", "boosterrail", "poweredtrack", "boostertrack", "booster"),
     DETECTOR_RAIL(28, "Detector Rail", "detectorrail", "detector"),
+    PISTON_STICKY_BASE(29, "Sticky Piston", "stickypiston"),
     WEB(30, "Web", "web", "spiderweb"),
     LONG_GRASS(31, "Long grass", "longgrass", "tallgrass"),
     DEAD_BUSH(32, "Shrub", "deadbush", "shrub", "deadshrub", "tumbleweed"),
+    PISTON_BASE(33, "Piston", "piston"),
+    PISTON_EXTENSION(34, "Piston extension", "pistonhead"),
     CLOTH(35, "Wool", "cloth", "wool"),
+    PISTON_MOVING_PIECE(36, "Piston moving piece", "movingpiston"),
     YELLOW_FLOWER(37, "Yellow flower", "yellowflower", "flower"),
     RED_FLOWER(38, "Red rose", "redflower", "redrose", "rose"),
     BROWN_MUSHROOM(39, "Brown mushroom", "brownmushroom", "mushroom"),
@@ -231,16 +235,17 @@ public enum ItemType {
     REDSTONE_REPEATER(356, "Redstone repeater", "redstonerepeater", "diode", "delayer", "repeater"),
     COOKIE(357, "Cookie", "cookie"),
     MAP(358, "Map", "map"),
+    SHEARS(359, "Shears", "shears", "scissors"),
     GOLD_RECORD(2256, "Gold Record", "goldrecord", "golddisc"),
     GREEN_RECORD(2257, "Green Record", "greenrecord", "greenddisc");
 
     /**
-     * Stores a map of the IDs for fast access.
-     */
+* Stores a map of the IDs for fast access.
+*/
     private static final Map<Integer,ItemType> ids = new HashMap<Integer,ItemType>();
     /**
-     * Stores a map of the names for fast access.
-     */
+* Stores a map of the names for fast access.
+*/
     private static final Map<String,ItemType> lookup = new LinkedHashMap<String,ItemType>();
 
     private final int id;
@@ -258,11 +263,11 @@ public enum ItemType {
 
 
     /**
-     * Construct the type.
-     *
-     * @param id
-     * @param name
-     */
+* Construct the type.
+*
+* @param id
+* @param name
+*/
     ItemType(int id, String name, String lookupKey) {
         this.id = id;
         this.name = name;
@@ -270,11 +275,11 @@ public enum ItemType {
     }
 
     /**
-     * Construct the type.
-     *
-     * @param id
-     * @param name
-     */
+* Construct the type.
+*
+* @param id
+* @param name
+*/
     ItemType(int id, String name, String ... lookupKeys) {
         this.id = id;
         this.name = name;
@@ -282,21 +287,21 @@ public enum ItemType {
     }
 
     /**
-     * Return type from ID. May return null.
-     *
-     * @param id
-     * @return
-     */
+* Return type from ID. May return null.
+*
+* @param id
+* @return
+*/
     public static ItemType fromID(int id) {
         return ids.get(id);
     }
 
     /**
-     * Get a name for the item.
-     *
-     * @param id
-     * @return
-     */
+* Get a name for the item.
+*
+* @param id
+* @return
+*/
     public static String toName(int id) {
         ItemType type = ids.get(id);
         if (type != null) {
@@ -307,11 +312,11 @@ public enum ItemType {
     }
 
     /**
-     * Get a name for a held item.
-     *
-     * @param id
-     * @return
-     */
+* Get a name for a held item.
+*
+* @param id
+* @return
+*/
     public static String toHeldName(int id) {
         if (id == 0) {
             return "Hand";
@@ -325,22 +330,22 @@ public enum ItemType {
     }
 
     /**
-     * Return type from name. May return null.
-     *
-     * @param name
-     * @return
-     */
+* Return type from name. May return null.
+*
+* @param name
+* @return
+*/
     public static ItemType lookup(String name) {
         return lookup(name, true);
     }
 
     /**
-     * Return type from name. May return null.
-     *
-     * @param name
-     * @param fuzzy
-     * @return
-     */
+* Return type from name. May return null.
+*
+* @param name
+* @param fuzzy
+* @return
+*/
     public static ItemType lookup(String name, boolean fuzzy) {
         String testName = name.replace(" ", "").toLowerCase();
         
@@ -373,38 +378,38 @@ public enum ItemType {
     }
 
     /**
-     * Get item numeric ID.
-     *
-     * @return
-     */
+* Get item numeric ID.
+*
+* @return
+*/
     public int getID() {
         return id;
     }
 
     /**
-     * Get user-friendly item name.
-     *
-     * @return
-     */
+* Get user-friendly item name.
+*
+* @return
+*/
     public String getName() {
         return name;
     }
     
     /**
-     * Get a list of aliases.
-     * 
-     * @return
-     */
+* Get a list of aliases.
+*
+* @return
+*/
     public String[] getAliases() {
         return lookupKeys;
     }
     
     /**
-     * Returns true if an item should not be stacked.
-     * 
-     * @param id
-     * @return
-     */
+* Returns true if an item should not be stacked.
+*
+* @param id
+* @return
+*/
     public static boolean shouldNotStack(int id) {
         return (id >= 256 && id <= 259)
             || id == 261
@@ -420,12 +425,12 @@ public enum ItemType {
     }
     
     /**
-     * Returns true if an item uses its damage value for something
-     * other than damage.
-     * 
-     * @param id
-     * @return
-     */
+* Returns true if an item uses its damage value for something
+* other than damage.
+*
+* @param id
+* @return
+*/
     public static boolean usesDamageValue(int id) {
         return id == 35
             || id == 351;
