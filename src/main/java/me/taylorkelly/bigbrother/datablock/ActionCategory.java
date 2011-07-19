@@ -57,5 +57,10 @@ public enum ActionCategory {
     /**
      * Everything else
      */
-    MISC
+    MISC,
+    
+    /**
+     * Hidden from the history (for internal events, like Heartbeats)
+     */
+    HIDDEN
 }

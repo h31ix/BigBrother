@@ -79,7 +79,7 @@ public class Heartbeat extends BBAction {
      */
     @Override
     public ActionCategory getCategory() {
-        return ActionCategory.COMMUNICATION;
+        return ActionCategory.HIDDEN;
     }
 
     /* (non-Javadoc)
@@ -91,4 +91,8 @@ public class Heartbeat extends BBAction {
         return "Keeps the connection to the database alive, also provides useful statistics!";
     }
     
+    @Override
+    public String toString() {
+        return "[HEARTBEAT]";
+    }
 }

@@ -226,7 +226,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
             boolean first=true;
             for (int actID : allowedActions) {
                 if(!first) {
-                    o+=",";
+                    o+=", ";
                 }
                 first=false;
                 o+=ActionProvider.findActionName(actID);
