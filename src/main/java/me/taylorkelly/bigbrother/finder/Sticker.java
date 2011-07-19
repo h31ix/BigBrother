@@ -1,7 +1,6 @@
 package me.taylorkelly.bigbrother.finder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BigBrother;
