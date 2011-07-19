@@ -75,6 +75,9 @@ public class ActionSender {
             BBLogging.debug(statementSql);
             ps = BBDB.prepare(statementSql);
             for (Action block : collection) {
+                if(BBSettings.worldExclusionList.contains(block.world))
+                    continue;
+                
                 ps.setLong(1, block.date);
                 ps.setInt(2, block.player.getID());
                 ps.setInt(3, ActionProvider.getActionID(block));

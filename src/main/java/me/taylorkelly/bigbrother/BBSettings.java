@@ -84,6 +84,7 @@ public class BBSettings {
     private static ArrayList<String> seenList;
     private static ArrayList<Integer> blockExclusionList;
     private static ArrayList<Integer> gnomes; 
+    public static List<String> worldExclusionList = new ArrayList<String>();
     public static int rollbacksPerTick;
     //private static BigBrother plugin;
     public static File dataFolder;
@@ -149,6 +150,8 @@ public class BBSettings {
         yml.save();
     }
 
+
+
     private static void loadYaml(File yamlfile) {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
@@ -174,7 +177,6 @@ public class BBSettings {
             yml.removeProperty("database.mysql.prefix"); 
         }
         BBDB.initSettings(yml);
-        //loadWatchSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");
         // Dodge NPE reported by Mineral (and set a default)
@@ -191,6 +193,14 @@ public class BBSettings {
                 blockExclusionList.add(id);
             }
         }
+        
+        List<String> excludedWorlds = yml.getStringList("general.excluded-worlds",new ArrayList<String>());
+        if(excludedWorlds==null) {
+            yml.setProperty("general.excluded-worlds", new ArrayList<String>());
+        } else {
+            worldExclusionList.addAll(excludedWorlds);
+        }
+        
         storeOwners=yml.getBoolean("general.store-owners",storeOwners);
         stickItem = yml.getInt("general.stick-item", 280);// "The item used for /bb stick");
         restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
