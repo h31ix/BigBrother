@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 public class HistoryCommand implements CommandExecutor {
     
     private BigBrother plugin;
+    private int ACTIONSPERPAGE=5;
     
     public HistoryCommand(BigBrother plugin) {
         this.plugin=plugin;
@@ -49,19 +50,29 @@ public class HistoryCommand implements CommandExecutor {
         if(BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
+            int page=1;
             for(String arg : args) {
                 if(arg.startsWith("a:")) {
                     acts=ActionProvider.parseActionSwitch(acts, arg.substring(2));
+                } else if(arg.startsWith("pg:")) {
+                    page=Integer.parseInt(arg.substring(3));
                 } else
                     name = arg;
             }
+            
             ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
-
+            int maxpages = history.size()/ACTIONSPERPAGE;
+            sendHeader(player,page,maxpages,history.size());
+            List<Action> trimmedHistory = new ArrayList<Action>();
+            
+            trimmedHistory.addAll(history.subList((page*ACTIONSPERPAGE), ((page+1)*ACTIONSPERPAGE)-1));
+            
             if (history.isEmpty()) {
-                player.sendMessage(ChatColor.RED + "No edits on this block");
+                player.sendMessage(ChatColor.RED + "No edits found");
+                return true;
             } else {
-                player.sendMessage(ChatColor.AQUA.toString() + history.size() + " edits on this block");
-                for (Action dataBlock : history) {
+                player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this block");
+                for (Action dataBlock : trimmedHistory) {
                     Calendar cal = Calendar.getInstance();
                     String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
                     SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -79,10 +90,33 @@ public class HistoryCommand implements CommandExecutor {
                             player.sendMessage(lines[l]);
                     }
                 }
+                return true;
             }
         } else {
             player.sendMessage(BigBrother.permissionDenied);
+            return true;
         }
-        return false;
+    }
+
+    /**
+     * @param player 
+     * @param page
+     * @param maxpages
+     * @param size
+     */
+    private void sendHeader(Player player, int page, int maxpages, int size) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BigBrother.premessage+" Player history (p. ");
+        sb.append(ChatColor.WHITE);
+        sb.append(page);
+        sb.append(ChatColor.AQUA);
+        sb.append("/");
+        sb.append(ChatColor.WHITE);
+        sb.append(maxpages);
+        sb.append(ChatColor.AQUA);
+        sb.append(", ");
+        sb.append(size);
+        sb.append("records)");
+        player.sendMessage(sb.toString());
     }
 }
