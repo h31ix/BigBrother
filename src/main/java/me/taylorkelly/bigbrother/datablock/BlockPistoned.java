@@ -21,6 +21,7 @@ package me.taylorkelly.bigbrother.datablock;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -149,4 +150,8 @@ public class BlockPistoned extends BBAction {
         return new BlockPistoned(pi,world,x,y,z,type,data);
     }
     
+    
+    public String toString() {
+        return String.format(" - A piston moved a "+Material.getMaterial(type).name()+".");
+    }
 }
