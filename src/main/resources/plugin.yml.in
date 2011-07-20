@@ -7,3 +7,16 @@ commands:
   bb:
     description: All of the BigBrother commands
     usage: Command unrecognised by BigBrother. See documentation or use /bb help.
+permissions:
+    bb.admin.info:
+        description: User can use /bb log, /bb here, etc.
+        default: op
+    bb.admin.rollback:
+        description: User can perform rollbacks.
+        default: op
+    bb.admin.watch:
+        description: User can modify the list of watched users.
+        default: op
+    bb.admin.cleanse:
+        description: User can perform database trimming operations.
+        default: op
