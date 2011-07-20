@@ -216,14 +216,11 @@ public abstract class RollbackPreparedStatement {
     public String undoStatement(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" "+BBDataTable.getInstance().getTableName() + " AS bbdata");
-        statement.append(", "+BBUsersTable.getInstance().getTableName()+" AS usr ");
-
         if(BBDB.usingDBMS(DBMS.H2))
         	statement.append(" SET rbacked = false");
         else
         	statement.append(" SET rbacked = '0'");
         statement.append(" WHERE ");
-        statement.append(" bbdata.player = usr.id AND ");
         statement.append(getActionString(rollback));
         if (!rollback.rollbackAll) {
             statement.append(" AND ");
