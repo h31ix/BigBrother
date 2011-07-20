@@ -8,6 +8,14 @@ commands:
     description: All of the BigBrother commands
     usage: Command unrecognised by BigBrother. See documentation or use /bb help.
 permissions:
+    bb.*:
+        default: op
+        description: All BigBrother Permission nodes.
+        children:
+            bb.admin.info: true
+            bb.admin.rollback: true
+            bb.admin.watch: true
+            bb.admin.cleanse: true
     bb.admin.info:
         description: User can use /bb log, /bb here, etc.
         default: op
