@@ -82,19 +82,24 @@ public class BBActionProvider extends ActionProvider {
     @SuppressWarnings("unchecked")
     @Override
     public Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+        // Explosions are in their own package.
+        String _package = "me.taylorkelly.bigbrother.datablock.";
+        if(actionName.endsWith("Explosion"))
+            _package+="explosions.";
+        
         //And here, we use the magic of reflection.
         Class<? extends BBAction> c=null;
         try {
-            c=(Class<? extends BBAction>) Class.forName("me.taylorkelly.bigbrother.datablock."+actionName);
+            c=(Class<? extends BBAction>) Class.forName(_package+actionName);
         } catch (ClassNotFoundException e) {
-            BBLogging.severe("Cannot find class me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
+            BBLogging.severe("Cannot find class "+_package+actionName+": ",e);
             return null;
         }
         try {
             Method meth = c.getMethod("getBBDataBlock", BBPlayerInfo.class,String.class, int.class, int.class, int.class, int.class,String.class);
             return (Action) meth.invoke(null,player, world,  x,  y,  z,  type,  data);
         } catch (Exception e) {
-            BBLogging.severe("Error constructing me.taylorkelly.bigbrother.datablock."+actionName+": ",e);
+            BBLogging.severe("Error constructing "+_package+actionName+": ",e);
         }
         return null;
     }
