@@ -111,7 +111,7 @@ public class Cleanser {
                 return;
             String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
             
-            String words = String.format("Removed %d old records because of age in %s.", cleanedSoFarAge, timespent);
+            String words = String.format("Removed %d records older than %s in %s.", cleanedSoFarAge, Time.formatDuration(BBSettings.cleanseAge), timespent);
             if (player == null) {
                 BBLogging.info(words);
             } else {
