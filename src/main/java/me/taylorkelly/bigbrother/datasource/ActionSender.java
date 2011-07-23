@@ -55,7 +55,6 @@ public class ActionSender {
         
         // Send a heartbeat after sending blocks.
         Heartbeat hb = new Heartbeat(plugin);
-        hb.player = BBPlayerInfo.ENVIRONMENT;
         hb.send();
             
         //H2 fix...

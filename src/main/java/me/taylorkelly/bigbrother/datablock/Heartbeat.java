@@ -18,6 +18,7 @@
 
 package me.taylorkelly.bigbrother.datablock;
 
+import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BigBrother;
 
 import org.bukkit.Server;
@@ -36,6 +37,8 @@ public class Heartbeat extends BBAction {
      * 
      */
     public Heartbeat(BigBrother plugin) {
+        // Populate fields
+        super(BBPlayerInfo.ENVIRONMENT, "BB_GLOBAL", 0, 0, 0, 0, "");
         StringBuilder sb = new StringBuilder();
         sb.append(System.currentTimeMillis());
         data=sb.toString();
@@ -45,10 +48,9 @@ public class Heartbeat extends BBAction {
     }
 
     /**
-     * 
+     * For ActionProvider registration only.
      */
     public Heartbeat() {
-        // TODO Auto-generated constructor stub
     }
 
     /* (non-Javadoc)
