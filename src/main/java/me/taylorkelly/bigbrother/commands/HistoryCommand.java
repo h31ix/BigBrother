@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 public class HistoryCommand implements CommandExecutor {
     
     private BigBrother plugin;
-    private int ACTIONSPERPAGE=5;
+    private int ACTIONSPERPAGE=6;
     
     public HistoryCommand(BigBrother plugin) {
         this.plugin=plugin;
@@ -65,7 +65,9 @@ public class HistoryCommand implements CommandExecutor {
             sendHeader(player,page,maxpages,history.size());
             List<Action> trimmedHistory = new ArrayList<Action>();
             
-            trimmedHistory.addAll(history.subList((page*ACTIONSPERPAGE), ((page+1)*ACTIONSPERPAGE)-1));
+            int from = (page*ACTIONSPERPAGE);
+            int to = ((page+1)*ACTIONSPERPAGE)-1;
+            trimmedHistory.addAll(history.subList(from, Math.max(to,history.size())));
             
             if (history.isEmpty()) {
                 player.sendMessage(ChatColor.RED + "No edits found");
