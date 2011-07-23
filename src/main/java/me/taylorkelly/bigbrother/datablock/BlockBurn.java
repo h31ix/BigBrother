@@ -12,11 +12,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public class BlockBurn extends BBAction {
-
+    
     private ArrayList<BBAction> bystanders;
     
-    public BlockBurn(){super();}
-
+    public BlockBurn() {
+        super();
+    }
+    
     public BlockBurn(String player, Block block, String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
@@ -25,7 +27,7 @@ public class BlockBurn extends BBAction {
         signCheck(player, block);
         checkGnomesLivingOnTop(player, block);
     }
-
+    
     public BlockBurn(Block block, String world) {
         super(ENVIRONMENT, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
@@ -34,7 +36,7 @@ public class BlockBurn extends BBAction {
         signCheck(block);
         checkGnomesLivingOnTop(block);
     }
-
+    
     @Override
     public void send() {
         for (BBAction block : bystanders) {
@@ -42,43 +44,41 @@ public class BlockBurn extends BBAction {
         }
         super.send();
     }
-
+    
     public void rollback(World wld) {
         if (type != 51 || BBSettings.restoreFire) {
-            World currWorld = wld;//server.getWorld(world);
+            World currWorld = wld;// server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
-            try
-            {
-                byte blockData = Byte.valueOf(data);
-                currWorld.getBlockAt(x, y, z).setTypeId(type);
-                currWorld.getBlockAt(x, y, z).setData(blockData);
+            byte blockData = 0;
+            try {
+                blockData = Byte.valueOf(data);
+            } catch (NumberFormatException e) {
+                BBLogging.debug("Erroneous BlockBurn data field:  Data value is unparsable.  Your ActionID datatable table may have become scrambled and may not match up with legacy actionIDs.  Defaulting to 0.");
             }
-            catch(NumberFormatException e) {
-                BBLogging.severe("Erroneous BlockBurn action:  Data value is unparsable.  Your ActionID datatable table may have become scrambled and may not match up with legacy actionIDs.  You may need to rebuild your database.");
-                BBLogging.severe("SKIPPED!");
-            }
+            currWorld.getBlockAt(x, y, z).setTypeId(type);
+            currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
-
+    
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
-
+    
     public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new BlockBurn(pi, world, x, y, z, type, data);
     }
-
+    
     private BlockBurn(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
+    
     /**
      * @param findOwner
      * @param block
@@ -92,19 +92,19 @@ public class BlockBurn extends BBAction {
         signCheck(player.getName(), block);
         checkGnomesLivingOnTop(player.getName(), block);
     }
-
+    
     private void torchCheck(String player, Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50);
         torchTypes.add(75);
         torchTypes.add(76);
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (torchTypes.contains(torchTop.getTypeId()) && torchTop.getData() == 5) {
             bystanders.add(new BrokenBlock(player, torchTop, world));
         }
@@ -125,12 +125,12 @@ public class BlockBurn extends BBAction {
             bystanders.add(new BrokenBlock(player, torchWest, world));
         }
     }
-
+    
     private void surroundingSignChecks(String player, Block block) {
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block top = block.getWorld().getBlockAt(x, y + 1, z);
         if (top.getTypeId() == 63) {
             bystanders.add(new BrokenBlock(player, top, world));
@@ -152,14 +152,14 @@ public class BlockBurn extends BBAction {
             bystanders.add(new BrokenBlock(player, west, world));
         }
     }
-
+    
     private void signCheck(String player, Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             bystanders.add(new SignDestroyed(player, block.getTypeId(), block.getData(), sign, world));
         }
     }
-
+    
     private void checkGnomesLivingOnTop(String player, Block block) {
         ArrayList<Integer> gnomes = new ArrayList<Integer>();
         gnomes.add(6); // Sapling
@@ -178,29 +178,29 @@ public class BlockBurn extends BBAction {
         gnomes.add(78); // Snow
         gnomes.add(81); // Cactus
         gnomes.add(83); // Reeds
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
         Block mrGnome = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (gnomes.contains(mrGnome.getTypeId())) {
             bystanders.add(new BrokenBlock(player, mrGnome, world));
         }
     }
-
+    
     private void torchCheck(Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50);
         torchTypes.add(75);
         torchTypes.add(76);
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (torchTypes.contains(torchTop.getTypeId()) && torchTop.getData() == 5) {
             bystanders.add(new BlockBurn(torchTop, world));
         }
@@ -221,12 +221,12 @@ public class BlockBurn extends BBAction {
             bystanders.add(new BlockBurn(torchWest, world));
         }
     }
-
+    
     private void surroundingSignChecks(Block block) {
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block top = block.getWorld().getBlockAt(x, y + 1, z);
         if (top.getTypeId() == 63) {
             bystanders.add(new BlockBurn(top, world));
@@ -248,14 +248,14 @@ public class BlockBurn extends BBAction {
             bystanders.add(new BlockBurn(west, world));
         }
     }
-
+    
     private void signCheck(Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             bystanders.add(new DestroySignText(player, sign, world));
         }
     }
-
+    
     private void checkGnomesLivingOnTop(Block block) {
         ArrayList<Integer> gnomes = new ArrayList<Integer>();
         gnomes.add(6); // Sapling
@@ -274,12 +274,12 @@ public class BlockBurn extends BBAction {
         gnomes.add(78); // Snow
         gnomes.add(81); // Cactus
         gnomes.add(83); // Reeds
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
         Block mrGnome = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (gnomes.contains(mrGnome.getTypeId())) {
             bystanders.add(new BlockBurn(mrGnome, world));
         }
@@ -289,16 +289,20 @@ public class BlockBurn extends BBAction {
     public String toString() {
         return "burnt up a block";
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
@@ -306,8 +310,10 @@ public class BlockBurn extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override
