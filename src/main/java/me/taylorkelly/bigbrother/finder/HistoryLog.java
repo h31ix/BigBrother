@@ -25,9 +25,9 @@ public class HistoryLog extends StickMode {
     @Override
     public void initialize(Player player) {
         player.sendMessage(BigBrother.premessage + "Every log in your inventory (and any logs you pick up) are now History Logs!");
-        player.sendMessage(BigBrother.premessage + "To read the history of a solid block (e.g. Dirt), punch the block in question with your History Log.");
-        player.sendMessage(BigBrother.premessage + "To read the history of a non-solid block (e.g. water or air), place the History Log within the block being inspected.");
-        player.sendMessage(BigBrother.premessage + "When you're done, simply type "+ChatColor.WHITE+"/bb done"+ChatColor.AQUA+" to return your logs to their normal behavior.");
+        player.sendMessage(ChatColor.AQUA+"To read the history of a solid block (e.g. Dirt), punch (left-click) it with your History Log.");
+        player.sendMessage(ChatColor.AQUA+"To read the history of a non-solid block (e.g. water or air), replace it (right-click) with your History Log");
+        player.sendMessage(ChatColor.AQUA+"When you're done, simply type "+ChatColor.WHITE+"/bb done"+ChatColor.AQUA+" to return your logs to their normal behavior.");
     }
 
     @Override
