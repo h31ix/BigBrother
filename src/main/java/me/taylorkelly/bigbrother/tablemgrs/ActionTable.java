@@ -19,7 +19,6 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
 import me.taylorkelly.bigbrother.ActionProvider;
-import me.taylorkelly.bigbrother.BBActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;

@@ -4,6 +4,7 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 
 public abstract class BBAction extends Action {
     
+    
     /**
      * @param player
      * @param action
@@ -14,20 +15,21 @@ public abstract class BBAction extends Action {
      * @param type
      * @param data
      */
-    public BBAction(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public BBAction(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
-    public BBAction(String player, String world, int x, int y, int z, int type, String data) {
-        super(player,world,x,y,z,type,data);
+    
+    public BBAction(String player, String world, int x, int y, int z, int type,
+            String data) {
+        super(player, world, x, y, z, type, data);
     }
+    
     /**
      * 
      */
-    public BBAction() {
-        // TODO Auto-generated constructor stub
-    }
-
+    public BBAction() {}
+    
     public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return null;
     }
