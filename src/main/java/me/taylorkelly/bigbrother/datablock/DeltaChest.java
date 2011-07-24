@@ -97,8 +97,8 @@ public class DeltaChest extends BBAction {
         public int Slot;
         public int ID=0;
         public int Amount=0;
-        public short Damage=0;
-        public byte Data=0;
+        public int Damage=0;
+        public int Data=0;
         public DeltaType Type=DeltaType.NO_CHANGE;
         private ItemStack newStack;
         private ItemStack oldStack;
@@ -290,7 +290,7 @@ public class DeltaChest extends BBAction {
                     else
                     {
                     	stack.setAmount(stack.getAmount()-diff[i].Amount);
-                    	stack.setDurability(diff[i].Damage);
+                    	stack.setDurability((short) diff[i].Damage);
                     }
                     inv[i]=stack;
                     break;
