@@ -74,7 +74,7 @@ public class SignDestroyed extends BBAction {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             for (int i = 1; i < lines.length+1; i++) {
-                sign.setLine(i, lines[i]);
+                sign.setLine(i-1, lines[i]);
             }
         } else {
             BBLogging.warning("Error when restoring sign: Block is currently a "+block.getState().getClass().getName()+"!");
