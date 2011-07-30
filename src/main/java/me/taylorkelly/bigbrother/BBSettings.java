@@ -41,31 +41,6 @@ import com.sk89q.worldedit.blocks.ItemType;
 public class BBSettings {
 
     public static List<String> watchedActions = new ArrayList<String>();
-    /*
-    public static boolean blockBreak;
-    public static boolean blockPlace;
-    public static boolean teleport;
-    public static boolean chestChanges;
-    public static boolean commands;
-    public static boolean chat;
-    public static boolean disconnect;
-    public static boolean login;
-    public static boolean doorOpen;
-    public static boolean buttonPress;
-    public static boolean leverSwitch;
-    public static boolean leafDrops;
-    public static boolean fire;
-    public static boolean tntExplosions;
-    public static boolean creeperExplosions;
-    public static boolean miscExplosions;
-    public static boolean ipPlayer;
-    public static boolean lavaFlow;
-    public static boolean waterFlow;
-    public static boolean fireSpread;
-    public static boolean pickupItem;
-    public static boolean dropItem;
-    */
-
 
     public static boolean logPlayerIPs=true;
     public static boolean libraryAutoDownload;
@@ -76,9 +51,8 @@ public class BBSettings {
     public static int defaultSearchRadius = 2; // 2 blocks
     public static int sendDelay = 4; // 4s
     public static int stickItem = 280; // A stick
+    public static int logItem = Material.LOG.getId(); // A stick
     public static long cleanseAge = 604800; // 7d
-    // Tested with this value, 10000rows = 1-2s on a
-    // Pentium 4 MySQL server with 1GB RAM and a SATA MySQL HDD
     public static long deletesPerCleansing = 20000L;
     private static ArrayList<String> watchList;
     private static ArrayList<String> seenList;
@@ -89,6 +63,8 @@ public class BBSettings {
     //private static BigBrother plugin;
     public static File dataFolder;
     public static boolean storeOwners=true;
+
+    public static List<String> censoredCommands;
 
     public static void initialize(BigBrother plg, File dataFolder) {
         BBSettings.dataFolder=dataFolder;
@@ -194,6 +170,19 @@ public class BBSettings {
             }
         }
         
+        
+        censoredCommands = new ArrayList<String>();
+        censoredCommands.add("login");          // xAuth
+        censoredCommands.add("l");              // xAuth
+        censoredCommands.add("register");       // xAuth
+        censoredCommands.add("changepw");       // xAuth
+        censoredCommands.add("changepass");     // xAuth
+        censoredCommands.add("cpw");            // xAuth
+        censoredCommands.add("changepassword"); // xAuth
+        censoredCommands.add("xauth");          // xAuth
+        censoredCommands.add("login");          // ?
+        censoredCommands = yml.getStringList("general.censored-commands", censoredCommands);
+
         List<String> excludedWorlds = yml.getStringList("general.excluded-worlds",new ArrayList<String>());
         if(excludedWorlds==null) {
             yml.setProperty("general.excluded-worlds", new ArrayList<String>());
@@ -213,32 +202,6 @@ public class BBSettings {
         TNTLogger.THRESHOLD = 10.0;//yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
         yml.save();
     }
-/*
-    private static void loadWatchSettings(BetterConfig watched) {
-        blockBreak = watched.getBoolean("watched.blocks.block-break", true);// "Watch when players break blocks");
-        blockPlace = watched.getBoolean("watched.blocks.block-place", true);// "Watch when players place blocks");
-        teleport = watched.getBoolean("watched.player.teleport", true);// "Watch when players teleport around");
-        chestChanges = watched.getBoolean("watched.blocks.chest-changes", true);// "Watch when players add/remove items from chests");
-        commands = watched.getBoolean("watched.chat.commands", true);// "Watch for all player commands");
-        chat = watched.getBoolean("watched.chat.chat", true);// "Watch for player chat");
-        login = watched.getBoolean("watched.player.login", true);// "Watch for player logins");
-        disconnect = watched.getBoolean("watched.player.disconnect", true);// "Watch for player disconnects");
-        doorOpen = watched.getBoolean("watched.misc.door-open", false);// "Watch for when player opens doors");
-        buttonPress = watched.getBoolean("watched.misc.button-press", false);// "Watch for when player pushes buttons");
-        leverSwitch = watched.getBoolean("watched.misc.lever-switch", false);// "Watch for when player switches levers");
-        fire = watched.getBoolean("watched.misc.flint-logging", true);// "Watch for when players start fires");
-        leafDrops = watched.getBoolean("watched.environment.leaf-decay", false);// "Watch for when leaves drop");
-        tntExplosions = watched.getBoolean("watched.explosions.tnt", true);// "Watch for when TNT explodes");
-        creeperExplosions = watched.getBoolean("watched.explosions.creeper", true);// "Watch for when Creepers explodes");
-        miscExplosions = watched.getBoolean("watched.explosions.misc", true);// "Watch for miscellaneous explosions");
-        
-        dropItem = watched.getBoolean("watched.player.drop-item", false);
-        pickupItem = watched.getBoolean("watched.player.pickup-item", false);
-        lavaFlow = watched.getBoolean("watched.environment.lava-flow", true);
-        waterFlow = watched.getBoolean("watched.environment.water-flow", true);
-        fireSpread = watched.getBoolean("watched.environment.fire-spread", true);
-    }
-    */
     
     /**
      * @todo Move to SQL tables.
