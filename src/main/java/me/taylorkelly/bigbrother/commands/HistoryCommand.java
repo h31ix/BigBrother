@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 public class HistoryCommand implements CommandExecutor {
     
     private BigBrother plugin;
-    private int ACTIONSPERPAGE=6;
+    private int ACTIONSPERPAGE=5;
     
     public HistoryCommand(BigBrother plugin) {
         this.plugin=plugin;
@@ -65,14 +65,22 @@ public class HistoryCommand implements CommandExecutor {
             sendHeader(player,page,maxpages,history.size());
             List<Action> trimmedHistory = new ArrayList<Action>();
             
-            int from = (page*ACTIONSPERPAGE);
-            int to = ((page+1)*ACTIONSPERPAGE)-1;
-            trimmedHistory.addAll(history.subList(from, Math.max(to,history.size())));
+            int from = ((page-1)*ACTIONSPERPAGE);
+            
+            // Sanity check to make sure we aren't going off into space...
+            if(from>history.size()-1) {
+                player.sendMessage("ERROR: Page out of range");
+                return true;
+            }
+            
+            int to = Math.min((page*ACTIONSPERPAGE)-1,history.size()-1);
             
             if (history.isEmpty()) {
                 player.sendMessage(ChatColor.RED + "No edits found");
                 return true;
             } else {
+                trimmedHistory.addAll(history.subList(from, to));
+                
                 for (Action dataBlock : trimmedHistory) {
                     Calendar cal = Calendar.getInstance();
                     String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
