@@ -129,7 +129,7 @@ public class DeltaChest extends BBAction {
                 }
                 Amount=Integer.valueOf(dchunks[2]);
                 Damage=Short.valueOf(dchunks[3]);
-                Data=Byte.valueOf(dchunks[4]);
+                Data=Integer.parseInt(dchunks[4]);
             }
         }
         
@@ -137,7 +137,7 @@ public class DeltaChest extends BBAction {
             ItemStack stack=new ItemStack(Integer.valueOf(dchunks[i]));
             stack.setAmount(Integer.valueOf(dchunks[i++]));
             stack.setDurability(Short.valueOf(dchunks[i++]));
-            stack.setData(new MaterialData(Byte.valueOf(dchunks[i++])));
+            stack.setData(new MaterialData(Integer.valueOf(dchunks[i++])));
             return stack;
         }
         
