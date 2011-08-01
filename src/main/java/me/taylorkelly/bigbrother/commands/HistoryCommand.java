@@ -73,7 +73,6 @@ public class HistoryCommand implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "No edits found");
                 return true;
             } else {
-                player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this block");
                 for (Action dataBlock : trimmedHistory) {
                     Calendar cal = Calendar.getInstance();
                     String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
@@ -92,6 +91,7 @@ public class HistoryCommand implements CommandExecutor {
                             player.sendMessage(lines[l]);
                     }
                 }
+                player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this page (out of "+history.size()+")");
                 return true;
             }
         } else {
