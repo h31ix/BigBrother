@@ -14,12 +14,12 @@ import org.bukkit.event.entity.EntityListener;
 public class BBEntityListener extends EntityListener {
     //private BigBrother plugin; // Not used - N3X
     //private List<World> worlds; // Not used - N3X
-
+    
     public BBEntityListener(BigBrother bigBrother) {
         //this.plugin = bigBrother;
         //this.worlds = plugin.getServer().getWorlds();
     }
-
+    
     @Override
     public void onEntityExplode(EntityExplodeEvent event) {
         // Err... why is this null when it's a TNT?

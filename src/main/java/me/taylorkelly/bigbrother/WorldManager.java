@@ -24,17 +24,16 @@ import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 public class WorldManager {
     private HashMap<String, Integer> worldMap;
-
+    
     public WorldManager() {
         worldMap = BBWorldsTable.getInstance().getWorlds();
     }
-
+    
     /**
-     * Returns the BB index of the world to use (starts at 0 and goes up).
-     * If BB has seen it before, it will use the key that it already had paired.
-     * Otherwise it will designate a new key, and save that key to bbworlds for
-     * later usage
-     * @param world The name of the world
+     * Returns the BB index of the world to use (starts at 0 and goes up). If BB has seen it before, it will use the key that it already had paired. Otherwise it will designate a new key, and save that key to bbworlds for later usage
+     * 
+     * @param world
+     *            The name of the world
      * @return The index of the world
      */
     public int getWorld(String world) {
@@ -50,11 +49,12 @@ public class WorldManager {
             return nextKey;
         }
     }
-
+    
     /**
-     * Generic max finder for a collection. Only works with positive numbers
-     * (which we'd be dealing with)
-     * @param values Collection of values
+     * Generic max finder for a collection. Only works with positive numbers (which we'd be dealing with)
+     * 
+     * @param values
+     *            Collection of values
      * @return The max of those numbers (or -1 if it's empty)
      */
     public static int getMax(Collection<Integer> values) {
@@ -66,8 +66,8 @@ public class WorldManager {
         }
         return max;
     }
-
+    
     private boolean saveWorld(String world, int index) {
-    	return BBWorldsTable.getInstance().insertWorld(index, world);
+        return BBWorldsTable.getInstance().insertWorld(index, world);
     }
 }

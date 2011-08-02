@@ -5,9 +5,10 @@ import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 public abstract class DBTable {
-
+    
     /**
      * Get the name of the table, minus prefix.
+     * 
      * @return
      */
     protected abstract String getActualTableName();
@@ -19,6 +20,7 @@ public abstract class DBTable {
     
     /**
      * Specify the CREATE TABLE syntax here.
+     * 
      * @return
      */
     public abstract String getCreateSyntax();
@@ -30,24 +32,22 @@ public abstract class DBTable {
     public boolean tableExists() {
         return BBDB.tableExists(getTableName());
     }
-
+    
     public void createTable() {
         BBDB.executeUpdate(getCreateSyntax());
     }
-
+    
     public boolean executeUpdate(String desc, String sql, Object[] args) {
         return BBDB.tryUpdate(sql, args);
     }
     
-
-
     public boolean executeUpdate(String desc, String sql) {
-        return executeUpdate(desc,sql,new Object[]{});
+        return executeUpdate(desc, sql, new Object[] {});
     }
     
     public void drop() {
-    	BBLogging.info("Dropping table "+getTableName());
-    	BBDB.executeUpdate("DROP TABLE IF EXISTS "+((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
-    	createTable();
+        BBLogging.info("Dropping table " + getTableName());
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + ((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
+        createTable();
     }
 }

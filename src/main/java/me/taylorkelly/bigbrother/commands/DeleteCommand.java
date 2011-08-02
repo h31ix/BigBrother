@@ -16,8 +16,9 @@ public class DeleteCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.rollback((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.rollback((Player) player)) {
             if (split.length == 1) {
                 if (RollbackConfirmation.hasRI((Player) player)) {
                     RollbackConfirmation.deleteRI((Player) player);

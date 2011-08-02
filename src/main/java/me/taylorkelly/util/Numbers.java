@@ -5,7 +5,7 @@
 package me.taylorkelly.util;
 
 public class Numbers {
-
+    
     public static boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
@@ -14,7 +14,7 @@ public class Numbers {
             return false;
         }
     }
-
+    
     public static boolean isNumber(String string) {
         try {
             Double.parseDouble(string);

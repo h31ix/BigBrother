@@ -39,10 +39,10 @@ import org.bukkit.Server;
 import com.sk89q.worldedit.blocks.ItemType;
 
 public class BBSettings {
-
+    
     public static List<String> watchedActions = new ArrayList<String>();
-
-    public static boolean logPlayerIPs=true;
+    
+    public static boolean logPlayerIPs = true;
     public static boolean libraryAutoDownload;
     public static boolean debugMode;
     public static boolean restoreFire = false;
@@ -57,17 +57,17 @@ public class BBSettings {
     private static ArrayList<String> watchList;
     private static ArrayList<String> seenList;
     private static ArrayList<Integer> blockExclusionList;
-    private static ArrayList<Integer> gnomes; 
+    private static ArrayList<Integer> gnomes;
     public static List<String> worldExclusionList = new ArrayList<String>();
     public static int rollbacksPerTick;
     //private static BigBrother plugin;
     public static File dataFolder;
-    public static boolean storeOwners=true;
-
+    public static boolean storeOwners = true;
+    
     public static List<String> censoredCommands;
-
+    
     public static void initialize(BigBrother plg, File dataFolder) {
-        BBSettings.dataFolder=dataFolder;
+        BBSettings.dataFolder = dataFolder;
         //BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
         seenList = new ArrayList<String>();
@@ -95,12 +95,12 @@ public class BBSettings {
         gnomes.add(Material.DIODE_BLOCK_OFF.getId());
         //gnomes.add(Material.FENCE.getId());
         gnomes.add(Material.DEAD_BUSH.getId());
-
+        
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-        final File exampleYml = new File(dataFolder,"BigBrother.example.yml");
-        if(!exampleYml.exists()) {
+        final File exampleYml = new File(dataFolder, "BigBrother.example.yml");
+        if (!exampleYml.exists()) {
             saveDefaultConfig(exampleYml);
         }
         final File yml = new File(dataFolder, "BigBrother.yml");
@@ -108,7 +108,7 @@ public class BBSettings {
         loadLists(dataFolder);
         loadYaml(yml);
         BBLogging.debug("Loaded Settings");
-
+        
     }
     
     public static void loadPostponed() {
@@ -116,7 +116,7 @@ public class BBSettings {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
         // If the file's not there, don't load it
-        if(yamlfile.exists())
+        if (yamlfile.exists())
             yml.load();
         
         ActionProvider.loadDisabled(yml);
@@ -125,23 +125,21 @@ public class BBSettings {
         
         yml.save();
     }
-
-
-
+    
     private static void loadYaml(File yamlfile) {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
         // If the file's not there, don't load it
-        if(yamlfile.exists())
+        if (yamlfile.exists())
             yml.load();
         
         logPlayerIPs = yml.getBoolean("general.log-ips", true);
         
         // Import old settings into new config defaults and remove the old versions.
-        if(yml.getProperty("database.mysql.username")!=null) {
+        if (yml.getProperty("database.mysql.username") != null) {
             BBDB.username = yml.getString("database.mysql.username", BBDB.username);
             yml.removeProperty("database.mysql.username");
-            BBDB.password= yml.getString("database.mysql.password", BBDB.password);
+            BBDB.password = yml.getString("database.mysql.password", BBDB.password);
             yml.removeProperty("database.mysql.password");
             BBDB.hostname = yml.getString("database.mysql.hostname", BBDB.hostname);
             yml.removeProperty("database.mysql.hostname");
@@ -150,47 +148,46 @@ public class BBSettings {
             BBDB.port = yml.getInt("database.mysql.port", BBDB.port);
             yml.removeProperty("database.mysql.port");
             BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
-            yml.removeProperty("database.mysql.prefix"); 
+            yml.removeProperty("database.mysql.prefix");
         }
         BBDB.initSettings(yml);
         
         List<Object> excluded = yml.getList("general.excluded-blocks");
         // Dodge NPE reported by Mineral (and set a default)
-        if(excluded==null) {
+        if (excluded == null) {
             yml.setProperty("general.excluded-blocks", blockExclusionList);
         } else {
             for (Object o : excluded) {
                 int id = 0;
-                if(o instanceof Integer)
-                    id = (int)(Integer)o;
-                else if(o instanceof String) {
-                    id = ItemType.lookup((String)o).getID();
+                if (o instanceof Integer)
+                    id = (int) (Integer) o;
+                else if (o instanceof String) {
+                    id = ItemType.lookup((String) o).getID();
                 }
                 blockExclusionList.add(id);
             }
         }
         
-        
         censoredCommands = new ArrayList<String>();
-        censoredCommands.add("login");          // xAuth
-        censoredCommands.add("l");              // xAuth
-        censoredCommands.add("register");       // xAuth
-        censoredCommands.add("changepw");       // xAuth
-        censoredCommands.add("changepass");     // xAuth
-        censoredCommands.add("cpw");            // xAuth
+        censoredCommands.add("login"); // xAuth
+        censoredCommands.add("l"); // xAuth
+        censoredCommands.add("register"); // xAuth
+        censoredCommands.add("changepw"); // xAuth
+        censoredCommands.add("changepass"); // xAuth
+        censoredCommands.add("cpw"); // xAuth
         censoredCommands.add("changepassword"); // xAuth
-        censoredCommands.add("xauth");          // xAuth
-        censoredCommands.add("login");          // ?
+        censoredCommands.add("xauth"); // xAuth
+        censoredCommands.add("login"); // ?
         censoredCommands = yml.getStringList("general.censored-commands", censoredCommands);
-
-        List<String> excludedWorlds = yml.getStringList("general.excluded-worlds",new ArrayList<String>());
-        if(excludedWorlds==null) {
+        
+        List<String> excludedWorlds = yml.getStringList("general.excluded-worlds", new ArrayList<String>());
+        if (excludedWorlds == null) {
             yml.setProperty("general.excluded-worlds", new ArrayList<String>());
         } else {
             worldExclusionList.addAll(excludedWorlds);
         }
         
-        storeOwners=yml.getBoolean("general.store-owners",storeOwners);
+        storeOwners = yml.getBoolean("general.store-owners", storeOwners);
         stickItem = yml.getInt("general.stick-item", 280);// "The item used for /bb stick");
         restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
         autoWatch = yml.getBoolean("general.auto-watch", true);// "Automatically start watching players");
@@ -229,7 +226,7 @@ public class BBSettings {
         } catch (final IOException e) {
             BBLogging.severe("IO Exception with file " + file.getName());
         }
-
+        
         file = new File(dataFolder, "SeenPlayers.txt");
         try {
             if (!file.exists()) {
@@ -251,21 +248,22 @@ public class BBSettings {
         } catch (final IOException e) {
             BBLogging.severe("IO Exception with file " + file.getName());
         }
-
+        
     }
-
+    
     public static Watcher getWatcher(Server server, File dataFolder) {
         return new Watcher(server);
     }
-
+    
     public enum DBMS {
-        H2, 
+        H2,
         MYSQL,
         POSTGRES,
     }
-
+    
     /**
      * Replace placeholder with the table prefix.
+     * 
      * @param sql
      * @param placeholder
      * @return
@@ -276,6 +274,7 @@ public class BBSettings {
     
     /**
      * Check if a blocktype is being ignored.
+     * 
      * @param type
      * @return
      */
@@ -283,25 +282,26 @@ public class BBSettings {
         return blockExclusionList.contains(type);
     }
     
-
     /**
      * Save example to file.
-     * @param f dataFolder.
+     * 
+     * @param f
+     *            dataFolder.
      */
     private static void saveDefaultConfig(File f) {
-        try{
+        try {
             InputStream is = BigBrother.class.getResourceAsStream("/BigBrother.example.yml");
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
             FileWriter fstream = new FileWriter(f);
             BufferedWriter out = new BufferedWriter(fstream);
             String line;
-            while((line=in.readLine())!=null){
-                out.write(line+"\n");
+            while ((line = in.readLine()) != null) {
+                out.write(line + "\n");
             }
             //Close the output stream
             out.close();
-        }catch (Exception e){//Catch exception if any
-            BBLogging.severe("Error while saving default config: ",e);
+        } catch (Exception e) {//Catch exception if any
+            BBLogging.severe("Error while saving default config: ", e);
         }
     }
 }

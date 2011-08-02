@@ -4,7 +4,6 @@ import me.taylorkelly.bigbrother.BBPlayerInfo;
 
 public abstract class BBAction extends Action {
     
-    
     /**
      * @param player
      * @param action
@@ -28,9 +27,11 @@ public abstract class BBAction extends Action {
     /**
      * 
      */
-    public BBAction() {}
+    public BBAction() {
+    }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return null;
     }
 }

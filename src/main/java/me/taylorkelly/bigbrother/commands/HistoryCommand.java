@@ -1,20 +1,20 @@
 /**
-* <A line to describe this file>
-* Copyright (C) 2011 BigBrother Contributors
-* 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * <A line to describe this file>
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package me.taylorkelly.bigbrother.commands;
 
 import java.text.SimpleDateFormat;
@@ -37,43 +37,44 @@ import org.bukkit.entity.Player;
 public class HistoryCommand implements CommandExecutor {
     
     private BigBrother plugin;
-    private int ACTIONSPERPAGE=5;
+    private int ACTIONSPERPAGE = 5;
     
     public HistoryCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     // bb history n3x15 a:BlockPlaced w:hyperion pg:2
     @Override
-    public boolean onCommand(CommandSender send, Command cmd, String cmdLabel, String[] args) {
-        Player player=(Player) send;
-        if(BBPermissions.info(player)) {
+    public boolean onCommand(CommandSender send, Command cmd, String cmdLabel,
+            String[] args) {
+        Player player = (Player) send;
+        if (BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
-            int page=1;
-            for(String arg : args) {
-                if(arg.startsWith("a:")) {
-                    acts=ActionProvider.parseActionSwitch(acts, arg.substring(2));
-                } else if(arg.startsWith("pg:")) {
-                    page=Integer.parseInt(arg.substring(3));
+            int page = 1;
+            for (String arg : args) {
+                if (arg.startsWith("a:")) {
+                    acts = ActionProvider.parseActionSwitch(acts, arg.substring(2));
+                } else if (arg.startsWith("pg:")) {
+                    page = Integer.parseInt(arg.substring(3));
                 } else
                     name = arg;
             }
             
             ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
-            int maxpages = history.size()/ACTIONSPERPAGE;
-            sendHeader(player,page,maxpages,history.size());
+            int maxpages = history.size() / ACTIONSPERPAGE;
+            sendHeader(player, page, maxpages, history.size());
             List<Action> trimmedHistory = new ArrayList<Action>();
             
-            int from = ((page-1)*ACTIONSPERPAGE);
+            int from = ((page - 1) * ACTIONSPERPAGE);
             
             // Sanity check to make sure we aren't going off into space...
-            if(from>history.size()-1) {
+            if (from > history.size() - 1) {
                 player.sendMessage("ERROR: Page out of range");
                 return true;
             }
             
-            int to = Math.min((page*ACTIONSPERPAGE)-1,history.size()-1);
+            int to = Math.min((page * ACTIONSPERPAGE) - 1, history.size() - 1);
             
             if (history.isEmpty()) {
                 player.sendMessage(ChatColor.RED + "No edits found");
@@ -91,15 +92,15 @@ public class HistoryCommand implements CommandExecutor {
                     msg.append(dataBlock.player);
                     msg.append(ChatColor.WHITE);
                     msg.append(" ");
-                    String[] lines=dataBlock.toString().split("\n");
+                    String[] lines = dataBlock.toString().split("\n");
                     msg.append(lines[0]);
                     player.sendMessage(msg.toString());
-                    if(lines.length>1) {
-                        for(int l = 1;l<lines.length;l++)
+                    if (lines.length > 1) {
+                        for (int l = 1; l < lines.length; l++)
                             player.sendMessage(lines[l]);
                     }
                 }
-                player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this page (out of "+history.size()+")");
+                player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this page (out of " + history.size() + ")");
                 return true;
             }
         } else {
@@ -107,16 +108,16 @@ public class HistoryCommand implements CommandExecutor {
             return true;
         }
     }
-
+    
     /**
-     * @param player 
+     * @param player
      * @param page
      * @param maxpages
      * @param size
      */
     private void sendHeader(Player player, int page, int maxpages, int size) {
         StringBuilder sb = new StringBuilder();
-        sb.append(BigBrother.premessage+" Player history (p. ");
+        sb.append(BigBrother.premessage + " Player history (p. ");
         sb.append(ChatColor.WHITE);
         sb.append(page);
         sb.append(ChatColor.AQUA);

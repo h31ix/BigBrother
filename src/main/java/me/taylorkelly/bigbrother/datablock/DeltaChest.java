@@ -17,34 +17,35 @@ import org.bukkit.material.MaterialData;
 import com.sk89q.worldedit.blocks.ItemType;
 
 public class DeltaChest extends BBAction {
-
+    
     public enum DeltaType {
         NO_CHANGE,
         ADDED,
         REMOVED,
         REPLACED
     }
-
+    
     public DeltaChest(String player, Chest chest, String changes) {
         super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), changes);
     }
-
-    private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    
+    private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
-    public DeltaChest(String player, Chest chest, ItemStack[] orig, ItemStack[] latest) {
-        super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), 
-        DeltaChest.getInventoryDelta(orig, latest));
+    public DeltaChest(String player, Chest chest, ItemStack[] orig,
+            ItemStack[] latest) {
+        super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), DeltaChest.getInventoryDelta(orig, latest));
     }
-
+    
     /**
      * 
      */
     public DeltaChest() {
         // TODO Auto-generated constructor stub
     }
-
+    
     // NEW FORMAT TO SUPPORT DAMAGE TRACKING (Wool, etc)
     // {SLOT:ID:[+|-]COUNT:DATA:DAMAGE[;...]
     // 0:1:15:20:0;
@@ -55,11 +56,11 @@ public class DeltaChest extends BBAction {
         StringBuilder builder = new StringBuilder();
         builder.append("{"); // Marker for the new format
         for (int i = 0; i < orig.length; i++) {
-            DeltaEntry e = new DeltaEntry(i,orig[i],latest[i]);
-            if(e.isChanged()) {
-            	builder.append(e.toString());
-            	//if (i + 1 < orig.length) { // do we really need this?
-                    builder.append(";");
+            DeltaEntry e = new DeltaEntry(i, orig[i], latest[i]);
+            if (e.isChanged()) {
+                builder.append(e.toString());
+                //if (i + 1 < orig.length) { // do we really need this?
+                builder.append(";");
                 //}
             }
         }
@@ -67,74 +68,76 @@ public class DeltaChest extends BBAction {
     }
     
     public static DeltaEntry[] processDeltaStream(int chestCapacity, String data) {
-        data=data.substring(1);
+        data = data.substring(1);
         DeltaEntry[] de = new DeltaEntry[chestCapacity];
-        for(int i = 0;i<chestCapacity;i++) {
+        for (int i = 0; i < chestCapacity; i++) {
             de[i] = new DeltaEntry(i);
         }
-        int numskipped=0;
-        for(String chunk : data.split(";")) {
-        	// Handle chest deltas where the chest is merely opened and then closed without changing crap.
-        	if(chunk.startsWith("{"))
-        		chunk=chunk.substring(1);
-        	if(chunk.isEmpty())
-        		continue;
+        int numskipped = 0;
+        for (String chunk : data.split(";")) {
+            // Handle chest deltas where the chest is merely opened and then closed without changing crap.
+            if (chunk.startsWith("{"))
+                chunk = chunk.substring(1);
+            if (chunk.isEmpty())
+                continue;
             DeltaEntry e = new DeltaEntry(chunk);
             // Check if we have enough room before adding crap to the array.  Solves BB-10.
-            if(e.Slot > chestCapacity-1) {
-            	BBLogging.debug("Skipping slot #"+e.Slot+", not enough room in chest. ("+e.Slot+" > "+chestCapacity+")");
-            	numskipped++;
+            if (e.Slot > chestCapacity - 1) {
+                BBLogging.debug("Skipping slot #" + e.Slot + ", not enough room in chest. (" + e.Slot + " > " + chestCapacity + ")");
+                numskipped++;
             } else {
-            	de[e.Slot]=e;
+                de[e.Slot] = e;
             }
         }
-        if(numskipped>0)
-        	BBLogging.warning("Skipped "+numskipped+" slots because there's not enough room in the chest.");
+        if (numskipped > 0)
+            BBLogging.warning("Skipped " + numskipped + " slots because there's not enough room in the chest.");
         
         return de;
     }
+    
     public static class DeltaEntry {
         public int Slot;
-        public int ID=0;
-        public int Amount=0;
-        public int Damage=0;
-        public int Data=0;
-        public DeltaType Type=DeltaType.NO_CHANGE;
+        public int ID = 0;
+        public int Amount = 0;
+        public int Damage = 0;
+        public int Data = 0;
+        public DeltaType Type = DeltaType.NO_CHANGE;
         private ItemStack newStack;
         private ItemStack oldStack;
         
         public DeltaEntry(int slot) {
-            Slot=slot;
+            Slot = slot;
         }
+        
         public DeltaEntry(String chunk) {
-            String[] dchunks=chunk.split(":");
-            Slot=Integer.valueOf(dchunks[0]);
-            if(chunk.contains("=")) {
+            String[] dchunks = chunk.split(":");
+            Slot = Integer.valueOf(dchunks[0]);
+            if (chunk.contains("=")) {
                 String[] schunks = chunk.split("=");
-                oldStack=parseStack(1,schunks[0].split(":"));
-                newStack=parseStack(0,schunks[1].split(":"));
-                ID=newStack.getTypeId();
-                Type=DeltaType.REPLACED;
-                Amount=newStack.getAmount();
-                Damage=newStack.getDurability();
-                Data=newStack.getData().getData();
+                oldStack = parseStack(1, schunks[0].split(":"));
+                newStack = parseStack(0, schunks[1].split(":"));
+                ID = newStack.getTypeId();
+                Type = DeltaType.REPLACED;
+                Amount = newStack.getAmount();
+                Damage = newStack.getDurability();
+                Data = newStack.getData().getData();
             } else {
-                ID=Integer.valueOf(dchunks[1]);
-                if(dchunks[2].startsWith("+")) {
-                    dchunks[2]=dchunks[2].substring(1);
-                    Type=DeltaType.ADDED;
+                ID = Integer.valueOf(dchunks[1]);
+                if (dchunks[2].startsWith("+")) {
+                    dchunks[2] = dchunks[2].substring(1);
+                    Type = DeltaType.ADDED;
                 } else {
-                    if(dchunks[2].startsWith("-"))
-                        Type=DeltaType.REMOVED;
+                    if (dchunks[2].startsWith("-"))
+                        Type = DeltaType.REMOVED;
                 }
-                Amount=Integer.valueOf(dchunks[2]);
-                Damage=Short.valueOf(dchunks[3]);
-                Data=Integer.parseInt(dchunks[4]);
+                Amount = Integer.valueOf(dchunks[2]);
+                Damage = Short.valueOf(dchunks[3]);
+                Data = Integer.parseInt(dchunks[4]);
             }
         }
         
         private ItemStack parseStack(int i, String[] dchunks) {
-            ItemStack stack=new ItemStack(Integer.valueOf(dchunks[i]));
+            ItemStack stack = new ItemStack(Integer.valueOf(dchunks[i]));
             stack.setAmount(Integer.valueOf(dchunks[i++]));
             stack.setDurability(Short.valueOf(dchunks[i++]));
             stack.setData(new MaterialData(Integer.valueOf(dchunks[i++])));
@@ -142,78 +145,76 @@ public class DeltaChest extends BBAction {
         }
         
         public DeltaEntry(int slot, ItemStack orig, ItemStack latest) {
-            oldStack=orig;
-            newStack=latest;
-            Slot=slot;
-            orig=fixStack(orig);
-            latest=fixStack(latest);
+            oldStack = orig;
+            newStack = latest;
+            Slot = slot;
+            orig = fixStack(orig);
+            latest = fixStack(latest);
             
-            if(isTypeDifferent(orig,latest)) {
-                Type=DeltaType.REPLACED;
-                ID=latest.getTypeId();
-                Amount=latest.getAmount();
-                Damage=latest.getDurability();
+            if (isTypeDifferent(orig, latest)) {
+                Type = DeltaType.REPLACED;
+                ID = latest.getTypeId();
+                Amount = latest.getAmount();
+                Damage = latest.getDurability();
                 // Why do you do this
-                if(orig.getData()==null)
-                    Data=0;
+                if (orig.getData() == null)
+                    Data = 0;
                 else
-                    Data=orig.getData().getData();
-            } else {      	
-            	//First we must determine this
-                Amount=latest.getAmount()-orig.getAmount();
-                if(Amount==0)
-                    Type=DeltaType.NO_CHANGE;
-                else if(Amount<0) {
-                    Type=DeltaType.REMOVED;
+                    Data = orig.getData().getData();
+            } else {
+                //First we must determine this
+                Amount = latest.getAmount() - orig.getAmount();
+                if (Amount == 0)
+                    Type = DeltaType.NO_CHANGE;
+                else if (Amount < 0) {
+                    Type = DeltaType.REMOVED;
                     //item might be removed completely, so our information source must be 'orig'
                     ID = orig.getTypeId();
                     Damage = orig.getDurability();
-                    if(orig.getData()==null)
+                    if (orig.getData() == null)
                         Data = 0;
                     else
                         Data = orig.getData().getData();
                     
-                } else if(Amount>0)	{
-                	Type=DeltaType.ADDED;
-                	//item might be added to an empty slot
-                	ID = latest.getTypeId();
+                } else if (Amount > 0) {
+                    Type = DeltaType.ADDED;
+                    //item might be added to an empty slot
+                    ID = latest.getTypeId();
                     Damage = latest.getDurability();
-                    if(latest.getData()==null)
+                    if (latest.getData() == null)
                         Data = 0;
                     else
                         Data = latest.getData().getData();
-                }   
+                }
             }
         }
-
-        public boolean isChanged()
-        {
-        	return (Type!=DeltaType.NO_CHANGE);
+        
+        public boolean isChanged() {
+            return (Type != DeltaType.NO_CHANGE);
         }
         
         private boolean isTypeDifferent(ItemStack orig, ItemStack latest) {
-            if(orig.getTypeId()==0 || latest.getTypeId()==0)
+            if (orig.getTypeId() == 0 || latest.getTypeId() == 0)
                 return false;
             
-            if(orig.getTypeId() != latest.getTypeId())
+            if (orig.getTypeId() != latest.getTypeId())
                 return true;
             else {
-                return(ItemType.usesDamageValue(orig.getTypeId()) && orig.getDurability()!=latest.getDurability());
+                return (ItemType.usesDamageValue(orig.getTypeId()) && orig.getDurability() != latest.getDurability());
             }
         }
-
+        
         private ItemStack fixStack(ItemStack stack) {
-            if(stack==null) {
+            if (stack == null) {
                 stack = new ItemStack(0);
                 stack.setData(new MaterialData(0));
             }
             
             // If air, data, durability, and damage are always 0.
-            if(stack.getType().equals(Material.AIR))
-            {
+            if (stack.getType().equals(Material.AIR)) {
                 stack.setAmount(0);
                 stack.setData(new MaterialData(0));
-                stack.setDurability((byte)0);
+                stack.setDurability((byte) 0);
             }
             return stack;
         }
@@ -222,18 +223,18 @@ public class DeltaChest extends BBAction {
         public String toString() {
             // {SLOT:ID:[+|-]COUNT:DATA:DAMAGE[;...]
             // SLOT:ID:COUNT:DATA:DAMAGE=NEWID:NEWCOUNT...
-            if(Type.equals(DeltaType.REPLACED)) {
-                return Slot+":"+rawDump(oldStack)+"="+rawDump(newStack);
+            if (Type.equals(DeltaType.REPLACED)) {
+                return Slot + ":" + rawDump(oldStack) + "=" + rawDump(newStack);
             } else {
                 StringBuilder b = new StringBuilder();
                 b.append(Slot);
                 b.append(":");
                 b.append(ID);
                 b.append(":");
-                if (Type == DeltaType.ADDED)  {
-                	b.append("+");	//nothing else to do here. If it was removed, the minus is already in the amount.
+                if (Type == DeltaType.ADDED) {
+                    b.append("+"); //nothing else to do here. If it was removed, the minus is already in the amount.
                 }
-                b.append(Amount);	
+                b.append(Amount);
                 b.append(":");
                 b.append(Data);
                 b.append(":");
@@ -251,17 +252,17 @@ public class DeltaChest extends BBAction {
             b.append(":");
             byte dat;
             // Why do you do this
-            if(a.getData()==null)
-                dat=0;
+            if (a.getData() == null)
+                dat = 0;
             else
-                dat=a.getData().getData();
+                dat = a.getData().getData();
             b.append(dat);
             b.append(":");
             b.append(a.getDurability());
             return b.toString();
         }
     }
-
+    
     @Override
     public void rollback(World wld) {
         World currWorld = wld;
@@ -269,43 +270,43 @@ public class DeltaChest extends BBAction {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         Block block = currWorld.getBlockAt(x, y, z);
-        if(data.startsWith("{")) { // Check for new marker!
-            do_NewRollback(currWorld,block);
+        if (data.startsWith("{")) { // Check for new marker!
+            do_NewRollback(currWorld, block);
         } else {
-            do_OldRollback(currWorld,block);
+            do_OldRollback(currWorld, block);
         }
     }
+    
     private void do_NewRollback(World currWorld, Block block) {
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             ItemStack[] inv = ChestTools.getChestContents(chest);
-            DeltaEntry[] diff = processDeltaStream(inv.length,data);
-            for(int i = 0;i<chest.getInventory().getSize();i++) {
-                switch(diff[i].Type) {
-                case ADDED:
-                case REMOVED:
-                    ItemStack stack = inv[i];
-                    if(stack==null)
-                    	stack=diff[i].oldStack;
-                    else
-                    {
-                    	stack.setAmount(stack.getAmount()-diff[i].Amount);
-                    	stack.setDurability((short) diff[i].Damage);
-                    }
-                    inv[i]=stack;
-                    break;
-                case REPLACED:
-                    inv[i]=diff[i].oldStack;
-                    break;
-                case NO_CHANGE:
-                    break;
+            DeltaEntry[] diff = processDeltaStream(inv.length, data);
+            for (int i = 0; i < chest.getInventory().getSize(); i++) {
+                switch (diff[i].Type) {
+                    case ADDED:
+                    case REMOVED:
+                        ItemStack stack = inv[i];
+                        if (stack == null)
+                            stack = diff[i].oldStack;
+                        else {
+                            stack.setAmount(stack.getAmount() - diff[i].Amount);
+                            stack.setDurability((short) diff[i].Damage);
+                        }
+                        inv[i] = stack;
+                        break;
+                    case REPLACED:
+                        inv[i] = diff[i].oldStack;
+                        break;
+                    case NO_CHANGE:
+                        break;
                 }
             }
             ChestTools.setChestContents(chest, inv);
         }
     }
     
-    private void do_OldRollback(World currWorld,Block block) {
+    private void do_OldRollback(World currWorld, Block block) {
         String[] changes = data.split(";");
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
@@ -357,17 +358,17 @@ public class DeltaChest extends BBAction {
                 }
             }
         } else {
-            BBLogging.severe("Error when restoring chest: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Chest!");
+            BBLogging.severe("Error when restoring chest: block.getState() returned a " + block.getState().getClass().getName() + " instead of a Chest!");
         }
     }
-
+    
     @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         String[] changes = data.split(";");
         Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Chest) {
@@ -420,14 +421,15 @@ public class DeltaChest extends BBAction {
                 }
             }
         } else {
-            BBLogging.severe("Error when redoing chest: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Chest!");
+            BBLogging.severe("Error when redoing chest: block.getState() returned a " + block.getState().getClass().getName() + " instead of a Chest!");
         }
     }
-
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return new DeltaChest(pi, world, x, y, z, type, data);
     }
-
+    
     /**
      * @return
      */
@@ -439,27 +441,27 @@ public class DeltaChest extends BBAction {
         if (block.getState() instanceof Chest) {
             Chest chest = (Chest) block.getState();
             ItemStack[] inv = ChestTools.getChestContents(chest);
-            return processDeltaStream(inv.length,data);
-        }
-        else return new DeltaEntry[0];
+            return processDeltaStream(inv.length, data);
+        } else
+            return new DeltaEntry[0];
     }
-
+    
     /**
      * @return
      */
     public DeltaEntry[] getChanges() {
-        return processDeltaStream(54,data);
+        return processDeltaStream(54, data);
     }
     
     @Override
     public String toString() {
         //String o = "changed a chest:\n";
         StringBuilder msg = new StringBuilder("changed a chest ");
-        int added=0;
-        int removed=0;
-        int replaced=0;
-        for(DeltaEntry de : getChanges()) {
-            switch(de.Type) {
+        int added = 0;
+        int removed = 0;
+        int replaced = 0;
+        for (DeltaEntry de : getChanges()) {
+            switch (de.Type) {
                 case ADDED:
                     added++;
                     //o+=String.format("%s + Added %d %s%s\n",ChatColor.GREEN.toString(),de.Amount, ItemType.toName(de.ID),ChatColor.YELLOW.toString());
@@ -490,24 +492,30 @@ public class DeltaChest extends BBAction {
         msg.append(ChatColor.YELLOW);
         return msg.toString();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
     public ActionCategory getCategory() {
         return ActionCategory.BLOCKS;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override

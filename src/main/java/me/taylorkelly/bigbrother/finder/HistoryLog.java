@@ -17,28 +17,28 @@ import org.bukkit.inventory.ItemStack;
 
 public class HistoryLog extends StickMode {
     /**
-     * This used to just give people logs.
-     * The new version will simply tell them that they must have a log
-     * in their hands to read block history.
+     * This used to just give people logs. The new version will simply tell them that they must have a log in their hands to read block history.
+     * 
      * @author N3X15
      */
     @Override
     public void initialize(Player player) {
         player.sendMessage(BigBrother.premessage + "Every log in your inventory (and any logs you pick up) are now History Logs!");
-        player.sendMessage(ChatColor.AQUA+"To read the history of a solid block (e.g. Dirt), punch (left-click) it with your History Log.");
-        player.sendMessage(ChatColor.AQUA+"To read the history of a non-solid block (e.g. water or air), replace it (right-click) with your History Log");
-        player.sendMessage(ChatColor.AQUA+"When you're done, simply type "+ChatColor.WHITE+"/bb done"+ChatColor.AQUA+" to return your logs to their normal behavior.");
+        player.sendMessage(ChatColor.AQUA + "To read the history of a solid block (e.g. Dirt), punch (left-click) it with your History Log.");
+        player.sendMessage(ChatColor.AQUA + "To read the history of a non-solid block (e.g. water or air), replace it (right-click) with your History Log");
+        player.sendMessage(ChatColor.AQUA + "When you're done, simply type " + ChatColor.WHITE + "/bb done" + ChatColor.AQUA + " to return your logs to their normal behavior.");
     }
-
+    
     @Override
     public void disable(Player player) {
         player.sendMessage(BigBrother.premessage + "Your logs have returned to their previous level of worthlessness!");
     }
-
+    
     @Override
-    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean leftclick) {
+    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager,
+            boolean leftclick) {
         ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager); //BlockHistory.hist(block, manager);
-
+        
         ArrayList<String> msgs = new ArrayList<String>();
         if (history.isEmpty()) {
             msgs.add(ChatColor.RED + "No edits on this block");
@@ -54,48 +54,48 @@ public class HistoryLog extends StickMode {
                 msg.append(dataBlock.player);
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
-                String[] lines=dataBlock.toString().split("\n");
+                String[] lines = dataBlock.toString().split("\n");
                 msg.append(lines[0]);
                 msgs.add(msg.toString());
-                if(lines.length>1) {
-                    for(int l = 1;l<lines.length;l++)
+                if (lines.length > 1) {
+                    for (int l = 1; l < lines.length; l++)
                         msgs.add(lines[l]);
                 }
             }
         }
         return msgs;
     }
-
+    
     @Override
     public String getDescription() {
         return "History Log";
     }
-
+    
     public boolean usesStick() {
         return false;
     }
-
+    
     @Override
     public void update(Player player) {
         //player.getInventory().setItem(slot, new ItemStack(Material.LOG, 1));
     }
-
+    
     @Override
     public boolean usesStick(ItemStack itemStack) {
-        if(itemStack.getType() == Material.LOG) {
+        if (itemStack.getType() == Material.LOG) {
             return true;
         }
         return false;
     }
-
+    
     @Override
     public boolean rightClickStick() {
         return false;
     }
-
+    
     @Override
     public boolean leftClickStick() {
         return true;
     }
-
+    
 }

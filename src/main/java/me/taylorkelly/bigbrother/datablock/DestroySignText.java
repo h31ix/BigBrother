@@ -9,11 +9,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public class DestroySignText extends BBAction {
-
+    
     public DestroySignText(String name, Sign sign, String world) {
         super(name, world, sign.getX(), sign.getY(), sign.getZ(), sign.getTypeId(), getText(sign));
     }
-
+    
     private static String getText(Sign sign) {
         StringBuilder message = new StringBuilder();
         String[] lines = sign.getLines();
@@ -25,36 +25,37 @@ public class DestroySignText extends BBAction {
         }
         return message.toString();
     }
-
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return new DestroySignText(pi, world, x, y, z, type, data);
     }
-
-    private DestroySignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    
+    private DestroySignText(BBPlayerInfo player, String world, int x, int y,
+            int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
+    
     public DestroySignText(BBPlayerInfo player, Sign sign, String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
-
+    
     /**
      * 
      */
     public DestroySignText() {
         // TODO Auto-generated constructor stub
     }
-
+    
     @Override
     public void rollback(World wld) {
         World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         String[] lines = data.split("\u0060");
-
-
+        
         Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -62,17 +63,17 @@ public class DestroySignText extends BBAction {
                 sign.setLine(i, lines[i]);
             }
         } else {
-            BBLogging.severe("Error when restoring sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
+            BBLogging.severe("Error when restoring sign: block.getState() returned a " + block.getState().getClass().getName() + " instead of a Sign!");
         }
     }
-
+    
     @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -88,29 +89,35 @@ public class DestroySignText extends BBAction {
     public String toString() {
         String[] lines = data.split("\u0060");
         String out = "destroyed a sign with text: ";
-        for(int i = 0;i<lines.length;i++){
-            out+="\n    "+lines[i];
+        for (int i = 0; i < lines.length; i++) {
+            out += "\n    " + lines[i];
         }
         return out;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
     public ActionCategory getCategory() {
         return ActionCategory.MISC;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override

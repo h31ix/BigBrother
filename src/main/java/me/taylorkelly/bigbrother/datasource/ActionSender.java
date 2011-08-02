@@ -25,42 +25,45 @@ import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
  * Sends Action data to the Action table in intervals.
  * 
  * @author Rob
- *
+ * 
  */
 public class ActionSender {
-
+    
     public static final LinkedBlockingQueue<Action> SENDING = new LinkedBlockingQueue<Action>();
     private static int sendingTask;
     private static BigBrother plugin;
-
+    
     public static void shutdown(BigBrother bb) {
-        if(sendingTask>=0)
+        if (sendingTask >= 0)
             bb.getServer().getScheduler().cancelTask(sendingTask);
     }
-
-    public static void initialize(BigBrother bb, File dataFolder, WorldManager manager) {
-        plugin=bb;
+    
+    public static void initialize(BigBrother bb, File dataFolder,
+            WorldManager manager) {
+        plugin = bb;
         sendingTask = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
         if (sendingTask < 0) {
             BBLogging.severe("Unable to schedule sending of blocks");
         }
     }
+    
     public static void offer(Action dataBlock) {
         SENDING.add(dataBlock);
     }
     
-    private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
+    private static boolean sendBlocksSQL(Collection<Action> collection,
+            WorldManager manager) {
         // Try to refactor most of these into the table managers.
         
         // Send a heartbeat after sending blocks.
         Heartbeat hb = new Heartbeat(plugin);
         hb.send();
-            
+        
         //H2 fix...
         if (BBDB.usingDBMS(DBMS.H2)) {
             for (Action block : collection) {
-                if(block.world == null) {
-                    BBLogging.severe(String.format("%s incorrectly initialized - World is null",block.getClass().getName()));
+                if (block.world == null) {
+                    BBLogging.severe(String.format("%s incorrectly initialized - World is null", block.getClass().getName()));
                 } else {
                     manager.getWorld(block.world);
                 }
@@ -73,7 +76,7 @@ public class ActionSender {
             BBLogging.debug(statementSql);
             ps = BBDB.prepare(statementSql);
             for (Action block : collection) {
-                if(BBSettings.worldExclusionList.contains(block.world))
+                if (BBSettings.worldExclusionList.contains(block.world))
                     continue;
                 
                 ps.setLong(1, block.date);
@@ -104,8 +107,9 @@ public class ActionSender {
             BBDB.cleanup("Data Insert", ps, rs);
         }
     }
-
-    private static void sendBlocksFlatFile(File dataFolder, Collection<Action> collection) {
+    
+    private static void sendBlocksFlatFile(File dataFolder,
+            Collection<Action> collection) {
         File dir = new File(dataFolder, "logs");
         if (!dir.exists()) {
             dir.mkdir();
@@ -130,7 +134,7 @@ public class ActionSender {
                 builder.append(block.type);
                 builder.append(", ");
                 builder.append(block.data);
-
+                
                 fwriter = new FileWriter(file, true);
                 bwriter = new BufferedWriter(fwriter);
                 bwriter.write(builder.toString());
@@ -158,17 +162,17 @@ public class ActionSender {
     public static String fixName(String player) {
         return player.replace(".", "").replace(":", "").replace("<", "").replace(">", "").replace("*", "").replace("\\", "").replace("/", "").replace("?", "").replace("\"", "").replace("|", "");
     }
-
+    
     private static class SendingTask implements Runnable {
-
+        
         private File dataFolder;
         private WorldManager manager;
-
+        
         public SendingTask(File dataFolder, WorldManager manager) {
             this.dataFolder = dataFolder;
             this.manager = manager;
         }
-
+        
         @Override
         public void run() {
             if (SENDING.size() == 0) {
@@ -176,12 +180,12 @@ public class ActionSender {
             }
             Collection<Action> collection = new ArrayList<Action>();
             SENDING.drainTo(collection);
-
+            
             boolean worked = sendBlocksSQL(collection, manager);
             if (BBSettings.flatLog) {
                 sendBlocksFlatFile(dataFolder, collection);
             }
-
+            
             if (!worked) {
                 SENDING.addAll(collection);
                 BBLogging.warning("SQL send failed. Keeping data for later send.");

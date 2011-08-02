@@ -20,30 +20,31 @@ public class FindCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public FindCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
-        Player player=(Player) send;
-        if(BBPermissions.info(player)) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2,
+            String[] split) {
+        Player player = (Player) send;
+        if (BBPermissions.info(player)) {
             if (split.length == 4 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
-                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
+                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
                 finder.find();
             } else if (split.length == 5 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3]) && Numbers.isNumber(split[4])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
-                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
+                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[4]));
                 finder.addReciever(player);
                 finder.find();
             } else if (split.length == 5 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
-                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin,null);
+                Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
                 List<Player> targets = plugin.getServer().matchPlayer(split[4]);
                 Player findee = null;

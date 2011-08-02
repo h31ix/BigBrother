@@ -26,13 +26,13 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class BBPermissions {
-
-    private enum BBPermPlugin 
-    {
+    
+    private enum BBPermPlugin {
         PERMISSIONS,
-        BUKKIT_PERMS, 
+        BUKKIT_PERMS,
         NONE
     }
+    
     public static PermissionHandler permissionHandler;
     private static BBPermPlugin handler;
     private static Plugin permissionPlugin;
@@ -41,14 +41,14 @@ public class BBPermissions {
     public static Permission rollback;
     public static Permission watch;
     public static Permission cleanse;
-
+    
     public static void initialize(BigBrother bb, Server server) {
-        if(setupPermissions(server)) {
+        if (setupPermissions(server)) {
             handler = BBPermPlugin.PERMISSIONS;
             String version = permissionPlugin.getDescription().getVersion();
             
             if (!server.getPluginManager().isPluginEnabled(permissionPlugin)) {
-                BBLogging.info("Permissions plugin found but disabled. Enabling 'Permissions' (v"+version+").");
+                BBLogging.info("Permissions plugin found but disabled. Enabling 'Permissions' (v" + version + ").");
                 server.getPluginManager().enablePlugin(permissionPlugin);
             }
             
@@ -56,22 +56,22 @@ public class BBPermissions {
         } else {
             handler = BBPermPlugin.BUKKIT_PERMS;
             
-            info = new Permission("bb.admin.info", "User can use /bb log, /bb here, etc.",PermissionDefault.OP);
-            rollback = new Permission("bb.admin.rollback", "User can perform rollbacks.",PermissionDefault.OP);
-            watch = new Permission("bb.admin.watch", "User can modify the list of watched users.",PermissionDefault.OP);
-            cleanse = new Permission("bb.admin.cleanse", "User can perform database trimming operations.",PermissionDefault.OP);
+            info = new Permission("bb.admin.info", "User can use /bb log, /bb here, etc.", PermissionDefault.OP);
+            rollback = new Permission("bb.admin.rollback", "User can perform rollbacks.", PermissionDefault.OP);
+            watch = new Permission("bb.admin.watch", "User can modify the list of watched users.", PermissionDefault.OP);
+            cleanse = new Permission("bb.admin.cleanse", "User can perform database trimming operations.", PermissionDefault.OP);
             
             BBLogging.severe("A permission plugin isn't loaded, patching into BukkitPerms.");
         }
     }
-
+    
     /**
      * @param server
      * @return
      */
-    private static boolean setupPermissions(Server server) { 
+    private static boolean setupPermissions(Server server) {
         permissionPlugin = server.getPluginManager().getPlugin("Permissions");
-
+        
         if (permissionHandler == null) {
             if (permissionPlugin != null) {
                 permissionHandler = ((Permissions) permissionPlugin).getHandler();
@@ -82,11 +82,11 @@ public class BBPermissions {
         }
         return false;
     }
-
+    
     private static boolean permission(Player player, String string) {
         switch (handler) {
             case PERMISSIONS:
-                return ((Permissions)permissionPlugin).getHandler().has(player, string);
+                return ((Permissions) permissionPlugin).getHandler().has(player, string);
             case BUKKIT_PERMS:
                 return player.hasPermission(string);
             case NONE:
@@ -95,19 +95,19 @@ public class BBPermissions {
                 return player.isOp();
         }
     }
-
+    
     public static boolean info(Player player) {
         return permission(player, "bb.admin.info");
     }
-
+    
     public static boolean rollback(Player player) {
         return permission(player, "bb.admin.rollback");
     }
-
+    
     public static boolean watch(Player player) {
         return permission(player, "bb.admin.watch");
     }
-
+    
     public static boolean cleanse(Player player) {
         return permission(player, "bb.admin.cleanse");
     }

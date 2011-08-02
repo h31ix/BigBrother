@@ -9,14 +9,14 @@ import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 public class RollbackPreparedStatementPostgreSQL extends
-		RollbackPreparedStatement {
-
+        RollbackPreparedStatement {
+    
     public String create(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS \"world\"");
         statement.append(" FROM");
-        statement.append(" "+BBDataTable.getInstance().getTableName()+ " AS bbdata,");
-        statement.append(" "+BBWorldsTable.getInstance().getTableName()+" AS bbworlds, ");
-        statement.append(" "+BBUsersTable.getInstance().getTableName()+" AS usr ");
+        statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata,");
+        statement.append(" " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds, ");
+        statement.append(" " + BBUsersTable.getInstance().getTableName() + " AS usr ");
         statement.append(" WHERE ");
         statement.append(" bbworlds.id = bbdata.world AND bbdata.player = usr.id AND ");
         statement.append(getActionString());
@@ -75,7 +75,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         statement.append(";");
         return statement.toString();
     }
-
+    
     private StringBuilder getBlockString(ArrayList<Integer> blockTypes) {
         StringBuilder ret = new StringBuilder("type IN(");
         for (int i = 0; i < blockTypes.size(); i++) {
@@ -89,7 +89,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         ret.append(")");
         return ret;
     }
-
+    
     private StringBuilder getPlayerString(ArrayList<String> players) {
         StringBuilder ret = new StringBuilder("usr.name IN (");
         for (int i = 0; i < players.size(); i++) {
@@ -103,7 +103,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         ret.append(")");
         return ret;
     }
-
+    
     private StringBuilder getActionString() {
         // TODO maybe more customizable actions?
         StringBuilder ret = new StringBuilder("action IN(");
@@ -132,7 +132,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         ret.append("')");
         return ret;
     }
-
+    
     public String update(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE");
         statement.append(" " + BBDataTable.getInstance().getTableName());
@@ -140,7 +140,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         statement.append(" WHERE ");
         statement.append(getActionString());
         if (!rollback.rollbackAll) {
-            statement.append(" AND player IN (SELECT id FROM " + BBUsersTable.getInstance().getTableName()+" AS usr WHERE ");
+            statement.append(" AND player IN (SELECT id FROM " + BBUsersTable.getInstance().getTableName() + " AS usr WHERE ");
             statement.append(getPlayerString(rollback.players));
             statement.append(")");
         }
@@ -194,16 +194,16 @@ public class RollbackPreparedStatementPostgreSQL extends
             statement.append(manager.getWorld(rollback.center.getWorld().getName()));
             statement.append("'");
         }
-
+        
         statement.append(" AND rbacked = '0'");
         statement.append(";");
         return statement.toString();
     }
-
+    
     public String undoStatement(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE ");
-        statement.append(" "+BBDataTable.getInstance().getTableName() + " AS bbdata,");
-        statement.append(" "+BBUsersTable.getInstance().getTableName()+" AS usr ");
+        statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata,");
+        statement.append(" " + BBUsersTable.getInstance().getTableName() + " AS usr ");
         statement.append(" SET rbacked = '0'");
         statement.append(" WHERE ");
         statement.append(" bbdata.player = usr.id AND ");
@@ -262,7 +262,7 @@ public class RollbackPreparedStatementPostgreSQL extends
             statement.append(manager.getWorld(rollback.center.getWorld().getName()));
             statement.append("'");
         }
-
+        
         statement.append(" AND rbacked = '1'");
         statement.append(";");
         return statement.toString();

@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
@@ -17,13 +16,13 @@ public abstract class BBWorldsTable extends DBTable {
     private static BBWorldsTable instance = null;
     
     public BBWorldsTable() {
-        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
             drop();
         if (!tableExists()) {
-            BBLogging.info("Building `"+getTableName()+"` table...");
+            BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
         } else {
-            BBLogging.debug("`"+getTableName()+"` table already exists");
+            BBLogging.debug("`" + getTableName() + "` table already exists");
         }
     }
     
@@ -45,14 +44,12 @@ public abstract class BBWorldsTable extends DBTable {
     }
     
     public static void cleanup() {
-        instance=null;
+        instance = null;
     }
     
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("
-                + "id INTEGER PRIMARY KEY,"
-                + "name varchar(50) NOT NULL DEFAULT 'world');";
+        return "CREATE TABLE IF NOT EXISTS " + getTableName() + " (" + "id INTEGER PRIMARY KEY," + "name varchar(50) NOT NULL DEFAULT 'world');";
     }
     
     public HashMap<String, Integer> getWorlds() {

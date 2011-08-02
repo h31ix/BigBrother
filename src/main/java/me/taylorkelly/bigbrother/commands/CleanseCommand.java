@@ -16,8 +16,9 @@ public class CleanseCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.cleanse((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.cleanse((Player) player)) {
             if (Cleanser.needsCleaning()) {
                 Cleanser.clean((Player) player);
             } else {

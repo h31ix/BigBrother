@@ -21,17 +21,17 @@ import me.taylorkelly.help.Help;
 import org.bukkit.plugin.Plugin;
 
 public class BBHelp {
-
+    
     public static void initialize(Plugin plugin) {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("Help");
         if (test != null) {
             if (!plugin.getServer().getPluginManager().isPluginEnabled(test)) {
-                BBLogging.info("Help plugin detected but disabled. Enabling plugin 'Help' (v"+test.getDescription().getVersion()+").");
-                plugin.getServer().getPluginManager().enablePlugin(test);                
+                BBLogging.info("Help plugin detected but disabled. Enabling plugin 'Help' (v" + test.getDescription().getVersion() + ").");
+                plugin.getServer().getPluginManager().enablePlugin(test);
             }
             
             Help helpPlugin = ((Help) test);
-            String[] permissions = new String[]{"bb.admin.watch", "bb.admin.info", "bb.admin.rollback", "bb.admin.cleanse"};
+            String[] permissions = new String[] { "bb.admin.watch", "bb.admin.info", "bb.admin.rollback", "bb.admin.cleanse" };
             helpPlugin.registerCommand("bb help", "Help for all BigBrother commands", plugin, permissions);
             helpPlugin.registerCommand("bb watch [player]", "Toggle the watch on [player]", plugin, permissions[0]);
             helpPlugin.registerCommand("bb watched", "Displays the list of watched players", plugin, permissions[1]);

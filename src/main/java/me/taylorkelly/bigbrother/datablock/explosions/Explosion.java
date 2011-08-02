@@ -13,9 +13,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public abstract class Explosion extends BBAction {
-
+    
     private ArrayList<BBAction> bystanders;
-
+    
     public Explosion(String name, Block block, String world) {
         super(name, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
@@ -25,7 +25,7 @@ public abstract class Explosion extends BBAction {
         chestCheck(name, block);
         checkGnomesLivingOnTop(name, block);
     }
-
+    
     @Override
     public void send() {
         for (BBAction block : bystanders) {
@@ -40,34 +40,34 @@ public abstract class Explosion extends BBAction {
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
-
+            
             byte blockData = Byte.parseByte(data);
             currWorld.getBlockAt(x, y, z).setTypeId(type);
             currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
-
+    
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
-
+    
     protected final void torchCheck(String player, Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50);
         torchTypes.add(75);
         torchTypes.add(76);
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (torchTypes.contains(torchTop.getTypeId()) && torchTop.getData() == 5) {
             bystanders.add(newInstance(player, torchTop));
         }
@@ -88,12 +88,12 @@ public abstract class Explosion extends BBAction {
             bystanders.add(newInstance(player, torchWest));
         }
     }
-
+    
     protected final void surroundingSignChecks(String player, Block block) {
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
-
+        
         Block top = block.getWorld().getBlockAt(x, y + 1, z);
         if (top.getTypeId() == 63) {
             bystanders.add(newInstance(player, top));
@@ -115,14 +115,14 @@ public abstract class Explosion extends BBAction {
             bystanders.add(newInstance(player, west));
         }
     }
-
+    
     protected final void signCheck(String player, Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             bystanders.add(new SignDestroyed(player, block.getTypeId(), block.getData(), sign, world));
         }
     }
-
+    
     protected final void checkGnomesLivingOnTop(String player, Block block) {
         ArrayList<Integer> gnomes = new ArrayList<Integer>();
         gnomes.add(6); // Sapling
@@ -141,23 +141,24 @@ public abstract class Explosion extends BBAction {
         gnomes.add(78); // Snow
         gnomes.add(81); // Cactus
         gnomes.add(83); // Reeds
-
+        
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
         Block mrGnome = block.getWorld().getBlockAt(x, y + 1, z);
-
+        
         if (gnomes.contains(mrGnome.getTypeId())) {
             bystanders.add(newInstance(player, mrGnome));
         }
     }
-
+    
     protected abstract Explosion newInstance(String player, Block block);
-
-    protected Explosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    
+    protected Explosion(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
+    
     /**
      * 
      */

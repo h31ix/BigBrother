@@ -40,10 +40,11 @@ public class BBCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command,
+            String commandLabel, String[] args) {
         String commandName = command.getName().toLowerCase();
         
-        args=groupArgs(args);
+        args = groupArgs(args);
         if (sender instanceof Player) {
             if (commandName.equals("bb")) {
                 if (args.length == 0)
@@ -72,42 +73,47 @@ public class BBCommand implements CommandExecutor {
         }
         return false;
     }
-
+    
     /**
      * A messy parser to group args together if they are surrounded by quotes.
+     * 
      * <pre>
      * String[]{"rollback","\"A","Griefer\"","r:15"}
      * </pre>
+     * 
      * Becomes
+     * 
      * <pre>
      * String[]{"rollback","A Griefer","r:15"}
      * </pre>
-     * @param preargs Arguments to group.
+     * 
+     * @param preargs
+     *            Arguments to group.
      * @return Grouped args.
      */
     public static String[] groupArgs(String[] preargs) {
         List<String> args = new ArrayList<String>();
-        String currentArg="";
-        boolean inQuotes=false;
-        for(String arg:preargs) {
-            if(inQuotes) {
+        String currentArg = "";
+        boolean inQuotes = false;
+        for (String arg : preargs) {
+            if (inQuotes) {
                 BBLogging.info(arg);
-                currentArg+=" "+arg;
-                if(arg.endsWith("\"")) {
-                    args.add(currentArg.substring(0,currentArg.lastIndexOf("\"")));
-                    inQuotes=false;
+                currentArg += " " + arg;
+                if (arg.endsWith("\"")) {
+                    args.add(currentArg.substring(0, currentArg.lastIndexOf("\"")));
+                    inQuotes = false;
                 }
             } else {
-                if(arg.startsWith("\"")) {
-                    inQuotes=true;
+                if (arg.startsWith("\"")) {
+                    inQuotes = true;
                     BBLogging.info(arg);
-                    currentArg=arg.substring(1,arg.length());
+                    currentArg = arg.substring(1, arg.length());
                 } else {
                     args.add(arg);
                 }
             }
         }
-        String[] gargs= new String[args.size()];
+        String[] gargs = new String[args.size()];
         return args.toArray(gargs);
     }
     

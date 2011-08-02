@@ -70,11 +70,13 @@ public class BlockBurn extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return new BlockBurn(pi, world, x, y, z, type, data);
     }
     
-    private BlockBurn(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private BlockBurn(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

@@ -45,11 +45,11 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 public class BBBlockListener extends BlockListener {
-
+    
     private BigBrother plugin;
-
+    
     public BBBlockListener(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
@@ -57,23 +57,16 @@ public class BBBlockListener extends BlockListener {
         if (!event.isCancelled()) {
             Block blockTo = event.getBlock();
             Block blockFrom = event.getSource();
-            BBLogging.debug(String.format("BlockSpread: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)",
-                    blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(),
-                    blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()
-                    ));
-            if(blockTo.getType() == Material.FIRE 
-                    || blockFrom.getType() == Material.FIRE) {
+            BBLogging.debug(String.format("BlockSpread: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)", blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()));
+            if (blockTo.getType() == Material.FIRE || blockFrom.getType() == Material.FIRE) {
                 OwnershipManager.trackFlow(blockFrom, blockTo);
             }
         }
     }
     
     /**
-     * Basically: 
-     *  * Update ownership of all the blocks moved
-     *  * Extend ownership of the piston in the direction it is pushing
-     *  * Generate a new log item for every block moved
-     *  * Kill james bond
+     * Basically: * Update ownership of all the blocks moved * Extend ownership of the piston in the direction it is pushing * Generate a new log item for every block moved * Kill james bond
+     * 
      * @author N3X15
      */
     @Override
@@ -89,32 +82,31 @@ public class BBBlockListener extends BlockListener {
         int y = e.getBlock().getY();
         int z = e.getBlock().getZ();
         
-        OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),opi);
-        for(Block b : e.getBlocks()) {
+        OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), opi);
+        for (Block b : e.getBlocks()) {
             //Get ownership information
             BBPlayerInfo pi = OwnershipManager.findOwner(b);
             x = b.getX();
             y = b.getY();
             z = b.getZ();
-            pi=OwnershipManager.findOwner(b);
-            OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),pi);
+            pi = OwnershipManager.findOwner(b);
+            OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), pi);
             
             // Generate action
-            BlockPistoned action = new BlockPistoned(opi,b,e.getDirection());
-            if(pi.getWatched())
+            BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
+            if (pi.getWatched())
                 action.send();
         }
     }
     
     /**
-     * Basically: 
-     *  * Remove the piston's "pusher" ownership
-     *  * Move the stickied block's ownership back to where it was
+     * Basically: * Remove the piston's "pusher" ownership * Move the stickied block's ownership back to where it was
+     * 
      * @author N3X15
      */
     @Override
     public void onBlockPistonRetract(BlockPistonRetractEvent e) {
-        if(!e.isSticky() && !e.isCancelled()) {
+        if (!e.isSticky() && !e.isCancelled()) {
             return;
         }
         World w = e.getBlock().getWorld();
@@ -128,12 +120,12 @@ public class BBBlockListener extends BlockListener {
         int y = e.getBlock().getY();
         int z = e.getBlock().getZ();
         
-        OwnershipManager.setOwnerLocation(new Location(w,x+xo,y+yo,z+zo),BBPlayerInfo.ENVIRONMENT);
-        Block pistonShaft = w.getBlockAt(x+xo,y+yo,z+zo);
+        OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), BBPlayerInfo.ENVIRONMENT);
+        Block pistonShaft = w.getBlockAt(x + xo, y + yo, z + zo);
         // <N3X15_> EvilSeph, Dinnerbone, whoever is available:  How am I supposed to track blocks retracted by a piston?  BlockPistonRetractEvent doesn't have a getBlocks() method, so I can't determine what blocks will be affected by sticky pistons.
         // <EvilSeph> rudimentary, sorry
         //for(Block b : e.getBlocks()) {
-        Block b = w.getBlockAt(x+(xo*2), y+(yo*2), z+(zo*2));
+        Block b = w.getBlockAt(x + (xo * 2), y + (yo * 2), z + (zo * 2));
         BBPlayerInfo pi = OwnershipManager.findOwner(b);
         
         // Clear the moved block's ownership
@@ -141,13 +133,13 @@ public class BBBlockListener extends BlockListener {
         
         // Update the new position with updated ownership
         OwnershipManager.setOwner(pistonShaft, pi);
-       
+        
         // Generate action
-        BlockPistoned action = new BlockPistoned(opi,b,e.getDirection());
-        if(pi.getWatched())
+        BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
+        if (pi.getWatched())
             action.send();
     }
-
+    
     @Override
     public void onBlockDamage(BlockDamageEvent event) {
         BBLogging.debug("onBlockDamage");
@@ -155,7 +147,7 @@ public class BBBlockListener extends BlockListener {
             TNTLogger.log(event.getPlayer().getName(), event.getBlock());
         }
     }
-
+    
     @Override
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled()) {
@@ -170,7 +162,7 @@ public class BBBlockListener extends BlockListener {
             }
         }
     }
-
+    
     @Override
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -179,11 +171,7 @@ public class BBBlockListener extends BlockListener {
         if (!ActionProvider.isDisabled(PlacedBlock.class) && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
-            if (block.getType() == Material.WATER 
-                    || block.getType() == Material.STATIONARY_WATER 
-                    || block.getType() == Material.LAVA 
-                    || block.getType() == Material.STATIONARY_LAVA 
-                    || block.getType() == Material.FIRE) {
+            if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.FIRE) {
                 OwnershipManager.setOwner(block, pi);
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
@@ -201,7 +189,7 @@ public class BBBlockListener extends BlockListener {
             dataBlock.send();
         }
     }
-
+    
     @Override
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (!ActionProvider.isDisabled(FlintAndSteel.class) && event.getCause() == IgniteCause.FLINT_AND_STEEL && !event.isCancelled()) {
@@ -210,7 +198,7 @@ public class BBBlockListener extends BlockListener {
             dataBlock.send();
         }
     }
-
+    
     /**
      * Called whenever a block is destroyed by fire
      */
@@ -223,42 +211,30 @@ public class BBBlockListener extends BlockListener {
             dataBlock.send();
         }
     }
-
+    
     /**
      * Called whenever something flows from one block to another.
      */
     @Override
     public void onBlockFromTo(BlockFromToEvent event) {
-        if(ActionProvider.isDisabled(Flow.class))
+        if (ActionProvider.isDisabled(Flow.class))
             return;
         Block blockFrom = event.getBlock();
         Block blockTo = event.getToBlock();
-        BBLogging.debug(String.format("BlockFromTo: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)",
-                blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(),
-                blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()
-                ));
+        BBLogging.debug(String.format("BlockFromTo: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)", blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()));
         if (!event.isCancelled()) {
             int fromID = blockFrom.getTypeId();
             int toID = blockTo.getTypeId();
-            if(BBSettings.isBlockIgnored(fromID) 
-                    || fromID == Material.WATER.getId()
-                    || fromID == Material.STATIONARY_WATER.getId()
-                    || fromID == Material.LAVA.getId()
-                    || fromID == Material.STATIONARY_LAVA.getId()
-                    || BBSettings.isBlockIgnored(toID)
-                    || toID == Material.WATER.getId()
-                    || toID == Material.STATIONARY_WATER.getId()
-                    || toID == Material.LAVA.getId()
-                    || toID == Material.STATIONARY_LAVA.getId())
+            if (BBSettings.isBlockIgnored(fromID) || fromID == Material.WATER.getId() || fromID == Material.STATIONARY_WATER.getId() || fromID == Material.LAVA.getId() || fromID == Material.STATIONARY_LAVA.getId() || BBSettings.isBlockIgnored(toID) || toID == Material.WATER.getId() || toID == Material.STATIONARY_WATER.getId() || toID == Material.LAVA.getId() || toID == Material.STATIONARY_LAVA.getId())
                 return;
             // Only record a change if the owner is different (avoids duplicates)
-            if(OwnershipManager.findOwner(blockFrom).getID()!=OwnershipManager.findOwner(blockTo).getID()) {
+            if (OwnershipManager.findOwner(blockFrom).getID() != OwnershipManager.findOwner(blockTo).getID()) {
                 Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
                 dataBlock.send();
             }
         }
     }
-
+    
     @Override
     public void onSignChange(SignChangeEvent event) {
         if (event.getBlock().getState() instanceof Sign) {
@@ -270,7 +246,7 @@ public class BBBlockListener extends BlockListener {
                 }
             }
             if (oldText) {
-                SignDestroyed dataBlock = new SignDestroyed(event.getPlayer().getName(), event.getBlock().getTypeId(), event.getBlock().getData(),(Sign) event.getBlock().getState(), event.getBlock().getWorld().getName());
+                SignDestroyed dataBlock = new SignDestroyed(event.getPlayer().getName(), event.getBlock().getTypeId(), event.getBlock().getData(), (Sign) event.getBlock().getState(), event.getBlock().getWorld().getName());
                 dataBlock.send();
             }
         }

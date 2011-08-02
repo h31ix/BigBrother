@@ -1,20 +1,20 @@
 /**
-* Ownership API
-* Copyright (C) 2011 BigBrother Contributors
-* 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Ownership API
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package me.taylorkelly.bigbrother.tablemgrs;
 
 import me.taylorkelly.bigbrother.BBLogging;
@@ -24,7 +24,7 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
 
 /**
  * @author Rob
- *
+ * 
  */
 public abstract class OwnersTable extends DBTable {
     private static final int VERSION = 1;
@@ -32,17 +32,19 @@ public abstract class OwnersTable extends DBTable {
     private static OwnersTable instance = null;
     
     public OwnersTable() {
-        if(BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
             drop();
         if (!tableExists()) {
-            BBLogging.info("Building `"+getTableName()+"` table...");
+            BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
         } else {
-            BBLogging.debug("`"+getTableName()+"` table already exists");
+            BBLogging.debug("`" + getTableName() + "` table already exists");
         }
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#getActualTableName()
      */
     @Override
@@ -63,9 +65,9 @@ public abstract class OwnersTable extends DBTable {
     }
     
     public static void cleanup() {
-        instance=null;
+        instance = null;
     }
-
+    
     /**
      * @param world
      * @param x
@@ -74,9 +76,9 @@ public abstract class OwnersTable extends DBTable {
      * @param playerID
      */
     public static void set(int world, int x, int y, int z, int playerID) {
-        getInstance().setBlockOwner(world,x,y,z,playerID);
+        getInstance().setBlockOwner(world, x, y, z, playerID);
     }
-
+    
     /**
      * @param world
      * @param x
@@ -84,8 +86,9 @@ public abstract class OwnersTable extends DBTable {
      * @param z
      * @param playerID
      */
-    protected abstract void setBlockOwner(int world, int x, int y, int z, int playerID);
-
+    protected abstract void setBlockOwner(int world, int x, int y, int z,
+            int playerID);
+    
     /**
      * @param name
      * @param x
@@ -94,9 +97,9 @@ public abstract class OwnersTable extends DBTable {
      * @return
      */
     public static int get(int world, int x, int y, int z) {
-        return getInstance().getBlockOwner(world,x,y,z);
+        return getInstance().getBlockOwner(world, x, y, z);
     }
-
+    
     /**
      * @param world
      * @param x
@@ -105,7 +108,7 @@ public abstract class OwnersTable extends DBTable {
      * @return
      */
     protected abstract int getBlockOwner(int world, int x, int y, int z);
-
+    
     /**
      * @param i
      * @param blockX
@@ -113,9 +116,9 @@ public abstract class OwnersTable extends DBTable {
      * @param blockZ
      */
     public static void remove(int wldID, int x, int y, int z) {
-        getInstance().removeBlockOwner(wldID,x,y,z);
+        getInstance().removeBlockOwner(wldID, x, y, z);
     }
-
+    
     /**
      * @param wldID
      * @param x

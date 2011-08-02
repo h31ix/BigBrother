@@ -13,12 +13,13 @@ public class UnwatchedCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public UnwatchedCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.info((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.info((Player) player)) {
             String unwatchedPlayers = plugin.getUnwatchedPlayers();
             if (unwatchedPlayers.equals("")) {
                 player.sendMessage(BigBrother.premessage + "Everyone on is being watched.");

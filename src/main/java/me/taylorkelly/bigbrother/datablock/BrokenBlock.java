@@ -12,12 +12,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class BrokenBlock extends BBAction {
-
+    
     public BrokenBlock(String player, Block block, String world) {
         this(player, block, world, true);
         OwnershipManager.removeOwner(block);
     }
-
+    
     public BrokenBlock(String player, Block block, String world, boolean checks) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         children = new ArrayList<BBAction>();
@@ -31,12 +31,13 @@ public class BrokenBlock extends BBAction {
         }
         OwnershipManager.removeOwner(block);
     }
-
-    public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {
+    
+    public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z,
+            int type, byte data) {
         super(pi, world, x, y, z, type, Byte.toString(data));
         children = new ArrayList<BBAction>();
     }
-
+    
     @Override
     public void send() {
         for (BBAction block : children) {
@@ -44,37 +45,39 @@ public class BrokenBlock extends BBAction {
         }
         super.send();
     }
-
+    
     public void rollback(World wld) {
         if (type != 51 || BBSettings.restoreFire) {
             World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
-
+            
             byte blockData = Byte.parseByte(data);
             currWorld.getBlockAt(x, y, z).setTypeId(type);
             currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
-
+    
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
-
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return new BrokenBlock(pi, world, x, y, z, type, data);
     }
-
-    private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    
+    private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
+    
     /**
      * 
      */
@@ -84,18 +87,22 @@ public class BrokenBlock extends BBAction {
     
     @Override
     public String toString() {
-        return "broke block "+Material.getMaterial(type);
+        return "broke block " + Material.getMaterial(type);
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
@@ -103,8 +110,10 @@ public class BrokenBlock extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override

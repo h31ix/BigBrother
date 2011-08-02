@@ -16,12 +16,13 @@ public class RollbackCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public RollbackCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.rollback((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.rollback((Player) player)) {
             if (split.length > 1) {
                 RollbackInterpreter interpreter = new RollbackInterpreter((Player) player, split, plugin.getServer(), plugin.worldManager, plugin);
                 Boolean passed = interpreter.interpret();

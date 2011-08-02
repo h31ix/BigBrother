@@ -13,13 +13,15 @@ import org.bukkit.entity.Player;
 
 public class WatchCommand implements CommandExecutor {
     private BigBrother plugin;
+    
     public WatchCommand(BigBrother bigBrother) {
-        plugin=bigBrother;
+        plugin = bigBrother;
     }
-
+    
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.watch((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.watch((Player) player)) {
             if (split.length == 2) {
                 List<Player> targets = plugin.getServer().matchPlayer(split[1]);
                 Player watchee = null;
@@ -27,7 +29,7 @@ public class WatchCommand implements CommandExecutor {
                     watchee = targets.get(0);
                 }
                 String playerName = (watchee == null) ? split[1] : watchee.getName();
-
+                
                 if (plugin.toggleWatch(playerName)) {
                     String status = (watchee == null) ? " (offline)" : " (online)";
                     player.sendMessage(BigBrother.premessage + "Now watching " + playerName + status);

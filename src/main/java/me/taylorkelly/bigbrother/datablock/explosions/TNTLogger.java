@@ -9,15 +9,16 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 public class TNTLogger {
-
+    
     public static double THRESHOLD = 10.0;
     private static HashMap<Location, String> tntMap = new HashMap<Location, String>();
-
+    
     public static void log(String player, Block block) {
         tntMap.put(block.getLocation(), player);
     }
-
-    public static void createTNTDataBlock(List<Block> blockList, Location location) {
+    
+    public static void createTNTDataBlock(List<Block> blockList,
+            Location location) {
         String player = BBAction.ENVIRONMENT;
         Location bestLocation = null;
         double bestDistance = THRESHOLD;
@@ -40,7 +41,7 @@ public class TNTLogger {
             }
         }
     }
-
+    
     public static double distance(Location from, Location to) {
         if (!from.getWorld().getName().equals(to.getWorld().getName())) {
             return Double.MAX_VALUE;

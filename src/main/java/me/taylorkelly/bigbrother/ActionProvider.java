@@ -36,11 +36,11 @@ import org.bukkit.plugin.Plugin;
  */
 public abstract class ActionProvider {
     public static class ActionData {
-        public Plugin          plugin = null;
-        public String          pluginName;
-        public Action          action = null;
-        public String          actionName;
-        public ActionCategory  category;
+        public Plugin plugin = null;
+        public String pluginName;
+        public Action action = null;
+        public String actionName;
+        public ActionCategory category;
         private ActionProvider provider;
         
         public ActionData(Plugin plugin, ActionProvider ap, Action action) {
@@ -59,17 +59,15 @@ public abstract class ActionProvider {
         @Override
         public boolean equals(Object o) {
             if (o instanceof ActionData) {
-                return ((ActionData) o).pluginName.equalsIgnoreCase(pluginName)
-                        && ((ActionData) o).actionName.equalsIgnoreCase(actionName)
-                        && ((ActionData) o).category == category;
+                return ((ActionData) o).pluginName.equalsIgnoreCase(pluginName) && ((ActionData) o).actionName.equalsIgnoreCase(actionName) && ((ActionData) o).category == category;
             }
             return false;
         }
     }
     
-    public static Map<Integer, ActionData> Actions         = new HashMap<Integer, ActionData>();
-    public static List<Integer>            disabledActions = new ArrayList<Integer>();
-    private Plugin                         plugin;
+    public static Map<Integer, ActionData> Actions = new HashMap<Integer, ActionData>();
+    public static List<Integer> disabledActions = new ArrayList<Integer>();
+    private Plugin plugin;
     
     /**
      * Override this to provide custom Actions.
@@ -84,7 +82,8 @@ public abstract class ActionProvider {
      * @param data
      * @return
      */
-    public abstract Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data);
+    public abstract Action getAction(String actionName, BBPlayerInfo player,
+            String world, int x, int y, int z, int type, String data);
     
     public ActionProvider(Plugin p) {
         this.plugin = p;
@@ -107,7 +106,8 @@ public abstract class ActionProvider {
      * @param provider
      * @param action
      */
-    protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
+    protected final void registerAction(Plugin plugin, ActionProvider provider,
+            Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
         int id = findActionID(action.getName());
         if (id == -1) {
@@ -149,7 +149,8 @@ public abstract class ActionProvider {
      * @param data
      * @return
      */
-    public static Action findAndProvide(int actionID, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public static Action findAndProvide(int actionID, BBPlayerInfo player,
+            String world, int x, int y, int z, int type, String data) {
         if (!Actions.containsKey(actionID))
             return null;
         ActionProvider provider = Actions.get(actionID).provider;
@@ -181,7 +182,8 @@ public abstract class ActionProvider {
      * @param deltaChest
      * @param i
      */
-    protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
+    protected void registerActionForceID(BigBrother plugin,
+            BBActionProvider provider, Action action, int id) {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsKey(id)) {
             ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id, action.getDescription());
@@ -197,61 +199,61 @@ public abstract class ActionProvider {
      */
     public static void loadDisabled(BetterConfig cfg) {
         List<String> actions;
-        if(cfg.getProperty("general.disabled-actions")==null) {
+        if (cfg.getProperty("general.disabled-actions") == null) {
             actions = new ArrayList<String>();
-            if(!cfg.getBoolean("watched.blocks.block-break", true))
+            if (!cfg.getBoolean("watched.blocks.block-break", true))
                 actions.add("BrokenBlock");
-            if(!cfg.getBoolean("watched.blocks.block-place", true))
+            if (!cfg.getBoolean("watched.blocks.block-place", true))
                 actions.add("PlacedBlock");
-            if(!cfg.getBoolean("watched.player.teleport", true))
+            if (!cfg.getBoolean("watched.player.teleport", true))
                 actions.add("Teleport");
-            if(!cfg.getBoolean("watched.blocks.chest-changes", true))
+            if (!cfg.getBoolean("watched.blocks.chest-changes", true))
                 actions.add("DeltaChest");
-            if(!cfg.getBoolean("watched.chat.commands", true))
+            if (!cfg.getBoolean("watched.chat.commands", true))
                 actions.add("Command");
-            if(!cfg.getBoolean("watched.chat.chat", true))
+            if (!cfg.getBoolean("watched.chat.chat", true))
                 actions.add("Chat");
-            if(!cfg.getBoolean("watched.player.login", true))
+            if (!cfg.getBoolean("watched.player.login", true))
                 actions.add("Login");
-            if(!cfg.getBoolean("watched.player.disconnect", true))
+            if (!cfg.getBoolean("watched.player.disconnect", true))
                 actions.add("Disconnect");
-            if(!cfg.getBoolean("watched.misc.door-open", false))
+            if (!cfg.getBoolean("watched.misc.door-open", false))
                 actions.add("DoorOpen");
-            if(!cfg.getBoolean("watched.misc.button-press", false))
+            if (!cfg.getBoolean("watched.misc.button-press", false))
                 actions.add("ButtonPress");
-            if(!cfg.getBoolean("watched.misc.lever-switch", false))
+            if (!cfg.getBoolean("watched.misc.lever-switch", false))
                 actions.add("LeverSwitch");
-            if(!cfg.getBoolean("watched.misc.flint-logging", true))
+            if (!cfg.getBoolean("watched.misc.flint-logging", true))
                 actions.add("FlintAndSteel");
-            if(!cfg.getBoolean("watched.environment.leaf-decay", false))
+            if (!cfg.getBoolean("watched.environment.leaf-decay", false))
                 actions.add("LeafDecay");
-            if(!cfg.getBoolean("watched.explosions.tnt", true))
+            if (!cfg.getBoolean("watched.explosions.tnt", true))
                 actions.add("TNTExplosion");
-            if(!cfg.getBoolean("watched.explosions.creeper", true))
+            if (!cfg.getBoolean("watched.explosions.creeper", true))
                 actions.add("CreeperExplosion");
-            if(!cfg.getBoolean("watched.explosions.misc", true))
+            if (!cfg.getBoolean("watched.explosions.misc", true))
                 actions.add("MiscExplosion");
-            if(!cfg.getBoolean("watched.player.drop-item", false))
+            if (!cfg.getBoolean("watched.player.drop-item", false))
                 actions.add("DropItem");
-            if(!cfg.getBoolean("watched.player.pickup-item", false))
+            if (!cfg.getBoolean("watched.player.pickup-item", false))
                 actions.add("PickupItem");
-            if(!cfg.getBoolean("watched.environment.lava-flow", true))
+            if (!cfg.getBoolean("watched.environment.lava-flow", true))
                 actions.add("Flow");
             cfg.removeProperty("watched");
             cfg.setProperty("general.disabled-actions", actions);
         } else {
-            actions=cfg.getStringList("general.disabled-actions",new ArrayList<String>());
+            actions = cfg.getStringList("general.disabled-actions", new ArrayList<String>());
         }
-        for(String act : actions) {
+        for (String act : actions) {
             int id = ActionProvider.findActionID(act);
-            if(id==-1) {
-                BBLogging.severe(String.format("Cannot disable action \"%s\", because it doesn't exist!",act));
+            if (id == -1) {
+                BBLogging.severe(String.format("Cannot disable action \"%s\", because it doesn't exist!", act));
             } else {
                 disabledActions.add(id);
             }
         }
     }
-
+    
     /**
      * @param class1
      * @return
@@ -261,59 +263,58 @@ public abstract class ActionProvider {
         try {
             return c.newInstance().isDisabled();
         } catch (Exception e) {
-            BBLogging.severe("When determining status of "+c.getName()+":",e);
+            BBLogging.severe("When determining status of " + c.getName() + ":", e);
         }
         return true;
     }
-
+    
     /**
      * @param actID
      * @return
      */
     public static String findActionName(int actID) {
         if (!Actions.containsKey(actID))
-            return "UNKNOWN ACTION #"+actID;
+            return "UNKNOWN ACTION #" + actID;
         return Actions.get(actID).actionName;
     }
     
-
-
     /**
-     * actions to roll back
-     * a:10,!BLOCK_PLACE
+     * actions to roll back a:10,!BLOCK_PLACE
+     * 
      * @author N3X15
-     * @return 
+     * @return
      */
-    public static List<Integer> parseActionSwitch(List<Integer> acts, String actstr) {
-        if(acts==null) {
-            acts=getDefaultActions();
+    public static List<Integer> parseActionSwitch(List<Integer> acts,
+            String actstr) {
+        if (acts == null) {
+            acts = getDefaultActions();
         }
-        for(String act:actstr.split(",")) {
-            if(!act.startsWith("!") && acts.size()==0) {
+        for (String act : actstr.split(",")) {
+            if (!act.startsWith("!") && acts.size() == 0) {
                 acts.clear();
             }
             int ca;
-            if(act.startsWith("!")) {
+            if (act.startsWith("!")) {
                 ca = findActionID(act.substring(1));
-                if(ca>-1 && acts.contains(ca))
+                if (ca > -1 && acts.contains(ca))
                     acts.remove(ca);
-            }else{
+            } else {
                 ca = findActionID(act);
-                if(ca>-1 && !acts.contains(ca))
+                if (ca > -1 && !acts.contains(ca))
                     acts.add(ca);
             }
         }
         return acts;
     }
-
+    
     /**
      * @return
      */
     public static List<Integer> getDefaultActions() {
         List<Integer> acts = new ArrayList<Integer>();
-        for(int actID : Actions.keySet()) {
+        for (int actID : Actions.keySet()) {
             // Not disabled in the config and not hidden.
-            if(!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN))
+            if (!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN))
                 acts.add(actID);
         }
         return acts;

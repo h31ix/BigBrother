@@ -53,7 +53,7 @@ public class Rollback {
         players = new ArrayList<String>();
         recievers = new ArrayList<Player>();
         listBlocks = new LinkedList<Action>();
-        allowedActions=new ArrayList<Integer>();
+        allowedActions = new ArrayList<Integer>();
     }
     
     public void addReciever(Player player) {
@@ -124,7 +124,7 @@ public class Rollback {
             }
         }
         if (undoRollback != null) {
-            if(BBDB.tryUpdate(undoRollback)) {
+            if (BBDB.tryUpdate(undoRollback)) {
                 undoRollback = null;
                 player.sendMessage(ChatColor.AQUA + "Successfully undid a rollback of " + i + " edits");
             }
@@ -138,15 +138,15 @@ public class Rollback {
     
     private class Rollbacker extends Thread {
         
-        private PreparedStatement create_ps=null;
-        private PreparedStatement update_ps=null;
+        private PreparedStatement create_ps = null;
+        private PreparedStatement update_ps = null;
         
         private Rollbacker(Plugin plugin, BukkitScheduler scheduler) {
             try {
                 create_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().create(Rollback.this, manager));
                 update_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().update(Rollback.this, manager));
             } catch (SQLException e) {
-                BBLogging.severe("Rollbacker failed to initialize:",e);
+                BBLogging.severe("Rollbacker failed to initialize:", e);
             }
         }
         
@@ -160,9 +160,7 @@ public class Rollback {
                 int rollbackSize = 0;
                 while (set.next()) {
                     String data = set.getString("data");
-                    listBlocks.addLast(
-ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().getUserByID(set.getInt("player")), set.getString("world"), set.getInt("x"),
-                            set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
+                    listBlocks.addLast(ActionProvider.findAndProvide(set.getInt("action"), BBUsersTable.getInstance().getUserByID(set.getInt("player")), set.getString("world"), set.getInt("x"), set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;
                 }
                 if (rollbackSize > 0) {
@@ -198,7 +196,7 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                         BBDB.commit();
                         undoRollback = RollbackPreparedStatement.getInstance().undoStatement(Rollback.this, manager);
                     } catch (SQLException ex) {
-                        BBLogging.severe("Rollback edit SQL Exception: "+RollbackPreparedStatement.getInstance().update(Rollback.this, manager), ex);
+                        BBLogging.severe("Rollback edit SQL Exception: " + RollbackPreparedStatement.getInstance().update(Rollback.this, manager), ex);
                     }
                 } else {
                     for (Player player : recievers) {
@@ -209,27 +207,28 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                 BBLogging.severe("Rollback get SQL Exception", ex);
             } finally {
                 try {
-                    if(create_ps!=null)
+                    if (create_ps != null)
                         create_ps.close();
-                    if(update_ps!=null)
+                    if (update_ps != null)
                         update_ps.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
-
+        
         /**
          * @param allowedActions
          * @return
          */
         private String getActionString(List<Integer> allowedActions) {
             String o = "";
-            boolean first=true;
+            boolean first = true;
             for (int actID : allowedActions) {
-                if(!first) {
-                    o+=", ";
+                if (!first) {
+                    o += ", ";
                 }
-                first=false;
-                o+=ActionProvider.findActionName(actID);
+                first = false;
+                o += ActionProvider.findActionName(actID);
             }
             return o;
         }
@@ -259,7 +258,6 @@ ActionProvider.findAndProvide(set.getInt("action"),BBUsersTable.getInstance().ge
                     count++;
                 }
             }
-            
             
             if (listBlocks.size() == 0) {
                 BBLogging.debug("Finished rollback");

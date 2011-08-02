@@ -14,13 +14,14 @@ public class LogCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public LogCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
-        Player player=(Player) send;
-        if(BBPermissions.info(player)) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2,
+            String[] split) {
+        Player player = (Player) send;
+        if (BBPermissions.info(player)) {
             if (split.length == 1) {
                 plugin.sticker.giveLog(player);
             } else {

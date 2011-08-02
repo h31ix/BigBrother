@@ -9,15 +9,12 @@ import java.util.Properties;
 
 /**
  * <b>Purpose:</b>Wrapper for JDBCConnectionDriver.<br>
- * <b>Description:</b>http://java.sun.com/developer/onlineTraining/Programming/
- * JDCBook/ conpool.html<br>
- * <b>Copyright:</b>Licensed under the Apache License, Version 2.0.
- * http://www.apache.org/licenses/LICENSE-2.0<br>
+ * <b>Description:</b>http://java.sun.com/developer/onlineTraining/Programming/ JDCBook/ conpool.html<br>
+ * <b>Copyright:</b>Licensed under the Apache License, Version 2.0. http://www.apache.org/licenses/LICENSE-2.0<br>
  * <b>Company:</b> SIMPL<br>
  * 
  * @author schneimi
- * @version $Id: JDCConnectionDriver.java 1224 2010-04-28 14:17:34Z
- *          michael.schneidt@arcor.de $<br>
+ * @version $Id: JDCConnectionDriver.java 1224 2010-04-28 14:17:34Z michael.schneidt@arcor.de $<br>
  * @link http://code.google.com/p/simpl09/
  */
 public class JDCConnectionDriver implements Driver {
@@ -26,7 +23,9 @@ public class JDCConnectionDriver implements Driver {
     private static final int MINOR_VERSION = 0;
     private ConnectionService pool;
     
-    public JDCConnectionDriver(String driver, String url, String user, String password) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
+    public JDCConnectionDriver(String driver, String url, String user,
+            String password) throws ClassNotFoundException,
+            InstantiationException, IllegalAccessException, SQLException {
         DriverManager.registerDriver(this);
         Class.forName(driver).newInstance();
         pool = new ConnectionService(url, user, password);

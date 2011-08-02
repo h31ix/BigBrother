@@ -43,20 +43,20 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         try {
             //plugin.processPsuedotick();
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             String[] parts = BBCommand.groupArgs(event.getMessage().split(" "));
             String cmd = parts[0].toLowerCase();
             String msg = event.getMessage();
             
             // Perform censoring
-            if(BBSettings.censoredCommands.contains(cmd)) {
-                msg="/"+cmd;
-                if(parts.length>1) {
-                    for(int i = 1;i<parts.length;i++) {
+            if (BBSettings.censoredCommands.contains(cmd)) {
+                msg = "/" + cmd;
+                if (parts.length > 1) {
+                    for (int i = 1; i < parts.length; i++) {
                         msg += " ";
-                        for(int j = 0;j<parts[i].length();j++)
-                            msg+="*";
+                        for (int j = 0; j < parts[i].length(); j++)
+                            msg += "*";
                     }
                 }
             }
@@ -67,8 +67,8 @@ public class BBPlayerListener extends PlayerListener {
                 Command dataBlock = new Command(player, msg, player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerCommandPreprocess("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerCommandPreprocess(" + event.toString() + ")", e);
         }
     }
     
@@ -76,7 +76,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         try {
             //plugin.processPsuedotick();
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             Player player = event.getPlayer();
             
@@ -88,7 +88,7 @@ public class BBPlayerListener extends PlayerListener {
                 dataBlock.send();
             }
             
-            if(BBPermissions.info(player)) {
+            if (BBPermissions.info(player)) {
                 plugin.sticker.onPlayerJoin(player, pi);
             }
             
@@ -97,8 +97,8 @@ public class BBPlayerListener extends PlayerListener {
             BBLogging.debug("- Info privileges: " + BBPermissions.info(player));
             BBLogging.debug("- Rollback privileges: " + BBPermissions.rollback(player));
             BBLogging.debug("- Cleansing privileges: " + BBPermissions.cleanse(player));
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerJoin("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerJoin(" + event.toString() + ")", e);
         }
     }
     
@@ -106,7 +106,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         try {
             //plugin.processPsuedotick();
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -115,8 +115,8 @@ public class BBPlayerListener extends PlayerListener {
                 Disconnect dataBlock = new Disconnect(player.getName(), player.getLocation(), player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerQuit("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerQuit(" + event.toString() + ")", e);
         }
     }
     
@@ -124,7 +124,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         try {
             //plugin.processPsuedotick();
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             Location from = event.getFrom();
             Location to = event.getTo();
@@ -136,8 +136,8 @@ public class BBPlayerListener extends PlayerListener {
                 Teleport dataBlock = new Teleport(player.getName(), event.getTo());
                 dataBlock.send();
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerTeleport("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerTeleport(" + event.toString() + ")", e);
         }
     }
     
@@ -145,7 +145,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerChat(PlayerChatEvent event) {
         try {
             //plugin.processPsuedotick();
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -154,35 +154,34 @@ public class BBPlayerListener extends PlayerListener {
                 Chat dataBlock = new Chat(player, event.getMessage(), player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerChat("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerChat(" + event.toString() + ")", e);
         }
     }
     
     @Override
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         try {
-            if(event==null || event.getPlayer()==null || event.getItem()==null)
+            if (event == null || event.getPlayer() == null || event.getItem() == null)
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             if (!ActionProvider.isDisabled(PickupItem.class) && pi.getWatched()) {
                 // It should not be null, but I have no other way to explain the NPEs.  Bukkit Bug?
-                if(event.getItem() != null && event.getItem().getItemStack() != null)
-                {
+                if (event.getItem() != null && event.getItem().getItemStack() != null) {
                     PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
                     dataBlock.send();
                 }
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerPickupItem("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerPickupItem(" + event.toString() + ")", e);
         }
     }
     
     @Override
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         try {
-            if(event==null || event.getPlayer()==null || event.getItemDrop()==null || event.getItemDrop().getItemStack()==null)
+            if (event == null || event.getPlayer() == null || event.getItemDrop() == null || event.getItemDrop().getItemStack() == null)
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -190,37 +189,38 @@ public class BBPlayerListener extends PlayerListener {
                 DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
                 dataBlock.send();
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerDropItem("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerDropItem(" + event.toString() + ")", e);
         }
     }
     
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
         try {
-            if(event==null || event.getPlayer()==null)
+            if (event == null || event.getPlayer() == null)
                 return;
             //plugin.processPsuedotick();
-            if(event.isCancelled()) return;
+            if (event.isCancelled())
+                return;
             
             Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             
-            if(event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+            if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 if (BBPermissions.info(player) && plugin.hasStick(player, player.getItemInHand()) && plugin.leftClickStick(player)) {
                     // Process left-clicks (punch action on log, etc)
-                    plugin.stick(player, event.getClickedBlock(),true);
+                    plugin.stick(player, event.getClickedBlock(), true);
                     
                     event.setCancelled(true); // Cancel in case of 1-hit breakable stuff like flowers.
                 }
             }
             
             // Process right-clicking stuff.
-            if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 // Process stick/log events first.
                 if (BBPermissions.info(player) && plugin.hasStick(player, player.getItemInHand()) && plugin.rightClickStick(player)) {
                     // Get info
-                    plugin.stick(player, event.getClickedBlock(),false);
+                    plugin.stick(player, event.getClickedBlock(), false);
                     
                     // Cancel any interactions.
                     ArrayList<Material> nonInteracts = new ArrayList<Material>();
@@ -240,10 +240,10 @@ public class BBPlayerListener extends PlayerListener {
                     Block block = event.getClickedBlock();
                     
                     plugin.closeChestIfOpen(pi);
-                    if(block.getState() instanceof Chest) {
-                        Chest chest = ((Chest)block.getState());
+                    if (block.getState() instanceof Chest) {
+                        Chest chest = ((Chest) block.getState());
                         // OH SHI-
-                        BBUsersTable.getInstance().userOpenedChest(player.getName(),chest,ChestTools.getChestContents(chest));
+                        BBUsersTable.getInstance().userOpenedChest(player.getName(), chest, ChestTools.getChestContents(chest));
                         return;
                     }
                     switch (event.getMaterial()) {
@@ -327,7 +327,7 @@ public class BBPlayerListener extends PlayerListener {
                             }
                             break;
                         default:
-                            
+
                             switch (event.getClickedBlock().getType()) {
                                 case WOODEN_DOOR:
                                     //case IRON_DOOR:
@@ -359,8 +359,8 @@ public class BBPlayerListener extends PlayerListener {
                     }
                 }
             }
-        } catch(Throwable e) {
-            BBLogging.severe("onPlayerInteract("+event.toString()+")",e);
+        } catch (Throwable e) {
+            BBLogging.severe("onPlayerInteract(" + event.toString() + ")", e);
         }
     }
     

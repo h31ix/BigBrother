@@ -30,7 +30,7 @@ public class PropertiesFile {
     private HashMap<String, PropertiesEntry> map;
     private File file;
     private boolean modified;
-
+    
     public PropertiesFile(File file) {
         this.file = file;
         map = new HashMap<String, PropertiesEntry>();
@@ -48,7 +48,7 @@ public class PropertiesFile {
                 if (line.contains("#")) {
                     commentIndex = line.indexOf('#');
                 }
-
+                
                 String key = line.substring(0, equals).trim();
                 if (key.equals(""))
                     continue;
@@ -65,8 +65,9 @@ public class PropertiesFile {
             BBLogging.severe("Cannot create file " + file.getName());
         }
     }
-
-    public boolean getBoolean(String key, Boolean defaultValue, String defaultComment) {
+    
+    public boolean getBoolean(String key, Boolean defaultValue,
+            String defaultComment) {
         if (map.containsKey(key)) {
             return Boolean.parseBoolean(map.get(key).value);
         } else {
@@ -75,8 +76,9 @@ public class PropertiesFile {
             return defaultValue;
         }
     }
-
-    public String getString(String key, String defaultValue, String defaultComment) {
+    
+    public String getString(String key, String defaultValue,
+            String defaultComment) {
         if (map.containsKey(key)) {
             return map.get(key).value;
         } else {
@@ -85,7 +87,7 @@ public class PropertiesFile {
             return defaultValue;
         }
     }
-
+    
     public int getInt(String key, Integer defaultValue, String defaultComment) {
         if (map.containsKey(key)) {
             try {
@@ -100,7 +102,7 @@ public class PropertiesFile {
             return defaultValue;
         }
     }
-
+    
     public long getLong(String key, Long defaultValue, String defaultComment) {
         if (map.containsKey(key)) {
             try {
@@ -115,8 +117,9 @@ public class PropertiesFile {
             return defaultValue;
         }
     }
-
-    public double getDouble(String key, Double defaultValue, String defaultComment) {
+    
+    public double getDouble(String key, Double defaultValue,
+            String defaultComment) {
         if (map.containsKey(key)) {
             try {
                 return Double.parseDouble(map.get(key).value);
@@ -130,7 +133,7 @@ public class PropertiesFile {
             return defaultValue;
         }
     }
-
+    
     public void setDouble(String key, Double globalMemory, String defaultComment) {
         if (map.containsKey(key)) {
             PropertiesEntry entry = map.get(key);
@@ -140,7 +143,7 @@ public class PropertiesFile {
         }
         modified = true;
     }
-
+    
     public void save() {
         if (!modified)
             return;
@@ -179,19 +182,19 @@ public class PropertiesFile {
                 BBLogging.severe("IO Exception with file " + file.getName() + " (on close)");
             }
         }
-
+        
     }
-
+    
     private static class PropertiesEntry {
         public String value;
         public String comment;
-
+        
         public PropertiesEntry(String value, String comment) {
             this.value = value;
             this.comment = comment;
         }
     }
-
+    
     /**
      * @param table
      * @param currentVersion

@@ -1,20 +1,20 @@
 /**
-* A piston moving stuff
-* Copyright (C) 2011 BigBrother Contributors
-* 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * A piston moving stuff
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package me.taylorkelly.bigbrother.datablock;
 
@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class BlockPistoned extends BBAction {
     
@@ -41,16 +41,16 @@ public class BlockPistoned extends BBAction {
      * @param direction
      */
     public BlockPistoned(BBPlayerInfo player, Block block, BlockFace direction) {
-        super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData())+"\t"+direction.name());
+        super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()) + "\t" + direction.name());
     }
-
+    
     /**
      * 
      */
     public BlockPistoned() {
         // TODO Auto-generated constructor stub
     }
-
+    
     /**
      * @param pi
      * @param world
@@ -60,18 +60,21 @@ public class BlockPistoned extends BBAction {
      * @param type
      * @param data
      */
-    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
-        super(pi,world,x,y,z,type,data);
+    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z,
+            int type, String data) {
+        super(pi, world, x, y, z, type, data);
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#rollback(org.bukkit.World)
      */
     @Override
     public void rollback(World world) {
         
-        Chunk c = world.getChunkAt(x,z);
-        if(!world.isChunkLoaded(c))
+        Chunk c = world.getChunkAt(x, z);
+        if (!world.isChunkLoaded(c))
             world.loadChunk(c);
         // Get the block we're about to replace
         Block rb = world.getBlockAt(x, y, z);
@@ -86,15 +89,15 @@ public class BlockPistoned extends BBAction {
         
         return Byte.valueOf(dat);
     }
-
+    
     /**
      * @return
      */
     private Vector getDirectionOffset() {
         BlockFace d = getDirection();
-        return new Vector(d.getModX(),d.getModY(),d.getModZ());
+        return new Vector(d.getModX(), d.getModY(), d.getModZ());
     }
-
+    
     /**
      * @return
      */
@@ -103,26 +106,30 @@ public class BlockPistoned extends BBAction {
         
         return BlockFace.valueOf(dname);
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#redo(org.bukkit.Server)
      */
     @Override
     public void redo(Server server) {
         Vector d = getDirectionOffset();
         World w = server.getWorld(world);
-        Chunk c = w.getChunkAt(x,z);
-        if(!w.isChunkLoaded(c))
+        Chunk c = w.getChunkAt(x, z);
+        if (!w.isChunkLoaded(c))
             w.loadChunk(c);
-        c = w.getChunkAt(x+d.getBlockX(),z+d.getBlockZ());
-        if(!w.isChunkLoaded(c))
+        c = w.getChunkAt(x + d.getBlockX(), z + d.getBlockZ());
+        if (!w.isChunkLoaded(c))
             w.loadChunk(c);
         // Get the block we're about to replace
-        Block rb = w.getBlockAt(x+d.getBlockX(), y+d.getBlockY(), z+d.getBlockZ());
+        Block rb = w.getBlockAt(x + d.getBlockX(), y + d.getBlockY(), z + d.getBlockZ());
         rb.setTypeIdAndData(type, getData(), true);
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
@@ -130,7 +137,9 @@ public class BlockPistoned extends BBAction {
         return getClass().getSimpleName();
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
@@ -138,20 +147,22 @@ public class BlockPistoned extends BBAction {
         return ActionCategory.BLOCKS;
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override
     public String getDescription() {
         return "A block moved by a piston";
     }
-
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
-        return new BlockPistoned(pi,world,x,y,z,type,data);
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
+        return new BlockPistoned(pi, world, x, y, z, type, data);
     }
     
-    
     public String toString() {
-        return String.format(" - A piston moved a "+Material.getMaterial(type).name()+".");
+        return String.format(" - A piston moved a " + Material.getMaterial(type).name() + ".");
     }
 }

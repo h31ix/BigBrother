@@ -29,129 +29,124 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class Updater {
-
-	private Logger logger = Logger.getLogger("Minecraft");
-
-	//Server's down, don't use it.
-	//private final static String UPDATE_SITE = "http://stethoscopesmp.com/tkelly/";
-	private final static String UPDATE_SITE = "http://mine.7chan.org/mirror/";
-
-	private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
-
-	public Updater() {
-	}
-
-	public void check() {
-		String[] paths = new String[] { "lib/h2.jar", /*"lib/" + getOSSpecificFileName(),*/ "lib/mysql.jar",
-				"lib/postgresql.jar" };
-
-		for (String path : paths) {
-			File file = new File(path);
-
-			if (file != null && !file.exists() && !file.isDirectory()) {
-			    String url=UPDATE_SITE+path;
-			    /*
-			    if(path.equalsIgnoreCase("lib/h2.jar"))
-			        url="http://mine.7chan.org/mirror/lib/h2.jar"; // Temporary
-			    if(path.equalsIgnoreCase("lib/postgresql.jar"))
-			        url="http://mine.7chan.org/mirror/lib/postgresql.jar";
-			    */
-				UpdaterFile updaterFile = new UpdaterFile(url);
-				updaterFile.setLocalLocation(path);
-				needsUpdating.add(updaterFile);
-			}
-		}
-	}
-
-
-	/**
-	 * Get the OS specific sqlite file name (arch specific, too, for linux)
-	 * 
-	 * @return
-	 */
-	public String getOSSpecificFileName() {
-		String osname = System.getProperty("os.name").toLowerCase();
-		String arch = System.getProperty("os.arch");
-
-		if (osname.contains("windows")) {
-			osname = "win";
-			arch = "x86";
-		} else if (osname.contains("mac")) {
-			osname = "mac";
-			arch = "universal";
-		} else if (osname.contains("nix")) {
-			osname = "linux";
-		} else if (osname.equals("sunos")) {
-			osname = "linux";
-		}
-
-		if (arch.startsWith("i") && arch.endsWith("86")) {
-			arch = "x86";
-		}
-
-		return osname + "-" + arch + ".lib";
-	}
-
-	/**
-	 * Ensure we have all of the required files (if not, download them)
-	 */
-	public void update() throws Exception {
-		if (needsUpdating.size() == 0) {
-			return;
-		}
-
-		File folder = new File("lib");
-
-		if (folder.exists() && !folder.isDirectory()) {
-			throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
-		} else if (!folder.exists()) {
-			logger.info("Creating folder : lib");
-			folder.mkdir();
-		}
-
-		logger.info("Need to download " + needsUpdating.size() + " object(s)");
-
-		Iterator<UpdaterFile> iterator = needsUpdating.iterator();
-		
-		while(iterator.hasNext()) {
-			UpdaterFile item = iterator.next();
-			
-			logger.info(" - Downloading file : " + item.getRemoteLocation()+" to "+item.getLocalLocation());
-
-			URL url = new URL(item.getRemoteLocation());
-			File file = new File(item.getLocalLocation());
-			logger.info("(Meaning "+file.getAbsolutePath()+")");
-			if (file.exists()) {
-				file.delete();
-			}
-
-			InputStream inputStream = url.openStream();
-			OutputStream outputStream = new FileOutputStream(file);
-
-			saveTo(inputStream, outputStream);
-
-			inputStream.close();
-			outputStream.close();
-
-			logger.info("  + Download complete");
-			iterator.remove();
-		}
-	}
-
-
-	/**
-	 * Write an input stream to an output stream
-	 * 
-	 * @param inputStream
-	 * @param outputStream
-	 */
-	private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
-		byte[] buffer = new byte[1024];
-		int len = 0;
-
-		while ((len = inputStream.read(buffer)) > 0) {
-			outputStream.write(buffer, 0, len);
-		}
-	}
-
+    
+    private Logger logger = Logger.getLogger("Minecraft");
+    
+    //Server's down, don't use it.
+    //private final static String UPDATE_SITE = "http://stethoscopesmp.com/tkelly/";
+    private final static String UPDATE_SITE = "http://mine.7chan.org/mirror/";
+    
+    private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
+    
+    public Updater() {
+    }
+    
+    public void check() {
+        String[] paths = new String[] { "lib/h2.jar", /* "lib/" + getOSSpecificFileName(), */"lib/mysql.jar", "lib/postgresql.jar" };
+        
+        for (String path : paths) {
+            File file = new File(path);
+            
+            if (file != null && !file.exists() && !file.isDirectory()) {
+                String url = UPDATE_SITE + path;
+                /*
+                 * if(path.equalsIgnoreCase("lib/h2.jar")) url="http://mine.7chan.org/mirror/lib/h2.jar"; // Temporary if(path.equalsIgnoreCase("lib/postgresql.jar")) url="http://mine.7chan.org/mirror/lib/postgresql.jar";
+                 */
+                UpdaterFile updaterFile = new UpdaterFile(url);
+                updaterFile.setLocalLocation(path);
+                needsUpdating.add(updaterFile);
+            }
+        }
+    }
+    
+    /**
+     * Get the OS specific sqlite file name (arch specific, too, for linux)
+     * 
+     * @return
+     */
+    public String getOSSpecificFileName() {
+        String osname = System.getProperty("os.name").toLowerCase();
+        String arch = System.getProperty("os.arch");
+        
+        if (osname.contains("windows")) {
+            osname = "win";
+            arch = "x86";
+        } else if (osname.contains("mac")) {
+            osname = "mac";
+            arch = "universal";
+        } else if (osname.contains("nix")) {
+            osname = "linux";
+        } else if (osname.equals("sunos")) {
+            osname = "linux";
+        }
+        
+        if (arch.startsWith("i") && arch.endsWith("86")) {
+            arch = "x86";
+        }
+        
+        return osname + "-" + arch + ".lib";
+    }
+    
+    /**
+     * Ensure we have all of the required files (if not, download them)
+     */
+    public void update() throws Exception {
+        if (needsUpdating.size() == 0) {
+            return;
+        }
+        
+        File folder = new File("lib");
+        
+        if (folder.exists() && !folder.isDirectory()) {
+            throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
+        } else if (!folder.exists()) {
+            logger.info("Creating folder : lib");
+            folder.mkdir();
+        }
+        
+        logger.info("Need to download " + needsUpdating.size() + " object(s)");
+        
+        Iterator<UpdaterFile> iterator = needsUpdating.iterator();
+        
+        while (iterator.hasNext()) {
+            UpdaterFile item = iterator.next();
+            
+            logger.info(" - Downloading file : " + item.getRemoteLocation() + " to " + item.getLocalLocation());
+            
+            URL url = new URL(item.getRemoteLocation());
+            File file = new File(item.getLocalLocation());
+            logger.info("(Meaning " + file.getAbsolutePath() + ")");
+            if (file.exists()) {
+                file.delete();
+            }
+            
+            InputStream inputStream = url.openStream();
+            OutputStream outputStream = new FileOutputStream(file);
+            
+            saveTo(inputStream, outputStream);
+            
+            inputStream.close();
+            outputStream.close();
+            
+            logger.info("  + Download complete");
+            iterator.remove();
+        }
+    }
+    
+    /**
+     * Write an input stream to an output stream
+     * 
+     * @param inputStream
+     * @param outputStream
+     */
+    private void saveTo(InputStream inputStream, OutputStream outputStream)
+            throws IOException {
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        
+        while ((len = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, len);
+        }
+    }
+    
 }

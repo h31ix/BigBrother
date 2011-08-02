@@ -9,16 +9,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class TimeParser {
-
+    
     /**
-     * Returns the Calendar of the date represented by now subtracted by
-     * a given time formatted with:
-     * #d - number of days
-     * #h - number of hours
-     * #m - number of minutes
-     * #s - number of seconds
-     * @param strTime The string
-     * @param player The player to report to
+     * Returns the Calendar of the date represented by now subtracted by a given time formatted with: #d - number of days #h - number of hours #m - number of minutes #s - number of seconds
+     * 
+     * @param strTime
+     *            The string
+     * @param player
+     *            The player to report to
      * @return The Calendar of the specified date
      */
     public static Calendar parseTime(String strTime, Player player) {
@@ -27,7 +25,7 @@ public class TimeParser {
         int hours = 0;
         int minutes = 0;
         int seconds = 0;
-
+        
         int lastIndex = 0;
         int currIndex = 1;
         while (currIndex <= strTime.length()) {
@@ -70,7 +68,7 @@ public class TimeParser {
             lastIndex = currIndex;
             currIndex += 1;
         }
-
+        
         if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
             player.sendMessage(ChatColor.RED + "No change in time was set.");
             return null;
@@ -83,13 +81,13 @@ public class TimeParser {
             return dateSearch;
         }
     }
-
+    
     public static long parseInterval(String strTime) {
         int days = 0;
         int hours = 0;
         int minutes = 0;
         int seconds = 0;
-
+        
         int lastIndex = 0;
         int currIndex = 1;
         try {
@@ -135,7 +133,7 @@ public class TimeParser {
         } catch (Exception e) {
             return -1;
         }
-
+        
         if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
             System.out.println("All items will be kept");
             return -1;

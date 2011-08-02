@@ -21,6 +21,7 @@ import org.junit.Test;
 
 /**
  * Run tests against H2
+ * 
  * @author Rob
  * 
  */
@@ -31,7 +32,7 @@ public class TestH2 {
     private static final String BBWORLDS_TABLE_NAME = "bbworlds";
     private static final String OWNERS_TABLE_NAME = "owners";
     private static final String ACTION_TABLE_NAME = "actions";
-
+    
     /**
      * @throws java.lang.Exception
      */
@@ -45,10 +46,9 @@ public class TestH2 {
     }
     
     /**
-     * Test method for
-     * {@link me.taylorkelly.bigbrother.datasource.BBDB#reconnect()}
-     * .
-     * @throws SQLException 
+     * Test method for {@link me.taylorkelly.bigbrother.datasource.BBDB#reconnect()} .
+     * 
+     * @throws SQLException
      */
     @Test
     public void testGetConnection() throws SQLException {
@@ -61,11 +61,11 @@ public class TestH2 {
     @Test
     public void testDataTableCreation() {
         //DROP first.
-        BBDB.executeUpdate("DROP TABLE IF EXISTS "+BBDATA_TABLE_NAME);
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + BBDATA_TABLE_NAME);
         
         // getInstance performs init, getCreateSyntax is a NOP in this instance.
         BBDataTable.getInstance().getCreateSyntax();
-
+        
         // Clean up singleton for next test.
         BBDataTable.cleanup();
     }
@@ -76,16 +76,14 @@ public class TestH2 {
     @Test
     public void testActionTableCreation() {
         //DROP first.
-        BBDB.executeUpdate("DROP TABLE IF EXISTS "+ACTION_TABLE_NAME);
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + ACTION_TABLE_NAME);
         
         // getInstance performs init, getCreateSyntax is a NOP in this instance.
         ActionTable.getInstance().getCreateSyntax();
-
+        
         // Clean up singleton for next test.
         ActionTable.cleanup();
     }
-    
-
     
     /**
      * Test method for creating data tables.
@@ -93,16 +91,14 @@ public class TestH2 {
     @Test
     public void testUserTableCreation() {
         //DROP first.
-        BBDB.executeUpdate("DROP TABLE IF EXISTS "+BBUSERS_TABLE_NAME);
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + BBUSERS_TABLE_NAME);
         
         // getInstance performs init, getCreateSyntax is a NOP in this instance.
-        BBUsersTable.getInstance().getCreateSyntax(); 
-
+        BBUsersTable.getInstance().getCreateSyntax();
+        
         // Clean up singleton for next test.
         BBUsersTable.cleanup();
     }
-    
-
     
     /**
      * Test method for creating data tables.
@@ -110,7 +106,7 @@ public class TestH2 {
     @Test
     public void testWorldTableCreation() {
         //DROP first.
-        BBDB.executeUpdate("DROP TABLE IF EXISTS "+BBWORLDS_TABLE_NAME);
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + BBWORLDS_TABLE_NAME);
         
         // getInstance performs init, getCreateSyntax is a NOP in this instance.
         BBWorldsTable.getInstance().getCreateSyntax();
@@ -119,8 +115,6 @@ public class TestH2 {
         BBWorldsTable.cleanup();
     }
     
-
-    
     /**
      * Test method for creating data tables.
      */
@@ -128,7 +122,7 @@ public class TestH2 {
     public void testOwnersTableCreation() {
         
         //DROP first.
-        BBDB.executeUpdate("DROP TABLE IF EXISTS "+OWNERS_TABLE_NAME);
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + OWNERS_TABLE_NAME);
         
         // getInstance performs init, getCreateSyntax is a NOP in this instance.
         OwnersTable.getInstance().getCreateSyntax();
@@ -136,6 +130,5 @@ public class TestH2 {
         // Clean up singleton for next test.
         OwnersTable.cleanup();
     }
-    
     
 }

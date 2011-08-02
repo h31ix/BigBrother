@@ -32,40 +32,42 @@ import me.taylorkelly.util.TimeParser;
 public class BBDB {
     /**
      * For tracing potential left-open statements.
+     * 
      * @author Rob
-     *
+     * 
      */
     public static class StatementInfo {
         public Object stmt;
         public StackTraceElement[] stack;
         
         public StatementInfo(Object stmt) {
-            this.stmt=stmt;
-            stack=Thread.currentThread().getStackTrace();
+            this.stmt = stmt;
+            stack = Thread.currentThread().getStackTrace();
         }
         
         public void close() throws SQLException {
-            if(stmt instanceof Statement) {
+            if (stmt instanceof Statement) {
                 ((Statement) stmt).close();
             }
-            if(stmt instanceof PreparedStatement) {
+            if (stmt instanceof PreparedStatement) {
                 ((PreparedStatement) stmt).close();
             }
         }
     }
-    public static String               prefix      = "";
-    public static DBMS                 dbms        = DBMS.H2;
-    public static String               username    = "";
-    public static String               password    = "";
-    public static String               schema      = "";
-    public static String               hostname    = "";
-    public static int                  port        = 3306;
-    public static boolean              lowPriority = true;
-    public static String               engine      = "INNODB";
     
-    private static Connection          conn;
+    public static String prefix = "";
+    public static DBMS dbms = DBMS.H2;
+    public static String username = "";
+    public static String password = "";
+    public static String schema = "";
+    public static String hostname = "";
+    public static int port = 3306;
+    public static boolean lowPriority = true;
+    public static String engine = "INNODB";
+    
+    private static Connection conn;
     private static JDCConnectionDriver driver;
-    public static Map<ResultSet,StatementInfo> statements = new HashMap<ResultSet,StatementInfo>();
+    public static Map<ResultSet, StatementInfo> statements = new HashMap<ResultSet, StatementInfo>();
     
     public interface DBFailCallback {
         void disableMe();
@@ -74,16 +76,16 @@ public class BBDB {
     public static void initSettings(BetterConfig yml) {
         // Database type (Database Management System = DBMS :V)
         final String dbms = yml.getString("database.type", DBMS.H2.name());
-        final String cleanse_age=yml.getString("database.cleanser.age", "7d");
+        final String cleanse_age = yml.getString("database.cleanser.age", "7d");
         setDBMS(dbms);
         
         BBSettings.deletesPerCleansing = yml.getLong("database.cleanser.deletes-per-operation", BBSettings.deletesPerCleansing); // "The maximum number of records to delete per cleansing (0 to disable).");
         
-        if(cleanse_age.equals("0s") || cleanse_age.equalsIgnoreCase("off"))
-            BBSettings.cleanseAge=-1;
+        if (cleanse_age.equals("0s") || cleanse_age.equalsIgnoreCase("off"))
+            BBSettings.cleanseAge = -1;
         else
             BBSettings.cleanseAge = TimeParser.parseInterval(cleanse_age);// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
-        
+            
         BBSettings.sendDelay = yml.getInt("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
         
         username = yml.getString("database.username", username);
@@ -102,17 +104,21 @@ public class BBDB {
      * Set up the connection
      * 
      * @param plugin
-     * @param system DBMS in use
-     * @param hostname Address of the server
+     * @param system
+     *            DBMS in use
+     * @param hostname
+     *            Address of the server
      * @param username
      * @param password
-     * @param schema Database
+     * @param schema
+     *            Database
      */
-    public static void init() {}
+    public static void init() {
+    }
     
     public static void shutdown() {
         // Close open statements
-        for(StatementInfo stmt : statements.values()) {
+        for (StatementInfo stmt : statements.values()) {
             try {
                 stmt.close();
             } catch (SQLException e) {
@@ -197,7 +203,7 @@ public class BBDB {
         try {
             if (null != rs) {
                 rs.close();
-                if(statements.containsKey(rs)) {
+                if (statements.containsKey(rs)) {
                     statements.get(rs).close();
                     statements.remove(rs);
                 }
@@ -217,6 +223,7 @@ public class BBDB {
     
     /**
      * Determine the version of the database table currently installed.
+     * 
      * @param dataFolder
      * @param table
      * @return
@@ -233,13 +240,14 @@ public class BBDB {
      * @param dataFolder
      * @return
      */
-    public static boolean needsUpdate(File dataFolder, String table, int latestVersion) {
-        boolean r=true;
+    public static boolean needsUpdate(File dataFolder, String table,
+            int latestVersion) {
+        boolean r = true;
         try {
             File f = new File(dataFolder, "DATABASE_VERSION");
             PropertiesFile pf = new PropertiesFile(f);
-            r=(pf.getInt(table, latestVersion, "")<latestVersion);
-            pf.setInt(table,latestVersion,"");
+            r = (pf.getInt(table, latestVersion, "") < latestVersion);
+            pf.setInt(table, latestVersion, "");
             pf.save();
         } catch (Exception e) {
             return true;
@@ -248,8 +256,7 @@ public class BBDB {
     }
     
     /**
-     * Get the JDBC DSN for a specific database system, with included
-     * database-specific settings.
+     * Get the JDBC DSN for a specific database system, with included database-specific settings.
      * 
      * @return The DSN we want.
      */
@@ -302,9 +309,9 @@ public class BBDB {
         int r = Statement.EXECUTE_FAILED;
         try {
             stmt = conn.prepareStatement(sql);
-
+            
             for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i+1, params[i]);
+                stmt.setObject(i + 1, params[i]);
             }
             r = stmt.executeUpdate();
             conn.commit();
@@ -352,24 +359,24 @@ public class BBDB {
         ResultSet rs = null;
         try {
             stmt = conn.prepareStatement(sql);
-
+            
             for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i+1, params[i]);
+                stmt.setObject(i + 1, params[i]);
             }
             
             if (!stmt.execute())
                 return null;
             rs = stmt.getResultSet();
-            statements.put(rs,new StatementInfo(stmt));
+            statements.put(rs, new StatementInfo(stmt));
         } catch (SQLException e) {
             BBLogging.severe("executeQuery failed (" + sql + "):", e);
-        } catch(Exception e) {
-            if(e.getClass().getName().contains("CommunicationsException")) {
-                BBLogging.severe("Communications failure, attempting to reconnect.",e);
+        } catch (Exception e) {
+            if (e.getClass().getName().contains("CommunicationsException")) {
+                BBLogging.severe("Communications failure, attempting to reconnect.", e);
                 try {
                     reconnect();
                 } catch (SQLException e1) {
-                    BBLogging.severe("Failed to reconnect.",e1);
+                    BBLogging.severe("Failed to reconnect.", e1);
                 }
             }
         } finally {

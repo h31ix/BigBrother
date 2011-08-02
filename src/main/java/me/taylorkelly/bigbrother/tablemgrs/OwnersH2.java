@@ -1,20 +1,20 @@
 /**
-* H2 driver for Owners table.
-* Copyright (C) 2011 BigBrother Contributors
-* 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * H2 driver for Owners table.
+ * Copyright (C) 2011 BigBrother Contributors
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package me.taylorkelly.bigbrother.tablemgrs;
 
@@ -28,26 +28,32 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class OwnersH2 extends OwnersTable {
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#setBlockOwner(int, int, int, int, int)
      */
     @Override
     protected void setBlockOwner(int world, int x, int y, int z, int playerID) {
-        if(!trySetBlockOwnerUpdate(world, x,y,z,playerID)) {
-            setBlockOwnerInsert(world,x,y,z,playerID);
+        if (!trySetBlockOwnerUpdate(world, x, y, z, playerID)) {
+            setBlockOwnerInsert(world, x, y, z, playerID);
         }
     }
-    protected boolean trySetBlockOwnerUpdate(int world,int x,int y, int z, int playerID) {
-        return BBDB.tryUpdate("UPDATE "+getTableName()+" SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?", playerID, world, x, y, z);
+    
+    protected boolean trySetBlockOwnerUpdate(int world, int x, int y, int z,
+            int playerID) {
+        return BBDB.tryUpdate("UPDATE " + getTableName() + " SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?", playerID, world, x, y, z);
     }
-    protected void setBlockOwnerInsert(int world,int x,int y, int z, int playerID) {
-        PreparedStatement stmt=null;
+    
+    protected void setBlockOwnerInsert(int world, int x, int y, int z,
+            int playerID) {
+        PreparedStatement stmt = null;
         try {
-            stmt = BBDB.prepare("INSERT INTO "+getTableName()+" (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
+            stmt = BBDB.prepare("INSERT INTO " + getTableName() + " (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
             stmt.setInt(1, world);
             stmt.setInt(2, x);
             stmt.setInt(3, y);
@@ -56,37 +62,41 @@ public class OwnersH2 extends OwnersTable {
             stmt.executeUpdate();
             BBDB.commit();
         } catch (SQLException e) {
-            BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
+            BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ", e);
         } finally {
             BBDB.cleanup("OwnersH2.setBlockOwner", stmt, null);
         }
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#getBlockOwner(int, int, int, int)
      */
     @Override
     protected int getBlockOwner(int world, int x, int y, int z) {
-        PreparedStatement stmt=null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = BBDB.prepare("SELECT usrID FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?");
+            stmt = BBDB.prepare("SELECT usrID FROM " + getTableName() + " WHERE wldID=? AND x=? AND y=? AND z=?");
             stmt.setInt(1, world);
             stmt.setInt(2, x);
             stmt.setInt(3, y);
             stmt.setInt(4, z);
             rs = stmt.executeQuery();
-            if(rs.next())
+            if (rs.next())
                 return rs.getInt("usrID");
         } catch (SQLException e) {
-            BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ",e);
+            BBLogging.severe("Error when performing setBlockOwner in OwnersH2: ", e);
         } finally {
             BBDB.cleanup("OwnersH2.setBlockOwner", stmt, rs);
         }
         return BBPlayerInfo.ENVIRONMENT.getID();
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#onLoad()
      */
     @Override
@@ -95,27 +105,24 @@ public class OwnersH2 extends OwnersTable {
         
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#getCreateSyntax()
      */
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE IF NOT EXISTS "+getTableName()+" ("
-        +"wldID INTEGER,"
-        +"x INTEGER,"
-        +"y INTEGER,"
-        +"z INTEGER,"
-        +"usrID INTEGER,"
-        +"PRIMARY KEY (wldID,x,y,z)"
-        +")";
+        return "CREATE TABLE IF NOT EXISTS " + getTableName() + " (" + "wldID INTEGER," + "x INTEGER," + "y INTEGER," + "z INTEGER," + "usrID INTEGER," + "PRIMARY KEY (wldID,x,y,z)" + ")";
     }
     
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#removeBlockOwner(int, int, int, int)
      */
     @Override
     protected void removeBlockOwner(int wldID, int x, int y, int z) {
-        BBDB.executeUpdate("DELETE FROM "+getTableName()+" WHERE wldID=? AND x=? AND y=? AND z=?", wldID, x, y, z);
+        BBDB.executeUpdate("DELETE FROM " + getTableName() + " WHERE wldID=? AND x=? AND y=? AND z=?", wldID, x, y, z);
     }
-
+    
 }

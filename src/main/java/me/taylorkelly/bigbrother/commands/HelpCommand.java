@@ -13,7 +13,8 @@ public class HelpCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] arg3) {
         // TODO: Modular help system
         player.sendMessage(BigBrother.premessage + "BigBrother version " + BigBrother.version + " help");
         player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb watch (name)" + ChatColor.WHITE + " - Toggles the whether BB is watching (name)");

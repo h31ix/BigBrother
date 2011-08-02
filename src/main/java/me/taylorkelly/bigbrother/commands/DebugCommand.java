@@ -15,10 +15,10 @@ import me.taylorkelly.bigbrother.BigBrother;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class DebugCommand extends BBCommand {
-
+    
     /**
      * @param plugin
      */
@@ -28,11 +28,12 @@ public class DebugCommand extends BBCommand {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
-        if(BBPermissions.rollback((Player) player)) {
-            if(split.length==2) {
-                BBSettings.debugMode=(split[1].equalsIgnoreCase("on"));
-                player.sendMessage(BigBrother.premessage + " DEBUG "+((BBSettings.debugMode) ? "ON":"OFF"));
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
+        if (BBPermissions.rollback((Player) player)) {
+            if (split.length == 2) {
+                BBSettings.debugMode = (split[1].equalsIgnoreCase("on"));
+                player.sendMessage(BigBrother.premessage + " DEBUG " + ((BBSettings.debugMode) ? "ON" : "OFF"));
             }
         } else {
             player.sendMessage(BigBrother.permissionDenied);

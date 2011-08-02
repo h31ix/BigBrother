@@ -32,7 +32,7 @@ public class BBPlayerInfo {
         WATCHED,
         HAS_LOG
     }
-
+    
     public static BBPlayerInfo ENVIRONMENT;
     
     /**
@@ -43,15 +43,15 @@ public class BBPlayerInfo {
     /**
      * Are we waiting for this guy to do something after he opens a chest? (Workaround for lack of inventory update events)
      */
-    private ItemStack[] chestContents=null;
+    private ItemStack[] chestContents = null;
     
     private String name = "";
     private int flags = 0; // bitfield flags
     private int id = -1;
-
+    
     public StickMode historyTool;
-
-    private Chest myOpenChest=null;
+    
+    private Chest myOpenChest = null;
     
     /**
      * For caching a new player.
@@ -64,23 +64,24 @@ public class BBPlayerInfo {
                       // UPDATE.
         if (BBSettings.autoWatch)
             setWatched(true);
-
+        
         BBUsersTable.getInstance().addOrUpdatePlayer(this);
         refresh(); // Get ID#
         setNew(false);
-        BBLogging.debug("New user: "+name+" -> #"+id);
+        BBLogging.debug("New user: " + name + " -> #" + id);
     }
     
     /**
      * For bringing in a user from the database.
+     * 
      * @param id
      * @param name
      * @param flags
      */
-    public BBPlayerInfo(int id,String name,int flags) {
-        this.id=id;
-        this.name=name;
-        this.flags=flags;
+    public BBPlayerInfo(int id, String name, int flags) {
+        this.id = id;
+        this.name = name;
+        this.flags = flags;
     }
     
     private void setFlag(PlayerField fld, boolean on) {
@@ -88,7 +89,7 @@ public class BBPlayerInfo {
             flags &= ~(1 << fld.ordinal());
         else
             flags |= (1 << fld.ordinal());
-        if(id!=-1) {
+        if (id != -1) {
             BBUsersTable.getInstance().addOrUpdatePlayer(this);
         }
     }
@@ -98,16 +99,16 @@ public class BBPlayerInfo {
      */
     public void refresh() {
         BBPlayerInfo clone;
-        BBLogging.debug("BBPlayerInfo.refresh(): "+name+"#"+Integer.valueOf(id));
-        if(id>-1)
+        BBLogging.debug("BBPlayerInfo.refresh(): " + name + "#" + Integer.valueOf(id));
+        if (id > -1)
             clone = BBUsersTable.getInstance().getUserFromDB(id);
         else
-            clone = BBUsersTable.getInstance().getUserFromDB(name); 
-        this.id=clone.id;
-        this.flags=clone.flags;
-        this.name=clone.name;
+            clone = BBUsersTable.getInstance().getUserFromDB(name);
+        this.id = clone.id;
+        this.flags = clone.flags;
+        this.name = clone.name;
     }
-
+    
     private boolean getFlag(PlayerField fld) {
         int f = (1 << fld.ordinal());
         return (flags & f) == f;
@@ -127,10 +128,11 @@ public class BBPlayerInfo {
     
     /**
      * Used for tracking whether a user is new to the database or not.
+     * 
      * @param b
      */
     public void setNew(boolean b) {
-        isNew=b;
+        isNew = b;
     }
     
     /**
@@ -150,14 +152,16 @@ public class BBPlayerInfo {
     
     /**
      * Are we tracking this user?
+     * 
      * @return
      */
-    public boolean getWatched() { 
+    public boolean getWatched() {
         return getFlag(PlayerField.WATCHED);
     }
     
     /**
      * Tell the system whether the player has a log in their possession or not.
+     * 
      * @param logInPossession
      */
     public void setHasLog(boolean logInPossession) {
@@ -166,66 +170,63 @@ public class BBPlayerInfo {
     
     /**
      * Does this user have the SuperLog?
+     * 
      * @return
      */
-    public boolean hasLog() { 
-        return getFlag(PlayerField.HAS_LOG); 
+    public boolean hasLog() {
+        return getFlag(PlayerField.HAS_LOG);
     }
     
     /**
-     * Set true when user has opened a chest.
-     * Set false when they move/do stuff that can only be done outside of inventory.
+     * Set true when user has opened a chest. Set false when they move/do stuff that can only be done outside of inventory.
+     * 
      * @param b
      */
-    public void setHasOpenedChest(Chest c,ItemStack[] contents) {
-        myOpenChest=c;
+    public void setHasOpenedChest(Chest c, ItemStack[] contents) {
+        myOpenChest = c;
         
-        if (contents!=null)	{
-        chestContents = new ItemStack[contents.length];
-        	for(int i = 0;i<contents.length;i++)	{
-        		if(contents[i]==null)
-        		{
-        			chestContents[i] = null;
-        		}
-        		else
-        		{
-        			//primitive cloning  - I can't figure, how to get Data field as well (ag)
-        			chestContents[i] = new ItemStack(contents[i].getTypeId(),contents[i].getAmount(),contents[i].getDurability());
-        		}
-        	}
+        if (contents != null) {
+            chestContents = new ItemStack[contents.length];
+            for (int i = 0; i < contents.length; i++) {
+                if (contents[i] == null) {
+                    chestContents[i] = null;
+                } else {
+                    //primitive cloning  - I can't figure, how to get Data field as well (ag)
+                    chestContents[i] = new ItemStack(contents[i].getTypeId(), contents[i].getAmount(), contents[i].getDurability());
+                }
+            }
         } else {
-        	chestContents = null;
+            chestContents = null;
         }
     }
     
     /**
      * True if the user is most likely messing around with their chest inventory.
+     * 
      * @return
      */
     public boolean hasOpenedChest() {
-        return chestContents!=null;
+        return chestContents != null;
     }
     
     /**
      * Format username, colorize if necessary
      */
     public String toString() {
-        String player=this.getName();
-        /* TODO: Future consideration, working to get this hunk of bugs out the door atm. - N3X
-        if(BBSettings.colorPlayerNames) {
-            player=BBPermissions.getPrefix(player)+player+BBPermissions.getSuffix(player);
-        }
-        */
+        String player = this.getName();
+        /*
+         * TODO: Future consideration, working to get this hunk of bugs out the door atm. - N3X if(BBSettings.colorPlayerNames) { player=BBPermissions.getPrefix(player)+player+BBPermissions.getSuffix(player); }
+         */
         return player;
     }
-
+    
     public ItemStack[] getOldChestContents() {
-        if(chestContents==null) {
+        if (chestContents == null) {
             BBLogging.severe("getOldChestContents is about to return a null.  Please report this.");
         }
         return chestContents;
     }
-
+    
     public Chest getOpenedChest() {
         return myOpenChest;
     }

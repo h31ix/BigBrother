@@ -9,20 +9,20 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 public class CreateSignText extends BBAction {
-
+    
     public CreateSignText(String player, Sign sign, String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
-
+    
     public CreateSignText(String player, String[] lines, Block block) {
         super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, getText(lines));
     }
-
+    
     private static String getText(Sign sign) {
         String[] lines = sign.getLines();
         return getText(lines);
     }
-
+    
     private static String getText(String[] lines) {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
@@ -33,33 +33,33 @@ public class CreateSignText extends BBAction {
         }
         return message.toString();
     }
-
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
         return new CreateSignText(pi, world, x, y, z, type, data);
     }
-
-    private CreateSignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    
+    private CreateSignText(BBPlayerInfo player, String world, int x, int y,
+            int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
-
-
+    
     /**
      * 
      */
     public CreateSignText() {
         // TODO Auto-generated constructor stub
     }
-
+    
     @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         String[] lines = data.split("\u0060");
-
-
+        
         Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -67,17 +67,17 @@ public class CreateSignText extends BBAction {
                 sign.setLine(i, lines[i]);
             }
         } else {
-            BBLogging.severe("Error when redoing sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
+            BBLogging.severe("Error when redoing sign: block.getState() returned a " + block.getState().getClass().getName() + " instead of a Sign!");
         }
     }
-
+    
     @Override
     public void rollback(World wld) {
         World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
-
+        
         Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -85,24 +85,28 @@ public class CreateSignText extends BBAction {
                 sign.setLine(i, "");
             }
         } else {
-            BBLogging.severe("Error when restoring sign: block.getState() returned a "+block.getState().getClass().getName()+" instead of a Sign!");
+            BBLogging.severe("Error when restoring sign: block.getState() returned a " + block.getState().getClass().getName() + " instead of a Sign!");
         }
     }
     
     @Override
     public String toString() {
-        return String.format("created a sign with text: %s",data.replace("\u0060", "\n"));
+        return String.format("created a sign with text: %s", data.replace("\u0060", "\n"));
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
@@ -110,8 +114,10 @@ public class CreateSignText extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.BLOCKS;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override

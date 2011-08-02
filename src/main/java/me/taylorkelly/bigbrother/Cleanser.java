@@ -38,7 +38,9 @@ public class Cleanser {
     
     /**
      * Start the cleaner thread and pray to God it finishes.
-     * @param player Person to blame for the lag. Or null.
+     * 
+     * @param player
+     *            Person to blame for the lag. Or null.
      */
     public static void clean(Player player) {
         if (cleanupThread != null && cleanupThread.done) {
@@ -56,13 +58,13 @@ public class Cleanser {
     
     public static void initialize(BigBrother bigbrother) {
         cleanupTask = bigbrother.getServer().getScheduler().scheduleAsyncRepeatingTask(bigbrother, new CleanupTask(), 50, 26000);
-        if(cleanupTask<0) {
+        if (cleanupTask < 0) {
             BBLogging.severe("Cannot schedule the cleanup task.");
         }
     }
     
     public static void shutdown(BigBrother bb) {
-        if(cleanupTask>=0)
+        if (cleanupTask >= 0)
             bb.getServer().getScheduler().cancelTask(cleanupTask);
     }
     
@@ -75,8 +77,9 @@ public class Cleanser {
     
     /**
      * Cleanser thread, to avoid blocking the main app when cleaning crap.
+     * 
      * @author N3X15 <nexis@7chan.org>
-     *
+     * 
      */
     private static class CleanupThread extends Thread {
         
@@ -85,7 +88,8 @@ public class Cleanser {
         private final Player player;
         
         /**
-         * @param p The player. Can be null.
+         * @param p
+         *            The player. Can be null.
          */
         public CleanupThread(Player p) {
             // Constructor.
@@ -105,9 +109,8 @@ public class Cleanser {
         
         private void cleanByAge() {
             long start = System.currentTimeMillis() / 1000;
-            cleanedSoFarAge = BBDB.executeUpdate(BBDataTable.getInstance().getCleanseAged(Long.valueOf(Time.ago(BBSettings.cleanseAge)),
-                    BBSettings.deletesPerCleansing));
-            if(cleanedSoFarAge==Statement.EXECUTE_FAILED)
+            cleanedSoFarAge = BBDB.executeUpdate(BBDataTable.getInstance().getCleanseAged(Long.valueOf(Time.ago(BBSettings.cleanseAge)), BBSettings.deletesPerCleansing));
+            if (cleanedSoFarAge == Statement.EXECUTE_FAILED)
                 return;
             String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
             

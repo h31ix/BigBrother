@@ -28,7 +28,8 @@ public class RollbackInterpreter {
     private Plugin plugin;
     private List<Integer> allowedActions;
     
-    public RollbackInterpreter(Player player, String[] split, Server server, WorldManager manager, Plugin plugin) {
+    public RollbackInterpreter(Player player, String[] split, Server server,
+            WorldManager manager, Plugin plugin) {
         this.manager = manager;
         this.player = player;
         this.server = server;
@@ -48,7 +49,7 @@ public class RollbackInterpreter {
             } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("r:")) {
                 parseRadius(argument.substring(2));
             } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("a:")) {
-                allowedActions = ActionProvider.parseActionSwitch(null,argument.substring(2));
+                allowedActions = ActionProvider.parseActionSwitch(null, argument.substring(2));
             } else if (argument.equalsIgnoreCase("*")) {
                 all = true;
             } else {
@@ -61,7 +62,7 @@ public class RollbackInterpreter {
             }
         }
     }
-
+    
     private void parseRadius(String radius) {
         try {
             int radInt = Integer.parseInt(radius);
@@ -118,7 +119,7 @@ public class RollbackInterpreter {
         if (!blockTypes.isEmpty()) {
             rollback.addTypes(blockTypes);
         }
-        rollback.allowedActions=allowedActions;
+        rollback.allowedActions = allowedActions;
         rollback.setRadius(radius, player.getLocation());
         if (radius == 0 && dateSearch == null) {
             return false;

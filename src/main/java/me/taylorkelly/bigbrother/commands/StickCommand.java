@@ -12,7 +12,8 @@ public class StickCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2,
+            String[] split) {
         
         player.sendMessage(BigBrother.premessage + "/bb stick is no longer used.  Please use /bb log.");
         

@@ -13,14 +13,15 @@ public class DoneCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public DoneCommand(BigBrother plugin) {
-        this.plugin=plugin;
+        this.plugin = plugin;
     }
     
     @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2,
+            String[] arg3) {
         
-        Player player=(Player) send;
-        if(BBPermissions.info(player)) {
+        Player player = (Player) send;
+        if (BBPermissions.info(player)) {
             plugin.sticker.removeLog(player);
         } else {
             player.sendMessage(BigBrother.permissionDenied);

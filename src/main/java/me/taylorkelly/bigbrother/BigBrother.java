@@ -50,20 +50,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BigBrother extends JavaPlugin {
     @SuppressWarnings("unused")
-    private ActionProvider      actionProvider=null;
-    private BBPlayerListener   playerListener;
-    private BBBlockListener    blockListener;
-    private BBEntityListener   entityListener;
-    private StickListener      stickListener;
-    private Watcher            watcher;
-    public Sticker             sticker;
-    public WorldManager        worldManager;
-    public static String       name;
-    public static String       version;
-    public static String       build;
+    private ActionProvider actionProvider = null;
+    private BBPlayerListener playerListener;
+    private BBBlockListener blockListener;
+    private BBEntityListener entityListener;
+    private StickListener stickListener;
+    private Watcher watcher;
+    public Sticker sticker;
+    public WorldManager worldManager;
+    public static String name;
+    public static String version;
+    public static String build;
     public final static String premessage = ChatColor.AQUA + "[BBROTHER]: " + ChatColor.WHITE;
     public static final String permissionDenied = ChatColor.RED + "[BBROTHER] PERMISSION DENIED.";
-    private Updater            updater;
+    private Updater updater;
     
     @Override
     public void onLoad() {
@@ -147,7 +147,7 @@ public class BigBrother extends JavaPlugin {
         OwnershipManager.init(this);
         
         // Initialize Permissions, Help
-        BBPermissions.initialize(this,getServer());
+        BBPermissions.initialize(this, getServer());
         BBHelp.initialize(this);
         
         // Register Events
@@ -270,7 +270,7 @@ public class BigBrother extends JavaPlugin {
         if (pi.hasOpenedChest()) {
             if (!ActionProvider.isDisabled(DeltaChest.class)) {
                 World world = pi.getOpenedChest().getWorld();
-                Block b = world.getBlockAt(pi.getOpenedChest().getX(),pi.getOpenedChest().getY(),pi.getOpenedChest().getZ());
+                Block b = world.getBlockAt(pi.getOpenedChest().getX(), pi.getOpenedChest().getY(), pi.getOpenedChest().getZ());
                 if (b.getState() instanceof Chest) {
                     Chest chest = (Chest) b.getState();
                     ItemStack[] orig = pi.getOldChestContents();
@@ -284,28 +284,37 @@ public class BigBrother extends JavaPlugin {
         }
     }
     
-/*///////////////////////////////////////////////////////////////
- BIGBROTHER COMMON API FUNCTIONS
-/*///////////////////////////////////////////////////////////////
-
+    /*
+     * /////////////////////////////////////////////////////////////// BIGBROTHER COMMON API FUNCTIONS /
+     *///////////////////////////////////////////////////////////////
+    
     /**
      * Tell BigBrother that a block has been broken/removed.
-     * @param player Player making the change
-     * @param block The block being removed
-     * @param world The world in which this action occurred
+     * 
+     * @param player
+     *            Player making the change
+     * @param block
+     *            The block being removed
+     * @param world
+     *            The world in which this action occurred
      */
     public void onBlockBroken(String player, Block block, String world) {
-        BrokenBlock bb = new BrokenBlock(player,block,world);
+        BrokenBlock bb = new BrokenBlock(player, block, world);
         bb.send();
     }
+    
     /**
      * Tell BigBrother that a block has been placed/created.
-     * @param player Player making the change
-     * @param block The block being added
-     * @param world The world in which this action occurred
+     * 
+     * @param player
+     *            Player making the change
+     * @param block
+     *            The block being added
+     * @param world
+     *            The world in which this action occurred
      */
     public void onBlockPlaced(String player, Block block, String world) {
-        PlacedBlock bb = new PlacedBlock(player,block,world);
+        PlacedBlock bb = new PlacedBlock(player, block, world);
         bb.send();
     }
 }

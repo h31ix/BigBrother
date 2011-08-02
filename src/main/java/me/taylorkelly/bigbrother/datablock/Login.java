@@ -9,43 +9,51 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Login extends BBAction {
-	public Login(Player player, String world) {
-        super(BBUsersTable.getInstance().getUserByName(player.getName()), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0,
-                BBSettings.logPlayerIPs ? player.getAddress().getAddress().toString().substring(1) : "");
-	}
-
-	public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
-		return new Login(pi, world, x, y, z, type, data);
-	}
-
-	private Login(BBPlayerInfo player, String world, int x, int y, int z, int type,  String data) {
-		super(player, world, x, y, z, type, data);
-	}
-
-	/**
+    public Login(Player player, String world) {
+        super(BBUsersTable.getInstance().getUserByName(player.getName()), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, BBSettings.logPlayerIPs ? player.getAddress().getAddress().toString().substring(1) : "");
+    }
+    
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
+            int y, int z, int type, String data) {
+        return new Login(pi, world, x, y, z, type, data);
+    }
+    
+    private Login(BBPlayerInfo player, String world, int x, int y, int z,
+            int type, String data) {
+        super(player, world, x, y, z, type, data);
+    }
+    
+    /**
      * 
      */
     public Login() {
         // TODO Auto-generated constructor stub
     }
-
-    public void rollback(World wld) {}
-	public void redo(Server server) {}
+    
+    public void rollback(World wld) {
+    }
+    
+    public void redo(Server server) {
+    }
     
     @Override
     public String toString() {
         return "logged in";
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getName()
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getCategory()
      */
     @Override
@@ -53,8 +61,10 @@ public class Login extends BBAction {
         // TODO Auto-generated method stub
         return ActionCategory.PLAYER;
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.datablock.Action#getDescription()
      */
     @Override

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class BBCommandTest {
     
@@ -20,9 +20,9 @@ public class BBCommandTest {
      */
     @Test
     public void testGroupArgs() {
-        String[] input=new String[]{"\"Some","Guy's\"","name"};
-        String[] expected=new String[]{"Some Guy's","name"};
-        assertArrayEquals("Grouping function failed.",expected,BBCommand.groupArgs(input));
+        String[] input = new String[] { "\"Some", "Guy's\"", "name" };
+        String[] expected = new String[] { "Some Guy's", "name" };
+        assertArrayEquals("Grouping function failed.", expected, BBCommand.groupArgs(input));
     }
     
 }

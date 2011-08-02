@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.datasource.BBDB;
@@ -16,12 +15,11 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
  */
 public class BBDataMySQL extends BBDataTable {
     public final int revision = 1;
+    
     public String toString() {
-        return "BBData MySQL Driver r"+Integer.valueOf(revision);
+        return "BBData MySQL Driver r" + Integer.valueOf(revision);
     }
     
-
-
     /**
      * Returns "LOW_PRIORITY" for MySQL when mysqlLowPrioInserts is set.
      * 
@@ -37,45 +35,28 @@ public class BBDataMySQL extends BBDataTable {
     
     @Override
     public String getPreparedDataBlockStatement() throws SQLException {
-        return "INSERT "+getMySQLIgnore()+" INTO " + getTableName()
-                + " (date, player, action, world, x, y, z, type, data, rbacked) VALUES (?,?,?,?,?,?,?,?,?,0)";
+        return "INSERT " + getMySQLIgnore() + " INTO " + getTableName() + " (date, player, action, world, x, y, z, type, data, rbacked) VALUES (?,?,?,?,?,?,?,?,?,0)";
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#getCreateSyntax()
      */
     @Override
     public String getCreateSyntax() {
-        return "CREATE TABLE `"+getTableName()+"` ("
-        + "`id` INT NOT NULL AUTO_INCREMENT," 
-        + "`date` INT UNSIGNED NOT NULL DEFAULT '0'," 
-        + "`player` INT UNSIGNED NOT NULL DEFAULT 0," 
-        + "`action` tinyint NOT NULL DEFAULT '0'," 
-        + "`world` tinyint NOT NULL DEFAULT '0'," 
-        + "`x` int NOT NULL DEFAULT '0'," 
-        + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," 
-        + "`z` int NOT NULL DEFAULT '0'," 
-        + "`type` smallint NOT NULL DEFAULT '0',"
-        + "`data` TEXT NOT NULL,"
-        + "`rbacked` boolean NOT NULL DEFAULT '0',"
-        + "PRIMARY KEY (`id`)," 
-        + "INDEX(`world`)," 
-        + "INDEX(`x`,`y`,`z`)," 
-        + "INDEX(`player`),"
-        + "INDEX(`action`)," 
-        + "INDEX(`date`)," 
-        + "INDEX(`type`)," 
-        + "INDEX(`rbacked`)" 
-        + ")";
+        return "CREATE TABLE `" + getTableName() + "` (" + "`id` INT NOT NULL AUTO_INCREMENT," + "`date` INT UNSIGNED NOT NULL DEFAULT '0'," + "`player` INT UNSIGNED NOT NULL DEFAULT 0," + "`action` tinyint NOT NULL DEFAULT '0'," + "`world` tinyint NOT NULL DEFAULT '0'," + "`x` int NOT NULL DEFAULT '0'," + "`y` tinyint UNSIGNED NOT NULL DEFAULT '0'," + "`z` int NOT NULL DEFAULT '0'," + "`type` smallint NOT NULL DEFAULT '0'," + "`data` TEXT NOT NULL," + "`rbacked` boolean NOT NULL DEFAULT '0'," + "PRIMARY KEY (`id`)," + "INDEX(`world`)," + "INDEX(`x`,`y`,`z`)," + "INDEX(`player`)," + "INDEX(`action`)," + "INDEX(`date`)," + "INDEX(`type`)," + "INDEX(`rbacked`)" + ")";
     }
+    
     // GoMySQL suggested partitioning. Currently, I like the following modifier,
     // but it doesn't work on MySQL < 5.1. So we need to add a setting for
     // "enableMySQLPartitioning" or something
     // PARTITION BY LINEAR KEY(date) PARTITIONS 12;
     // Another stupid idea: use table comments for tracking table revision.
     
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.tablemgrs.DBTable#onLoad()
      */
     @Override
@@ -86,11 +67,12 @@ public class BBDataMySQL extends BBDataTable {
     
     /**
      * Ensure we're using the right storage engine.
-     *
+     * 
      * @param tableName
      * @param requiredEngine
      */
-    private void checkDBEngine(String tableName, String requiredEngine, boolean optional) {
+    private void checkDBEngine(String tableName, String requiredEngine,
+            boolean optional) {
         String engine = getEngine(tableName);
         if (engine == null) {
             return; // Error.
@@ -107,11 +89,11 @@ public class BBDataMySQL extends BBDataTable {
             }
         }
     }
-
+    
     private void setEngine(String tableName, String engine) {
         BBDB.executeUpdate("ALTER TABLE " + tableName + " ENGINE = " + engine);
     }
-
+    
     private String getEngine(String tableName) {
         ResultSet rs = null;
         Statement stmt = null;
@@ -128,34 +110,30 @@ public class BBDataMySQL extends BBDataTable {
         } catch (SQLException e) {
             BBLogging.severe("Could not retreive table information.", e);
         } finally {
-            BBDB.cleanup( "getEngine",  stmt, rs );
+            BBDB.cleanup("getEngine", stmt, rs);
         }
         return engine;
     }
-
-
-
-	@Override
-	public String getCleanseAged(Long timeAgo, long deletesPerCleansing) {
-		String cleansql = "DELETE FROM `"+getTableName()+"` WHERE date < " + timeAgo;
+    
+    @Override
+    public String getCleanseAged(Long timeAgo, long deletesPerCleansing) {
+        String cleansql = "DELETE FROM `" + getTableName() + "` WHERE date < " + timeAgo;
         if (BBSettings.deletesPerCleansing > 0) {
             cleansql += " LIMIT " + Long.valueOf(BBSettings.deletesPerCleansing);
         }
         cleansql += ";";
         return cleansql;
-	}
-
-
-
-	@Override
-	public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
-		// Fucking MySQL and your lack of subquery LIMIT support.
-		stmt.executeUpdate("CREATE TEMPORARY TABLE top_record SELECT id FROM "+getTableName()+" ORDER BY id DESC "+((maxRecords>0) ? "LIMIT "+maxRecords:""));
-		int numUpdates = stmt.executeUpdate("DELETE FROM "+getTableName()+" WHERE id NOT IN (SELECT id FROM top_record) "+((maxRecords>0) ? "LIMIT "+deletesPerCleansing:""));
-		stmt.executeUpdate("DROP TABLE top_record");
-
-		return numUpdates;
-	}
-
-
+    }
+    
+    @Override
+    public int getCleanseByLimit(Statement stmt, Long maxRecords,
+            long deletesPerCleansing) throws SQLException {
+        // Fucking MySQL and your lack of subquery LIMIT support.
+        stmt.executeUpdate("CREATE TEMPORARY TABLE top_record SELECT id FROM " + getTableName() + " ORDER BY id DESC " + ((maxRecords > 0) ? "LIMIT " + maxRecords : ""));
+        int numUpdates = stmt.executeUpdate("DELETE FROM " + getTableName() + " WHERE id NOT IN (SELECT id FROM top_record) " + ((maxRecords > 0) ? "LIMIT " + deletesPerCleansing : ""));
+        stmt.executeUpdate("DROP TABLE top_record");
+        
+        return numUpdates;
+    }
+    
 }

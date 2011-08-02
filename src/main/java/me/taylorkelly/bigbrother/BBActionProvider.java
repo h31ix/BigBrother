@@ -27,20 +27,15 @@ import me.taylorkelly.bigbrother.datablock.explosions.TNTExplosion;
 
 /**
  * This should only be initialized after BigBrother is loaded (e.g. from a PluginListener)
+ * 
  * @author Rob
- *
+ * 
  */
 public class BBActionProvider extends ActionProvider {
     public BBActionProvider(BigBrother plugin) {
         super(plugin);
         /*****************************************************
-         * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
-         *                                                   *
-         *    ONLY ADD ITEMS TO THE BOTTOM OF THIS LIST!     *
-         *  FAILURE TO DO SO MAY RESULT IN LOST DATA DUE TO  *
-         *              REASSIGNED ACTION IDS!               *
-         *                                                   *
-         * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
+         * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING * * ONLY ADD ITEMS TO THE BOTTOM OF THIS LIST! * FAILURE TO DO SO MAY RESULT IN LOST DATA DUE TO * REASSIGNED ACTION IDS! * * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
          *****************************************************/
         //BEGIN LEGACY ACTIONS
         registerAction(plugin, this, new BrokenBlock());
@@ -58,7 +53,7 @@ public class BBActionProvider extends ActionProvider {
         registerAction(plugin, this, new CreateSignText());
         registerAction(plugin, this, new LeafDecay());
         registerAction(plugin, this, new FlintAndSteel());
-
+        
         registerAction(plugin, this, new TNTExplosion());
         registerAction(plugin, this, new CreeperExplosion());
         registerAction(plugin, this, new MiscExplosion());
@@ -75,31 +70,34 @@ public class BBActionProvider extends ActionProvider {
         //END LEGACY ACTIONS
         
     }
-
-    /* (non-Javadoc)
+    
+    /*
+     * (non-Javadoc)
+     * 
      * @see me.taylorkelly.bigbrother.ActionProvider#getAction(java.lang.String, me.taylorkelly.bigbrother.BBPlayerInfo, java.lang.String, int, int, int, int, java.lang.String)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public Action getAction(String actionName, BBPlayerInfo player,
+            String world, int x, int y, int z, int type, String data) {
         // Explosions are in their own package.
         String _package = "me.taylorkelly.bigbrother.datablock.";
-        if(actionName.endsWith("Explosion"))
-            _package+="explosions.";
+        if (actionName.endsWith("Explosion"))
+            _package += "explosions.";
         
         //And here, we use the magic of reflection.
-        Class<? extends BBAction> c=null;
+        Class<? extends BBAction> c = null;
         try {
-            c=(Class<? extends BBAction>) Class.forName(_package+actionName);
+            c = (Class<? extends BBAction>) Class.forName(_package + actionName);
         } catch (ClassNotFoundException e) {
-            BBLogging.severe("Cannot find class "+_package+actionName+": ",e);
+            BBLogging.severe("Cannot find class " + _package + actionName + ": ", e);
             return null;
         }
         try {
-            Method meth = c.getMethod("getBBDataBlock", BBPlayerInfo.class,String.class, int.class, int.class, int.class, int.class,String.class);
-            return (Action) meth.invoke(null,player, world,  x,  y,  z,  type,  data);
+            Method meth = c.getMethod("getBBDataBlock", BBPlayerInfo.class, String.class, int.class, int.class, int.class, int.class, String.class);
+            return (Action) meth.invoke(null, player, world, x, y, z, type, data);
         } catch (Exception e) {
-            BBLogging.severe("Error constructing "+_package+actionName+": ",e);
+            BBLogging.severe("Error constructing " + _package + actionName + ": ", e);
         }
         return null;
     }

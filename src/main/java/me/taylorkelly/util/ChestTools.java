@@ -11,18 +11,12 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Rob
- *
+ * 
  */
 public class ChestTools {
-    /** 
-     * Workaround for horrific bug, that took me ages to discover. When Accessing double chest
-     * inventory using default bukkit method,
-     * the getInventory() method returns only half of the contents, depending on
-     * what block was right-clicked.
-     * According to forums, there is no appropriate solution in bukkit API, so
-     * we must manually search, whether
-     * current chest is double chest, and then eventually return merged
-     * inventories.
+    /**
+     * Workaround for horrific bug, that took me ages to discover. When Accessing double chest inventory using default bukkit method, the getInventory() method returns only half of the contents, depending on what block was right-clicked. According to forums, there is no appropriate solution in bukkit API, so we must manually search, whether current chest is double chest, and then eventually return merged inventories.
+     * 
      * @TODO: Is this fixed?
      */
     public static ItemStack[] getChestContents(Chest chest) {
@@ -76,6 +70,7 @@ public class ChestTools {
     
     /**
      * Adapted by Nexypoo.
+     * 
      * @param chest
      */
     public static void setChestContents(Chest chest, ItemStack[] items) {
@@ -118,10 +113,10 @@ public class ChestTools {
             // now merge them
             // possibly unsafe number 27?
             for (int i = 0; i < 27; i++) {
-                firstHalf[i]=items[i];
-                secondHalf[i]=items[i + 27];
+                firstHalf[i] = items[i];
+                secondHalf[i] = items[i + 27];
             }
-
+            
             // UND SAVE
             if ((chest.getX() + chest.getZ()) < (second.getX() + second.getZ())) {
                 chest.getInventory().setContents(firstHalf);
