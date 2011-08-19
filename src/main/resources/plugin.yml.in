@@ -1,6 +1,7 @@
 name: BigBrother
 version: $VERSION$
 main: me.taylorkelly.bigbrother.BigBrother
+# Put your name here (in plugin.yml.in), if it's not already present.
 authors: ['tkelly','n3x15']
 latest-release-url: 'http://ci.nexisonline.net:8080/job/BigBrother/Recommended/artifact/target/BigBrother.jar'
 commands:

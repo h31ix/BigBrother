@@ -33,12 +33,10 @@ public abstract class BBWorldsTable extends DBTable {
     
     public static BBWorldsTable getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.MYSQL))
-                instance = new BBWorldsMySQL();
-            else if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES))
                 instance = new BBWorldsPostgreSQL();
             else
-                instance = new BBWorldsH2();
+                instance = new BBWorldsMySQL();
         }
         return instance;
     }

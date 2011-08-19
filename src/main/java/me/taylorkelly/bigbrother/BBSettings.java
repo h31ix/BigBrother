@@ -256,7 +256,6 @@ public class BBSettings {
     }
     
     public enum DBMS {
-        H2,
         MYSQL,
         POSTGRES,
     }

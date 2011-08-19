@@ -54,12 +54,10 @@ public abstract class OwnersTable extends DBTable {
     
     public static OwnersTable getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.MYSQL))
-                instance = new OwnersMySQL();
-            else if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES))
                 instance = new OwnersPostgreSQL();
             else
-                instance = new OwnersH2();
+                instance = new OwnersMySQL();
         }
         return instance;
     }

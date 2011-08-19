@@ -127,7 +127,7 @@ public class Finder {
             /*
              * org.h2.jdbc.JdbcSQLException: Column "ID" must be in the GROUP BY list; SQL statement:
              */
-            if (BBDB.usingDBMS(DBMS.H2) || BBDB.usingDBMS(DBMS.POSTGRES)) {
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = " + (BBDB.usingDBMS(DBMS.POSTGRES) ? "false" : "0") + " AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY player DESC");
             } else {
                 ps = BBDB.prepare("SELECT player, count(player) AS modifications FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = '0' AND x < ? AND x > ? AND y < ? AND y > ? AND z < ? AND z > ? AND world = ? GROUP BY player ORDER BY id DESC");

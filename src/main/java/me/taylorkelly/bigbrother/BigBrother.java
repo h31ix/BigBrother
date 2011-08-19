@@ -24,8 +24,8 @@ import me.taylorkelly.bigbrother.commands.*;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.PlacedBlock;
-import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.datasource.ActionSender;
+import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.finder.Sticker;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
 import me.taylorkelly.bigbrother.listeners.BBBlockListener;
@@ -93,7 +93,7 @@ public class BigBrother extends JavaPlugin {
             BBLogging.info("Hello, and thank you for using the TESTING version of BigBrother!");
             BBLogging.info("Please note that, since this is far from complete, there will be many bugs.");
             BBLogging.info("IF YOU FIND ANY BUGS, PLEASE REPORT THEM ON http://bugs.nexisonline.net/bb");
-            BBLogging.info("Please stay tuned in irc.esper.net #bigbrother for updates and build notifications.");
+            BBLogging.info("Please stay tuned in irc.7chan.org #bigbrother for updates and build notifications.");
             BBLogging.info("------------------------------------");
         }
         

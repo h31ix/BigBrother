@@ -27,7 +27,7 @@ public abstract class BBUsersTable extends DBTable {
     
     public void drop() {
         BBLogging.info("Dropping table " + getTableName());
-        BBDB.executeUpdate("DROP TABLE IF EXISTS " + ((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + getTableName());
         createTable();
         getInstance().knownPlayers.clear();
         getInstance().knownNames.clear();
@@ -46,12 +46,10 @@ public abstract class BBUsersTable extends DBTable {
     public static BBUsersTable getInstance() {
         if (instance == null) {
             BBLogging.debug("BBDB.dbms=" + BBDB.dbms.toString());
-            if (BBDB.usingDBMS(DBMS.MYSQL))
-                instance = new BBUsersMySQL();
-            else if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES))
                 instance = new BBUsersPostgreSQL();
             else
-                instance = new BBUsersH2();
+                instance = new BBUsersMySQL();
             instance.loadCache();
         }
         return instance;

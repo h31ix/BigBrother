@@ -14,7 +14,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
-import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
@@ -58,17 +57,6 @@ public class ActionSender {
         // Send a heartbeat after sending blocks.
         Heartbeat hb = new Heartbeat(plugin);
         hb.send();
-        
-        //H2 fix...
-        if (BBDB.usingDBMS(DBMS.H2)) {
-            for (Action block : collection) {
-                if (block.world == null) {
-                    BBLogging.severe(String.format("%s incorrectly initialized - World is null", block.getClass().getName()));
-                } else {
-                    manager.getWorld(block.world);
-                }
-            }
-        }
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {

@@ -1,7 +1,6 @@
 package me.taylorkelly.bigbrother.tablemgrs;
 
 import me.taylorkelly.bigbrother.BBLogging;
-import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 public abstract class DBTable {
@@ -47,7 +46,7 @@ public abstract class DBTable {
     
     public void drop() {
         BBLogging.info("Dropping table " + getTableName());
-        BBDB.executeUpdate("DROP TABLE IF EXISTS " + ((BBDB.usingDBMS(DBMS.H2)) ? getActualTableName() : getTableName()));
+        BBDB.executeUpdate("DROP TABLE IF EXISTS " + getTableName());
         createTable();
     }
 }

@@ -121,12 +121,10 @@ public abstract class ActionTable extends DBTable {
     public static ActionTable getInstance() {
         if (instance == null) {
             //BBLogging.info("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
-            if (BBDB.usingDBMS(DBMS.MYSQL))
-                instance = new ActionMySQL();
-            else if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES))
                 instance = new ActionPostgreSQL();
             else
-                instance = new ActionH2();
+                instance = new ActionMySQL();
         }
         return instance;
     }

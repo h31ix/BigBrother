@@ -32,8 +32,6 @@ public class Updater {
     
     private Logger logger = Logger.getLogger("Minecraft");
     
-    //Server's down, don't use it.
-    //private final static String UPDATE_SITE = "http://stethoscopesmp.com/tkelly/";
     private final static String UPDATE_SITE = "http://mine.7chan.org/mirror/";
     
     private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
@@ -42,16 +40,13 @@ public class Updater {
     }
     
     public void check() {
-        String[] paths = new String[] { "lib/h2.jar", /* "lib/" + getOSSpecificFileName(), */"lib/mysql.jar", "lib/postgresql.jar" };
+        String[] paths = new String[] { /* "lib/" + getOSSpecificFileName(), */"lib/mysql.jar", "lib/postgresql.jar" };
         
         for (String path : paths) {
             File file = new File(path);
             
             if (file != null && !file.exists() && !file.isDirectory()) {
                 String url = UPDATE_SITE + path;
-                /*
-                 * if(path.equalsIgnoreCase("lib/h2.jar")) url="http://mine.7chan.org/mirror/lib/h2.jar"; // Temporary if(path.equalsIgnoreCase("lib/postgresql.jar")) url="http://mine.7chan.org/mirror/lib/postgresql.jar";
-                 */
                 UpdaterFile updaterFile = new UpdaterFile(url);
                 updaterFile.setLocalLocation(path);
                 needsUpdating.add(updaterFile);

@@ -15,12 +15,10 @@ public abstract class RollbackPreparedStatement {
     
     public static RollbackPreparedStatement getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.MYSQL))
-                instance = new RollbackPreparedStatementMySQL();
-            else if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES))
                 instance = new RollbackPreparedStatementPostgreSQL();
             else
-                instance = new RollbackPreparedStatementH2();
+                instance = new RollbackPreparedStatementMySQL();
         }
         return instance;
     }
@@ -85,10 +83,7 @@ public abstract class RollbackPreparedStatement {
             statement.append(manager.getWorld(rollback.center.getWorld().getName()));
             statement.append("'");
         }
-        if (BBDB.usingDBMS(DBMS.H2))
-            statement.append(" AND rbacked = false");
-        else
-            statement.append(" AND rbacked = '0'");
+        statement.append(" AND rbacked = '0'");
         
         statement.append(" ORDER BY bbdata.id DESC");
         statement.append(";");
@@ -144,10 +139,7 @@ public abstract class RollbackPreparedStatement {
     public String update(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata");
-        if (BBDB.usingDBMS(DBMS.H2))
-            statement.append(" SET rbacked = true");
-        else
-            statement.append(" SET rbacked = '1'");
+        statement.append(" SET rbacked = '1'");
         statement.append(" WHERE ");
         statement.append(getActionString(rollback));
         if (!rollback.rollbackAll) {
@@ -205,10 +197,7 @@ public abstract class RollbackPreparedStatement {
             statement.append("'");
         }
         
-        if (BBDB.usingDBMS(DBMS.H2))
-            statement.append(" AND rbacked = false");
-        else
-            statement.append(" AND rbacked = '0'");
+        statement.append(" AND rbacked = '0'");
         statement.append(";");
         return statement.toString();
     }
@@ -216,10 +205,7 @@ public abstract class RollbackPreparedStatement {
     public String undoStatement(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata");
-        if (BBDB.usingDBMS(DBMS.H2))
-            statement.append(" SET rbacked = false");
-        else
-            statement.append(" SET rbacked = '0'");
+        statement.append(" SET rbacked = '0'");
         statement.append(" WHERE ");
         statement.append(getActionString(rollback));
         if (!rollback.rollbackAll) {
@@ -277,10 +263,7 @@ public abstract class RollbackPreparedStatement {
             statement.append("'");
         }
         
-        if (BBDB.usingDBMS(DBMS.H2))
-            statement.append(" AND rbacked = true");
-        else
-            statement.append(" AND rbacked = '1'");
+        statement.append(" AND rbacked = '1'");
         statement.append(";");
         return statement.toString();
     }

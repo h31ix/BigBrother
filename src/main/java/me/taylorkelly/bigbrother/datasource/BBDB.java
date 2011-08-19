@@ -56,7 +56,7 @@ public class BBDB {
     }
     
     public static String prefix = "";
-    public static DBMS dbms = DBMS.H2;
+    public static DBMS dbms = DBMS.MYSQL;
     public static String username = "";
     public static String password = "";
     public static String schema = "";
@@ -75,7 +75,7 @@ public class BBDB {
     
     public static void initSettings(BetterConfig yml) {
         // Database type (Database Management System = DBMS :V)
-        final String dbms = yml.getString("database.type", DBMS.H2.name());
+        final String dbms = yml.getString("database.type", DBMS.MYSQL.name());
         final String cleanse_age = yml.getString("database.cleanser.age", "7d");
         setDBMS(dbms);
         
@@ -140,7 +140,7 @@ public class BBDB {
         try {
             dbms = DBMS.valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
-            dbms = DBMS.H2;
+            dbms = DBMS.MYSQL;
         }
     }
     
@@ -170,11 +170,6 @@ public class BBDB {
     public static void reconnect() throws SQLException {
         String driverClass = "";
         switch (dbms) {
-            case H2:
-                driverClass = "org.h2.Driver";
-                username = "sa";
-                password = "";
-                break;
             case MYSQL:
                 driverClass = "com.mysql.jdbc.Driver";
                 break;
@@ -266,8 +261,6 @@ public class BBDB {
                 return String.format("jdbc:mysql://%s:%d/%s?autoReconnect=true", hostname, port, schema);
             case POSTGRES:
                 return String.format("jdbc:postgresql://%s:%d/%s", hostname, port, schema);
-            case H2:
-                return "jdbc:h2:plugins" + File.separator + "BigBrother" + File.separator + "bigbrother";
             default:
                 return "";
         }
