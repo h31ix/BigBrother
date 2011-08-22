@@ -47,6 +47,7 @@ public class HistoryCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender send, Command cmd, String cmdLabel,
             String[] args) {
+        try{
         Player player = (Player) send;
         if (BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
@@ -106,6 +107,9 @@ public class HistoryCommand implements CommandExecutor {
         } else {
             player.sendMessage(BigBrother.permissionDenied);
             return true;
+        }
+        } catch (Throwable t){
+        	player.sendMessage(ChatColor.RED "Invalid User")
         }
     }
     
