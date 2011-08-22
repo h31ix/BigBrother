@@ -7,3 +7,4 @@ target/
 /BigBrother - Mvn Clean Install.launch
 /bin
 /tests
+.DS_Store
