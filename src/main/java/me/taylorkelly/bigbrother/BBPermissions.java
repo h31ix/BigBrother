@@ -111,4 +111,7 @@ public class BBPermissions {
     public static boolean cleanse(Player player) {
         return permission(player, "bb.admin.cleanse");
     }
+    public static boolean unwatched(Player player) {
+        return permission(player, "bb.admin.unwatched");
+    }
 }
