@@ -20,6 +20,7 @@ package me.taylorkelly.bigbrother;
 import java.io.File;
 import java.sql.SQLException;
 
+import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.commands.*;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
@@ -113,12 +114,20 @@ public class BigBrother extends JavaPlugin {
             BBLogging.debug("Downloading libraries was skipped");
         }
         
+        // Check to see if the user set up BB or not.
+        if (BBDB.usingDBMS(DBMS.NULL)) {
+            BBLogging.severe("Please rename BigBrother.example.yml to BigBrother.yml and edit it, otherwise BB will not work!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        
         // Get database running.
         try {
             BBDB.reconnect();
         } catch (SQLException e) {
             BBLogging.severe("Your database settings are probably incorrect:", e);
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
         
         // Initialize tables

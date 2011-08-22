@@ -56,7 +56,7 @@ public class BBDB {
     }
     
     public static String prefix = "";
-    public static DBMS dbms = DBMS.MYSQL;
+    public static DBMS dbms = DBMS.NULL;
     public static String username = "";
     public static String password = "";
     public static String schema = "";
@@ -75,7 +75,7 @@ public class BBDB {
     
     public static void initSettings(BetterConfig yml) {
         // Database type (Database Management System = DBMS :V)
-        final String dbms = yml.getString("database.type", DBMS.MYSQL.name());
+        final String dbms = yml.getString("database.type", DBMS.NULL.name());
         final String cleanse_age = yml.getString("database.cleanser.age", "7d");
         setDBMS(dbms);
         
@@ -140,7 +140,7 @@ public class BBDB {
         try {
             dbms = DBMS.valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
-            dbms = DBMS.MYSQL;
+            dbms = DBMS.NULL;
         }
     }
     

@@ -256,6 +256,7 @@ public class BBSettings {
     }
     
     public enum DBMS {
+        NULL, // Not set up
         MYSQL,
         POSTGRES,
     }
