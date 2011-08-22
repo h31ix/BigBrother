@@ -112,6 +112,7 @@ public class HistoryCommand implements CommandExecutor {
         }
         } catch (Throwable t){
         	player.sendMessage(invalidPlayer);
+        	return true;
         }
     }
 
