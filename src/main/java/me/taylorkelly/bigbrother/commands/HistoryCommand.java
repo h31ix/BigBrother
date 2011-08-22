@@ -38,6 +38,7 @@ public class HistoryCommand implements CommandExecutor {
     
     private BigBrother plugin;
     private int ACTIONSPERPAGE = 5;
+    public static final String invalidPlayer = ChatColor.RED + "[BBROTHER] Invalid Player.";
     
     public HistoryCommand(BigBrother plugin) {
         this.plugin = plugin;
@@ -109,7 +110,7 @@ public class HistoryCommand implements CommandExecutor {
             return true;
         }
         } catch (Throwable t){
-        	player.sendMessage(ChatColor.RED "Invalid User");
+        	player.sendMessage(invalidPlayer);
         }
     }
 
