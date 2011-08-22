@@ -109,9 +109,10 @@ public class HistoryCommand implements CommandExecutor {
             return true;
         }
         } catch (Throwable t){
-        	player.sendMessage(ChatColor.RED "Invalid User")
+        	player.sendMessage(ChatColor.RED "Invalid User");
         }
     }
+
     
     /**
      * @param player
