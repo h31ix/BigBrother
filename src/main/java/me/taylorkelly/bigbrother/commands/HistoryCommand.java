@@ -48,8 +48,9 @@ public class HistoryCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender send, Command cmd, String cmdLabel,
             String[] args) {
+    	Player player = (Player) send;
         try{
-        Player player = (Player) send;
+        
         if (BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
