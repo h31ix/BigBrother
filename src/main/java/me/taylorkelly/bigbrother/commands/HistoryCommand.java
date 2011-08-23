@@ -49,7 +49,6 @@ public class HistoryCommand implements CommandExecutor {
     public boolean onCommand(CommandSender send, Command cmd, String cmdLabel,
             String[] args) {
     	Player player = (Player) send;
-        try{
         
         if (BBPermissions.info(player)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
@@ -67,7 +66,7 @@ public class HistoryCommand implements CommandExecutor {
             ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
             int maxpages = history.size() / ACTIONSPERPAGE;
             sendHeader(player, page, maxpages, history.size());
-            List<Action> trimmedHistory = new ArrayList<Action>();
+            ArrayList<Action> trimmedHistory = new ArrayList<Action>();
             
             int from = ((page - 1) * ACTIONSPERPAGE);
             
@@ -109,10 +108,6 @@ public class HistoryCommand implements CommandExecutor {
         } else {
             player.sendMessage(BigBrother.permissionDenied);
             return true;
-        }
-        } catch (Throwable t){
-        	player.sendMessage(invalidPlayer);
-        	return true;
         }
     }
 
