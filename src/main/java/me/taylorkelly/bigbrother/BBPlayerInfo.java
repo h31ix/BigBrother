@@ -165,7 +165,7 @@ public class BBPlayerInfo {
      * @param logInPossession
      */
     public void setHasLog(boolean logInPossession) {
-        setFlag(PlayerField.WATCHED, logInPossession);
+        setFlag(PlayerField.HAS_LOG, logInPossession);
     }
     
     /**
