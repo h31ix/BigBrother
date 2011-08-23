@@ -15,7 +15,7 @@ For compilation, you need :
 Installation
 ------------
 
-For installation procedure, please view the [Wiki](https://github.com/tkelly910/BigBrother/wiki).
+For installation procedure, please view the [Wiki](http://wiki.nexisonline.net/wiki/BigBrother:Main_Page).
 
 Bugs
 ----
@@ -26,6 +26,7 @@ You can also file any ideas or suggestions through the same system.
 
 Contributors
 ------------
+(Put your names here and stuff so you get credit)
 
 * Taylor Kelly (tkelly)
 * OniTux
