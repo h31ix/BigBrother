@@ -19,7 +19,7 @@ public class UnwatchedCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender player, Command arg1, String arg2,
             String[] split) {
-    	player.sendMessage(ChatColor.RED + "Watch/unwatch is not used anymore")
+    	player.sendMessage(ChatColor.RED + "Watch/unwatch is not used anymore");
         return true;
     }
     
