@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.taylorkelly</groupId>
 	<artifactId>bigbrother</artifactId>
-	<version>1.10.3-SNAPSHOT</version>
+	<version>1.11.0-SNAPSHOT</version>
 	<name>BigBrother</name>
 	<url>http://www.bukkit.org</url>
 	<repositories>
