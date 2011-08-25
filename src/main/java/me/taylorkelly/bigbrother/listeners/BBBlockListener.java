@@ -155,7 +155,7 @@ public class BBBlockListener extends BlockListener {
             Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
-            if (!ActionProvider.isDisabled(BrokenBlock.class) && pi.getWatched()) {
+            if (!ActionProvider.isDisabled(BrokenBlock.class)) {
                 Block block = event.getBlock();
                 BrokenBlock dataBlock = new BrokenBlock(player.getName(), block, block.getWorld().getName());
                 dataBlock.send();

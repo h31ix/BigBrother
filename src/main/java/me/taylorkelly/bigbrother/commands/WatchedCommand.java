@@ -18,17 +18,7 @@ public class WatchedCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender player, Command arg1, String arg2,
             String[] split) {
-        if (BBPermissions.info((Player) player)) {
-            String watchedPlayers = plugin.getWatchedPlayers();
-            if (watchedPlayers.equals("")) {
-                player.sendMessage(BigBrother.premessage + "Not watching anyone.");
-            } else {
-                player.sendMessage(BigBrother.premessage + "Now watching:");
-                player.sendMessage(watchedPlayers);
-            }
-        } else {
-            player.sendMessage(BigBrother.permissionDenied);
-        }
+    	player.sendMessage(ChatColor.RED + "Watch/unwatch is not used anymore")
         return true;
     }
     

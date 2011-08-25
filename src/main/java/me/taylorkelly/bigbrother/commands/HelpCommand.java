@@ -17,9 +17,6 @@ public class HelpCommand implements CommandExecutor {
             String[] arg3) {
         // TODO: Modular help system
         player.sendMessage(BigBrother.premessage + "BigBrother version " + BigBrother.version + " help");
-        player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb watch (name)" + ChatColor.WHITE + " - Toggles the whether BB is watching (name)");
-        player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb watched" + ChatColor.WHITE + " - Shows which users are being watched by BB");
-        player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb unwatched" + ChatColor.WHITE + " - Shows which users that are logged in are unwatched");
         player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb stick (0|1|2)" + ChatColor.WHITE + " - Gives you a stick (1), a log you can place (2), or disables either (0).");
         player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb here" + ChatColor.WHITE + " - See changes that took place in the area you are standing in.");
         player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb find x y z" + ChatColor.WHITE + " - Get the history of an area at a specific coordinate");
