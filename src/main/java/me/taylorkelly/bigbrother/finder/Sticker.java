@@ -43,10 +43,9 @@ public class Sticker {
     
     public void removeLog(Player player) {
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        if (pi.hasLog()) {
-            player.sendMessage(BigBrother.premessage + "... But you don't HAVE a History Log, you doofus.");
-            return;
-        }
+        /*
+         * if (pi.hasLog()) { player.sendMessage(BigBrother.premessage + "... But you don't HAVE a History Log, you doofus."); return; }
+         */
         player.sendMessage(BigBrother.premessage + "Turning off the History Log...");
         HistoryLog c = new HistoryLog();
         c.disable(player);
