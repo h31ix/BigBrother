@@ -2,22 +2,43 @@ package me.taylorkelly.bigbrother.listeners;
 
 import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.datablock.EndermanGrief;
 import me.taylorkelly.bigbrother.datablock.explosions.CreeperExplosion;
 import me.taylorkelly.bigbrother.datablock.explosions.MiscExplosion;
 import me.taylorkelly.bigbrother.datablock.explosions.TNTExplosion;
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EndermanPickupEvent;
+import org.bukkit.event.entity.EndermanPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
 public class BBEntityListener extends EntityListener {
-    //private BigBrother plugin; // Not used - N3X
-    //private List<World> worlds; // Not used - N3X
     
+    /**
+     * @param bigBrother
+     */
     public BBEntityListener(BigBrother bigBrother) {
-        //this.plugin = bigBrother;
-        //this.worlds = plugin.getServer().getWorlds();
+        // TODO Auto-generated constructor stub
+    }
+    
+    /**
+     * @param entityListener
+     * @param event
+     */
+    public static void onEndermanPickup(EntityListener entityListener,
+            EndermanPickupEvent event) {
+        EndermanGrief.createPickup(event.getEntity(), event.getBlock());
+    }
+    
+    /**
+     * @param entityListener
+     * @param event
+     */
+    public static void onEndermanPlace(EntityListener entityListener,
+            EndermanPlaceEvent event) {
+        EndermanGrief.createPlace(event.getEntity(), event.getLocation(), event.getType());
     }
     
     @Override

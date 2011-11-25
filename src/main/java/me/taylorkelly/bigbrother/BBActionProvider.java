@@ -35,7 +35,7 @@ public class BBActionProvider extends ActionProvider {
     public BBActionProvider(BigBrother plugin) {
         super(plugin);
         /*****************************************************
-         * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING * * ONLY ADD ITEMS TO THE BOTTOM OF THIS LIST! * FAILURE TO DO SO MAY RESULT IN LOST DATA DUE TO * REASSIGNED ACTION IDS! * * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
+         * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING * ONLY ADD ITEMS TO THE BOTTOM OF THIS LIST! * FAILURE TO DO SO MAY RESULT IN LOST DATA DUE TO * REASSIGNED ACTION IDS! * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
          *****************************************************/
         //BEGIN LEGACY ACTIONS
         registerAction(plugin, this, new BrokenBlock());
@@ -67,6 +67,13 @@ public class BBActionProvider extends ActionProvider {
         
         registerAction(plugin, this, new Heartbeat());
         registerAction(plugin, this, new BlockPistoned());
+        
+        // 1.7?  1.8?
+        registerAction(plugin, this, new EndermanGrief());
+        
+        // 1.9+
+        //registerAction(plugin, this, new DragonGrief());
+        //registerAction(plugin, this, new Enchant());
         //END LEGACY ACTIONS
         
     }

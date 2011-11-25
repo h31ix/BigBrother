@@ -58,7 +58,8 @@ public abstract class ActionTable extends DBTable {
         FLOW,
         DROPITEM,
         PICKUPITEM,
-        SIGNDESTROYED
+        SIGNDESTROYED,
+        ENDERMANGRIEF
     }
     
     public ActionTable() {
