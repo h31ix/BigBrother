@@ -20,13 +20,11 @@ For installation procedure, please view the [Wiki](http://wiki.nexisonline.net/w
 Bugs
 ----
 
-Please report bugs via our new bug tracking system at http://bugs.nexisonline.net/bb.  *Please search for the problem you are having first so we don't get duplicates!*
-
-You can also file any ideas or suggestions through the same system.
+Please report bugs to N3X15 in #bukkitdev if he's around.
 
 Contributors
 ------------
-(Put your names here and stuff so you get credit)
+(Put your names here and stuff so you get credit, even if you just fix bugs.)
 
 * Taylor Kelly (tkelly)
 * OniTux
