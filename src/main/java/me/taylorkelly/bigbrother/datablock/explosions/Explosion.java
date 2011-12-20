@@ -34,8 +34,9 @@ public abstract class Explosion extends BBAction {
         super.send();
     }
     
+    @Override
     public void rollback(World wld) {
-        if (type != 51 || BBSettings.restoreFire) {
+        if ((type != 51) || BBSettings.restoreFire) {
             World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
@@ -47,6 +48,7 @@ public abstract class Explosion extends BBAction {
         }
     }
     
+    @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
@@ -56,6 +58,7 @@ public abstract class Explosion extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
+    @Override
     protected final void torchCheck(String player, Block block) {
         ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50);
@@ -68,27 +71,28 @@ public abstract class Explosion extends BBAction {
         
         Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
         
-        if (torchTypes.contains(torchTop.getTypeId()) && torchTop.getData() == 5) {
+        if (torchTypes.contains(torchTop.getTypeId()) && (torchTop.getData() == 5)) {
             bystanders.add(newInstance(player, torchTop));
         }
         Block torchNorth = block.getWorld().getBlockAt(x + 1, y, z);
-        if (torchTypes.contains(torchNorth.getTypeId()) && torchNorth.getData() == 1) {
+        if (torchTypes.contains(torchNorth.getTypeId()) && (torchNorth.getData() == 1)) {
             bystanders.add(newInstance(player, torchNorth));
         }
         Block torchSouth = block.getWorld().getBlockAt(x - 1, y, z);
-        if (torchTypes.contains(torchSouth.getTypeId()) && torchSouth.getData() == 2) {
+        if (torchTypes.contains(torchSouth.getTypeId()) && (torchSouth.getData() == 2)) {
             bystanders.add(newInstance(player, torchSouth));
         }
         Block torchEast = block.getWorld().getBlockAt(x, y, z + 1);
-        if (torchTypes.contains(torchEast.getTypeId()) && torchEast.getData() == 3) {
+        if (torchTypes.contains(torchEast.getTypeId()) && (torchEast.getData() == 3)) {
             bystanders.add(newInstance(player, torchEast));
         }
         Block torchWest = block.getWorld().getBlockAt(x, y, z - 1);
-        if (torchTypes.contains(torchWest.getTypeId()) && torchWest.getData() == 4) {
+        if (torchTypes.contains(torchWest.getTypeId()) && (torchWest.getData() == 4)) {
             bystanders.add(newInstance(player, torchWest));
         }
     }
     
+    @Override
     protected final void surroundingSignChecks(String player, Block block) {
         int x = block.getX();
         int y = block.getY();
@@ -99,23 +103,24 @@ public abstract class Explosion extends BBAction {
             bystanders.add(newInstance(player, top));
         }
         Block north = block.getWorld().getBlockAt(x + 1, y, z);
-        if (north.getTypeId() == 68 && north.getData() == 5) {
+        if ((north.getTypeId() == 68) && (north.getData() == 5)) {
             bystanders.add(newInstance(player, north));
         }
         Block south = block.getWorld().getBlockAt(x - 1, y, z);
-        if (south.getTypeId() == 68 && south.getData() == 4) {
+        if ((south.getTypeId() == 68) && (south.getData() == 4)) {
             bystanders.add(newInstance(player, south));
         }
         Block east = block.getWorld().getBlockAt(x, y, z + 1);
-        if (east.getTypeId() == 68 && east.getData() == 3) {
+        if ((east.getTypeId() == 68) && (east.getData() == 3)) {
             bystanders.add(newInstance(player, east));
         }
         Block west = block.getWorld().getBlockAt(x, y, z - 1);
-        if (west.getTypeId() == 68 && west.getData() == 2) {
+        if ((west.getTypeId() == 68) && (west.getData() == 2)) {
             bystanders.add(newInstance(player, west));
         }
     }
     
+    @Override
     protected final void signCheck(String player, Block block) {
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
@@ -123,6 +128,7 @@ public abstract class Explosion extends BBAction {
         }
     }
     
+    @Override
     protected final void checkGnomesLivingOnTop(String player, Block block) {
         ArrayList<Integer> gnomes = new ArrayList<Integer>();
         gnomes.add(6); // Sapling
@@ -154,8 +160,7 @@ public abstract class Explosion extends BBAction {
     
     protected abstract Explosion newInstance(String player, Block block);
     
-    protected Explosion(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    protected Explosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

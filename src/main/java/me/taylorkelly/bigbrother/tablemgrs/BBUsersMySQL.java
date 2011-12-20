@@ -20,6 +20,7 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
 public class BBUsersMySQL extends BBUsersTable {
     public final int revision = 1;
     
+    @Override
     public String toString() {
         return "BBUsers MySQL Driver r" + Integer.valueOf(revision);
     }
@@ -67,7 +68,7 @@ public class BBUsersMySQL extends BBUsersTable {
     @Override
     protected void do_addOrUpdatePlayer(BBPlayerInfo pi) {
         try {
-            if (pi.getNew() && getUserFromDB(pi.getName()) == null) {
+            if (pi.getNew() && (getUserFromDB(pi.getName()) == null)) {
                 BBDB.executeUpdate("INSERT INTO " + getTableName() + " (name,flags) VALUES (?,?) ON DUPLICATE KEY UPDATE flags=VALUES(flags)", pi.getName(), pi.getFlags());
             } else {
                 BBDB.executeUpdate("UPDATE " + getTableName() + " SET flags = ? WHERE id=?", pi.getFlags(), pi.getID());
@@ -124,8 +125,8 @@ public class BBUsersMySQL extends BBUsersTable {
             
             while (rs.next()) {
                 BBPlayerInfo pi = new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
-                this.knownPlayers.put(pi.getID(), pi);
-                this.knownNames.put(pi.getName(), pi.getID());
+                knownPlayers.put(pi.getID(), pi);
+                knownNames.put(pi.getName(), pi.getID());
             }
         } catch (SQLException e) {
             BBLogging.severe("Error trying to load the user/name cache.", e);

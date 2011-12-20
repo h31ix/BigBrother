@@ -22,9 +22,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.ActionProvider.ActionData;
+import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.datablock.ActionCategory;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
@@ -40,8 +40,7 @@ public class ActionMySQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID,
-            String actionDesc) {
+    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getTableName() + " (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
@@ -77,8 +76,7 @@ public class ActionMySQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName,
-            int catID, int ID, String description) {
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID, String description) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getTableName() + " (actID,actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?,?)");
@@ -96,6 +94,7 @@ public class ActionMySQL extends ActionTable {
         }
     }
     
+    @Override
     protected void onLoad() {
     }
     

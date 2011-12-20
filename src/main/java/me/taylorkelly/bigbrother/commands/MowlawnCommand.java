@@ -20,7 +20,9 @@ package me.taylorkelly.bigbrother.commands;
 
 import me.taylorkelly.bigbrother.BigBrother;
 
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 /**
  * @author Rob
@@ -32,7 +34,7 @@ public class MowlawnCommand implements CommandExecutor {
     private BigBrother plugin;
     
     public MowlawnCommand(BigBrother p) {
-        this.plugin = p;
+        plugin = p;
     }
     
     /*
@@ -40,9 +42,8 @@ public class MowlawnCommand implements CommandExecutor {
      * 
      * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
      */
-    @Override
-    public boolean onCommand(CommandSender arg0, Command arg1, String arg2,
-            String[] arg3) {
+    
+    public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
         arg0.sendMessage(BigBrother.premessage + " I hope you realize that I was joking what I said that BigBrother can mow your lawn, you big dummy.");
         return true;
     }

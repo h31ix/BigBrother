@@ -49,8 +49,7 @@ class URLReader {
     /**
      * Gets the data from a given string
      * 
-     * @param string
-     *            The line to get the data from
+     * @param string The line to get the data from
      * @return The data.
      */
     public static String getField(String string) {

@@ -33,12 +33,12 @@ public class ActionSender {
     private static BigBrother plugin;
     
     public static void shutdown(BigBrother bb) {
-        if (sendingTask >= 0)
+        if (sendingTask >= 0) {
             bb.getServer().getScheduler().cancelTask(sendingTask);
+        }
     }
     
-    public static void initialize(BigBrother bb, File dataFolder,
-            WorldManager manager) {
+    public static void initialize(BigBrother bb, File dataFolder, WorldManager manager) {
         plugin = bb;
         sendingTask = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
         if (sendingTask < 0) {
@@ -50,8 +50,7 @@ public class ActionSender {
         SENDING.add(dataBlock);
     }
     
-    private static boolean sendBlocksSQL(Collection<Action> collection,
-            WorldManager manager) {
+    private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
         // Try to refactor most of these into the table managers.
         
         // Send a heartbeat after sending blocks.
@@ -64,8 +63,9 @@ public class ActionSender {
             BBLogging.debug(statementSql);
             ps = BBDB.prepare(statementSql);
             for (Action block : collection) {
-                if (BBSettings.worldExclusionList.contains(block.world))
+                if (BBSettings.worldExclusionList.contains(block.world)) {
                     continue;
+                }
                 
                 ps.setLong(1, block.date);
                 ps.setInt(2, block.player.getID());
@@ -96,8 +96,7 @@ public class ActionSender {
         }
     }
     
-    private static void sendBlocksFlatFile(File dataFolder,
-            Collection<Action> collection) {
+    private static void sendBlocksFlatFile(File dataFolder, Collection<Action> collection) {
         File dir = new File(dataFolder, "logs");
         if (!dir.exists()) {
             dir.mkdir();
@@ -161,11 +160,9 @@ public class ActionSender {
             this.manager = manager;
         }
         
-        @Override
         public void run() {
-            if (SENDING.size() == 0) {
+            if (SENDING.size() == 0)
                 return;
-            }
             Collection<Action> collection = new ArrayList<Action>();
             SENDING.drainTo(collection);
             

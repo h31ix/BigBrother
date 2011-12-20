@@ -67,9 +67,8 @@ public class ConnectionService {
         
         for (int i = 0; i < connections.size(); i++) {
             c = connections.elementAt(i);
-            if (c.lease()) {
+            if (c.lease())
                 return c;
-            }
         }
         
         Connection conn = DriverManager.getConnection(url, user, password);

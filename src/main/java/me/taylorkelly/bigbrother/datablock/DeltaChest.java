@@ -29,13 +29,11 @@ public class DeltaChest extends BBAction {
         super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), changes);
     }
     
-    private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private DeltaChest(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
-    public DeltaChest(String player, Chest chest, ItemStack[] orig,
-            ItemStack[] latest) {
+    public DeltaChest(String player, Chest chest, ItemStack[] orig, ItemStack[] latest) {
         super(player, chest.getWorld().getName(), chest.getX(), chest.getY(), chest.getZ(), chest.getTypeId(), DeltaChest.getInventoryDelta(orig, latest));
     }
     
@@ -76,21 +74,24 @@ public class DeltaChest extends BBAction {
         int numskipped = 0;
         for (String chunk : data.split(";")) {
             // Handle chest deltas where the chest is merely opened and then closed without changing crap.
-            if (chunk.startsWith("{"))
+            if (chunk.startsWith("{")) {
                 chunk = chunk.substring(1);
-            if (chunk.isEmpty())
+            }
+            if (chunk.isEmpty()) {
                 continue;
+            }
             DeltaEntry e = new DeltaEntry(chunk);
             // Check if we have enough room before adding crap to the array.  Solves BB-10.
-            if (e.Slot > chestCapacity - 1) {
+            if (e.Slot > (chestCapacity - 1)) {
                 BBLogging.debug("Skipping slot #" + e.Slot + ", not enough room in chest. (" + e.Slot + " > " + chestCapacity + ")");
                 numskipped++;
             } else {
                 de[e.Slot] = e;
             }
         }
-        if (numskipped > 0)
+        if (numskipped > 0) {
             BBLogging.warning("Skipped " + numskipped + " slots because there's not enough room in the chest.");
+        }
         
         return de;
     }
@@ -127,8 +128,9 @@ public class DeltaChest extends BBAction {
                     dchunks[2] = dchunks[2].substring(1);
                     Type = DeltaType.ADDED;
                 } else {
-                    if (dchunks[2].startsWith("-"))
+                    if (dchunks[2].startsWith("-")) {
                         Type = DeltaType.REMOVED;
+                    }
                 }
                 Amount = Integer.valueOf(dchunks[2]);
                 Damage = Short.valueOf(dchunks[3]);
@@ -157,34 +159,37 @@ public class DeltaChest extends BBAction {
                 Amount = latest.getAmount();
                 Damage = latest.getDurability();
                 // Why do you do this
-                if (orig.getData() == null)
+                if (orig.getData() == null) {
                     Data = 0;
-                else
+                } else {
                     Data = orig.getData().getData();
+                }
             } else {
                 //First we must determine this
                 Amount = latest.getAmount() - orig.getAmount();
-                if (Amount == 0)
+                if (Amount == 0) {
                     Type = DeltaType.NO_CHANGE;
-                else if (Amount < 0) {
+                } else if (Amount < 0) {
                     Type = DeltaType.REMOVED;
                     //item might be removed completely, so our information source must be 'orig'
                     ID = orig.getTypeId();
                     Damage = orig.getDurability();
-                    if (orig.getData() == null)
+                    if (orig.getData() == null) {
                         Data = 0;
-                    else
+                    } else {
                         Data = orig.getData().getData();
+                    }
                     
                 } else if (Amount > 0) {
                     Type = DeltaType.ADDED;
                     //item might be added to an empty slot
                     ID = latest.getTypeId();
                     Damage = latest.getDurability();
-                    if (latest.getData() == null)
+                    if (latest.getData() == null) {
                         Data = 0;
-                    else
+                    } else {
                         Data = latest.getData().getData();
+                    }
                 }
             }
         }
@@ -194,14 +199,13 @@ public class DeltaChest extends BBAction {
         }
         
         private boolean isTypeDifferent(ItemStack orig, ItemStack latest) {
-            if (orig.getTypeId() == 0 || latest.getTypeId() == 0)
+            if ((orig.getTypeId() == 0) || (latest.getTypeId() == 0))
                 return false;
             
             if (orig.getTypeId() != latest.getTypeId())
                 return true;
-            else {
-                return (ItemType.usesDamageValue(orig.getTypeId()) && orig.getDurability() != latest.getDurability());
-            }
+            else
+                return (ItemType.usesDamageValue(orig.getTypeId()) && (orig.getDurability() != latest.getDurability()));
         }
         
         private ItemStack fixStack(ItemStack stack) {
@@ -223,9 +227,9 @@ public class DeltaChest extends BBAction {
         public String toString() {
             // {SLOT:ID:[+|-]COUNT:DATA:DAMAGE[;...]
             // SLOT:ID:COUNT:DATA:DAMAGE=NEWID:NEWCOUNT...
-            if (Type.equals(DeltaType.REPLACED)) {
+            if (Type.equals(DeltaType.REPLACED))
                 return Slot + ":" + rawDump(oldStack) + "=" + rawDump(newStack);
-            } else {
+            else {
                 StringBuilder b = new StringBuilder();
                 b.append(Slot);
                 b.append(":");
@@ -252,10 +256,11 @@ public class DeltaChest extends BBAction {
             b.append(":");
             byte dat;
             // Why do you do this
-            if (a.getData() == null)
+            if (a.getData() == null) {
                 dat = 0;
-            else
+            } else {
                 dat = a.getData().getData();
+            }
             b.append(dat);
             b.append(":");
             b.append(a.getDurability());
@@ -287,9 +292,9 @@ public class DeltaChest extends BBAction {
                     case ADDED:
                     case REMOVED:
                         ItemStack stack = inv[i];
-                        if (stack == null)
+                        if (stack == null) {
                             stack = diff[i].oldStack;
-                        else {
+                        } else {
                             stack.setAmount(stack.getAmount() - diff[i].Amount);
                             stack.setDurability((short) diff[i].Damage);
                         }
@@ -332,7 +337,7 @@ public class DeltaChest extends BBAction {
                     }
                     int amount = -1 * Integer.parseInt(pieces[1]);
                     ItemStack stack = inv.getItem(i);
-                    if (stack == null || stack.getAmount() == 0) {
+                    if ((stack == null) || (stack.getAmount() == 0)) {
                         if (amount > 0) {
                             ItemStack newStack = new ItemStack(id, amount, (byte) 0x01, (byte) itemData);
                             inv.setItem(i, newStack);
@@ -395,7 +400,7 @@ public class DeltaChest extends BBAction {
                     }
                     int amount = Integer.parseInt(pieces[1]);
                     ItemStack stack = inv.getItem(i);
-                    if (stack == null || stack.getAmount() == 0) {
+                    if ((stack == null) || (stack.getAmount() == 0)) {
                         if (amount > 0) {
                             ItemStack newStack = new ItemStack(id, amount, (byte) 0x01, (byte) itemData);
                             inv.setItem(i, newStack);
@@ -425,8 +430,7 @@ public class DeltaChest extends BBAction {
         }
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DeltaChest(pi, world, x, y, z, type, data);
     }
     

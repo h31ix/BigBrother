@@ -59,8 +59,7 @@ public class BBDataPostgreSQL extends BBDataMySQL {
     }
     
     @Override
-    public int getCleanseByLimit(Statement stmt, Long maxRecords,
-            long deletesPerCleansing) throws SQLException {
+    public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
         String cleansql = "DELETE FROM \"" + getTableName() + "\" LEFT OUTER JOIN (SELECT \"id\" FROM \"bbdata\" ORDER BY \"id\" DESC LIMIT 0," + maxRecords + ") AS \"savedValues\" ON \"savedValues.id\" = \"bbdata.id\" WHERE \"savedValues.id\" IS NULL";
         if (deletesPerCleansing > 0) {
             cleansql += " LIMIT " + deletesPerCleansing;
@@ -68,6 +67,7 @@ public class BBDataPostgreSQL extends BBDataMySQL {
         return stmt.executeUpdate(cleansql);
     }
     
+    @Override
     public ArrayList<Action> getBlockHistory(Block block, WorldManager manager) {
         PreparedStatement ps = null;
         ResultSet rs = null;

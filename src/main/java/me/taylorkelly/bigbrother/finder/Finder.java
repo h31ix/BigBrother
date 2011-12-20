@@ -38,16 +38,15 @@ public class Finder {
     private final Plugin plugin;
     private static List<Integer> allowedActions;
     
-    public Finder(Location location, List<World> worlds, WorldManager manager,
-            Plugin plugin, Collection<Integer> actions) {
+    public Finder(Location location, List<World> worlds, WorldManager manager, Plugin plugin, Collection<Integer> actions) {
         this.manager = manager;
         this.location = location;
-        this.radius = BBSettings.defaultSearchRadius;
+        radius = BBSettings.defaultSearchRadius;
         players = new ArrayList<Player>();
         this.plugin = plugin;
-        if (actions != null)
+        if (actions != null) {
             allowedActions = new ArrayList<Integer>(actions);
-        else {
+        } else {
             allowedActions = ActionProvider.getDefaultActions();
         }
     }
@@ -87,9 +86,7 @@ public class Finder {
         private final Plugin plugin;
         private final String player;
         
-        public FinderRunner(final Plugin plugin, final String player,
-                final Location location, final int radius,
-                final WorldManager manager, final ArrayList<Player> players) {
+        public FinderRunner(final Plugin plugin, final String player, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
             this.player = player;
             this.plugin = plugin;
             this.radius = radius;
@@ -98,13 +95,10 @@ public class Finder {
             this.players = players;
         }
         
-        public FinderRunner(Plugin plugin, final Location location,
-                final int radius, final WorldManager manager,
-                final ArrayList<Player> players) {
+        public FinderRunner(Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
             this(plugin, null, location, radius, manager, players);
         }
         
-        @Override
         public void run() {
             if (player == null) {
                 mysqlFind(plugin, location, radius, manager, players);
@@ -115,9 +109,7 @@ public class Finder {
         }
     }
     
-    private static final void mysqlFind(final Plugin plugin,
-            final Location location, final int radius,
-            final WorldManager manager, final ArrayList<Player> players) {
+    private static final void mysqlFind(final Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
@@ -197,9 +189,7 @@ public class Finder {
         return act + ")";
     }
     
-    private static final void mysqlFind(final Plugin plugin,
-            final String playerName, final Location location, final int radius,
-            final WorldManager manager, final ArrayList<Player> players) {
+    private static final void mysqlFind(final Plugin plugin, final String playerName, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         
         BBPlayerInfo hunted = BBUsersTable.getInstance().getUserByName(playerName);
         
@@ -214,10 +204,11 @@ public class Finder {
         try {
             // TODO Centralize action list SQL generation.
             
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = false AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
-            else
+            } else {
                 ps = BBDB.prepare("SELECT action, type FROM " + BBDataTable.getInstance().getTableName() + " WHERE " + getActionString() + " AND rbacked = 0 AND x < ? AND x > ? AND y < ? AND y > ?  AND z < ? AND z > ? AND player = ? AND world = ? order by date desc");
+            }
             
             ps.setInt(1, location.getBlockX() + radius);
             ps.setInt(2, location.getBlockX() - radius);
@@ -249,8 +240,9 @@ public class Finder {
                 for (Player player : players) {
                     player.sendMessage(BigBrother.premessage + playerName + " has made " + size + " modifications");
                     for (ActionCategory category : ActionCategory.values()) {
-                        if (mods.get(category).size() == 0)
+                        if (mods.get(category).size() == 0) {
                             continue;
+                        }
                         StringBuilder list = new StringBuilder();
                         list.append(ChatColor.AQUA.toString());
                         list.append(category + ": ");

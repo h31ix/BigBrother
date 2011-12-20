@@ -65,7 +65,7 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
     
     @Override
     protected void do_addOrUpdatePlayer(BBPlayerInfo pi) {
-        if (pi.getNew() && getUserFromDB(pi.getName()) == null) {
+        if (pi.getNew() && (getUserFromDB(pi.getName()) == null)) {
             String sql = "INSERT INTO " + getTableName() + " (name,flags) VALUES (?,?)";
             BBDB.executeUpdate(sql, pi.getName(), pi.getFlags());
             

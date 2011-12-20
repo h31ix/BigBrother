@@ -32,6 +32,7 @@ public abstract class BBDataTable extends DBTable {
     /**
      * Get table name + prefix
      */
+    @Override
     protected String getActualTableName() {
         return "bbdata";
     }
@@ -39,10 +40,11 @@ public abstract class BBDataTable extends DBTable {
     public static BBDataTable getInstance() {
         if (instance == null) {
             //BBLogging.info("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new BBDataPostgreSQL();
-            else
+            } else {
                 instance = new BBDataMySQL();
+            }
         }
         return instance;
     }
@@ -52,8 +54,9 @@ public abstract class BBDataTable extends DBTable {
     }
     
     public BBDataTable() {
-        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION)) {
             drop();
+        }
         if (!tableExists()) {
             BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
@@ -87,8 +90,7 @@ public abstract class BBDataTable extends DBTable {
      * @return
      * @throws SQLException
      */
-    public abstract int getCleanseByLimit(Statement stmt, Long maxRecords,
-            long deletesPerCleansing) throws SQLException;
+    public abstract int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException;
     
     public ArrayList<Action> getBlockHistory(Block block, WorldManager manager) {
         PreparedStatement ps = null;
@@ -97,10 +99,11 @@ public abstract class BBDataTable extends DBTable {
         
         try {
             // TODO maybe more customizable actions?
-            if (BBDB.usingDBMS(DBMS.POSTGRES)) // TODO: Someone made rbacked a BOOLEAN, which screws up the logic.
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = false AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
-            else
+            } else {
                 ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = 0 AND x = ? AND y = ?  AND z = ? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+            }
             
             ps.setInt(1, block.getX());
             ps.setInt(2, block.getY());
@@ -130,8 +133,7 @@ public abstract class BBDataTable extends DBTable {
      * @param worldManager
      * @return
      */
-    public ArrayList<Action> getPlayerHistory(Player sender, String name,
-            WorldManager manager) {
+    public ArrayList<Action> getPlayerHistory(Player sender, String name, WorldManager manager) {
         
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -139,10 +141,11 @@ public abstract class BBDataTable extends DBTable {
         
         try {
             // TODO maybe more customizable actions?
-            if (BBDB.usingDBMS(DBMS.POSTGRES)) // TODO: Someone made rbacked a BOOLEAN, which screws up the logic.
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = false AND player=? AND bbdata.world = ? ORDER BY bbdata.id ASC;");
-            else
+            } else {
                 ps = BBDB.prepare("SELECT  bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS world FROM " + BBDataTable.getInstance().getTableName() + " AS bbdata INNER JOIN " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds ON bbworlds.id = bbdata.world  WHERE rbacked = 0 AND player=?  AND bbdata.world = ? ORDER BY bbdata.id ASC;");
+            }
             
             ps.setInt(1, BBUsersTable.getInstance().getUserByName(name).getID());
             ps.setInt(2, manager.getWorld(sender.getWorld().getName()));

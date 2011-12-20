@@ -22,15 +22,15 @@ public class HistoryStick extends StickMode {
     public void initialize(Player player) {
         slot = player.getInventory().getHeldItemSlot();
         oldItem = player.getInventory().getItem(slot);
-        if (oldItem != null && oldItem.getAmount() > 0) {
+        if ((oldItem != null) && (oldItem.getAmount() > 0)) {
             player.sendMessage(ChatColor.AQUA + "Saving your " + oldItem.getType() + ".");
         }
-        player.getInventory().setItem(slot, new ItemStack((int) BBSettings.stickItem, 1));
+        player.getInventory().setItem(slot, new ItemStack(BBSettings.stickItem, 1));
     }
     
     @Override
     public void disable(Player player) {
-        if (oldItem != null && oldItem.getAmount() > 0) {
+        if ((oldItem != null) && (oldItem.getAmount() > 0)) {
             player.sendMessage(ChatColor.AQUA + "Here's your " + oldItem.getType() + " back!");
             player.getInventory().setItem(slot, oldItem);
         } else {
@@ -39,8 +39,7 @@ public class HistoryStick extends StickMode {
     }
     
     @Override
-    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager,
-            boolean ignored) {
+    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean ignored) {
         ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager);
         
         ArrayList<String> msgs = new ArrayList<String>();
@@ -62,8 +61,9 @@ public class HistoryStick extends StickMode {
                 msg.append(lines[0]);
                 msgs.add(msg.toString());
                 if (lines.length > 1) {
-                    for (int l = 1; l < lines.length; l++)
+                    for (int l = 1; l < lines.length; l++) {
                         msgs.add(lines[l]);
+                    }
                 }
             }
         }
@@ -77,14 +77,13 @@ public class HistoryStick extends StickMode {
     
     @Override
     public void update(Player player) {
-        player.getInventory().setItem(slot, new ItemStack((int) BBSettings.stickItem, 1));
+        player.getInventory().setItem(slot, new ItemStack(BBSettings.stickItem, 1));
     }
     
     @Override
     public boolean usesStick(ItemStack itemStack) {
-        if (itemStack.getTypeId() == BBSettings.stickItem) {
+        if (itemStack.getTypeId() == BBSettings.stickItem)
             return true;
-        }
         return false;
     }
     

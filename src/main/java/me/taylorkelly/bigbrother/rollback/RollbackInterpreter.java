@@ -28,8 +28,7 @@ public class RollbackInterpreter {
     private Plugin plugin;
     private List<Integer> allowedActions;
     
-    public RollbackInterpreter(Player player, String[] split, Server server,
-            WorldManager manager, Plugin plugin) {
+    public RollbackInterpreter(Player player, String[] split, Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
         this.player = player;
         this.server = server;
@@ -42,13 +41,13 @@ public class RollbackInterpreter {
             if (argument.equals("") || argument.equals(" ")) {
                 continue;
             }
-            if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("t:")) {
+            if ((argument.length() > 2) && argument.substring(0, 2).equalsIgnoreCase("t:")) {
                 dateSearch = TimeParser.parseTime(argument.substring(2), player);
-            } else if (argument.length() > 3 && argument.substring(0, 3).equalsIgnoreCase("id:")) {
+            } else if ((argument.length() > 3) && argument.substring(0, 3).equalsIgnoreCase("id:")) {
                 parseId(argument.substring(3));
-            } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("r:")) {
+            } else if ((argument.length() > 2) && argument.substring(0, 2).equalsIgnoreCase("r:")) {
                 parseRadius(argument.substring(2));
-            } else if (argument.length() > 2 && argument.substring(0, 2).equalsIgnoreCase("a:")) {
+            } else if ((argument.length() > 2) && argument.substring(0, 2).equalsIgnoreCase("a:")) {
                 allowedActions = ActionProvider.parseActionSwitch(null, argument.substring(2));
             } else if (argument.equalsIgnoreCase("*")) {
                 all = true;
@@ -84,17 +83,17 @@ public class RollbackInterpreter {
                     continue;
                 }
                 Material m = Material.matchMaterial(actId);
-                if (m != null)
+                if (m != null) {
                     blockTypes.add(m.getId());
-                else {
+                } else {
                     player.sendMessage(ChatColor.RED + "Ignoring invalid block id: " + actId);
                 }
             }
         } else {
             Material m = Material.matchMaterial(id);
-            if (m != null)
+            if (m != null) {
                 blockTypes.add(m.getId());
-            else {
+            } else {
                 player.sendMessage(ChatColor.RED + "Ignoring invalid block id: " + id);
             }
         }
@@ -121,11 +120,10 @@ public class RollbackInterpreter {
         }
         rollback.allowedActions = allowedActions;
         rollback.setRadius(radius, player.getLocation());
-        if (radius == 0 && dateSearch == null) {
+        if ((radius == 0) && (dateSearch == null))
             return false;
-        } else {
+        else
             return true;
-        }
     }
     
     // public Rollback getAndInitializeRollback() {

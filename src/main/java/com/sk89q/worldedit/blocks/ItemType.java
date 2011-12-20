@@ -19,11 +19,12 @@
 
 package com.sk89q.worldedit.blocks;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.EnumSet;
 import java.util.Map.Entry;
+
 import com.sk89q.util.StringUtil;
 
 /**
@@ -270,7 +271,7 @@ public enum ItemType {
     ItemType(int id, String name, String lookupKey) {
         this.id = id;
         this.name = name;
-        this.lookupKeys = new String[] { lookupKey };
+        lookupKeys = new String[] { lookupKey };
     }
     
     /**
@@ -303,11 +304,10 @@ public enum ItemType {
      */
     public static String toName(int id) {
         ItemType type = ids.get(id);
-        if (type != null) {
+        if (type != null)
             return type.getName();
-        } else {
+        else
             return "#" + id;
-        }
     }
     
     /**
@@ -317,15 +317,13 @@ public enum ItemType {
      * @return
      */
     public static String toHeldName(int id) {
-        if (id == 0) {
+        if (id == 0)
             return "Hand";
-        }
         ItemType type = ids.get(id);
-        if (type != null) {
+        if (type != null)
             return type.getName();
-        } else {
+        else
             return "#" + id;
-        }
     }
     
     /**
@@ -350,13 +348,11 @@ public enum ItemType {
         
         ItemType type = lookup.get(testName);
         
-        if (type != null) {
+        if (type != null)
             return type;
-        }
         
-        if (!fuzzy) {
+        if (!fuzzy)
             return null;
-        }
         
         int minDist = -1;
         
@@ -367,7 +363,7 @@ public enum ItemType {
             
             int dist = StringUtil.getLevenshteinDistance(entry.getKey(), testName);
             
-            if ((dist < minDist || minDist == -1) && dist < 2) {
+            if (((dist < minDist) || (minDist == -1)) && (dist < 2)) {
                 minDist = dist;
                 type = entry.getValue();
             }
@@ -410,7 +406,7 @@ public enum ItemType {
      * @return
      */
     public static boolean shouldNotStack(int id) {
-        return (id >= 256 && id <= 259) || id == 261 || (id >= 267 && id <= 279) || (id >= 281 && id <= 286) || (id >= 290 && id <= 294) || (id >= 298 && id <= 317) || (id >= 325 && id <= 327) || id == 335 || id == 354 || id == 355 || id >= 2256;
+        return ((id >= 256) && (id <= 259)) || (id == 261) || ((id >= 267) && (id <= 279)) || ((id >= 281) && (id <= 286)) || ((id >= 290) && (id <= 294)) || ((id >= 298) && (id <= 317)) || ((id >= 325) && (id <= 327)) || (id == 335) || (id == 354) || (id == 355) || (id >= 2256);
     }
     
     /**
@@ -420,6 +416,6 @@ public enum ItemType {
      * @return
      */
     public static boolean usesDamageValue(int id) {
-        return id == 35 || id == 351;
+        return (id == 35) || (id == 351);
     }
 }

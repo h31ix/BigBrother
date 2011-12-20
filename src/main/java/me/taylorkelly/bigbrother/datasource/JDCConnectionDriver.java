@@ -23,9 +23,7 @@ public class JDCConnectionDriver implements Driver {
     private static final int MINOR_VERSION = 0;
     private ConnectionService pool;
     
-    public JDCConnectionDriver(String driver, String url, String user,
-            String password) throws ClassNotFoundException,
-            InstantiationException, IllegalAccessException, SQLException {
+    public JDCConnectionDriver(String driver, String url, String user, String password) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
         DriverManager.registerDriver(this);
         Class.forName(driver).newInstance();
         pool = new ConnectionService(url, user, password);
@@ -36,9 +34,8 @@ public class JDCConnectionDriver implements Driver {
     }
     
     public Connection connect(String url, Properties props) throws SQLException {
-        if (!url.startsWith(JDCConnectionDriver.URL_PREFIX)) {
+        if (!url.startsWith(JDCConnectionDriver.URL_PREFIX))
             return null;
-        }
         return pool.getConnection();
     }
     

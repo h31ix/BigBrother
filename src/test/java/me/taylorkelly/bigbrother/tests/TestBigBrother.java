@@ -18,7 +18,7 @@ public class TestBigBrother {
     
     @Before
     public void setup() {
-        this.testFolder = new File("tests");
+        testFolder = new File("tests");
     }
     
     @Test

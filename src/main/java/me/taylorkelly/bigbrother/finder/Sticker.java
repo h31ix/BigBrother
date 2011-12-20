@@ -25,10 +25,8 @@ public class Sticker {
     /**
      * Creates the Stick Controller
      * 
-     * @param server
-     *            The server
-     * @param manager
-     *            The world manager (for passing to sticks)
+     * @param server The server
+     * @param manager The world manager (for passing to sticks)
      */
     public Sticker(Server server, WorldManager manager) {
         this.manager = manager;
@@ -68,43 +66,36 @@ public class Sticker {
     /**
      * Returns the description of the Stick that the player is holding
      * 
-     * @param player
-     *            The player to get their stick info
+     * @param player The player to get their stick info
      * @return the description, or null if the player has no stick
      */
     public String descMode(Player player) {
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        if (pi.historyTool != null) {
+        if (pi.historyTool != null)
             return pi.historyTool.getDescription();
-        } else {
+        else
             return null;
-        }
     }
     
     /**
      * Determines if a player is using their stick based on the item stack they're associated with. This association is typically what item stack they have in their hand
      * 
-     * @param player
-     *            The player to check
-     * @param itemStack
-     *            The item stack they're interacting with.
+     * @param player The player to check
+     * @param itemStack The item stack they're interacting with.
      * @return true if they're using their stick. false if not
      */
     public boolean hasStick(Player player, ItemStack itemStack) {
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        if (pi.historyTool != null) {
+        if (pi.historyTool != null)
             return pi.historyTool.usesStick(itemStack);
-        }
         return false;
     }
     
     /**
      * Sends info on a block to a specific player based on their stick
      * 
-     * @param player
-     *            The player to send info to and to use their stick
-     * @param block
-     *            The block to get info about
+     * @param player The player to send info to and to use their stick
+     * @param block The block to get info about
      * @param leftclick
      */
     private void blockInfo(Player player, Block block, boolean leftclick) {
@@ -121,10 +112,8 @@ public class Sticker {
     /**
      * Occurs when a player uses their stick. Gets info and applies updates
      * 
-     * @param player
-     *            The player who is using a HistoryTool
-     * @param block
-     *            The block that the stick is interacting with
+     * @param player The player who is using a HistoryTool
+     * @param block The block that the stick is interacting with
      */
     public void stick(Player player, Block block, boolean leftclick) {
         blockInfo(player, block, leftclick);
@@ -137,23 +126,20 @@ public class Sticker {
     /**
      * Returns if the player is holding a stick that uses right clicks
      * 
-     * @param player
-     *            The player to get info about
+     * @param player The player to get info about
      * @return Whether they are holding a right click stick
      */
     public boolean rightClickStick(Player player) {
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        if (pi.historyTool != null) {
+        if (pi.historyTool != null)
             return pi.historyTool.rightClickStick();
-        }
         return false;
     }
     
     public boolean leftClickStick(Player player) {
         BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
-        if (pi.historyTool != null) {
+        if (pi.historyTool != null)
             return pi.historyTool.leftClickStick();
-        }
         return false;
     }
 }

@@ -5,11 +5,24 @@ import java.util.ArrayList;
 import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBCommand;
 import me.taylorkelly.bigbrother.BBLogging;
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.datablock.*;
+import me.taylorkelly.bigbrother.Permissions;
+import me.taylorkelly.bigbrother.datablock.BBAction;
+import me.taylorkelly.bigbrother.datablock.BrokenBlock;
+import me.taylorkelly.bigbrother.datablock.ButtonPress;
+import me.taylorkelly.bigbrother.datablock.Chat;
+import me.taylorkelly.bigbrother.datablock.ChestOpen;
+import me.taylorkelly.bigbrother.datablock.Command;
+import me.taylorkelly.bigbrother.datablock.Disconnect;
+import me.taylorkelly.bigbrother.datablock.DoorOpen;
+import me.taylorkelly.bigbrother.datablock.DropItem;
+import me.taylorkelly.bigbrother.datablock.LeverSwitch;
+import me.taylorkelly.bigbrother.datablock.Login;
+import me.taylorkelly.bigbrother.datablock.PickupItem;
+import me.taylorkelly.bigbrother.datablock.PlacedBlock;
+import me.taylorkelly.bigbrother.datablock.Teleport;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.util.ChestTools;
 import net.nexisonline.bigbrother.ownership.OwnershipManager;
@@ -43,7 +56,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         try {
             //plugin.processPsuedotick();
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             String[] parts = BBCommand.groupArgs(event.getMessage().split(" "));
             String cmd = parts[0].toLowerCase();
@@ -55,8 +68,9 @@ public class BBPlayerListener extends PlayerListener {
                 if (parts.length > 1) {
                     for (int i = 1; i < parts.length; i++) {
                         msg += " ";
-                        for (int j = 0; j < parts[i].length(); j++)
+                        for (int j = 0; j < parts[i].length(); j++) {
                             msg += "*";
+                        }
                     }
                 }
             }
@@ -76,7 +90,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         try {
             //plugin.processPsuedotick();
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             Player player = event.getPlayer();
             
@@ -88,15 +102,15 @@ public class BBPlayerListener extends PlayerListener {
                 dataBlock.send();
             }
             
-            if (BBPermissions.info(player)) {
+            if (player.hasPermission(Permissions.INFO.id)) {
                 plugin.sticker.onPlayerJoin(player, pi);
             }
             
             BBLogging.debug(player.getName() + " has Permissions: ");
-            BBLogging.debug("- Watching privileges: " + BBPermissions.watch(player));
-            BBLogging.debug("- Info privileges: " + BBPermissions.info(player));
-            BBLogging.debug("- Rollback privileges: " + BBPermissions.rollback(player));
-            BBLogging.debug("- Cleansing privileges: " + BBPermissions.cleanse(player));
+            BBLogging.debug("- Watching privileges: " + player.hasPermission(Permissions.WATCH.id));
+            BBLogging.debug("- Info privileges: " + player.hasPermission(Permissions.INFO.id));
+            BBLogging.debug("- Rollback privileges: " + player.hasPermission(Permissions.ROLLBACK.id));
+            BBLogging.debug("- Cleansing privileges: " + player.hasPermission(Permissions.CLEANSE.id));
         } catch (Throwable e) {
             BBLogging.severe("onPlayerJoin(" + event.toString() + ")", e);
         }
@@ -106,7 +120,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         try {
             //plugin.processPsuedotick();
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -124,7 +138,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         try {
             //plugin.processPsuedotick();
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             Location from = event.getFrom();
             Location to = event.getTo();
@@ -132,7 +146,7 @@ public class BBPlayerListener extends PlayerListener {
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
-            if (!ActionProvider.isDisabled(Teleport.class) && pi.getWatched() && distance(from, to) > 5 && !event.isCancelled()) {
+            if (!ActionProvider.isDisabled(Teleport.class) && pi.getWatched() && (distance(from, to) > 5) && !event.isCancelled()) {
                 Teleport dataBlock = new Teleport(player.getName(), event.getTo());
                 dataBlock.send();
             }
@@ -145,7 +159,7 @@ public class BBPlayerListener extends PlayerListener {
     public void onPlayerChat(PlayerChatEvent event) {
         try {
             //plugin.processPsuedotick();
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -162,13 +176,13 @@ public class BBPlayerListener extends PlayerListener {
     @Override
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         try {
-            if (event == null || event.getPlayer() == null || event.getItem() == null)
+            if ((event == null) || (event.getPlayer() == null) || (event.getItem() == null))
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             if (!ActionProvider.isDisabled(PickupItem.class) && pi.getWatched()) {
                 // It should not be null, but I have no other way to explain the NPEs.  Bukkit Bug?
-                if (event.getItem() != null && event.getItem().getItemStack() != null) {
+                if ((event.getItem() != null) && (event.getItem().getItemStack() != null)) {
                     PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
                     dataBlock.send();
                 }
@@ -181,7 +195,7 @@ public class BBPlayerListener extends PlayerListener {
     @Override
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         try {
-            if (event == null || event.getPlayer() == null || event.getItemDrop() == null || event.getItemDrop().getItemStack() == null)
+            if ((event == null) || (event.getPlayer() == null) || (event.getItemDrop() == null) || (event.getItemDrop().getItemStack() == null))
                 return;
             final Player player = event.getPlayer();
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
@@ -197,7 +211,7 @@ public class BBPlayerListener extends PlayerListener {
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
         try {
-            if (event == null || event.getPlayer() == null)
+            if ((event == null) || (event.getPlayer() == null))
                 return;
             //plugin.processPsuedotick();
             if (event.isCancelled())
@@ -207,7 +221,7 @@ public class BBPlayerListener extends PlayerListener {
             BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             
             if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-                if (BBPermissions.info(player) && plugin.hasStick(player, player.getItemInHand()) && plugin.leftClickStick(player)) {
+                if (player.hasPermission(Permissions.INFO.id) && plugin.hasStick(player, player.getItemInHand()) && plugin.leftClickStick(player)) {
                     // Process left-clicks (punch action on log, etc)
                     plugin.stick(player, event.getClickedBlock(), true);
                     
@@ -218,7 +232,7 @@ public class BBPlayerListener extends PlayerListener {
             // Process right-clicking stuff.
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 // Process stick/log events first.
-                if (BBPermissions.info(player) && plugin.hasStick(player, player.getItemInHand()) && plugin.rightClickStick(player)) {
+                if (player.hasPermission(Permissions.INFO.id) && plugin.hasStick(player, player.getItemInHand()) && plugin.rightClickStick(player)) {
                     // Get info
                     plugin.stick(player, event.getClickedBlock(), false);
                     
@@ -247,7 +261,7 @@ public class BBPlayerListener extends PlayerListener {
                         return;
                     }
                     switch (event.getMaterial()) {
-                        //TODO Door logging
+                    //TODO Door logging
                         case LAVA_BUCKET:
                             x = event.getClickedBlock().getX() + event.getBlockFace().getModX();
                             y = event.getClickedBlock().getY() + event.getBlockFace().getModY();
@@ -327,7 +341,7 @@ public class BBPlayerListener extends PlayerListener {
                             }
                             break;
                         default:
-
+                            
                             switch (event.getClickedBlock().getType()) {
                                 case WOODEN_DOOR:
                                     //case IRON_DOOR:

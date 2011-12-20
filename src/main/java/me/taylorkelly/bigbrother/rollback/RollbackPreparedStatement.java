@@ -15,10 +15,11 @@ public abstract class RollbackPreparedStatement {
     
     public static RollbackPreparedStatement getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new RollbackPreparedStatementPostgreSQL();
-            else
+            } else {
                 instance = new RollbackPreparedStatementMySQL();
+            }
         }
         return instance;
     }
@@ -96,7 +97,7 @@ public abstract class RollbackPreparedStatement {
             ret.append("'");
             ret.append(blockTypes.get(i));
             ret.append("'");
-            if (i + 1 < blockTypes.size()) {
+            if ((i + 1) < blockTypes.size()) {
                 ret.append(",");
             }
         }
@@ -110,7 +111,7 @@ public abstract class RollbackPreparedStatement {
             ret.append("'");
             ret.append(BBUsersTable.getInstance().getUserByName(players.get(i)).getID());
             ret.append("'");
-            if (i + 1 < players.size()) {
+            if ((i + 1) < players.size()) {
                 ret.append(",");
             }
         }

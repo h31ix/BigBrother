@@ -44,8 +44,7 @@ public class OwnersPostgreSQL extends OwnersTable {
         }
     }
     
-    protected boolean trySetBlockOwnerUpdate(int world, int x, int y, int z,
-            int playerID) {
+    protected boolean trySetBlockOwnerUpdate(int world, int x, int y, int z, int playerID) {
         PreparedStatement stmt = null;
         try {
             stmt = BBDB.prepare("UPDATE " + getTableName() + " SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?");
@@ -63,8 +62,7 @@ public class OwnersPostgreSQL extends OwnersTable {
         return false;
     }
     
-    protected void setBlockOwnerInsert(int world, int x, int y, int z,
-            int playerID) {
+    protected void setBlockOwnerInsert(int world, int x, int y, int z, int playerID) {
         PreparedStatement stmt = null;
         try {
             stmt = BBDB.prepare("INSERT INTO " + getTableName() + " (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");

@@ -69,7 +69,7 @@ public class DeltaChestTest {
      * 
      * assertArrayEquals("Rollback failed",stateA,c.getInventory().getContents()); }
      */
-
+    
     /**
      * Test method for {@link me.taylorkelly.bigbrother.datablock.DeltaChest#redo(org.bukkit.Server)}.
      */

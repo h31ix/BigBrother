@@ -8,9 +8,9 @@ import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
-public class RollbackPreparedStatementPostgreSQL extends
-        RollbackPreparedStatement {
+public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStatement {
     
+    @Override
     public String create(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS \"world\"");
         statement.append(" FROM");
@@ -82,7 +82,7 @@ public class RollbackPreparedStatementPostgreSQL extends
             ret.append("'");
             ret.append(blockTypes.get(i));
             ret.append("'");
-            if (i + 1 < blockTypes.size()) {
+            if ((i + 1) < blockTypes.size()) {
                 ret.append(",");
             }
         }
@@ -96,7 +96,7 @@ public class RollbackPreparedStatementPostgreSQL extends
             ret.append("'");
             ret.append(players.get(i));
             ret.append("'");
-            if (i + 1 < players.size()) {
+            if ((i + 1) < players.size()) {
                 ret.append(",");
             }
         }
@@ -133,6 +133,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         return ret;
     }
     
+    @Override
     public String update(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE");
         statement.append(" " + BBDataTable.getInstance().getTableName());
@@ -200,6 +201,7 @@ public class RollbackPreparedStatementPostgreSQL extends
         return statement.toString();
     }
     
+    @Override
     public String undoStatement(Rollback rollback, WorldManager manager) {
         StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata,");

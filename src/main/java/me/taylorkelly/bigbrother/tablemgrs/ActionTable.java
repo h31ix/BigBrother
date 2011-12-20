@@ -76,10 +76,11 @@ public abstract class ActionTable extends DBTable {
      */
     private void checkForUpdates() {
         int actionVersion = BBDB.getVersion(BBSettings.dataFolder, getActualTableName());
-        int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
+        BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
         
-        if (actionVersion < 3)
+        if (actionVersion < 3) {
             drop();
+        }
     }
     
     /**
@@ -122,10 +123,11 @@ public abstract class ActionTable extends DBTable {
     public static ActionTable getInstance() {
         if (instance == null) {
             //BBLogging.info("BBSettings.databaseSystem="+BBSettings.databaseSystem.toString());
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new ActionPostgreSQL();
-            else
+            } else {
                 instance = new ActionMySQL();
+            }
         }
         return instance;
     }
@@ -135,12 +137,10 @@ public abstract class ActionTable extends DBTable {
     }
     
     /**
-     * @param act
-     *            Action to add to the database
+     * @param act Action to add to the database
      * @return int ID of the Action
      */
-    public static int add(String pluginName, String actionName, int catID,
-            String description) {
+    public static int add(String pluginName, String actionName, int catID, String description) {
         return getInstance().addAction(pluginName, actionName, catID, description);
     }
     
@@ -151,8 +151,7 @@ public abstract class ActionTable extends DBTable {
      * @param catID
      * @return
      */
-    protected abstract int addAction(String pluginName, String actionName,
-            int catID, String description);
+    protected abstract int addAction(String pluginName, String actionName, int catID, String description);
     
     public abstract void init();
     
@@ -165,8 +164,7 @@ public abstract class ActionTable extends DBTable {
      * @param ID
      * @param description
      */
-    protected abstract void addActionForceID(String pluginName,
-            String actionName, int catID, int ID, String description);
+    protected abstract void addActionForceID(String pluginName, String actionName, int catID, int ID, String description);
     
     /**
      * @param pluginName
@@ -174,8 +172,7 @@ public abstract class ActionTable extends DBTable {
      * @param catID
      * @param actID
      */
-    public static void addForcedID(String pluginName, String actionName,
-            int catID, int actID, String description) {
+    public static void addForcedID(String pluginName, String actionName, int catID, int actID, String description) {
         getInstance().addActionForceID(pluginName, actionName, catID, actID, description);
     }
     
@@ -183,10 +180,11 @@ public abstract class ActionTable extends DBTable {
      * Change bbdata table, if needed.
      */
     public static void performPostponedUpdates() {
-        int actionVersion = BBDB.getVersion(BBSettings.dataFolder, ActionTable.getInstance().getActualTableName());
+        BBDB.getVersion(BBSettings.dataFolder, ActionTable.getInstance().getActualTableName());
         int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
         
-        if (dataVersion == 6)
+        if (dataVersion == 6) {
             doActionIDUpdates();
+        }
     }
 }

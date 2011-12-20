@@ -54,9 +54,8 @@ public abstract class Action {
     public Action() {
     }
     
-    public Action(String player, String world, int x, int y, int z, int type,
-            String data) {
-        this.date = System.currentTimeMillis() / 1000;
+    public Action(String player, String world, int x, int y, int z, int type, String data) {
+        date = System.currentTimeMillis() / 1000;
         this.player = BBUsersTable.getInstance().getUserByName(player);
         this.world = world;
         this.x = x;
@@ -66,9 +65,8 @@ public abstract class Action {
         this.data = data;
     }
     
-    public Action(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
-        this.date = System.currentTimeMillis() / 1000;
+    public Action(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+        date = System.currentTimeMillis() / 1000;
         this.player = player;
         this.world = world;
         this.x = x;
@@ -79,8 +77,9 @@ public abstract class Action {
     }
     
     public void send() {
-        if (!isDisabled())
+        if (!isDisabled()) {
             ActionSender.offer(this);
+        }
     }
     
     public final boolean isDisabled() {
@@ -141,23 +140,23 @@ public abstract class Action {
         
         Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
         
-        if (torchTypes.contains(torchTop.getTypeId()) && torchTop.getData() == 5) {
+        if (torchTypes.contains(torchTop.getTypeId()) && (torchTop.getData() == 5)) {
             children.add(new BrokenBlock(player, torchTop, world));
         }
         Block torchNorth = block.getWorld().getBlockAt(x + 1, y, z);
-        if (torchTypes.contains(torchNorth.getTypeId()) && torchNorth.getData() == 1) {
+        if (torchTypes.contains(torchNorth.getTypeId()) && (torchNorth.getData() == 1)) {
             children.add(new BrokenBlock(player, torchNorth, world));
         }
         Block torchSouth = block.getWorld().getBlockAt(x - 1, y, z);
-        if (torchTypes.contains(torchSouth.getTypeId()) && torchSouth.getData() == 2) {
+        if (torchTypes.contains(torchSouth.getTypeId()) && (torchSouth.getData() == 2)) {
             children.add(new BrokenBlock(player, torchSouth, world));
         }
         Block torchEast = block.getWorld().getBlockAt(x, y, z + 1);
-        if (torchTypes.contains(torchEast.getTypeId()) && torchEast.getData() == 3) {
+        if (torchTypes.contains(torchEast.getTypeId()) && (torchEast.getData() == 3)) {
             children.add(new BrokenBlock(player, torchEast, world));
         }
         Block torchWest = block.getWorld().getBlockAt(x, y, z - 1);
-        if (torchTypes.contains(torchWest.getTypeId()) && torchWest.getData() == 4) {
+        if (torchTypes.contains(torchWest.getTypeId()) && (torchWest.getData() == 4)) {
             children.add(new BrokenBlock(player, torchWest, world));
         }
     }
@@ -172,19 +171,19 @@ public abstract class Action {
             children.add(new BrokenBlock(player, top, world));
         }
         Block north = block.getWorld().getBlockAt(x + 1, y, z);
-        if (north.getTypeId() == 68 && north.getData() == 5) {
+        if ((north.getTypeId() == 68) && (north.getData() == 5)) {
             children.add(new BrokenBlock(player, north, world));
         }
         Block south = block.getWorld().getBlockAt(x - 1, y, z);
-        if (south.getTypeId() == 68 && south.getData() == 4) {
+        if ((south.getTypeId() == 68) && (south.getData() == 4)) {
             children.add(new BrokenBlock(player, south, world));
         }
         Block east = block.getWorld().getBlockAt(x, y, z + 1);
-        if (east.getTypeId() == 68 && east.getData() == 3) {
+        if ((east.getTypeId() == 68) && (east.getData() == 3)) {
             children.add(new BrokenBlock(player, east, world));
         }
         Block west = block.getWorld().getBlockAt(x, y, z - 1);
-        if (west.getTypeId() == 68 && west.getData() == 2) {
+        if ((west.getTypeId() == 68) && (west.getData() == 2)) {
             children.add(new BrokenBlock(player, west, world));
         }
     }

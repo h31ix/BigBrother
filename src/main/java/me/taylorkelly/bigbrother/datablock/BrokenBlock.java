@@ -32,8 +32,7 @@ public class BrokenBlock extends BBAction {
         OwnershipManager.removeOwner(block);
     }
     
-    public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z,
-            int type, byte data) {
+    public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {
         super(pi, world, x, y, z, type, Byte.toString(data));
         children = new ArrayList<BBAction>();
     }
@@ -46,8 +45,9 @@ public class BrokenBlock extends BBAction {
         super.send();
     }
     
+    @Override
     public void rollback(World wld) {
-        if (type != 51 || BBSettings.restoreFire) {
+        if ((type != 51) || BBSettings.restoreFire) {
             World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
@@ -59,6 +59,7 @@ public class BrokenBlock extends BBAction {
         }
     }
     
+    @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
@@ -68,13 +69,11 @@ public class BrokenBlock extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new BrokenBlock(pi, world, x, y, z, type, data);
     }
     
-    private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

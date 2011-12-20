@@ -35,8 +35,7 @@ public class HistoryLog extends StickMode {
     }
     
     @Override
-    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager,
-            boolean leftclick) {
+    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean leftclick) {
         ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager); //BlockHistory.hist(block, manager);
         
         ArrayList<String> msgs = new ArrayList<String>();
@@ -58,8 +57,9 @@ public class HistoryLog extends StickMode {
                 msg.append(lines[0]);
                 msgs.add(msg.toString());
                 if (lines.length > 1) {
-                    for (int l = 1; l < lines.length; l++)
+                    for (int l = 1; l < lines.length; l++) {
                         msgs.add(lines[l]);
+                    }
                 }
             }
         }
@@ -82,9 +82,8 @@ public class HistoryLog extends StickMode {
     
     @Override
     public boolean usesStick(ItemStack itemStack) {
-        if (itemStack.getType() == Material.LOG) {
+        if (itemStack.getType() == Material.LOG)
             return true;
-        }
         return false;
     }
     

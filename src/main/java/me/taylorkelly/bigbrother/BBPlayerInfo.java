@@ -62,8 +62,9 @@ public class BBPlayerInfo {
         this.name = name;
         setNew(true); // Only really used to determine if we need to INSERT or
                       // UPDATE.
-        if (BBSettings.autoWatch)
+        if (BBSettings.autoWatch) {
             setWatched(true);
+        }
         
         BBUsersTable.getInstance().addOrUpdatePlayer(this);
         refresh(); // Get ID#
@@ -85,10 +86,11 @@ public class BBPlayerInfo {
     }
     
     private void setFlag(PlayerField fld, boolean on) {
-        if (!on)
+        if (!on) {
             flags &= ~(1 << fld.ordinal());
-        else
+        } else {
             flags |= (1 << fld.ordinal());
+        }
         if (id != -1) {
             BBUsersTable.getInstance().addOrUpdatePlayer(this);
         }
@@ -100,13 +102,14 @@ public class BBPlayerInfo {
     public void refresh() {
         BBPlayerInfo clone;
         BBLogging.debug("BBPlayerInfo.refresh(): " + name + "#" + Integer.valueOf(id));
-        if (id > -1)
+        if (id > -1) {
             clone = BBUsersTable.getInstance().getUserFromDB(id);
-        else
+        } else {
             clone = BBUsersTable.getInstance().getUserFromDB(name);
-        this.id = clone.id;
-        this.flags = clone.flags;
-        this.name = clone.name;
+        }
+        id = clone.id;
+        flags = clone.flags;
+        name = clone.name;
     }
     
     private boolean getFlag(PlayerField fld) {
@@ -212,8 +215,9 @@ public class BBPlayerInfo {
     /**
      * Format username, colorize if necessary
      */
+    @Override
     public String toString() {
-        String player = this.getName();
+        String player = getName();
         /*
          * TODO: Future consideration, working to get this hunk of bugs out the door atm. - N3X if(BBSettings.colorPlayerNames) { player=BBPermissions.getPrefix(player)+player+BBPermissions.getSuffix(player); }
          */

@@ -8,11 +8,10 @@ public class RollbackConfirmation {
     private static HashMap<String, RollbackInterpreter> confirmees = new HashMap<String, RollbackInterpreter>();
     
     public static boolean hasRI(Player player) {
-        if (confirmees.containsKey(player.getName())) {
+        if (confirmees.containsKey(player.getName()))
             return true;
-        } else {
+        else
             return false;
-        }
     }
     
     public static RollbackInterpreter getRI(Player player) {

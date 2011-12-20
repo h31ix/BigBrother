@@ -46,21 +46,20 @@ public abstract class ActionProvider {
         public ActionData(Plugin plugin, ActionProvider ap, Action action) {
             this(plugin.getDescription().getName(), action.getCategory(), action.getName());
             this.plugin = plugin;
-            this.provider = ap;
+            provider = ap;
             this.action = action;
         }
         
         public ActionData(String plugin, ActionCategory category, String action) {
-            this.pluginName = plugin;
+            pluginName = plugin;
             this.category = category;
-            this.actionName = action;
+            actionName = action;
         }
         
         @Override
         public boolean equals(Object o) {
-            if (o instanceof ActionData) {
-                return ((ActionData) o).pluginName.equalsIgnoreCase(pluginName) && ((ActionData) o).actionName.equalsIgnoreCase(actionName) && ((ActionData) o).category == category;
-            }
+            if (o instanceof ActionData)
+                return ((ActionData) o).pluginName.equalsIgnoreCase(pluginName) && ((ActionData) o).actionName.equalsIgnoreCase(actionName) && (((ActionData) o).category == category);
             return false;
         }
     }
@@ -82,11 +81,10 @@ public abstract class ActionProvider {
      * @param data
      * @return
      */
-    public abstract Action getAction(String actionName, BBPlayerInfo player,
-            String world, int x, int y, int z, int type, String data);
+    public abstract Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data);
     
     public ActionProvider(Plugin p) {
-        this.plugin = p;
+        plugin = p;
     }
     
     public final void disable() {
@@ -106,8 +104,7 @@ public abstract class ActionProvider {
      * @param provider
      * @param action
      */
-    protected final void registerAction(Plugin plugin, ActionProvider provider,
-            Action action) {
+    protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
         ActionData dat = new ActionData(plugin, provider, action);
         int id = findActionID(action.getName());
         if (id == -1) {
@@ -128,9 +125,8 @@ public abstract class ActionProvider {
      */
     public static int getActionID(Action action) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
-            if (e.getValue().action.getName().equalsIgnoreCase(action.getName())) {
+            if (e.getValue().action.getName().equalsIgnoreCase(action.getName()))
                 return e.getKey();
-            }
         }
         BBLogging.severe("Unknown Action: " + action.getName());
         return -1;
@@ -149,8 +145,7 @@ public abstract class ActionProvider {
      * @param data
      * @return
      */
-    public static Action findAndProvide(int actionID, BBPlayerInfo player,
-            String world, int x, int y, int z, int type, String data) {
+    public static Action findAndProvide(int actionID, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         if (!Actions.containsKey(actionID))
             return null;
         ActionProvider provider = Actions.get(actionID).provider;
@@ -167,9 +162,8 @@ public abstract class ActionProvider {
      */
     public static int findActionID(String actionName) {
         for (Entry<Integer, ActionData> e : Actions.entrySet()) {
-            if (e.getValue().actionName.equalsIgnoreCase(actionName)) {
+            if (e.getValue().actionName.equalsIgnoreCase(actionName))
                 return e.getKey();
-            }
         }
         return -1;
     }
@@ -182,8 +176,7 @@ public abstract class ActionProvider {
      * @param deltaChest
      * @param i
      */
-    protected void registerActionForceID(BigBrother plugin,
-            BBActionProvider provider, Action action, int id) {
+    protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
         ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsKey(id)) {
             ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id, action.getDescription());
@@ -201,44 +194,63 @@ public abstract class ActionProvider {
         List<String> actions;
         if (cfg.getProperty("general.disabled-actions") == null) {
             actions = new ArrayList<String>();
-            if (!cfg.getBoolean("watched.blocks.block-break", true))
+            if (!cfg.getBoolean("watched.blocks.block-break", true)) {
                 actions.add("BrokenBlock");
-            if (!cfg.getBoolean("watched.blocks.block-place", true))
+            }
+            if (!cfg.getBoolean("watched.blocks.block-place", true)) {
                 actions.add("PlacedBlock");
-            if (!cfg.getBoolean("watched.player.teleport", true))
+            }
+            if (!cfg.getBoolean("watched.player.teleport", true)) {
                 actions.add("Teleport");
-            if (!cfg.getBoolean("watched.blocks.chest-changes", true))
+            }
+            if (!cfg.getBoolean("watched.blocks.chest-changes", true)) {
                 actions.add("DeltaChest");
-            if (!cfg.getBoolean("watched.chat.commands", true))
+            }
+            if (!cfg.getBoolean("watched.chat.commands", true)) {
                 actions.add("Command");
-            if (!cfg.getBoolean("watched.chat.chat", true))
+            }
+            if (!cfg.getBoolean("watched.chat.chat", true)) {
                 actions.add("Chat");
-            if (!cfg.getBoolean("watched.player.login", true))
+            }
+            if (!cfg.getBoolean("watched.player.login", true)) {
                 actions.add("Login");
-            if (!cfg.getBoolean("watched.player.disconnect", true))
+            }
+            if (!cfg.getBoolean("watched.player.disconnect", true)) {
                 actions.add("Disconnect");
-            if (!cfg.getBoolean("watched.misc.door-open", false))
+            }
+            if (!cfg.getBoolean("watched.misc.door-open", false)) {
                 actions.add("DoorOpen");
-            if (!cfg.getBoolean("watched.misc.button-press", false))
+            }
+            if (!cfg.getBoolean("watched.misc.button-press", false)) {
                 actions.add("ButtonPress");
-            if (!cfg.getBoolean("watched.misc.lever-switch", false))
+            }
+            if (!cfg.getBoolean("watched.misc.lever-switch", false)) {
                 actions.add("LeverSwitch");
-            if (!cfg.getBoolean("watched.misc.flint-logging", true))
+            }
+            if (!cfg.getBoolean("watched.misc.flint-logging", true)) {
                 actions.add("FlintAndSteel");
-            if (!cfg.getBoolean("watched.environment.leaf-decay", false))
+            }
+            if (!cfg.getBoolean("watched.environment.leaf-decay", false)) {
                 actions.add("LeafDecay");
-            if (!cfg.getBoolean("watched.explosions.tnt", true))
+            }
+            if (!cfg.getBoolean("watched.explosions.tnt", true)) {
                 actions.add("TNTExplosion");
-            if (!cfg.getBoolean("watched.explosions.creeper", true))
+            }
+            if (!cfg.getBoolean("watched.explosions.creeper", true)) {
                 actions.add("CreeperExplosion");
-            if (!cfg.getBoolean("watched.explosions.misc", true))
+            }
+            if (!cfg.getBoolean("watched.explosions.misc", true)) {
                 actions.add("MiscExplosion");
-            if (!cfg.getBoolean("watched.player.drop-item", false))
+            }
+            if (!cfg.getBoolean("watched.player.drop-item", false)) {
                 actions.add("DropItem");
-            if (!cfg.getBoolean("watched.player.pickup-item", false))
+            }
+            if (!cfg.getBoolean("watched.player.pickup-item", false)) {
                 actions.add("PickupItem");
-            if (!cfg.getBoolean("watched.environment.lava-flow", true))
+            }
+            if (!cfg.getBoolean("watched.environment.lava-flow", true)) {
                 actions.add("Flow");
+            }
             cfg.removeProperty("watched");
             cfg.setProperty("general.disabled-actions", actions);
         } else {
@@ -284,24 +296,25 @@ public abstract class ActionProvider {
      * @author N3X15
      * @return
      */
-    public static List<Integer> parseActionSwitch(List<Integer> acts,
-            String actstr) {
+    public static List<Integer> parseActionSwitch(List<Integer> acts, String actstr) {
         if (acts == null) {
             acts = getDefaultActions();
         }
         for (String act : actstr.split(",")) {
-            if (!act.startsWith("!") && acts.size() == 0) {
+            if (!act.startsWith("!") && (acts.size() == 0)) {
                 acts.clear();
             }
             int ca;
             if (act.startsWith("!")) {
                 ca = findActionID(act.substring(1));
-                if (ca > -1 && acts.contains(ca))
+                if ((ca > -1) && acts.contains(ca)) {
                     acts.remove(ca);
+                }
             } else {
                 ca = findActionID(act);
-                if (ca > -1 && !acts.contains(ca))
+                if ((ca > -1) && !acts.contains(ca)) {
                     acts.add(ca);
+                }
             }
         }
         return acts;
@@ -314,8 +327,9 @@ public abstract class ActionProvider {
         List<Integer> acts = new ArrayList<Integer>();
         for (int actID : Actions.keySet()) {
             // Not disabled in the config and not hidden.
-            if (!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN))
+            if (!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN)) {
                 acts.add(actID);
+            }
         }
         return acts;
     }

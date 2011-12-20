@@ -81,11 +81,12 @@ public class BBDB {
         
         BBSettings.deletesPerCleansing = yml.getLong("database.cleanser.deletes-per-operation", BBSettings.deletesPerCleansing); // "The maximum number of records to delete per cleansing (0 to disable).");
         
-        if (cleanse_age.equals("0s") || cleanse_age.equalsIgnoreCase("off"))
+        if (cleanse_age.equals("0s") || cleanse_age.equalsIgnoreCase("off")) {
             BBSettings.cleanseAge = -1;
-        else
+        } else {
             BBSettings.cleanseAge = TimeParser.parseInterval(cleanse_age);// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
-            
+        }
+        
         BBSettings.sendDelay = yml.getInt("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
         
         username = yml.getString("database.username", username);
@@ -104,14 +105,11 @@ public class BBDB {
      * Set up the connection
      * 
      * @param plugin
-     * @param system
-     *            DBMS in use
-     * @param hostname
-     *            Address of the server
+     * @param system DBMS in use
+     * @param hostname Address of the server
      * @param username
      * @param password
-     * @param schema
-     *            Database
+     * @param schema Database
      */
     public static void init() {
     }
@@ -157,8 +155,9 @@ public class BBDB {
             r = false;
         } finally {
             try {
-                if (rs != null)
+                if (rs != null) {
                     rs.close();
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -235,8 +234,7 @@ public class BBDB {
      * @param dataFolder
      * @return
      */
-    public static boolean needsUpdate(File dataFolder, String table,
-            int latestVersion) {
+    public static boolean needsUpdate(File dataFolder, String table, int latestVersion) {
         boolean r = true;
         try {
             File f = new File(dataFolder, "DATABASE_VERSION");
@@ -269,8 +267,7 @@ public class BBDB {
     /**
      * Are we using a certain Database Management System?
      * 
-     * @param system
-     *            The database system to check against.
+     * @param system The database system to check against.
      * @return
      */
     public static boolean usingDBMS(DBMS system) {

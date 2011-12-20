@@ -6,7 +6,7 @@ import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.datablock.BBAction;
+import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 
 import org.bukkit.block.Chest;
@@ -25,6 +25,7 @@ public abstract class BBUsersTable extends DBTable {
     public Hashtable<Integer, BBPlayerInfo> knownPlayers = new Hashtable<Integer, BBPlayerInfo>();
     public Hashtable<String, Integer> knownNames = new Hashtable<String, Integer>();
     
+    @Override
     public void drop() {
         BBLogging.info("Dropping table " + getTableName());
         BBDB.executeUpdate("DROP TABLE IF EXISTS " + getTableName());
@@ -39,6 +40,7 @@ public abstract class BBUsersTable extends DBTable {
     /**
      * Get table name
      */
+    @Override
     public String getActualTableName() {
         return "bbusers";
     }
@@ -46,10 +48,11 @@ public abstract class BBUsersTable extends DBTable {
     public static BBUsersTable getInstance() {
         if (instance == null) {
             BBLogging.debug("BBDB.dbms=" + BBDB.dbms.toString());
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new BBUsersPostgreSQL();
-            else
+            } else {
                 instance = new BBUsersMySQL();
+            }
             instance.loadCache();
         }
         return instance;
@@ -62,8 +65,9 @@ public abstract class BBUsersTable extends DBTable {
     protected abstract void loadCache();
     
     public BBUsersTable() {
-        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION)) {
             drop();
+        }
         if (!tableExists()) {
             BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
@@ -76,7 +80,7 @@ public abstract class BBUsersTable extends DBTable {
     }
     
     public BBPlayerInfo getUserByName(String name) {
-        if (name.equalsIgnoreCase(BBAction.ENVIRONMENT))
+        if (name.equalsIgnoreCase(Action.ENVIRONMENT))
             return BBPlayerInfo.ENVIRONMENT;
         
         // Check cache first.

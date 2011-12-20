@@ -1,7 +1,7 @@
 package me.taylorkelly.bigbrother.commands;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 import me.taylorkelly.bigbrother.rollback.RollbackConfirmation;
 import me.taylorkelly.bigbrother.rollback.RollbackInterpreter;
 
@@ -19,10 +19,8 @@ public class RollbackCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2,
-            String[] split) {
-        if (BBPermissions.rollback((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+        if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length > 1) {
                 RollbackInterpreter interpreter = new RollbackInterpreter((Player) player, split, plugin.getServer(), plugin.worldManager, plugin);
                 Boolean passed = interpreter.interpret();

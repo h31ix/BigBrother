@@ -20,12 +20,12 @@ public class MiscExplosion extends Explosion {
         super(ENVIRONMENT, block, world);
     }
     
+    @Override
     protected Explosion newInstance(String player, Block block) {
         return new MiscExplosion(player, block, block.getWorld().getName());
     }
     
-    public static void create(Location location, List<Block> blockList,
-            String world) {
+    public static void create(Location location, List<Block> blockList, String world) {
         for (Block block : blockList) {
             BBAction dataBlock = new MiscExplosion(ENVIRONMENT, block, world);
             dataBlock.send();
@@ -35,8 +35,7 @@ public class MiscExplosion extends Explosion {
         }
     }
     
-    private MiscExplosion(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private MiscExplosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -47,8 +46,7 @@ public class MiscExplosion extends Explosion {
         // TODO Auto-generated constructor stub
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo player, String world,
-            int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         return new MiscExplosion(player, world, x, y, z, type, data);
     }
     

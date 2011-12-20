@@ -60,8 +60,7 @@ public class BlockPistoned extends BBAction {
      * @param type
      * @param data
      */
-    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z,
-            int type, String data) {
+    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         super(pi, world, x, y, z, type, data);
     }
     
@@ -74,8 +73,9 @@ public class BlockPistoned extends BBAction {
     public void rollback(World world) {
         
         Chunk c = world.getChunkAt(x, z);
-        if (!world.isChunkLoaded(c))
+        if (!world.isChunkLoaded(c)) {
             world.loadChunk(c);
+        }
         // Get the block we're about to replace
         Block rb = world.getBlockAt(x, y, z);
         rb.setTypeIdAndData(type, getData(), true);
@@ -117,11 +117,13 @@ public class BlockPistoned extends BBAction {
         Vector d = getDirectionOffset();
         World w = server.getWorld(world);
         Chunk c = w.getChunkAt(x, z);
-        if (!w.isChunkLoaded(c))
+        if (!w.isChunkLoaded(c)) {
             w.loadChunk(c);
+        }
         c = w.getChunkAt(x + d.getBlockX(), z + d.getBlockZ());
-        if (!w.isChunkLoaded(c))
+        if (!w.isChunkLoaded(c)) {
             w.loadChunk(c);
+        }
         // Get the block we're about to replace
         Block rb = w.getBlockAt(x + d.getBlockX(), y + d.getBlockY(), z + d.getBlockZ());
         rb.setTypeIdAndData(type, getData(), true);
@@ -157,11 +159,11 @@ public class BlockPistoned extends BBAction {
         return "A block moved by a piston";
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new BlockPistoned(pi, world, x, y, z, type, data);
     }
     
+    @Override
     public String toString() {
         return String.format(" - A piston moved a " + Material.getMaterial(type).name() + ".");
     }

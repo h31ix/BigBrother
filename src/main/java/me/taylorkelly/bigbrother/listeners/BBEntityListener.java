@@ -27,8 +27,7 @@ public class BBEntityListener extends EntityListener {
      * @param entityListener
      * @param event
      */
-    public static void onEndermanPickup(EntityListener entityListener,
-            EndermanPickupEvent event) {
+    public static void onEndermanPickup(EntityListener entityListener, EndermanPickupEvent event) {
         EndermanGrief.createPickup(event.getEntity(), event.getBlock());
     }
     
@@ -36,8 +35,7 @@ public class BBEntityListener extends EntityListener {
      * @param entityListener
      * @param event
      */
-    public static void onEndermanPlace(EntityListener entityListener,
-            EndermanPlaceEvent event) {
+    public static void onEndermanPlace(EntityListener entityListener, EndermanPlaceEvent event) {
         EndermanGrief.createPlace(event.getEntity(), event.getLocation(), event.getType());
     }
     

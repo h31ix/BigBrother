@@ -2,8 +2,8 @@ package me.taylorkelly.bigbrother.commands;
 
 import java.util.List;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 import me.taylorkelly.bigbrother.finder.Finder;
 import me.taylorkelly.util.Numbers;
 
@@ -21,16 +21,14 @@ public class HereCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2,
-            String[] split) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
         Player player = (Player) send;
-        if (BBPermissions.info(player)) {
+        if (player.hasPermission(Permissions.INFO.id)) {
             if (split.length == 1) {
                 Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
                 finder.find();
-            } else if (Numbers.isNumber(split[1]) && split.length == 2) {
+            } else if (Numbers.isNumber(split[1]) && (split.length == 2)) {
                 Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[1]));
                 finder.addReciever(player);
@@ -44,7 +42,7 @@ public class HereCommand implements CommandExecutor {
                     findee = targets.get(0);
                 }
                 finder.find((findee == null) ? split[1] : findee.getName());
-            } else if (Numbers.isNumber(split[2]) && split.length == 3) {
+            } else if (Numbers.isNumber(split[2]) && (split.length == 3)) {
                 Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[2]));
                 finder.addReciever(player);

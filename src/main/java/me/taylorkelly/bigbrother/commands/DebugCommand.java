@@ -4,14 +4,13 @@
  */
 package me.taylorkelly.bigbrother.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.taylorkelly.bigbrother.BBCommand;
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
  * @author Rob
@@ -28,9 +27,8 @@ public class DebugCommand extends BBCommand {
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2,
-            String[] split) {
-        if (BBPermissions.rollback((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+        if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length == 2) {
                 BBSettings.debugMode = (split[1].equalsIgnoreCase("on"));
                 player.sendMessage(BigBrother.premessage + " DEBUG " + ((BBSettings.debugMode) ? "ON" : "OFF"));

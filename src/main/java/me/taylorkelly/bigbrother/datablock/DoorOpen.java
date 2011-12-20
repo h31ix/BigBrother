@@ -12,19 +12,19 @@ public class DoorOpen extends BBAction {
         super(player, world, door.getX(), door.getY(), door.getZ(), 324, door.getData() + "");
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DoorOpen(pi, world, x, y, z, type, data);
     }
     
-    private DoorOpen(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private DoorOpen(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

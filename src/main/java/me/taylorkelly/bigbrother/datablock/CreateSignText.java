@@ -27,20 +27,18 @@ public class CreateSignText extends BBAction {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
-            if (i < lines.length - 1) {
+            if (i < (lines.length - 1)) {
                 message.append("\u0060");
             }
         }
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new CreateSignText(pi, world, x, y, z, type, data);
     }
     
-    private CreateSignText(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private CreateSignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

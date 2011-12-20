@@ -2,8 +2,8 @@ package me.taylorkelly.bigbrother.commands;
 
 import java.util.List;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 import me.taylorkelly.bigbrother.finder.Finder;
 import me.taylorkelly.util.Numbers;
 
@@ -23,25 +23,23 @@ public class FindCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2,
-            String[] split) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
         Player player = (Player) send;
-        if (BBPermissions.info(player)) {
-            if (split.length == 4 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
+        if (player.hasPermission(Permissions.INFO.id)) {
+            if ((split.length == 4) && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
                 Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
                 finder.find();
-            } else if (split.length == 5 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3]) && Numbers.isNumber(split[4])) {
+            } else if ((split.length == 5) && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3]) && Numbers.isNumber(split[4])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
                 Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[4]));
                 finder.addReciever(player);
                 finder.find();
-            } else if (split.length == 5 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
+            } else if ((split.length == 5) && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
                 Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
@@ -52,7 +50,7 @@ public class FindCommand implements CommandExecutor {
                     findee = targets.get(0);
                 }
                 finder.find((findee == null) ? split[4] : findee.getName());
-            } else if (split.length == 6 && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3]) && Numbers.isNumber(split[5])) {
+            } else if ((split.length == 6) && Numbers.isNumber(split[1]) && Numbers.isNumber(split[2]) && Numbers.isNumber(split[3]) && Numbers.isNumber(split[5])) {
                 World currentWorld = player.getWorld();
                 Location loc = new Location(currentWorld, Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
                 Finder finder = new Finder(loc, plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);

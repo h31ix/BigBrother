@@ -19,20 +19,18 @@ public class DestroySignText extends BBAction {
         String[] lines = sign.getLines();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
-            if (i < lines.length - 1) {
+            if (i < (lines.length - 1)) {
                 message.append("\u0060");
             }
         }
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new DestroySignText(pi, world, x, y, z, type, data);
     }
     
-    private DestroySignText(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private DestroySignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -89,8 +87,8 @@ public class DestroySignText extends BBAction {
     public String toString() {
         String[] lines = data.split("\u0060");
         String out = "destroyed a sign with text: ";
-        for (int i = 0; i < lines.length; i++) {
-            out += "\n    " + lines[i];
+        for (String line : lines) {
+            out += "\n    " + line;
         }
         return out;
     }

@@ -12,9 +12,7 @@ public class HelpCommand implements CommandExecutor {
     public HelpCommand(BigBrother plugin) {
     }
     
-    @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2,
-            String[] arg3) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
         // TODO: Modular help system
         player.sendMessage(BigBrother.premessage + "BigBrother version " + BigBrother.version + " help");
         player.sendMessage(BigBrother.premessage + " " + ChatColor.RED + "/bb stick (0|1|2)" + ChatColor.WHITE + " - Gives you a stick (1), a log you can place (2), or disables either (0).");

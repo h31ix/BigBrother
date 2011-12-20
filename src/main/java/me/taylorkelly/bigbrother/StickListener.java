@@ -29,9 +29,10 @@ public class StickListener extends BlockListener {
         this.plugin = plugin;
     }
     
+    @Override
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if (BBPermissions.info(player) && plugin.hasStick(player, event.getItemInHand())) {
+        if (player.hasPermission(Permissions.INFO.id) && plugin.hasStick(player, event.getItemInHand())) {
             plugin.stick(player, event.getBlockPlaced(), false);
             event.setCancelled(true);
         }

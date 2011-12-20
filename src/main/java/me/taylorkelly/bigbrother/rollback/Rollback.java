@@ -9,10 +9,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BigBrother;
-import me.taylorkelly.bigbrother.ActionProvider;
 import me.taylorkelly.bigbrother.WorldManager;
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datasource.BBDB;
@@ -45,10 +45,10 @@ public class Rollback {
     
     public Rollback(Server server, WorldManager manager, Plugin plugin) {
         this.manager = manager;
-        this.rollbackAll = false;
+        rollbackAll = false;
         this.server = server;
         this.plugin = plugin;
-        this.time = 0;
+        time = 0;
         blockTypes = new ArrayList<Integer>();
         players = new ArrayList<String>();
         recievers = new ArrayList<Player>();
@@ -70,7 +70,7 @@ public class Rollback {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             builder.append(list.get(i).toString());
-            if (i + 1 < list.size()) {
+            if ((i + 1) < list.size()) {
                 builder.append(", ");
             }
         }
@@ -86,7 +86,7 @@ public class Rollback {
     }
     
     public void setTime(long l) {
-        this.time = l;
+        time = l;
     }
     
     public void addTypes(ArrayList<Integer> blockTypes) {
@@ -99,19 +99,17 @@ public class Rollback {
     }
     
     public static boolean canUndo() {
-        if (lastRollback != null) {
+        if (lastRollback != null)
             return lastRollback.size() > 0;
-        } else {
+        else
             return false;
-        }
     }
     
     public static int undoSize() {
-        if (lastRollback != null) {
+        if (lastRollback != null)
             return lastRollback.size();
-        } else {
+        else
             return 0;
-        }
     }
     
     public static void undo(Server server, Player player) {
@@ -150,6 +148,7 @@ public class Rollback {
             }
         }
         
+        @Override
         public void run() {
             ResultSet set = null;
             try {
@@ -207,10 +206,12 @@ public class Rollback {
                 BBLogging.severe("Rollback get SQL Exception", ex);
             } finally {
                 try {
-                    if (create_ps != null)
+                    if (create_ps != null) {
                         create_ps.close();
-                    if (update_ps != null)
+                    }
+                    if (update_ps != null) {
                         update_ps.close();
+                    }
                 } catch (SQLException e) {
                 }
             }
@@ -239,14 +240,13 @@ public class Rollback {
         private final int id;
         
         public RollbackByTick(BukkitScheduler scheduler, Plugin plugin) {
-            this.id = scheduler.scheduleSyncRepeatingTask(plugin, this, 0, 1);
+            id = scheduler.scheduleSyncRepeatingTask(plugin, this, 0, 1);
         }
         
-        @Override
         public void run() {
             int count = 0;
             
-            while (count < BBSettings.rollbacksPerTick && listBlocks.size() > 0) {
+            while ((count < BBSettings.rollbacksPerTick) && (listBlocks.size() > 0)) {
                 Action dataBlock = listBlocks.removeFirst();
                 if (dataBlock != null) {
                     lastRollback.addFirst(dataBlock);

@@ -12,19 +12,19 @@ public class LeverSwitch extends BBAction {
         super(player, world, lever.getX(), lever.getY(), lever.getZ(), 69, Byte.toString(lever.getData()));
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new LeverSwitch(pi, world, x, y, z, type, data);
     }
     
-    private LeverSwitch(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private LeverSwitch(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

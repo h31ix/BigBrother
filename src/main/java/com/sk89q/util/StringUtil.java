@@ -34,9 +34,8 @@ public class StringUtil {
      * @return
      */
     public static String trimLength(String str, int len) {
-        if (str.length() > len) {
+        if (str.length() > len)
             return str.substring(0, len);
-        }
         
         return str;
     }
@@ -49,11 +48,9 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(String[] str, String delimiter,
-            int initialIndex) {
-        if (str.length == 0) {
+    public static String joinString(String[] str, String delimiter, int initialIndex) {
+        if (str.length == 0)
             return "";
-        }
         StringBuilder buffer = new StringBuilder(str[initialIndex]);
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(str[i]);
@@ -70,11 +67,9 @@ public class StringUtil {
      * @param quote
      * @return
      */
-    public static String joinQuotedString(String[] str, String delimiter,
-            int initialIndex, String quote) {
-        if (str.length == 0) {
+    public static String joinQuotedString(String[] str, String delimiter, int initialIndex, String quote) {
+        if (str.length == 0)
             return "";
-        }
         StringBuilder buffer = new StringBuilder();
         buffer.append(quote);
         buffer.append(str[initialIndex]);
@@ -104,11 +99,9 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(Object[] str, String delimiter,
-            int initialIndex) {
-        if (str.length == 0) {
+    public static String joinString(Object[] str, String delimiter, int initialIndex) {
+        if (str.length == 0)
             return "";
-        }
         StringBuilder buffer = new StringBuilder(str[initialIndex].toString());
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(str[i].toString());
@@ -124,11 +117,9 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(int[] str, String delimiter,
-            int initialIndex) {
-        if (str.length == 0) {
+    public static String joinString(int[] str, String delimiter, int initialIndex) {
+        if (str.length == 0)
             return "";
-        }
         StringBuilder buffer = new StringBuilder(Integer.toString(str[initialIndex]));
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(Integer.toString(str[i]));
@@ -144,11 +135,9 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(Collection<?> str, String delimiter,
-            int initialIndex) {
-        if (str.size() == 0) {
+    public static String joinString(Collection<?> str, String delimiter, int initialIndex) {
+        if (str.size() == 0)
             return "";
-        }
         StringBuilder buffer = new StringBuilder();
         int i = 0;
         for (Object o : str) {
@@ -196,33 +185,28 @@ public class StringUtil {
      * StringUtil.getLevenshteinDistance("hello", "hallo")    = 1
      * </pre>
      * 
-     * @param s
-     *            the first String, must not be null
-     * @param t
-     *            the second String, must not be null
+     * @param s the first String, must not be null
+     * @param t the second String, must not be null
      * @return result distance
-     * @throws IllegalArgumentException
-     *             if either String input <code>null</code>
+     * @throws IllegalArgumentException if either String input <code>null</code>
      */
     public static int getLevenshteinDistance(String s, String t) {
-        if (s == null || t == null) {
+        if ((s == null) || (t == null))
             throw new IllegalArgumentException("Strings must not be null");
-        }
         
         /*
          * The difference between this impl. and the previous is that, rather than creating and retaining a matrix of size s.length()+1 by t.length()+1, we maintain two single-dimensional arrays of length s.length()+1. The first, d, is the 'current working' distance array that maintains the newest distance cost counts as we iterate through the characters of String s. Each time we increment the index of String t we are comparing, d is copied to p, the second int[]. Doing so allows us to retain the previous cost counts as required by the algorithm (taking the minimum of the cost count to the left, up one, and diagonally up and to the left of the current cost count being calculated). (Note that the arrays aren't really copied anymore, just switched...this is clearly much better than cloning an array or doing a System.arraycopy() each time through the outer loop.)
          * 
          * Effectively, the difference between the two implementations is this one does not cause an out of memory condition when calculating the LD over two very large strings.
          */
-
+        
         int n = s.length(); // length of s
         int m = t.length(); // length of t
         
-        if (n == 0) {
+        if (n == 0)
             return m;
-        } else if (m == 0) {
+        else if (m == 0)
             return n;
-        }
         
         int p[] = new int[n + 1]; // 'previous' cost array, horizontally
         int d[] = new int[n + 1]; // cost array, horizontally

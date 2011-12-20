@@ -51,8 +51,7 @@ public class EndermanGrief extends Action {
      * @param type
      * @param data
      */
-    public EndermanGrief(String player, String world, int x, int y, int z,
-            int type, String data) {
+    public EndermanGrief(String player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
         // TODO Auto-generated constructor stub
     }
@@ -66,8 +65,7 @@ public class EndermanGrief extends Action {
      * @param type
      * @param data
      */
-    public EndermanGrief(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    public EndermanGrief(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
         // TODO Auto-generated constructor stub
     }

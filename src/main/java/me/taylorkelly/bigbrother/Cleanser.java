@@ -39,14 +39,13 @@ public class Cleanser {
     /**
      * Start the cleaner thread and pray to God it finishes.
      * 
-     * @param player
-     *            Person to blame for the lag. Or null.
+     * @param player Person to blame for the lag. Or null.
      */
     public static void clean(Player player) {
-        if (cleanupThread != null && cleanupThread.done) {
+        if ((cleanupThread != null) && cleanupThread.done) {
             cleanupThread = null;
         }
-        if (cleanupThread == null || !cleanupThread.isAlive()) {
+        if ((cleanupThread == null) || !cleanupThread.isAlive()) {
             cleanupThread = new CleanupThread(player);
             cleanupThread.start();
         } else {
@@ -64,12 +63,12 @@ public class Cleanser {
     }
     
     public static void shutdown(BigBrother bb) {
-        if (cleanupTask >= 0)
+        if (cleanupTask >= 0) {
             bb.getServer().getScheduler().cancelTask(cleanupTask);
+        }
     }
     
     public static class CleanupTask implements Runnable {
-        @Override
         public void run() {
             clean(null);
         }
@@ -88,13 +87,12 @@ public class Cleanser {
         private final Player player;
         
         /**
-         * @param p
-         *            The player. Can be null.
+         * @param p The player. Can be null.
          */
         public CleanupThread(Player p) {
             // Constructor.
             player = p;
-            this.setName("Cleanser");
+            setName("Cleanser");
         }
         
         @Override
@@ -112,7 +110,7 @@ public class Cleanser {
             cleanedSoFarAge = BBDB.executeUpdate(BBDataTable.getInstance().getCleanseAged(Long.valueOf(Time.ago(BBSettings.cleanseAge)), BBSettings.deletesPerCleansing));
             if (cleanedSoFarAge == Statement.EXECUTE_FAILED)
                 return;
-            String timespent = Time.formatDuration(System.currentTimeMillis() / 1000 - start);
+            String timespent = Time.formatDuration((System.currentTimeMillis() / 1000) - start);
             
             String words = String.format("Removed %d records older than %s in %s.", cleanedSoFarAge, Time.formatDuration(BBSettings.cleanseAge), timespent);
             if (player == null) {

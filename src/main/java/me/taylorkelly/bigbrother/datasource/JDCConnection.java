@@ -37,14 +37,14 @@ public class JDCConnection implements Connection {
     public JDCConnection(Connection conn, ConnectionService pool) {
         this.conn = conn;
         this.pool = pool;
-        this.inuse = false;
-        this.timestamp = 0;
+        inuse = false;
+        timestamp = 0;
     }
     
     public synchronized boolean lease() {
-        if (inuse) {
+        if (inuse)
             return false;
-        } else {
+        else {
             inuse = true;
             timestamp = System.currentTimeMillis();
             return true;
@@ -157,9 +157,8 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createArrayOf(java.lang.String, java.lang.Object[])
      */
-    @Override
-    public Array createArrayOf(String typeName, Object[] elements)
-            throws SQLException {
+    
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
         return conn.createArrayOf(typeName, elements);
     }
     
@@ -168,7 +167,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createBlob()
      */
-    @Override
+    
     public Blob createBlob() throws SQLException {
         return conn.createBlob();
     }
@@ -178,7 +177,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createClob()
      */
-    @Override
+    
     public Clob createClob() throws SQLException {
         return conn.createClob();
     }
@@ -188,7 +187,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createNClob()
      */
-    @Override
+    
     public NClob createNClob() throws SQLException {
         return conn.createNClob();
     }
@@ -198,7 +197,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createSQLXML()
      */
-    @Override
+    
     public SQLXML createSQLXML() throws SQLException {
         return conn.createSQLXML();
     }
@@ -208,9 +207,8 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createStatement(int, int)
      */
-    @Override
-    public Statement createStatement(int resultSetType, int resultSetConcurrency)
-            throws SQLException {
+    
+    public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
         return conn.createStatement(resultSetType, resultSetConcurrency);
     }
     
@@ -219,10 +217,8 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createStatement(int, int, int)
      */
-    @Override
-    public Statement createStatement(int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
+    
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         return conn.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
     
@@ -231,9 +227,8 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#createStruct(java.lang.String, java.lang.Object[])
      */
-    @Override
-    public Struct createStruct(String typeName, Object[] attributes)
-            throws SQLException {
+    
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
         return conn.createStruct(typeName, attributes);
     }
     
@@ -242,7 +237,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#getClientInfo()
      */
-    @Override
+    
     public Properties getClientInfo() throws SQLException {
         return conn.getClientInfo();
     }
@@ -252,7 +247,7 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#getClientInfo(java.lang.String)
      */
-    @Override
+    
     public String getClientInfo(String name) throws SQLException {
         return conn.getClientInfo(name);
     }
@@ -262,228 +257,84 @@ public class JDCConnection implements Connection {
      * 
      * @see java.sql.Connection#getHoldability()
      */
-    @Override
+    
     public int getHoldability() throws SQLException {
         return conn.getHoldability();
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#getTypeMap()
-     */
-    @Override
+    public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+        return conn.isWrapperFor(arg0);
+    }
+    
+    public <T> T unwrap(Class<T> arg0) throws SQLException {
+        return conn.unwrap(arg0);
+    }
+    
     public Map<String, Class<?>> getTypeMap() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return conn.getTypeMap();
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#isValid(int)
-     */
-    @Override
     public boolean isValid(int timeout) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return conn.isValid(timeout);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareCall(java.lang.String, int, int)
-     */
-    @Override
-    public CallableStatement prepareCall(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+        return conn.prepareCall(sql, resultSetType, resultSetConcurrency);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareCall(java.lang.String, int, int, int)
-     */
-    @Override
-    public CallableStatement prepareCall(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        return conn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareStatement(java.lang.String, int)
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+        return conn.prepareStatement(sql, autoGeneratedKeys);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareStatement(java.lang.String, int[])
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public PreparedStatement prepareStatement(String arg0, int[] arg1) throws SQLException {
+        return conn.prepareStatement(arg0, arg1);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareStatement(java.lang.String, java.lang.String[])
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql, String[] columnNames)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public PreparedStatement prepareStatement(String arg0, String[] arg1) throws SQLException {
+        return conn.prepareStatement(arg0, arg1);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareStatement(java.lang.String, int, int)
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public PreparedStatement prepareStatement(String arg0, int arg1, int arg2) throws SQLException {
+        return conn.prepareStatement(arg0, arg1, arg2);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#prepareStatement(java.lang.String, int, int, int)
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public PreparedStatement prepareStatement(String arg0, int arg1, int arg2, int arg3) throws SQLException {
+        return conn.prepareStatement(arg0, arg1, arg2, arg3);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#releaseSavepoint(java.sql.Savepoint)
-     */
-    @Override
-    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void releaseSavepoint(Savepoint arg0) throws SQLException {
+        conn.releaseSavepoint(arg0);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#rollback(java.sql.Savepoint)
-     */
-    @Override
-    public void rollback(Savepoint savepoint) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void rollback(Savepoint arg0) throws SQLException {
+        conn.rollback(arg0);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setClientInfo(java.util.Properties)
-     */
-    @Override
-    public void setClientInfo(Properties properties)
-            throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-        
+    public void setClientInfo(Properties arg0) throws SQLClientInfoException {
+        conn.setClientInfo(arg0);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setClientInfo(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void setClientInfo(String name, String value)
-            throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-        
+    public void setClientInfo(String arg0, String arg1) throws SQLClientInfoException {
+        conn.setClientInfo(arg0, arg1);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setHoldability(int)
-     */
-    @Override
-    public void setHoldability(int holdability) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setHoldability(int arg0) throws SQLException {
+        conn.setHoldability(arg0);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setSavepoint()
-     */
-    @Override
     public Savepoint setSavepoint() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return conn.setSavepoint();
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setSavepoint(java.lang.String)
-     */
-    @Override
-    public Savepoint setSavepoint(String name) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public Savepoint setSavepoint(String arg0) throws SQLException {
+        return conn.setSavepoint(arg0);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Connection#setTypeMap(java.util.Map)
-     */
-    @Override
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
-     */
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.sql.Wrapper#unwrap(java.lang.Class)
-     */
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+    public void setTypeMap(Map<String, Class<?>> arg0) throws SQLException {
+        conn.setTypeMap(arg0);
     }
 }

@@ -3,8 +3,7 @@
  */
 package me.taylorkelly.bigbrother.tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertArrayEquals;
 import me.taylorkelly.bigbrother.BBCommand;
 
 import org.junit.Test;

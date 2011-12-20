@@ -24,19 +24,20 @@ public class ChestTools {
         
         // iterate through nearby blocks.
         
-        if (chest.getBlock().getRelative(BlockFace.NORTH).getType() == Material.CHEST)
+        if (chest.getBlock().getRelative(BlockFace.NORTH).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.NORTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.SOUTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.EAST).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.EAST).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.EAST).getState();
-        else if (chest.getBlock().getRelative(BlockFace.WEST).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.WEST).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.WEST).getState();
+        }
         
-        if (second == null) {
+        if (second == null)
             // no problem here
             return chest.getInventory().getContents();
-        } else {
+        else {
             // I think it would be good, to consistently return same chest
             // contents, regardless of what
             // block was clicked on. That means, we must determine, which part
@@ -78,14 +79,15 @@ public class ChestTools {
         
         // iterate through nearby blocks.
         
-        if (chest.getBlock().getRelative(BlockFace.NORTH).getType() == Material.CHEST)
+        if (chest.getBlock().getRelative(BlockFace.NORTH).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.NORTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.SOUTH).getState();
-        else if (chest.getBlock().getRelative(BlockFace.EAST).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.EAST).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.EAST).getState();
-        else if (chest.getBlock().getRelative(BlockFace.WEST).getType() == Material.CHEST)
+        } else if (chest.getBlock().getRelative(BlockFace.WEST).getType() == Material.CHEST) {
             second = (Chest) chest.getBlock().getRelative(BlockFace.WEST).getState();
+        }
         
         if (second == null) {
             // no problem here

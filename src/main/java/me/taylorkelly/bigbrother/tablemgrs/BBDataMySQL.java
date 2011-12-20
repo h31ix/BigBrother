@@ -16,6 +16,7 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
 public class BBDataMySQL extends BBDataTable {
     public final int revision = 1;
     
+    @Override
     public String toString() {
         return "BBData MySQL Driver r" + Integer.valueOf(revision);
     }
@@ -26,11 +27,10 @@ public class BBDataMySQL extends BBDataTable {
      * @return LOW_PRIORITY | ""
      */
     public static String getMySQLIgnore() {
-        if (BBDB.lowPriority) {
+        if (BBDB.lowPriority)
             return " LOW_PRIORITY ";
-        } else {
+        else
             return " ";
-        }
     }
     
     @Override
@@ -71,12 +71,10 @@ public class BBDataMySQL extends BBDataTable {
      * @param tableName
      * @param requiredEngine
      */
-    private void checkDBEngine(String tableName, String requiredEngine,
-            boolean optional) {
+    private void checkDBEngine(String tableName, String requiredEngine, boolean optional) {
         String engine = getEngine(tableName);
-        if (engine == null) {
+        if (engine == null)
             return; // Error.
-        }
         if (!engine.equalsIgnoreCase(requiredEngine)) {
             if (!optional) {
                 BBLogging.warning("Changing " + tableName + " so that it uses " + requiredEngine + " instead of " + engine + ". THIS MAY TAKE A WHILE!");
@@ -126,8 +124,7 @@ public class BBDataMySQL extends BBDataTable {
     }
     
     @Override
-    public int getCleanseByLimit(Statement stmt, Long maxRecords,
-            long deletesPerCleansing) throws SQLException {
+    public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
         // Fucking MySQL and your lack of subquery LIMIT support.
         stmt.executeUpdate("CREATE TEMPORARY TABLE top_record SELECT id FROM " + getTableName() + " ORDER BY id DESC " + ((maxRecords > 0) ? "LIMIT " + maxRecords : ""));
         int numUpdates = stmt.executeUpdate("DELETE FROM " + getTableName() + " WHERE id NOT IN (SELECT id FROM top_record) " + ((maxRecords > 0) ? "LIMIT " + deletesPerCleansing : ""));

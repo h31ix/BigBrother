@@ -12,19 +12,19 @@ public class ButtonPress extends BBAction {
         super(player, world, button.getX(), button.getY(), button.getZ(), 77, Byte.toString(button.getData()));
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new ButtonPress(pi, world, x, y, z, type, data);
     }
     
-    private ButtonPress(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private ButtonPress(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

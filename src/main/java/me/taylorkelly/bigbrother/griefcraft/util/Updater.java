@@ -45,7 +45,7 @@ public class Updater {
         for (String path : paths) {
             File file = new File(path);
             
-            if (file != null && !file.exists() && !file.isDirectory()) {
+            if ((file != null) && !file.exists() && !file.isDirectory()) {
                 String url = UPDATE_SITE + path;
                 UpdaterFile updaterFile = new UpdaterFile(url);
                 updaterFile.setLocalLocation(path);
@@ -86,15 +86,14 @@ public class Updater {
      * Ensure we have all of the required files (if not, download them)
      */
     public void update() throws Exception {
-        if (needsUpdating.size() == 0) {
+        if (needsUpdating.size() == 0)
             return;
-        }
         
         File folder = new File("lib");
         
-        if (folder.exists() && !folder.isDirectory()) {
+        if (folder.exists() && !folder.isDirectory())
             throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
-        } else if (!folder.exists()) {
+        else if (!folder.exists()) {
             logger.info("Creating folder : lib");
             folder.mkdir();
         }
@@ -134,8 +133,7 @@ public class Updater {
      * @param inputStream
      * @param outputStream
      */
-    private void saveTo(InputStream inputStream, OutputStream outputStream)
-            throws IOException {
+    private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int len = 0;
         

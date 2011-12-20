@@ -48,8 +48,9 @@ public class Watcher {
                 list.append(", ");
             }
         }
-        if (list.toString().contains(","))
+        if (list.toString().contains(",")) {
             list.delete(list.lastIndexOf(","), list.length());
+        }
         return list.toString();
     }
     
@@ -76,8 +77,9 @@ public class Watcher {
                 list.append(", ");
             }
         }
-        if (list.toString().contains(","))
+        if (list.toString().contains(",")) {
             list.delete(list.lastIndexOf(","), list.length());
+        }
         return list.toString();
     }
 }

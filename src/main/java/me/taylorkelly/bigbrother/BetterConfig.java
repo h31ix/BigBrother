@@ -36,21 +36,20 @@ public class BetterConfig extends Configuration {
      * @return
      */
     private static Long castLong(Object o) {
-        if (o == null) {
+        if (o == null)
             return null;
-        } else if (o instanceof Byte) {
+        else if (o instanceof Byte)
             return (long) (Byte) o;
-        } else if (o instanceof Integer) {
+        else if (o instanceof Integer)
             return Long.valueOf((Integer) o);
-        } else if (o instanceof Double) {
+        else if (o instanceof Double)
             return (long) (double) (Double) o;
-        } else if (o instanceof Float) {
+        else if (o instanceof Float)
             return (long) (float) (Float) o;
-        } else if (o instanceof Long) {
+        else if (o instanceof Long)
             return (Long) o;
-        } else {
+        else
             return null;
-        }
     }
     
     public long getLong(String path, long defaultValue) {
@@ -95,7 +94,7 @@ public class BetterConfig extends Configuration {
     @SuppressWarnings("unchecked")
     @Override
     public BetterNode getNode(String path) {
-        if (getProperty(path) == null || !(getProperty(path) instanceof Map)) {
+        if ((getProperty(path) == null) || !(getProperty(path) instanceof Map)) {
             BetterNode node = new BetterNode();
             setProperty(path, new HashMap<String, Object>());
             return node;

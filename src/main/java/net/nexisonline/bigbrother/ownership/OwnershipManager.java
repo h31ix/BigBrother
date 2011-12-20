@@ -63,7 +63,7 @@ public class OwnershipManager {
          * @return
          */
         public boolean isTimeToGo() {
-            return ((System.currentTimeMillis() - time) / 1000 > MAX_SECONDS_UNACCESSED);
+            return (((System.currentTimeMillis() - time) / 1000) > MAX_SECONDS_UNACCESSED);
         }
     }
     
@@ -77,12 +77,9 @@ public class OwnershipManager {
     /**
      * Attempt to find the owner of a block. TODO: Try to interface with LWC, etc.
      * 
-     * @param x
-     *            X position of the block
-     * @param y
-     *            Y position of the block
-     * @param z
-     *            Z position of the block
+     * @param x X position of the block
+     * @param y Y position of the block
+     * @param z Z position of the block
      * @return Owner, or Environment if unknown.
      */
     public static BBPlayerInfo findOwner(Block b) {
@@ -91,9 +88,9 @@ public class OwnershipManager {
         
         Location loc = b.getLocation();
         int ownerID = -1;
-        if (ownershipMap.containsKey(loc))
+        if (ownershipMap.containsKey(loc)) {
             ownerID = getFromMap(loc);
-        else {
+        } else {
             int wldID = plugin.worldManager.getWorld(b.getWorld().getName());
             ownerID = OwnersTable.get(wldID, b.getX(), b.getY(), b.getZ());
         }
@@ -120,10 +117,8 @@ public class OwnershipManager {
     /**
      * Try to set a block's owner
      * 
-     * @param b
-     *            Block
-     * @param p
-     *            Player
+     * @param b Block
+     * @param p Player
      */
     public static void setOwner(Block b, BBPlayerInfo p) {
         setOwnerLocation(b.getLocation(), p);
@@ -167,8 +162,9 @@ public class OwnershipManager {
             return;
         OwnershipData dat = new OwnershipData(p.getID());
         synchronized (ownershipMap) {
-            if (ownershipMap.containsKey(loc))
+            if (ownershipMap.containsKey(loc)) {
                 ownershipMap.remove(loc); // Replace.
+            }
             ownershipMap.put(loc, dat);
         }
         OwnersTable.set(plugin.worldManager.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), p.getID());
@@ -196,9 +192,8 @@ public class OwnershipManager {
         // Fire can be attached to any face of the block,
         // but we should check the top, first.
         for (BlockFace bf : cardinalFaces) {
-            if (isFireSource(block.getRelative(bf))) {
+            if (isFireSource(block.getRelative(bf)))
                 return block.getRelative(bf);
-            }
         }
         return null;
     }
@@ -224,8 +219,9 @@ public class OwnershipManager {
      */
     public static void removeOwnerByLocation(Location loc) {
         synchronized (ownershipMap) {
-            if (ownershipMap.containsKey(loc))
+            if (ownershipMap.containsKey(loc)) {
                 ownershipMap.remove(loc);
+            }
         }
         OwnersTable.remove(plugin.worldManager.getWorld(loc.getWorld().getName()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }

@@ -12,8 +12,7 @@ public class FlintAndSteel extends BBAction {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
     }
     
-    private FlintAndSteel(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private FlintAndSteel(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -24,14 +23,15 @@ public class FlintAndSteel extends BBAction {
         // TODO Auto-generated constructor stub
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new FlintAndSteel(pi, world, x, y, z, type, data);
     }
     

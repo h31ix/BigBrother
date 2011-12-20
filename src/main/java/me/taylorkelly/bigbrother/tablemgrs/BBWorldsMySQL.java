@@ -6,6 +6,7 @@ public class BBWorldsMySQL extends BBWorldsTable {
     protected void onLoad() {
     }
     
+    @Override
     public String getCreateSyntax() {
         return "CREATE TABLE `" + getTableName() + "` (" + "`id` INTEGER PRIMARY KEY," + "`name` varchar(50) NOT NULL DEFAULT 'world');";
     }

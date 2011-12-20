@@ -36,8 +36,7 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID,
-            String actionDesc) {
+    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getActualTableName() + " (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
@@ -94,8 +93,7 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName,
-            int catID, int ID, String description) {
+    protected void addActionForceID(String pluginName, String actionName, int catID, int ID, String description) {
         // TODO Auto-generated method stub
     }
     

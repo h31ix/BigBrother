@@ -16,8 +16,7 @@ import org.bukkit.block.Sign;
  */
 public class SignDestroyed extends BBAction {
     
-    public SignDestroyed(String player, int type, byte data, Sign sign,
-            String world) {
+    public SignDestroyed(String player, int type, byte data, Sign sign, String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), type, Byte.toString(data) + "\u0060" + getText(sign));
     }
     
@@ -34,20 +33,18 @@ public class SignDestroyed extends BBAction {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
-            if (i < lines.length - 1) {
+            if (i < (lines.length - 1)) {
                 message.append("\u0060");
             }
         }
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new SignDestroyed(pi, world, x, y, z, type, data);
     }
     
-    private SignDestroyed(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private SignDestroyed(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -76,7 +73,7 @@ public class SignDestroyed extends BBAction {
         }
         if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
-            for (int i = 1; i < lines.length + 1; i++) {
+            for (int i = 1; i < (lines.length + 1); i++) {
                 sign.setLine(i - 1, lines[i]);
             }
         } else {

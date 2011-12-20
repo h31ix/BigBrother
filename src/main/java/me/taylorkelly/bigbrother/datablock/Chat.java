@@ -11,19 +11,19 @@ public class Chat extends BBAction {
         super(player.getName(), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, message);
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new Chat(pi, world, x, y, z, type, data);
     }
     
-    private Chat(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private Chat(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

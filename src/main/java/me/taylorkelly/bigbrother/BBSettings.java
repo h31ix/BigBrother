@@ -116,8 +116,9 @@ public class BBSettings {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
         // If the file's not there, don't load it
-        if (yamlfile.exists())
+        if (yamlfile.exists()) {
             yml.load();
+        }
         
         ActionProvider.loadDisabled(yml);
         
@@ -130,8 +131,9 @@ public class BBSettings {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
         // If the file's not there, don't load it
-        if (yamlfile.exists())
+        if (yamlfile.exists()) {
             yml.load();
+        }
         
         logPlayerIPs = yml.getBoolean("general.log-ips", true);
         
@@ -159,9 +161,9 @@ public class BBSettings {
         } else {
             for (Object o : excluded) {
                 int id = 0;
-                if (o instanceof Integer)
-                    id = (int) (Integer) o;
-                else if (o instanceof String) {
+                if (o instanceof Integer) {
+                    id = (Integer) o;
+                } else if (o instanceof String) {
                     id = ItemType.lookup((String) o).getID();
                 }
                 blockExclusionList.add(id);
@@ -285,8 +287,7 @@ public class BBSettings {
     /**
      * Save example to file.
      * 
-     * @param f
-     *            dataFolder.
+     * @param f dataFolder.
      */
     private static void saveDefaultConfig(File f) {
         try {

@@ -1,7 +1,7 @@
 package me.taylorkelly.bigbrother.commands;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,12 +16,10 @@ public class DoneCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2,
-            String[] arg3) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] arg3) {
         
         Player player = (Player) send;
-        if (BBPermissions.info(player)) {
+        if (player.hasPermission(Permissions.INFO.id)) {
             plugin.sticker.removeLog(player);
         } else {
             player.sendMessage(BigBrother.permissionDenied);

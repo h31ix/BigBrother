@@ -12,8 +12,7 @@ public class ChestOpen extends BBAction {
         super(player, world, block.getX(), block.getY(), block.getZ(), 54, "");
     }
     
-    private ChestOpen(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private ChestOpen(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -24,15 +23,16 @@ public class ChestOpen extends BBAction {
         // TODO Auto-generated constructor stub
     }
     
+    @Override
     public void rollback(World wld) {
         
     }
     
+    @Override
     public void redo(Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new ChestOpen(pi, world, x, y, z, type, data);
     }
     

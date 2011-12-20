@@ -5,6 +5,7 @@
 package me.taylorkelly.util;
 
 import java.util.Calendar;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -13,10 +14,8 @@ public class TimeParser {
     /**
      * Returns the Calendar of the date represented by now subtracted by a given time formatted with: #d - number of days #h - number of hours #m - number of minutes #s - number of seconds
      * 
-     * @param strTime
-     *            The string
-     * @param player
-     *            The player to report to
+     * @param strTime The string
+     * @param player The player to report to
      * @return The Calendar of the specified date
      */
     public static Calendar parseTime(String strTime, Player player) {
@@ -29,10 +28,10 @@ public class TimeParser {
         int lastIndex = 0;
         int currIndex = 1;
         while (currIndex <= strTime.length()) {
-            while (currIndex <= strTime.length() && Numbers.isInteger(strTime.substring(lastIndex, currIndex))) {
+            while ((currIndex <= strTime.length()) && Numbers.isInteger(strTime.substring(lastIndex, currIndex))) {
                 currIndex++;
             }
-            if (currIndex - 1 == lastIndex) {
+            if ((currIndex - 1) == lastIndex) {
                 player.sendMessage(ChatColor.RED + "Ignoring time quantifier with no time value: " + strTime.substring(currIndex - 1, currIndex));
                 return null;
             } else {
@@ -69,7 +68,7 @@ public class TimeParser {
             currIndex += 1;
         }
         
-        if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+        if ((days == 0) && (hours == 0) && (minutes == 0) && (seconds == 0)) {
             player.sendMessage(ChatColor.RED + "No change in time was set.");
             return null;
         } else {
@@ -92,10 +91,10 @@ public class TimeParser {
         int currIndex = 1;
         try {
             while (currIndex <= strTime.length()) {
-                while (Numbers.isInteger(strTime.substring(lastIndex, currIndex)) && currIndex <= strTime.length()) {
+                while (Numbers.isInteger(strTime.substring(lastIndex, currIndex)) && (currIndex <= strTime.length())) {
                     currIndex++;
                 }
-                if (currIndex - 1 == lastIndex) {
+                if ((currIndex - 1) == lastIndex) {
                     System.out.println("Invalid time quanitifier, all items will be kept");
                     return -1;
                 } else {
@@ -134,11 +133,10 @@ public class TimeParser {
             return -1;
         }
         
-        if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+        if ((days == 0) && (hours == 0) && (minutes == 0) && (seconds == 0)) {
             System.out.println("All items will be kept");
             return -1;
-        } else {
-            return seconds + (((days * 24 + hours) * 60) + minutes) * 60;
-        }
+        } else
+            return seconds + (((((days * 24) + hours) * 60) + minutes) * 60);
     }
 }

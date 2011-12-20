@@ -32,8 +32,9 @@ public abstract class OwnersTable extends DBTable {
     private static OwnersTable instance = null;
     
     public OwnersTable() {
-        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION)) {
             drop();
+        }
         if (!tableExists()) {
             BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
@@ -54,10 +55,11 @@ public abstract class OwnersTable extends DBTable {
     
     public static OwnersTable getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new OwnersPostgreSQL();
-            else
+            } else {
                 instance = new OwnersMySQL();
+            }
         }
         return instance;
     }
@@ -84,8 +86,7 @@ public abstract class OwnersTable extends DBTable {
      * @param z
      * @param playerID
      */
-    protected abstract void setBlockOwner(int world, int x, int y, int z,
-            int playerID);
+    protected abstract void setBlockOwner(int world, int x, int y, int z, int playerID);
     
     /**
      * @param name

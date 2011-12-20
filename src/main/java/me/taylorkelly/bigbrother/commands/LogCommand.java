@@ -1,7 +1,7 @@
 package me.taylorkelly.bigbrother.commands;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,11 +17,9 @@ public class LogCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    @Override
-    public boolean onCommand(CommandSender send, Command arg1, String arg2,
-            String[] split) {
+    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
         Player player = (Player) send;
-        if (BBPermissions.info(player)) {
+        if (player.hasPermission(Permissions.INFO.id)) {
             if (split.length == 1) {
                 plugin.sticker.giveLog(player);
             } else {

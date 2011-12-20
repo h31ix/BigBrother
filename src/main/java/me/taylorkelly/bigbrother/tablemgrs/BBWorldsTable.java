@@ -16,8 +16,9 @@ public abstract class BBWorldsTable extends DBTable {
     private static BBWorldsTable instance = null;
     
     public BBWorldsTable() {
-        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION))
+        if (BBDB.needsUpdate(BBSettings.dataFolder, getActualTableName(), VERSION)) {
             drop();
+        }
         if (!tableExists()) {
             BBLogging.info("Building `" + getTableName() + "` table...");
             createTable();
@@ -33,10 +34,11 @@ public abstract class BBWorldsTable extends DBTable {
     
     public static BBWorldsTable getInstance() {
         if (instance == null) {
-            if (BBDB.usingDBMS(DBMS.POSTGRES))
+            if (BBDB.usingDBMS(DBMS.POSTGRES)) {
                 instance = new BBWorldsPostgreSQL();
-            else
+            } else {
                 instance = new BBWorldsMySQL();
+            }
         }
         return instance;
     }
@@ -55,9 +57,7 @@ public abstract class BBWorldsTable extends DBTable {
         ResultSet set = null;
         try {
             set = BBDB.executeQuery(getSelectWorldsQuery());
-            int size = 0;
             while (set.next()) {
-                size++;
                 int index = set.getInt("id");
                 String name = set.getString("name");
                 ret.put(name, index);

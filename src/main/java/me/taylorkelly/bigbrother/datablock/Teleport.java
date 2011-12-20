@@ -11,13 +11,11 @@ public class Teleport extends BBAction {
         super(player, to.getWorld().getName(), to.getBlockX(), to.getBlockY(), to.getBlockZ(), 0, "");
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new Teleport(pi, world, x, y, z, type, data);
     }
     
-    private Teleport(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private Teleport(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -28,9 +26,11 @@ public class Teleport extends BBAction {
         // TODO Auto-generated constructor stub
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     

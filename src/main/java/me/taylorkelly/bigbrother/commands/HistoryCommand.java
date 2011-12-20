@@ -23,8 +23,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import me.taylorkelly.bigbrother.ActionProvider;
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
+import me.taylorkelly.bigbrother.Permissions;
 import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 
@@ -45,12 +45,11 @@ public class HistoryCommand implements CommandExecutor {
     }
     
     // bb history n3x15 a:BlockPlaced w:hyperion pg:2
-    @Override
-    public boolean onCommand(CommandSender send, Command cmd, String cmdLabel,
-            String[] args) {
-    	Player player = (Player) send;
+    
+    public boolean onCommand(CommandSender send, Command cmd, String cmdLabel, String[] args) {
+        Player player = (Player) send;
         
-        if (BBPermissions.info(player)) {
+        if (player.hasPermission(Permissions.INFO.id)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
             int page = 1;
@@ -59,8 +58,9 @@ public class HistoryCommand implements CommandExecutor {
                     acts = ActionProvider.parseActionSwitch(acts, arg.substring(2));
                 } else if (arg.startsWith("pg:")) {
                     page = Integer.parseInt(arg.substring(3));
-                } else
+                } else {
                     name = arg;
+                }
             }
             
             ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
@@ -71,7 +71,7 @@ public class HistoryCommand implements CommandExecutor {
             int from = ((page - 1) * ACTIONSPERPAGE);
             
             // Sanity check to make sure we aren't going off into space...
-            if (from > history.size() - 1) {
+            if (from > (history.size() - 1)) {
                 player.sendMessage("ERROR: Page out of range");
                 return true;
             }
@@ -98,8 +98,9 @@ public class HistoryCommand implements CommandExecutor {
                     msg.append(lines[0]);
                     player.sendMessage(msg.toString());
                     if (lines.length > 1) {
-                        for (int l = 1; l < lines.length; l++)
+                        for (int l = 1; l < lines.length; l++) {
                             player.sendMessage(lines[l]);
+                        }
                     }
                 }
                 player.sendMessage(ChatColor.AQUA.toString() + trimmedHistory.size() + " edits on this page (out of " + history.size() + ")");
@@ -110,7 +111,6 @@ public class HistoryCommand implements CommandExecutor {
             return true;
         }
     }
-
     
     /**
      * @param player

@@ -13,13 +13,11 @@ public class Login extends BBAction {
         super(BBUsersTable.getInstance().getUserByName(player.getName()), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, BBSettings.logPlayerIPs ? player.getAddress().getAddress().toString().substring(1) : "");
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new Login(pi, world, x, y, z, type, data);
     }
     
-    private Login(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private Login(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -30,9 +28,11 @@ public class Login extends BBAction {
         // TODO Auto-generated constructor stub
     }
     
+    @Override
     public void rollback(World wld) {
     }
     
+    @Override
     public void redo(Server server) {
     }
     

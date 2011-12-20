@@ -44,8 +44,9 @@ public class LeafDecay extends BBAction {
         super.send();
     }
     
+    @Override
     public void rollback(World wld) {
-        if (type != 51 || BBSettings.restoreFire) {
+        if ((type != 51) || BBSettings.restoreFire) {
             World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
@@ -57,6 +58,7 @@ public class LeafDecay extends BBAction {
         }
     }
     
+    @Override
     public void redo(Server server) {
         World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
@@ -66,13 +68,11 @@ public class LeafDecay extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new LeafDecay(pi, world, x, y, z, type, data);
     }
     
-    private LeafDecay(BBPlayerInfo player, String world, int x, int y, int z,
-            int type, String data) {
+    private LeafDecay(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     

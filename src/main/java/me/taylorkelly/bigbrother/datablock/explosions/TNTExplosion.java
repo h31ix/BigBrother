@@ -21,8 +21,7 @@ public class TNTExplosion extends Explosion {
         return new TNTExplosion(player, block, block.getWorld().getName());
     }
     
-    private TNTExplosion(BBPlayerInfo player, String world, int x, int y,
-            int z, int type, String data) {
+    private TNTExplosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -32,8 +31,7 @@ public class TNTExplosion extends Explosion {
     public TNTExplosion() {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x,
-            int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
         return new TNTExplosion(pi, world, x, y, z, type, data);
     }
     

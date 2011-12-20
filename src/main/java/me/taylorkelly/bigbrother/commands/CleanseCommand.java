@@ -1,8 +1,8 @@
 package me.taylorkelly.bigbrother.commands;
 
-import me.taylorkelly.bigbrother.BBPermissions;
 import me.taylorkelly.bigbrother.BigBrother;
 import me.taylorkelly.bigbrother.Cleanser;
+import me.taylorkelly.bigbrother.Permissions;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,10 +15,8 @@ public class CleanseCommand implements CommandExecutor {
     public CleanseCommand(BigBrother plugin) {
     }
     
-    @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2,
-            String[] split) {
-        if (BBPermissions.cleanse((Player) player)) {
+    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+        if (player.hasPermission(Permissions.CLEANSE.id)) {
             if (Cleanser.needsCleaning()) {
                 Cleanser.clean((Player) player);
             } else {

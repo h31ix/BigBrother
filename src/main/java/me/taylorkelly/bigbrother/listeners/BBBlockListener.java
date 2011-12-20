@@ -41,8 +41,19 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
+import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
 public class BBBlockListener extends BlockListener {
     
@@ -58,7 +69,7 @@ public class BBBlockListener extends BlockListener {
             Block blockTo = event.getBlock();
             Block blockFrom = event.getSource();
             BBLogging.debug(String.format("BlockSpread: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)", blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()));
-            if (blockTo.getType() == Material.FIRE || blockFrom.getType() == Material.FIRE) {
+            if ((blockTo.getType() == Material.FIRE) || (blockFrom.getType() == Material.FIRE)) {
                 OwnershipManager.trackFlow(blockFrom, blockTo);
             }
         }
@@ -94,8 +105,9 @@ public class BBBlockListener extends BlockListener {
             
             // Generate action
             BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
-            if (pi.getWatched())
+            if (pi.getWatched()) {
                 action.send();
+            }
         }
     }
     
@@ -106,9 +118,8 @@ public class BBBlockListener extends BlockListener {
      */
     @Override
     public void onBlockPistonRetract(BlockPistonRetractEvent e) {
-        if (!e.isSticky() && !e.isCancelled()) {
+        if (!e.isSticky() && !e.isCancelled())
             return;
-        }
         World w = e.getBlock().getWorld();
         // Determine direction of move
         int xo = e.getDirection().getModX();
@@ -136,8 +147,9 @@ public class BBBlockListener extends BlockListener {
         
         // Generate action
         BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
-        if (pi.getWatched())
+        if (pi.getWatched()) {
             action.send();
+        }
     }
     
     @Override
@@ -171,7 +183,7 @@ public class BBBlockListener extends BlockListener {
         if (!ActionProvider.isDisabled(PlacedBlock.class) && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
             Block block = event.getBlockPlaced();
-            if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.FIRE) {
+            if ((block.getType() == Material.WATER) || (block.getType() == Material.STATIONARY_WATER) || (block.getType() == Material.LAVA) || (block.getType() == Material.STATIONARY_LAVA) || (block.getType() == Material.FIRE)) {
                 OwnershipManager.setOwner(block, pi);
             }
             PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
@@ -192,7 +204,7 @@ public class BBBlockListener extends BlockListener {
     
     @Override
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (!ActionProvider.isDisabled(FlintAndSteel.class) && event.getCause() == IgniteCause.FLINT_AND_STEEL && !event.isCancelled()) {
+        if (!ActionProvider.isDisabled(FlintAndSteel.class) && (event.getCause() == IgniteCause.FLINT_AND_STEEL) && !event.isCancelled()) {
             final Block block = event.getBlock();
             BBAction dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
             dataBlock.send();
@@ -225,7 +237,7 @@ public class BBBlockListener extends BlockListener {
         if (!event.isCancelled()) {
             int fromID = blockFrom.getTypeId();
             int toID = blockTo.getTypeId();
-            if (BBSettings.isBlockIgnored(fromID) || fromID == Material.WATER.getId() || fromID == Material.STATIONARY_WATER.getId() || fromID == Material.LAVA.getId() || fromID == Material.STATIONARY_LAVA.getId() || BBSettings.isBlockIgnored(toID) || toID == Material.WATER.getId() || toID == Material.STATIONARY_WATER.getId() || toID == Material.LAVA.getId() || toID == Material.STATIONARY_LAVA.getId())
+            if (BBSettings.isBlockIgnored(fromID) || (fromID == Material.WATER.getId()) || (fromID == Material.STATIONARY_WATER.getId()) || (fromID == Material.LAVA.getId()) || (fromID == Material.STATIONARY_LAVA.getId()) || BBSettings.isBlockIgnored(toID) || (toID == Material.WATER.getId()) || (toID == Material.STATIONARY_WATER.getId()) || (toID == Material.LAVA.getId()) || (toID == Material.STATIONARY_LAVA.getId()))
                 return;
             // Only record a change if the owner is different (avoids duplicates)
             if (OwnershipManager.findOwner(blockFrom).getID() != OwnershipManager.findOwner(blockTo).getID()) {

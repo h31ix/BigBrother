@@ -21,7 +21,24 @@ import java.io.File;
 import java.sql.SQLException;
 
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.commands.*;
+import me.taylorkelly.bigbrother.commands.CleanseCommand;
+import me.taylorkelly.bigbrother.commands.ConfirmCommand;
+import me.taylorkelly.bigbrother.commands.DebugCommand;
+import me.taylorkelly.bigbrother.commands.DeleteCommand;
+import me.taylorkelly.bigbrother.commands.DoneCommand;
+import me.taylorkelly.bigbrother.commands.FindCommand;
+import me.taylorkelly.bigbrother.commands.HelpCommand;
+import me.taylorkelly.bigbrother.commands.HereCommand;
+import me.taylorkelly.bigbrother.commands.HistoryCommand;
+import me.taylorkelly.bigbrother.commands.LogCommand;
+import me.taylorkelly.bigbrother.commands.MowlawnCommand;
+import me.taylorkelly.bigbrother.commands.RollbackCommand;
+import me.taylorkelly.bigbrother.commands.StickCommand;
+import me.taylorkelly.bigbrother.commands.UndoCommand;
+import me.taylorkelly.bigbrother.commands.UnwatchedCommand;
+import me.taylorkelly.bigbrother.commands.VersionCommand;
+import me.taylorkelly.bigbrother.commands.WatchCommand;
+import me.taylorkelly.bigbrother.commands.WatchedCommand;
 import me.taylorkelly.bigbrother.datablock.BrokenBlock;
 import me.taylorkelly.bigbrother.datablock.DeltaChest;
 import me.taylorkelly.bigbrother.datablock.PlacedBlock;
@@ -66,25 +83,18 @@ public class BigBrother extends JavaPlugin {
     public static final String permissionDenied = ChatColor.RED + "[BBROTHER] PERMISSION DENIED.";
     private Updater updater;
     
-    @Override
-    public void onLoad() {
-        // Don't need.
-    }
-    
-    @Override
     public void onDisable() {
         ActionSender.shutdown(this);
         Cleanser.shutdown(this);
         BBDB.shutdown();
     }
     
-    @Override
     public void onEnable() {
         BBLogging.debug("Debug Mode enabled");
         
         // Stuff that was in Constructor
-        name = this.getDescription().getName();
-        version = this.getDescription().getVersion();
+        name = getDescription().getName();
+        version = getDescription().getVersion();
         // git-BigBrother-jenkins-BigBrother-384
         String[] buildp = BigBrother.class.getPackage().getImplementationVersion().split("-");
         build = buildp[buildp.length - 1]; // 384
@@ -155,8 +165,6 @@ public class BigBrother extends JavaPlugin {
         // Fire up the ownership system.
         OwnershipManager.init(this);
         
-        // Initialize Permissions, Help
-        BBPermissions.initialize(this, getServer());
         BBHelp.initialize(this);
         
         // Register Events
@@ -300,12 +308,9 @@ public class BigBrother extends JavaPlugin {
     /**
      * Tell BigBrother that a block has been broken/removed.
      * 
-     * @param player
-     *            Player making the change
-     * @param block
-     *            The block being removed
-     * @param world
-     *            The world in which this action occurred
+     * @param player Player making the change
+     * @param block The block being removed
+     * @param world The world in which this action occurred
      */
     public void onBlockBroken(String player, Block block, String world) {
         BrokenBlock bb = new BrokenBlock(player, block, world);
@@ -315,12 +320,9 @@ public class BigBrother extends JavaPlugin {
     /**
      * Tell BigBrother that a block has been placed/created.
      * 
-     * @param player
-     *            Player making the change
-     * @param block
-     *            The block being added
-     * @param world
-     *            The world in which this action occurred
+     * @param player Player making the change
+     * @param block The block being added
+     * @param world The world in which this action occurred
      */
     public void onBlockPlaced(String player, Block block, String world) {
         PlacedBlock bb = new PlacedBlock(player, block, world);

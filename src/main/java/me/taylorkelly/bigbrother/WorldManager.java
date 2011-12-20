@@ -32,14 +32,13 @@ public class WorldManager {
     /**
      * Returns the BB index of the world to use (starts at 0 and goes up). If BB has seen it before, it will use the key that it already had paired. Otherwise it will designate a new key, and save that key to bbworlds for later usage
      * 
-     * @param world
-     *            The name of the world
+     * @param world The name of the world
      * @return The index of the world
      */
     public int getWorld(String world) {
-        if (worldMap.containsKey(world)) {
+        if (worldMap.containsKey(world))
             return worldMap.get(world);
-        } else {
+        else {
             int nextKey = 0;
             if (!worldMap.isEmpty()) {
                 nextKey = getMax(worldMap.values()) + 1;
@@ -53,8 +52,7 @@ public class WorldManager {
     /**
      * Generic max finder for a collection. Only works with positive numbers (which we'd be dealing with)
      * 
-     * @param values
-     *            Collection of values
+     * @param values Collection of values
      * @return The max of those numbers (or -1 if it's empty)
      */
     public static int getMax(Collection<Integer> values) {

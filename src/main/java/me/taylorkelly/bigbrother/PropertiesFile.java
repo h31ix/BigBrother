@@ -36,13 +36,15 @@ public class PropertiesFile {
         map = new HashMap<String, PropertiesEntry>();
         Scanner scan;
         try {
-            if (!file.exists())
+            if (!file.exists()) {
                 file.createNewFile();
+            }
             scan = new Scanner(file);
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                if (!line.contains("="))
+                if (!line.contains("=")) {
                     continue;
+                }
                 int equals = line.indexOf('=');
                 int commentIndex = line.length();
                 if (line.contains("#")) {
@@ -50,11 +52,12 @@ public class PropertiesFile {
                 }
                 
                 String key = line.substring(0, equals).trim();
-                if (key.equals(""))
+                if (key.equals("")) {
                     continue;
+                }
                 String value = line.substring(equals + 1, commentIndex).trim();
                 String comment = "";
-                if (commentIndex < line.length() - 1) {
+                if (commentIndex < (line.length() - 1)) {
                     comment = line.substring(commentIndex + 1, line.length()).trim();
                 }
                 map.put(key, new PropertiesEntry(value, comment));
@@ -66,22 +69,20 @@ public class PropertiesFile {
         }
     }
     
-    public boolean getBoolean(String key, Boolean defaultValue,
-            String defaultComment) {
-        if (map.containsKey(key)) {
+    public boolean getBoolean(String key, Boolean defaultValue, String defaultComment) {
+        if (map.containsKey(key))
             return Boolean.parseBoolean(map.get(key).value);
-        } else {
+        else {
             map.put(key, new PropertiesEntry(defaultValue.toString(), defaultComment));
             modified = true;
             return defaultValue;
         }
     }
     
-    public String getString(String key, String defaultValue,
-            String defaultComment) {
-        if (map.containsKey(key)) {
+    public String getString(String key, String defaultValue, String defaultComment) {
+        if (map.containsKey(key))
             return map.get(key).value;
-        } else {
+        else {
             map.put(key, new PropertiesEntry(defaultValue, defaultComment));
             modified = true;
             return defaultValue;
@@ -118,8 +119,7 @@ public class PropertiesFile {
         }
     }
     
-    public double getDouble(String key, Double defaultValue,
-            String defaultComment) {
+    public double getDouble(String key, Double defaultValue, String defaultComment) {
         if (map.containsKey(key)) {
             try {
                 return Double.parseDouble(map.get(key).value);
@@ -150,8 +150,9 @@ public class PropertiesFile {
         BufferedWriter bwriter = null;
         FileWriter fwriter = null;
         try {
-            if (!file.exists())
+            if (!file.exists()) {
                 file.createNewFile();
+            }
             fwriter = new FileWriter(file);
             bwriter = new BufferedWriter(fwriter);
             for (Entry<String, PropertiesEntry> entry : map.entrySet()) {
