@@ -15,7 +15,7 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
-			<url>http://repo.bukkit.org/artifactory/plugins-release</url>
+			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
 		<repository>
 			<id>nexisonline-repo</id>
@@ -32,7 +32,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>bukkit-plugins</id>
-			<url>http://repo.bukkit.org/artifactory/plugins-release</url>
+			<url>http://repo.bukkit.org/content/groups/public</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
