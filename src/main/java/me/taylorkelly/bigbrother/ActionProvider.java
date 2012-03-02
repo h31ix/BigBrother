@@ -66,7 +66,7 @@ public abstract class ActionProvider {
     
     public static Map<Integer, ActionData> Actions = new HashMap<Integer, ActionData>();
     public static List<Integer> disabledActions = new ArrayList<Integer>();
-    private Plugin plugin;
+    private final Plugin plugin;
     
     /**
      * Override this to provide custom Actions.

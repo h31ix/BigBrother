@@ -46,9 +46,6 @@ import me.taylorkelly.bigbrother.datasource.ActionSender;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.finder.Sticker;
 import me.taylorkelly.bigbrother.griefcraft.util.Updater;
-import me.taylorkelly.bigbrother.listeners.BBBlockListener;
-import me.taylorkelly.bigbrother.listeners.BBEntityListener;
-import me.taylorkelly.bigbrother.listeners.BBPlayerListener;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBDataTable;
 import me.taylorkelly.bigbrother.tablemgrs.BBUsersTable;
@@ -60,8 +57,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -69,10 +64,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class BigBrother extends JavaPlugin {
     @SuppressWarnings("unused")
     private ActionProvider actionProvider = null;
-    private BBPlayerListener playerListener;
-    private BBBlockListener blockListener;
-    private BBEntityListener entityListener;
-    private StickListener stickListener;
+    private BBListener listener;
     private Watcher watcher;
     public Sticker sticker;
     public WorldManager worldManager;
@@ -83,12 +75,14 @@ public class BigBrother extends JavaPlugin {
     public static final String permissionDenied = ChatColor.RED + "[BBROTHER] PERMISSION DENIED.";
     private Updater updater;
     
+    @Override
     public void onDisable() {
         ActionSender.shutdown(this);
         Cleanser.shutdown(this);
         BBDB.shutdown();
     }
     
+    @Override
     public void onEnable() {
         BBLogging.debug("Debug Mode enabled");
         
@@ -146,11 +140,8 @@ public class BigBrother extends JavaPlugin {
         ActionTable.getInstance().init();
         BBPlayerInfo.ENVIRONMENT = new BBPlayerInfo("Environment");
         
-        // Initialize Listeners
-        playerListener = new BBPlayerListener(this);
-        blockListener = new BBBlockListener(this);
-        entityListener = new BBEntityListener(this);
-        stickListener = new StickListener(this);
+        // Initialize listener
+        listener = new BBListener(this);
         sticker = new Sticker(getServer(), worldManager);
         actionProvider = new BBActionProvider(this);
         BBSettings.loadPostponed();
@@ -192,33 +183,16 @@ public class BigBrother extends JavaPlugin {
     private void registerEvents() {
         // TODO Only register events that are being listened to
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_ITEM_HELD, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
-        
-        pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_IGNITE, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.LEAVES_DECAY, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_FROMTO, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_SPREAD, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Monitor, this);
-        
-        pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
-        
-        // These events are used for Super Sticks
-        pm.registerEvent(Event.Type.BLOCK_PLACE, stickListener, Priority.Low, this);
+        pm.registerEvents(listener, this);
+        /*
+         * pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_ITEM_HELD, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
+         * 
+         * pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_IGNITE, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.LEAVES_DECAY, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_BURN, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_FROMTO, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_SPREAD, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Monitor, this); pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Monitor, this);
+         * 
+         * pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Priority.Monitor, this); pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
+         * 
+         * // These events are used for Super Sticks pm.registerEvent(Event.Type.BLOCK_PLACE, stickListener, Priority.Low, this);
+         */
         
         BBCommand bbc = new BBCommand(this);
         bbc.registerExecutor("debug", new DebugCommand(this));

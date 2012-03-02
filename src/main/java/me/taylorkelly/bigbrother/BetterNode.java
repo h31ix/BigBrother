@@ -20,7 +20,7 @@ package me.taylorkelly.bigbrother;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.util.config.ConfigurationNode;
+import org.spout.api.util.config.ConfigurationNode;
 
 public class BetterNode extends ConfigurationNode {
     

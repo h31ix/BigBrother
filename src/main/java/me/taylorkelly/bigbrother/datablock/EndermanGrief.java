@@ -21,11 +21,11 @@ package me.taylorkelly.bigbrother.datablock;
 import me.taylorkelly.bigbrother.BBPlayerInfo;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event.Type;
 
 /**
  * @author Rob
@@ -139,7 +139,7 @@ public class EndermanGrief extends Action {
      * @param location
      * @param type
      */
-    public static void createPlace(Entity entity, Location location, Type type) {
+    public static void createPlace(Entity entity, Location location, Material type) {
         // TODO Auto-generated method stub
         
     }

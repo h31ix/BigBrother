@@ -8,10 +8,10 @@ import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
-import org.bukkit.util.config.Configuration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.spout.api.util.config.Configuration;
 
 public class TestBigBrother {
     private File testFolder;
@@ -36,7 +36,7 @@ public class TestBigBrother {
         dataFolder.mkdirs();
         File settingsFile = new File(dataFolder, "BigBrother.yml");
         
-        Configuration cfg = new Configuration(settingsFile);
+        Configuration cfg = new org.spout.api.util.config.Configuration(settingsFile);
         cfg.setProperty("database.type", "MYSQL");
         cfg.save();
         

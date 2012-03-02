@@ -3,6 +3,8 @@ BigBrother
 
 **NOTE:** This is a temporary repository until tkelly910 returns from University.  The changes can be easily merged.
 
+**NOTE:**  N3X15 is busy with a job and University, so no support is offered.  This software is made available to you on an AS-IS BASIS!
+
 Compilation
 -----------
 

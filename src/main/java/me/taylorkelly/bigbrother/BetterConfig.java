@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.util.config.Configuration;
+import org.spout.api.util.config.Configuration;
 
 public class BetterConfig extends Configuration {
     
@@ -103,5 +103,15 @@ public class BetterConfig extends Configuration {
             return new BetterNode((Map<String, Object>) raw);
         }
         
+    }
+    
+    /**
+     * Remove a property.
+     * @param path
+     */
+    public void removeProperty(String path) {
+        if (getProperty(path) != null) {
+            super.setProperty(path, null);
+        }
     }
 }
