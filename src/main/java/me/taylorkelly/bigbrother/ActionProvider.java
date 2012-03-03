@@ -192,7 +192,7 @@ public abstract class ActionProvider {
      */
     public static void loadDisabled(BetterConfig cfg) {
         List<String> actions;
-        if (cfg.getProperty("general.disabled-actions") == null) {
+        if (cfg.getValue("general.disabled-actions") == null) {
             actions = new ArrayList<String>();
             if (!cfg.getBoolean("watched.blocks.block-break", true)) {
                 actions.add("BrokenBlock");
@@ -252,7 +252,7 @@ public abstract class ActionProvider {
                 actions.add("Flow");
             }
             cfg.removeProperty("watched");
-            cfg.setProperty("general.disabled-actions", actions);
+            cfg.setValue("general.disabled-actions", actions);
         } else {
             actions = cfg.getStringList("general.disabled-actions", new ArrayList<String>());
         }

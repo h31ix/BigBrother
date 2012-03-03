@@ -37,7 +37,7 @@ public class TestBigBrother {
         File settingsFile = new File(dataFolder, "BigBrother.yml");
         
         Configuration cfg = new org.spout.api.util.config.Configuration(settingsFile);
-        cfg.setProperty("database.type", "MYSQL");
+        cfg.setValue("database.type", "MYSQL");
         cfg.save();
         
         BBSettings.initialize(null, dataFolder);

@@ -138,7 +138,7 @@ public class BBSettings {
         logPlayerIPs = yml.getBoolean("general.log-ips", true);
         
         // Import old settings into new config defaults and remove the old versions.
-        if (yml.getProperty("database.mysql.username") != null) {
+        if (yml.getValue("database.mysql.username") != null) {
             BBDB.username = yml.getString("database.mysql.username", BBDB.username);
             yml.removeProperty("database.mysql.username");
             BBDB.password = yml.getString("database.mysql.password", BBDB.password);
@@ -147,7 +147,7 @@ public class BBSettings {
             yml.removeProperty("database.mysql.hostname");
             BBDB.schema = yml.getString("database.mysql.database", BBDB.schema);
             yml.removeProperty("database.mysql.database");
-            BBDB.port = yml.getInt("database.mysql.port", BBDB.port);
+            BBDB.port = yml.getInteger("database.mysql.port", BBDB.port);
             yml.removeProperty("database.mysql.port");
             BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
             yml.removeProperty("database.mysql.prefix");
@@ -157,7 +157,7 @@ public class BBSettings {
         List<Object> excluded = yml.getList("general.excluded-blocks");
         // Dodge NPE reported by Mineral (and set a default)
         if (excluded == null) {
-            yml.setProperty("general.excluded-blocks", blockExclusionList);
+            yml.setValue("general.excluded-blocks", blockExclusionList);
         } else {
             for (Object o : excluded) {
                 int id = 0;
@@ -184,18 +184,18 @@ public class BBSettings {
         
         List<String> excludedWorlds = yml.getStringList("general.excluded-worlds", new ArrayList<String>());
         if (excludedWorlds == null) {
-            yml.setProperty("general.excluded-worlds", new ArrayList<String>());
+            yml.setValue("general.excluded-worlds", new ArrayList<String>());
         } else {
             worldExclusionList.addAll(excludedWorlds);
         }
         
         storeOwners = yml.getBoolean("general.store-owners", storeOwners);
-        stickItem = yml.getInt("general.stick-item", 280);// "The item used for /bb stick");
+        stickItem = yml.getInteger("general.stick-item", 280);// "The item used for /bb stick");
         restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
         autoWatch = yml.getBoolean("general.auto-watch", true);// "Automatically start watching players");
-        defaultSearchRadius = yml.getInt("general.default-search-radius", 5);// "Default search radius for bbhere and bbfind");
+        defaultSearchRadius = yml.getInteger("general.default-search-radius", 5);// "Default search radius for bbhere and bbfind");
         flatLog = yml.getBoolean("general.personal-log-files", false);// "If true, will also log actions to .logs (one for each player)");
-        rollbacksPerTick = yml.getInt("general.rollbacks-per-tick", 2000);// "If true, will also log actions to .logs (one for each player)");
+        rollbacksPerTick = yml.getInteger("general.rollbacks-per-tick", 2000);// "If true, will also log actions to .logs (one for each player)");
         debugMode = yml.getBoolean("general.debug-mode", false);// "If true, will also log actions to .logs (one for each player)");
         libraryAutoDownload = yml.getBoolean("general.library-autodownload", true);// "If true, will also log actions to .logs (one for each player)");
         TNTLogger.THRESHOLD = 10.0;//yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");

@@ -17,19 +17,16 @@
  */
 package me.taylorkelly.bigbrother;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.spout.api.util.config.ConfigurationNode;
 
 public class BetterNode extends ConfigurationNode {
     
-    protected BetterNode(Map<String, Object> root) {
-        super(root);
+    protected BetterNode(String path, Object value) {
+        super(path, value);
     }
     
     public BetterNode() {
-        this(new HashMap<String, Object>());
+        this("", null);
     }
     
     /**
@@ -55,42 +52,42 @@ public class BetterNode extends ConfigurationNode {
             return null;
     }
     
-    public long getLong(String path, long defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public long getLong(long defaultValue) {
+        if (getValue() == null) {
+            setValue(defaultValue);
         }
-        return castLong(getProperty(path));
+        return castLong(getValue());
     }
     
     @Override
-    public double getDouble(String path, double defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public double getDouble(double defaultValue) {
+        if (getValue() == null) {
+            setValue(defaultValue);
         }
-        return super.getDouble(path, defaultValue);
+        return super.getDouble(defaultValue);
     }
     
     @Override
-    public int getInt(String path, int defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public int getInteger(int defaultValue) {
+        if (getValue() == null) {
+            setValue(defaultValue);
         }
-        return super.getInt(path, defaultValue);
+        return super.getInteger(defaultValue);
     }
     
     @Override
-    public String getString(String path, String defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public String getString(String defaultValue) {
+        if (getValue() == null) {
+            setValue(defaultValue);
         }
-        return super.getString(path, defaultValue);
+        return super.getString(defaultValue);
     }
     
     @Override
-    public boolean getBoolean(String path, boolean defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public boolean getBoolean(boolean defaultValue) {
+        if (getValue() == null) {
+            setValue(defaultValue);
         }
-        return super.getBoolean(path, defaultValue);
+        return super.getBoolean(defaultValue);
     }
 }

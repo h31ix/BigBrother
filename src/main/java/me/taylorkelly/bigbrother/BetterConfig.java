@@ -53,54 +53,53 @@ public class BetterConfig extends Configuration {
     }
     
     public long getLong(String path, long defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+        if (getValue(path) == null) {
+            setValue(path, defaultValue);
         }
-        return castLong(getProperty(path));
+        return castLong(getValue(path));
     }
     
     @Override
-    public int getInt(String path, int defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+    public int getInteger(String path, int defaultValue) {
+        if (getValue(path) == null) {
+            setValue(path, defaultValue);
         }
-        return super.getInt(path, defaultValue);
+        return super.getInteger(path, defaultValue);
     }
     
     @Override
     public double getDouble(String path, double defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+        if (getValue(path) == null) {
+            setValue(path, defaultValue);
         }
         return super.getDouble(path, defaultValue);
     }
     
     @Override
     public String getString(String path, String defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+        if (getValue(path) == null) {
+            setValue(path, defaultValue);
         }
         return super.getString(path, defaultValue);
     }
     
     @Override
     public boolean getBoolean(String path, boolean defaultValue) {
-        if (getProperty(path) == null) {
-            setProperty(path, defaultValue);
+        if (getValue(path) == null) {
+            setValue(path, defaultValue);
         }
         return super.getBoolean(path, defaultValue);
     }
     
     @SuppressWarnings("unchecked")
-    @Override
     public BetterNode getNode(String path) {
-        if ((getProperty(path) == null) || !(getProperty(path) instanceof Map)) {
+        if ((getValue(path) == null) || !(getValue(path) instanceof Map)) {
             BetterNode node = new BetterNode();
-            setProperty(path, new HashMap<String, Object>());
+            setValue(path, new HashMap<String, Object>());
             return node;
         } else {
-            Object raw = getProperty(path);
-            return new BetterNode((Map<String, Object>) raw);
+            Object raw = getValue(path);
+            return new BetterNode(path, raw);
         }
         
     }
@@ -110,8 +109,6 @@ public class BetterConfig extends Configuration {
      * @param path
      */
     public void removeProperty(String path) {
-        if (getProperty(path) != null) {
-            super.setProperty(path, null);
-        }
+        super.removeNode(path);
     }
 }

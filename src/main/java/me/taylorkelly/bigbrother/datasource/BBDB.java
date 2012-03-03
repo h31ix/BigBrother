@@ -87,12 +87,12 @@ public class BBDB {
             BBSettings.cleanseAge = TimeParser.parseInterval(cleanse_age);// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
         }
         
-        BBSettings.sendDelay = yml.getInt("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
+        BBSettings.sendDelay = yml.getInteger("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
         
         username = yml.getString("database.username", username);
         password = yml.getString("database.password", password);
         hostname = yml.getString("database.hostname", hostname);
-        port = yml.getInt("database.port", port);
+        port = yml.getInteger("database.port", port);
         schema = yml.getString("database.database", schema);
         prefix = yml.getString("database.prefix", prefix);
         
