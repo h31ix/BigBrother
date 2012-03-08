@@ -44,7 +44,7 @@
 			<!-- Grabs from Bukkit Artifactory -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.2.3-R0.1-SNAPSHOT</version>
+			<version>1.2.3-R0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.getspout</groupId>
