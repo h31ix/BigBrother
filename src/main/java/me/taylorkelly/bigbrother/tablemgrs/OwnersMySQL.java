@@ -38,7 +38,7 @@ public class OwnersMySQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#setBlockOwner(int, int, int, int, int)
      */
     @Override
-    protected void setBlockOwner(int world, int x, int y, int z, int playerID) {
+    protected void setBlockOwner(final int world, final int x, final int y, final int z, final int playerID) {
         PreparedStatement stmt = null;
         try {
             // I love REPLACE INTO.  It makes my job so much easier ._.
@@ -49,7 +49,7 @@ public class OwnersMySQL extends OwnersTable {
             stmt.setInt(4, z);
             stmt.setInt(5, playerID);
             stmt.execute();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersMySQL: ", e);
         } finally {
             BBDB.cleanup("OwnersMySQL.setBlockOwner", stmt, null);
@@ -62,7 +62,7 @@ public class OwnersMySQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#getBlockOwner(int, int, int, int)
      */
     @Override
-    protected int getBlockOwner(int world, int x, int y, int z) {
+    protected int getBlockOwner(final int world, final int x, final int y, final int z) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -74,7 +74,7 @@ public class OwnersMySQL extends OwnersTable {
             rs = stmt.executeQuery();
             if (rs.next())
                 return rs.getInt("usrID");
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersMySQL: ", e);
         } finally {
             BBDB.cleanup("OwnersMySQL.setBlockOwner", stmt, rs);
@@ -109,7 +109,7 @@ public class OwnersMySQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#removeBlockOwner(int, int, int, int)
      */
     @Override
-    protected void removeBlockOwner(int wldID, int x, int y, int z) {
+    protected void removeBlockOwner(final int wldID, final int x, final int y, final int z) {
         BBDB.executeUpdate("DELETE FROM " + getTableName() + " WHERE wldID=? AND x=? AND y=? AND z=?", wldID, x, y, z);
     }
 }

@@ -79,7 +79,7 @@ public abstract class BBUsersTable extends DBTable {
         onLoad();
     }
     
-    public BBPlayerInfo getUserByName(String name) {
+    public BBPlayerInfo getUserByName(final String name) {
         if (name.equalsIgnoreCase(Action.ENVIRONMENT))
             return BBPlayerInfo.ENVIRONMENT;
         
@@ -96,13 +96,13 @@ public abstract class BBUsersTable extends DBTable {
         return pi;
     }
     
-    public void addOrUpdateUser(Player p) {
-        String name = p.getName();
+    public void addOrUpdateUser(final Player p) {
+        final String name = p.getName();
         
         BBPlayerInfo pi = null;
         // Check cache first.
         if (knownNames.containsKey(name)) {
-            int id = knownNames.get(name);
+            final int id = knownNames.get(name);
             pi = knownPlayers.get(id);
             knownPlayers.remove(id);
             knownNames.remove(name);
@@ -147,10 +147,10 @@ public abstract class BBUsersTable extends DBTable {
     
     public abstract BBPlayerInfo getUserFromDB(int id);
     
-    public BBPlayerInfo getUserByID(int id) {
+    public BBPlayerInfo getUserByID(final int id) {
         if (knownPlayers.containsKey(id))
             return knownPlayers.get(id);
-        BBPlayerInfo pi = this.getUserFromDB(id);
+        final BBPlayerInfo pi = this.getUserFromDB(id);
         if (pi != null) {
             knownPlayers.put(pi.getID(), pi);
             knownNames.put(pi.getName(), pi.getID());
@@ -158,8 +158,8 @@ public abstract class BBUsersTable extends DBTable {
         return pi;
     }
     
-    public void userOpenedChest(String player, Chest c, ItemStack[] contents) {
-        BBPlayerInfo pi = getUserByName(player);
+    public void userOpenedChest(final String player, final Chest c, final ItemStack[] contents) {
+        final BBPlayerInfo pi = getUserByName(player);
         pi.setHasOpenedChest(c, contents);
         knownPlayers.put(pi.getID(), pi);
     }

@@ -41,7 +41,7 @@ public class Cleanser {
      * 
      * @param player Person to blame for the lag. Or null.
      */
-    public static void clean(Player player) {
+    public static void clean(final Player player) {
         if ((cleanupThread != null) && cleanupThread.done) {
             cleanupThread = null;
         }
@@ -55,14 +55,14 @@ public class Cleanser {
         }
     }
     
-    public static void initialize(BigBrother bigbrother) {
+    public static void initialize(final BigBrother bigbrother) {
         cleanupTask = bigbrother.getServer().getScheduler().scheduleAsyncRepeatingTask(bigbrother, new CleanupTask(), 50, 26000);
         if (cleanupTask < 0) {
             BBLogging.severe("Cannot schedule the cleanup task.");
         }
     }
     
-    public static void shutdown(BigBrother bb) {
+    public static void shutdown(final BigBrother bb) {
         if (cleanupTask >= 0) {
             bb.getServer().getScheduler().cancelTask(cleanupTask);
         }
@@ -89,7 +89,7 @@ public class Cleanser {
         /**
          * @param p The player. Can be null.
          */
-        public CleanupThread(Player p) {
+        public CleanupThread(final Player p) {
             // Constructor.
             player = p;
             setName("Cleanser");
@@ -106,13 +106,13 @@ public class Cleanser {
         }
         
         private void cleanByAge() {
-            long start = System.currentTimeMillis() / 1000;
+            final long start = System.currentTimeMillis() / 1000;
             cleanedSoFarAge = BBDB.executeUpdate(BBDataTable.getInstance().getCleanseAged(Long.valueOf(Time.ago(BBSettings.cleanseAge)), BBSettings.deletesPerCleansing));
             if (cleanedSoFarAge == Statement.EXECUTE_FAILED)
                 return;
-            String timespent = Time.formatDuration((System.currentTimeMillis() / 1000) - start);
+            final String timespent = Time.formatDuration((System.currentTimeMillis() / 1000) - start);
             
-            String words = String.format("Removed %d records older than %s in %s.", cleanedSoFarAge, Time.formatDuration(BBSettings.cleanseAge), timespent);
+            final String words = String.format("Removed %d records older than %s in %s.", cleanedSoFarAge, Time.formatDuration(BBSettings.cleanseAge), timespent);
             if (player == null) {
                 BBLogging.info(words);
             } else {

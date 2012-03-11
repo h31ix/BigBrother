@@ -12,22 +12,22 @@ import org.bukkit.block.Block;
 
 public class MiscExplosion extends Explosion {
     
-    public MiscExplosion(String player, Block block, String world) {
+    public MiscExplosion(final String player, final Block block, final String world) {
         super(player, block, world);
     }
     
-    public MiscExplosion(Block block, String world) {
+    public MiscExplosion(final Block block, final String world) {
         super(ENVIRONMENT, block, world);
     }
     
     @Override
-    protected Explosion newInstance(String player, Block block) {
+    protected Explosion newInstance(final String player, final Block block) {
         return new MiscExplosion(player, block, block.getWorld().getName());
     }
     
-    public static void create(Location location, List<Block> blockList, String world) {
-        for (Block block : blockList) {
-            BBAction dataBlock = new MiscExplosion(ENVIRONMENT, block, world);
+    public static void create(final Location location, final List<Block> blockList, final String world) {
+        for (final Block block : blockList) {
+            final BBAction dataBlock = new MiscExplosion(ENVIRONMENT, block, world);
             dataBlock.send();
             if (block.getType() == Material.TNT) {
                 TNTLogger.log(ENVIRONMENT, block);
@@ -35,7 +35,7 @@ public class MiscExplosion extends Explosion {
         }
     }
     
-    private MiscExplosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private MiscExplosion(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -46,7 +46,7 @@ public class MiscExplosion extends Explosion {
         // TODO Auto-generated constructor stub
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new MiscExplosion(player, world, x, y, z, type, data);
     }
     

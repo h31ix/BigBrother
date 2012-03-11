@@ -31,9 +31,9 @@ import org.bukkit.command.CommandSender;
 public class MowlawnCommand implements CommandExecutor {
     
     @SuppressWarnings("unused")
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public MowlawnCommand(BigBrother p) {
+    public MowlawnCommand(final BigBrother p) {
         plugin = p;
     }
     
@@ -43,7 +43,7 @@ public class MowlawnCommand implements CommandExecutor {
      * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
      */
     
-    public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(final CommandSender arg0, final Command arg1, final String arg2, final String[] arg3) {
         arg0.sendMessage(BigBrother.premessage + " I hope you realize that I was joking what I said that BigBrother can mow your lawn, you big dummy.");
         return true;
     }

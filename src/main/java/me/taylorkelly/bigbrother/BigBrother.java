@@ -90,7 +90,7 @@ public class BigBrother extends JavaPlugin {
         name = getDescription().getName();
         version = getDescription().getVersion();
         // git-BigBrother-jenkins-BigBrother-384
-        String[] buildp = BigBrother.class.getPackage().getImplementationVersion().split("-");
+        final String[] buildp = BigBrother.class.getPackage().getImplementationVersion().split("-");
         build = buildp[buildp.length - 1]; // 384
         
         if (version.endsWith("SNAPSHOT")) {
@@ -111,7 +111,7 @@ public class BigBrother extends JavaPlugin {
             try {
                 updater.check();
                 updater.update();
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 BBLogging.severe("Could not download dependencies", e);
             }
         } else {
@@ -128,7 +128,7 @@ public class BigBrother extends JavaPlugin {
         // Get database running.
         try {
             BBDB.reconnect();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Your database settings are probably incorrect:", e);
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -174,15 +174,15 @@ public class BigBrother extends JavaPlugin {
         BBLogging.info(name + " " + version + " (build #" + build + ") enabled!");
     }
     
-    private void updateSettings(File dataFolder) {
-        File oldDirectory = new File("BigBrother");
+    private void updateSettings(final File dataFolder) {
+        final File oldDirectory = new File("BigBrother");
         dataFolder.getParentFile().mkdirs();
         oldDirectory.renameTo(dataFolder);
     }
     
     private void registerEvents() {
         // TODO Only register events that are being listened to
-        PluginManager pm = getServer().getPluginManager();
+        final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(listener, this);
         /*
          * pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_ITEM_HELD, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Monitor, this); pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
@@ -194,7 +194,7 @@ public class BigBrother extends JavaPlugin {
          * // These events are used for Super Sticks pm.registerEvent(Event.Type.BLOCK_PLACE, stickListener, Priority.Low, this);
          */
         
-        BBCommand bbc = new BBCommand(this);
+        final BBCommand bbc = new BBCommand(this);
         bbc.registerExecutor("debug", new DebugCommand(this));
         bbc.registerExecutor("version", new VersionCommand(this));
         //bbc.registerExecutor("update", new UpdateCommand(this));
@@ -217,11 +217,11 @@ public class BigBrother extends JavaPlugin {
         getCommand("bb").setExecutor(bbc);
     }
     
-    public boolean watching(Player player) {
+    public boolean watching(final Player player) {
         return watcher.watching(player);
     }
     
-    public boolean toggleWatch(String player) {
+    public boolean toggleWatch(final String player) {
         return watcher.toggleWatch(player);
     }
     
@@ -229,11 +229,11 @@ public class BigBrother extends JavaPlugin {
         return watcher.getWatchedPlayers();
     }
     
-    public boolean haveSeen(Player player) {
+    public boolean haveSeen(final Player player) {
         return watcher.haveSeen(player);
     }
     
-    public void watchPlayer(Player player) {
+    public void watchPlayer(final Player player) {
         watcher.watchPlayer(player);
     }
     
@@ -241,32 +241,32 @@ public class BigBrother extends JavaPlugin {
         return watcher.getUnwatchedPlayers();
     }
     
-    public boolean hasStick(Player player, ItemStack itemStack) {
+    public boolean hasStick(final Player player, final ItemStack itemStack) {
         return sticker.hasStick(player, itemStack);
     }
     
-    public void stick(Player player, Block block, boolean leftclick) {
+    public void stick(final Player player, final Block block, final boolean leftclick) {
         sticker.stick(player, block, leftclick);
     }
     
-    public boolean rightClickStick(Player player) {
+    public boolean rightClickStick(final Player player) {
         return sticker.rightClickStick(player);
     }
     
-    public boolean leftClickStick(Player player) {
+    public boolean leftClickStick(final Player player) {
         return sticker.leftClickStick(player);
     }
     
-    public void closeChestIfOpen(BBPlayerInfo pi) {
+    public void closeChestIfOpen(final BBPlayerInfo pi) {
         if (pi.hasOpenedChest()) {
             if (!ActionProvider.isDisabled(DeltaChest.class)) {
-                World world = pi.getOpenedChest().getWorld();
-                Block b = world.getBlockAt(pi.getOpenedChest().getX(), pi.getOpenedChest().getY(), pi.getOpenedChest().getZ());
+                final World world = pi.getOpenedChest().getWorld();
+                final Block b = world.getBlockAt(pi.getOpenedChest().getX(), pi.getOpenedChest().getY(), pi.getOpenedChest().getZ());
                 if (b.getState() instanceof Chest) {
-                    Chest chest = (Chest) b.getState();
-                    ItemStack[] orig = pi.getOldChestContents();
-                    ItemStack[] latest = ChestTools.getChestContents(chest);
-                    DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
+                    final Chest chest = (Chest) b.getState();
+                    final ItemStack[] orig = pi.getOldChestContents();
+                    final ItemStack[] latest = ChestTools.getChestContents(chest);
+                    final DeltaChest dc = new DeltaChest(pi.getName(), chest, orig, latest);
                     dc.send();
                 }
             }
@@ -286,8 +286,8 @@ public class BigBrother extends JavaPlugin {
      * @param block The block being removed
      * @param world The world in which this action occurred
      */
-    public void onBlockBroken(String player, Block block, String world) {
-        BrokenBlock bb = new BrokenBlock(player, block, world);
+    public void onBlockBroken(final String player, final Block block, final String world) {
+        final BrokenBlock bb = new BrokenBlock(player, block, world);
         bb.send();
     }
     
@@ -298,8 +298,8 @@ public class BigBrother extends JavaPlugin {
      * @param block The block being added
      * @param world The world in which this action occurred
      */
-    public void onBlockPlaced(String player, Block block, String world) {
-        PlacedBlock bb = new PlacedBlock(player, block, world);
+    public void onBlockPlaced(final String player, final Block block, final String world) {
+        final PlacedBlock bb = new PlacedBlock(player, block, world);
         bb.send();
     }
 }

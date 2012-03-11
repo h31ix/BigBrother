@@ -31,7 +31,6 @@ import me.taylorkelly.bigbrother.datasource.BBDB;
  * 
  */
 public abstract class ActionTable extends DBTable {
-    private static final int VERSION = 3;
     private static ActionTable instance = null;
     
     public static enum LegacyAction {
@@ -72,33 +71,21 @@ public abstract class ActionTable extends DBTable {
     }
     
     /**
-     * Recursive function.
-     */
-    private void checkForUpdates() {
-        int actionVersion = BBDB.getVersion(BBSettings.dataFolder, getActualTableName());
-        BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
-        
-        if (actionVersion < 3) {
-            drop();
-        }
-    }
-    
-    /**
      * Convert from legacy static BBDataBlock IDs (which correspond with an enum) to the new dynamically-allocated system.
      */
     private static void doActionIDUpdates() {
         BBLogging.warning("Preparing to update from legacy action IDs to the newer, dynamically-assigned ones.");
         BBLogging.warning("This WILL take a long time, so if you do not want to wait, please delete your bbdata table and restart.");
         
-        String tmpTable = "_TMP_" + BBDataTable.getInstance().getActualTableName();
-        String tbl = BBDataTable.getInstance().getTableName();
+        final String tmpTable = "_TMP_" + BBDataTable.getInstance().getActualTableName();
+        final String tbl = BBDataTable.getInstance().getTableName();
         // Create temporary table.
         BBDB.executeUpdate(BBDataTable.getInstance().getCreateSyntax().replace(tbl, tmpTable));
         
         // Begin looping through each legacy ID
-        for (LegacyAction act : LegacyAction.values()) {
+        for (final LegacyAction act : LegacyAction.values()) {
             // Locate an Action that corresponds to each ID, based on name.
-            int id = ActionProvider.findActionID(act.name().toLowerCase());
+            final int id = ActionProvider.findActionID(act.name().toLowerCase());
             if (id == 3) {
                 BBLogging.severe("Unable to locate an action that corresponds with " + act.name() + "!");
             } else {
@@ -140,7 +127,7 @@ public abstract class ActionTable extends DBTable {
      * @param act Action to add to the database
      * @return int ID of the Action
      */
-    public static int add(String pluginName, String actionName, int catID, String description) {
+    public static int add(final String pluginName, final String actionName, final int catID, final String description) {
         return getInstance().addAction(pluginName, actionName, catID, description);
     }
     
@@ -172,7 +159,7 @@ public abstract class ActionTable extends DBTable {
      * @param catID
      * @param actID
      */
-    public static void addForcedID(String pluginName, String actionName, int catID, int actID, String description) {
+    public static void addForcedID(final String pluginName, final String actionName, final int catID, final int actID, final String description) {
         getInstance().addActionForceID(pluginName, actionName, catID, actID, description);
     }
     
@@ -181,7 +168,7 @@ public abstract class ActionTable extends DBTable {
      */
     public static void performPostponedUpdates() {
         BBDB.getVersion(BBSettings.dataFolder, ActionTable.getInstance().getActualTableName());
-        int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
+        final int dataVersion = BBDB.getVersion(BBSettings.dataFolder, BBDataTable.getInstance().getActualTableName());
         
         if (dataVersion == 6) {
             doActionIDUpdates();

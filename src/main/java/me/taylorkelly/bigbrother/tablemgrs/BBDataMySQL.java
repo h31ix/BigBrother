@@ -71,8 +71,8 @@ public class BBDataMySQL extends BBDataTable {
      * @param tableName
      * @param requiredEngine
      */
-    private void checkDBEngine(String tableName, String requiredEngine, boolean optional) {
-        String engine = getEngine(tableName);
+    private void checkDBEngine(final String tableName, final String requiredEngine, final boolean optional) {
+        final String engine = getEngine(tableName);
         if (engine == null)
             return; // Error.
         if (!engine.equalsIgnoreCase(requiredEngine)) {
@@ -88,11 +88,11 @@ public class BBDataMySQL extends BBDataTable {
         }
     }
     
-    private void setEngine(String tableName, String engine) {
+    private void setEngine(final String tableName, final String engine) {
         BBDB.executeUpdate("ALTER TABLE " + tableName + " ENGINE = " + engine);
     }
     
-    private String getEngine(String tableName) {
+    private String getEngine(final String tableName) {
         ResultSet rs = null;
         Statement stmt = null;
         String engine = null;
@@ -105,7 +105,7 @@ public class BBDataMySQL extends BBDataTable {
             rs = stmt.getResultSet();
             rs.first();
             engine = rs.getString("Engine");
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Could not retreive table information.", e);
         } finally {
             BBDB.cleanup("getEngine", stmt, rs);
@@ -114,7 +114,7 @@ public class BBDataMySQL extends BBDataTable {
     }
     
     @Override
-    public String getCleanseAged(Long timeAgo, long deletesPerCleansing) {
+    public String getCleanseAged(final Long timeAgo, final long deletesPerCleansing) {
         String cleansql = "DELETE FROM `" + getTableName() + "` WHERE date < " + timeAgo;
         if (BBSettings.deletesPerCleansing > 0) {
             cleansql += " LIMIT " + Long.valueOf(BBSettings.deletesPerCleansing);
@@ -124,10 +124,10 @@ public class BBDataMySQL extends BBDataTable {
     }
     
     @Override
-    public int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException {
+    public int getCleanseByLimit(final Statement stmt, final Long maxRecords, final long deletesPerCleansing) throws SQLException {
         // Fucking MySQL and your lack of subquery LIMIT support.
         stmt.executeUpdate("CREATE TEMPORARY TABLE top_record SELECT id FROM " + getTableName() + " ORDER BY id DESC " + ((maxRecords > 0) ? "LIMIT " + maxRecords : ""));
-        int numUpdates = stmt.executeUpdate("DELETE FROM " + getTableName() + " WHERE id NOT IN (SELECT id FROM top_record) " + ((maxRecords > 0) ? "LIMIT " + deletesPerCleansing : ""));
+        final int numUpdates = stmt.executeUpdate("DELETE FROM " + getTableName() + " WHERE id NOT IN (SELECT id FROM top_record) " + ((maxRecords > 0) ? "LIMIT " + deletesPerCleansing : ""));
         stmt.executeUpdate("DROP TABLE top_record");
         
         return numUpdates;

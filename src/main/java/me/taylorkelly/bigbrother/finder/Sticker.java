@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 public class Sticker {
     //private Server server;
     
-    private WorldManager manager;
+    private final WorldManager manager;
     
     /**
      * Creates the Stick Controller
@@ -28,32 +28,32 @@ public class Sticker {
      * @param server The server
      * @param manager The world manager (for passing to sticks)
      */
-    public Sticker(Server server, WorldManager manager) {
+    public Sticker(final Server server, final WorldManager manager) {
         this.manager = manager;
     }
     
-    public void onPlayerJoin(Player player, BBPlayerInfo pi) {
+    public void onPlayerJoin(final Player player, final BBPlayerInfo pi) {
         if (pi.hasLog()) {
             pi.historyTool = new HistoryLog();
             player.sendMessage(BigBrother.premessage + "NOTE:  Your logs are still History Logs.  Type /bb done to change them back.");
         }
     }
     
-    public void removeLog(Player player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public void removeLog(final Player player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         //if (pi.hasLog()) {
         //    player.sendMessage(BigBrother.premessage + "... But you don't HAVE a History Log, you doofus.");
         //    return;
         //}
         player.sendMessage(BigBrother.premessage + "Turning off the History Log...");
-        HistoryLog c = new HistoryLog();
+        final HistoryLog c = new HistoryLog();
         c.disable(player);
         pi.historyTool = null;
         pi.setHasLog(false);
     }
     
-    public void giveLog(Player player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public void giveLog(final Player player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.hasLog()) {
             player.sendMessage(BigBrother.premessage + "You already have a History Log.");
             return;
@@ -69,8 +69,8 @@ public class Sticker {
      * @param player The player to get their stick info
      * @return the description, or null if the player has no stick
      */
-    public String descMode(Player player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public String descMode(final Player player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null)
             return pi.historyTool.getDescription();
         else
@@ -84,8 +84,8 @@ public class Sticker {
      * @param itemStack The item stack they're interacting with.
      * @return true if they're using their stick. false if not
      */
-    public boolean hasStick(Player player, ItemStack itemStack) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public boolean hasStick(final Player player, final ItemStack itemStack) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null)
             return pi.historyTool.usesStick(itemStack);
         return false;
@@ -98,12 +98,12 @@ public class Sticker {
      * @param block The block to get info about
      * @param leftclick
      */
-    private void blockInfo(Player player, Block block, boolean leftclick) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    private void blockInfo(final Player player, final Block block, final boolean leftclick) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null) {
-            StickMode mode = pi.historyTool;
-            ArrayList<String> info = mode.getInfoOnBlock(block, manager, leftclick);
-            for (String msg : info) {
+            final StickMode mode = pi.historyTool;
+            final ArrayList<String> info = mode.getInfoOnBlock(block, manager, leftclick);
+            for (final String msg : info) {
                 player.sendMessage(msg);
             }
         }
@@ -115,9 +115,9 @@ public class Sticker {
      * @param player The player who is using a HistoryTool
      * @param block The block that the stick is interacting with
      */
-    public void stick(Player player, Block block, boolean leftclick) {
+    public void stick(final Player player, final Block block, final boolean leftclick) {
         blockInfo(player, block, leftclick);
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null) {
             pi.historyTool.update(player);
         }
@@ -129,15 +129,15 @@ public class Sticker {
      * @param player The player to get info about
      * @return Whether they are holding a right click stick
      */
-    public boolean rightClickStick(Player player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public boolean rightClickStick(final Player player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null)
             return pi.historyTool.rightClickStick();
         return false;
     }
     
-    public boolean leftClickStick(Player player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public boolean leftClickStick(final Player player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         if (pi.historyTool != null)
             return pi.historyTool.leftClickStick();
         return false;

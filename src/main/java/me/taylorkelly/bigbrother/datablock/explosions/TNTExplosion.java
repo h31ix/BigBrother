@@ -8,20 +8,20 @@ import org.bukkit.block.Block;
 
 public class TNTExplosion extends Explosion {
     
-    public TNTExplosion(String player, Block block, String world) {
+    public TNTExplosion(final String player, final Block block, final String world) {
         super(player, block, world);
     }
     
-    public TNTExplosion(Block block, String world) {
+    public TNTExplosion(final Block block, final String world) {
         super(ENVIRONMENT, block, world);
     }
     
     @Override
-    protected Explosion newInstance(String player, Block block) {
+    protected Explosion newInstance(final String player, final Block block) {
         return new TNTExplosion(player, block, block.getWorld().getName());
     }
     
-    private TNTExplosion(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private TNTExplosion(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -31,7 +31,7 @@ public class TNTExplosion extends Explosion {
     public TNTExplosion() {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new TNTExplosion(pi, world, x, y, z, type, data);
     }
     

@@ -36,24 +36,24 @@ import org.bukkit.entity.Player;
 
 public class HistoryCommand implements CommandExecutor {
     
-    private BigBrother plugin;
-    private int ACTIONSPERPAGE = 5;
+    private final BigBrother plugin;
+    private final int ACTIONSPERPAGE = 5;
     public static final String invalidPlayer = ChatColor.RED + "[BBROTHER] Invalid Player.";
     
-    public HistoryCommand(BigBrother plugin) {
+    public HistoryCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
     // bb history n3x15 a:BlockPlaced w:hyperion pg:2
     
-    public boolean onCommand(CommandSender send, Command cmd, String cmdLabel, String[] args) {
-        Player player = (Player) send;
+    public boolean onCommand(final CommandSender send, final Command cmd, final String cmdLabel, final String[] args) {
+        final Player player = (Player) send;
         
         if (player.hasPermission(Permissions.INFO.id)) {
             List<Integer> acts = ActionProvider.getDefaultActions();
             String name = "Environment";
             int page = 1;
-            for (String arg : args) {
+            for (final String arg : args) {
                 if (arg.startsWith("a:")) {
                     acts = ActionProvider.parseActionSwitch(acts, arg.substring(2));
                 } else if (arg.startsWith("pg:")) {
@@ -63,12 +63,12 @@ public class HistoryCommand implements CommandExecutor {
                 }
             }
             
-            ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
-            int maxpages = history.size() / ACTIONSPERPAGE;
+            final ArrayList<Action> history = BBDataTable.getInstance().getPlayerHistory(player, name, plugin.worldManager);
+            final int maxpages = history.size() / ACTIONSPERPAGE;
             sendHeader(player, page, maxpages, history.size());
-            ArrayList<Action> trimmedHistory = new ArrayList<Action>();
+            final ArrayList<Action> trimmedHistory = new ArrayList<Action>();
             
-            int from = ((page - 1) * ACTIONSPERPAGE);
+            final int from = ((page - 1) * ACTIONSPERPAGE);
             
             // Sanity check to make sure we aren't going off into space...
             if (from > (history.size() - 1)) {
@@ -76,7 +76,7 @@ public class HistoryCommand implements CommandExecutor {
                 return true;
             }
             
-            int to = Math.min((page * ACTIONSPERPAGE) - 1, history.size() - 1);
+            final int to = Math.min((page * ACTIONSPERPAGE) - 1, history.size() - 1);
             
             if (history.isEmpty()) {
                 player.sendMessage(ChatColor.RED + "No edits found");
@@ -84,17 +84,17 @@ public class HistoryCommand implements CommandExecutor {
             } else {
                 trimmedHistory.addAll(history.subList(from, to));
                 
-                for (Action dataBlock : trimmedHistory) {
-                    Calendar cal = Calendar.getInstance();
-                    String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
-                    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+                for (final Action dataBlock : trimmedHistory) {
+                    final Calendar cal = Calendar.getInstance();
+                    final String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
+                    final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
                     cal.setTimeInMillis(dataBlock.date * 1000);
-                    StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
+                    final StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
                     msg.append(ChatColor.WHITE).append(" - ").append(ChatColor.YELLOW);
                     msg.append(dataBlock.player);
                     msg.append(ChatColor.WHITE);
                     msg.append(" ");
-                    String[] lines = dataBlock.toString().split("\n");
+                    final String[] lines = dataBlock.toString().split("\n");
                     msg.append(lines[0]);
                     player.sendMessage(msg.toString());
                     if (lines.length > 1) {
@@ -118,8 +118,8 @@ public class HistoryCommand implements CommandExecutor {
      * @param maxpages
      * @param size
      */
-    private void sendHeader(Player player, int page, int maxpages, int size) {
-        StringBuilder sb = new StringBuilder();
+    private void sendHeader(final Player player, final int page, final int maxpages, final int size) {
+        final StringBuilder sb = new StringBuilder();
         sb.append(BigBrother.premessage + " Player history (p. ");
         sb.append(ChatColor.WHITE);
         sb.append(page);

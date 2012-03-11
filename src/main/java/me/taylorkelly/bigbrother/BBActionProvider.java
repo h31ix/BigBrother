@@ -57,7 +57,7 @@ import me.taylorkelly.bigbrother.datablock.explosions.TNTExplosion;
  * 
  */
 public class BBActionProvider extends ActionProvider {
-    public BBActionProvider(BigBrother plugin) {
+    public BBActionProvider(final BigBrother plugin) {
         super(plugin);
         /*****************************************************
          * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING * ONLY ADD ITEMS TO THE BOTTOM OF THIS LIST! * FAILURE TO DO SO MAY RESULT IN LOST DATA DUE TO * REASSIGNED ACTION IDS! * WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNING *
@@ -110,7 +110,7 @@ public class BBActionProvider extends ActionProvider {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public Action getAction(final String actionName, final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         // Explosions are in their own package.
         String _package = "me.taylorkelly.bigbrother.datablock.";
         if (actionName.endsWith("Explosion")) {
@@ -121,14 +121,14 @@ public class BBActionProvider extends ActionProvider {
         Class<? extends BBAction> c = null;
         try {
             c = (Class<? extends BBAction>) Class.forName(_package + actionName);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             BBLogging.severe("Cannot find class " + _package + actionName + ": ", e);
             return null;
         }
         try {
-            Method meth = c.getMethod("getBBDataBlock", BBPlayerInfo.class, String.class, int.class, int.class, int.class, int.class, String.class);
+            final Method meth = c.getMethod("getBBDataBlock", BBPlayerInfo.class, String.class, int.class, int.class, int.class, int.class, String.class);
             return (Action) meth.invoke(null, player, world, x, y, z, type, data);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             BBLogging.severe("Error constructing " + _package + actionName + ": ", e);
         }
         return null;

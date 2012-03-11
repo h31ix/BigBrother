@@ -16,21 +16,21 @@ import org.bukkit.block.Sign;
  */
 public class SignDestroyed extends BBAction {
     
-    public SignDestroyed(String player, int type, byte data, Sign sign, String world) {
+    public SignDestroyed(final String player, final int type, final byte data, final Sign sign, final String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), type, Byte.toString(data) + "\u0060" + getText(sign));
     }
     
-    public SignDestroyed(String player, String[] lines, Block block) {
+    public SignDestroyed(final String player, final String[] lines, final Block block) {
         super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, 0 + "\u0060" + getText(lines));
     }
     
-    private static String getText(Sign sign) {
-        String[] lines = sign.getLines();
+    private static String getText(final Sign sign) {
+        final String[] lines = sign.getLines();
         return getText(lines);
     }
     
-    private static String getText(String[] lines) {
-        StringBuilder message = new StringBuilder();
+    private static String getText(final String[] lines) {
+        final StringBuilder message = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
             if (i < (lines.length - 1)) {
@@ -40,11 +40,11 @@ public class SignDestroyed extends BBAction {
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new SignDestroyed(pi, world, x, y, z, type, data);
     }
     
-    private SignDestroyed(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private SignDestroyed(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -56,23 +56,23 @@ public class SignDestroyed extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
-        World currWorld = wld;//server.getWorld(world);
+    public void rollback(final World wld) {
+        final World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         
         //Format is DATABYTE\u0060Line 1\u0060Line 2\u0060Line 3\u0060Line 4\u0060Line 5 
-        String[] lines = data.split("\u0060");
-        Block block = currWorld.getBlockAt(x, y, z);
+        final String[] lines = data.split("\u0060");
+        final Block block = currWorld.getBlockAt(x, y, z);
         block.setTypeId(type);
         try {
             block.setData(Byte.valueOf(lines[0]));
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             BBLogging.severe("Encountered invalid SignDestroyed block.  Note that this sign may be unrecoverable.  The bug that produces these blocks has been fixed.");
         }
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             for (int i = 1; i < (lines.length + 1); i++) {
                 sign.setLine(i - 1, lines[i]);
             }
@@ -82,8 +82,8 @@ public class SignDestroyed extends BBAction {
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -94,7 +94,7 @@ public class SignDestroyed extends BBAction {
     @Override
     public String toString() {
         String out = "changed a sign to read:";
-        String[] lines = data.split("\u0060");
+        final String[] lines = data.split("\u0060");
         for (int i = 1; i < lines.length; i++) {
             out += "\n" + lines[i];
         }

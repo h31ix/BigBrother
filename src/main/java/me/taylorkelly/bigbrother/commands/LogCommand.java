@@ -11,14 +11,14 @@ import org.bukkit.entity.Player;
 
 public class LogCommand implements CommandExecutor {
     
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public LogCommand(BigBrother plugin) {
+    public LogCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
-        Player player = (Player) send;
+    public boolean onCommand(final CommandSender send, final Command arg1, final String arg2, final String[] split) {
+        final Player player = (Player) send;
         if (player.hasPermission(Permissions.INFO.id)) {
             if (split.length == 1) {
                 plugin.sticker.giveLog(player);

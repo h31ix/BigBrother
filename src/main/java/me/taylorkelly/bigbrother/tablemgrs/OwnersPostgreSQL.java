@@ -38,13 +38,13 @@ public class OwnersPostgreSQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#setBlockOwner(int, int, int, int, int)
      */
     @Override
-    protected void setBlockOwner(int world, int x, int y, int z, int playerID) {
+    protected void setBlockOwner(final int world, final int x, final int y, final int z, final int playerID) {
         if (!trySetBlockOwnerUpdate(world, x, y, z, playerID)) {
             setBlockOwnerInsert(world, x, y, z, playerID);
         }
     }
     
-    protected boolean trySetBlockOwnerUpdate(int world, int x, int y, int z, int playerID) {
+    protected boolean trySetBlockOwnerUpdate(final int world, final int x, final int y, final int z, final int playerID) {
         PreparedStatement stmt = null;
         try {
             stmt = BBDB.prepare("UPDATE " + getTableName() + " SET usrID=? WHERE wldID=? AND x=? AND y=? AND z=?");
@@ -54,7 +54,7 @@ public class OwnersPostgreSQL extends OwnersTable {
             stmt.setInt(4, y);
             stmt.setInt(5, z);
             return stmt.execute();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersPostgreSQL: ", e);
         } finally {
             BBDB.cleanup("OwnersPostgreSQL.setBlockOwner", stmt, null);
@@ -62,7 +62,7 @@ public class OwnersPostgreSQL extends OwnersTable {
         return false;
     }
     
-    protected void setBlockOwnerInsert(int world, int x, int y, int z, int playerID) {
+    protected void setBlockOwnerInsert(final int world, final int x, final int y, final int z, final int playerID) {
         PreparedStatement stmt = null;
         try {
             stmt = BBDB.prepare("INSERT INTO " + getTableName() + " (wldID,x,y,z,usrID) VALUES (?,?,?,?,?)");
@@ -72,7 +72,7 @@ public class OwnersPostgreSQL extends OwnersTable {
             stmt.setInt(4, z);
             stmt.setInt(5, playerID);
             stmt.execute();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersPostgreSQL: ", e);
         } finally {
             BBDB.cleanup("OwnersPostgreSQL.setBlockOwner", stmt, null);
@@ -85,7 +85,7 @@ public class OwnersPostgreSQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#getBlockOwner(int, int, int, int)
      */
     @Override
-    protected int getBlockOwner(int world, int x, int y, int z) {
+    protected int getBlockOwner(final int world, final int x, final int y, final int z) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -97,7 +97,7 @@ public class OwnersPostgreSQL extends OwnersTable {
             rs = stmt.executeQuery();
             if (rs.next())
                 return rs.getInt("usrID");
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error when performing setBlockOwner in OwnersPostgreSQL: ", e);
         } finally {
             BBDB.cleanup("OwnersPostgreSQL.setBlockOwner", stmt, rs);
@@ -132,7 +132,7 @@ public class OwnersPostgreSQL extends OwnersTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.OwnersTable#removeBlockOwner(int, int, int, int)
      */
     @Override
-    protected void removeBlockOwner(int wldID, int x, int y, int z) {
+    protected void removeBlockOwner(final int wldID, final int x, final int y, final int z) {
         BBDB.executeUpdate("DELETE FROM " + getTableName() + " WHERE wldID=? AND x=? AND y=? AND z=?", wldID, x, y, z);
     }
 }

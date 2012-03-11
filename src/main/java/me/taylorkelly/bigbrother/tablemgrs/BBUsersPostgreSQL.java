@@ -22,10 +22,10 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
      * @see BBUsersMySQL changed quotes
      */
     @Override
-    public BBPlayerInfo getUserFromDB(String name) {
+    public BBPlayerInfo getUserFromDB(final String name) {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE \"name\"=?";
+            final String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE \"name\"=?";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql, name);
             
@@ -34,7 +34,7 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
             
             return new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
             
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error trying to find the user `" + name + "`.", e);
         } finally {
             BBDB.cleanup("BBUsersMySQL.getUserFromDB(string)", null, rs);
@@ -43,10 +43,10 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
     }
     
     @Override
-    public BBPlayerInfo getUserFromDB(int id) {
+    public BBPlayerInfo getUserFromDB(final int id) {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE \"id\"=?;";
+            final String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE \"id\"=?;";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql, id);
             
@@ -55,7 +55,7 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
             
             return new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
             
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't find user #" + id + ".", e);
         } finally {
             BBDB.cleanup("BBUsersMySQL.getUserFromDB(int)", null, rs);
@@ -64,13 +64,13 @@ public class BBUsersPostgreSQL extends BBUsersMySQL {
     }
     
     @Override
-    protected void do_addOrUpdatePlayer(BBPlayerInfo pi) {
+    protected void do_addOrUpdatePlayer(final BBPlayerInfo pi) {
         if (pi.getNew() && (getUserFromDB(pi.getName()) == null)) {
-            String sql = "INSERT INTO " + getTableName() + " (name,flags) VALUES (?,?)";
+            final String sql = "INSERT INTO " + getTableName() + " (name,flags) VALUES (?,?)";
             BBDB.executeUpdate(sql, pi.getName(), pi.getFlags());
             
         } else {
-            String sql = "UPDATE " + getTableName() + " SET flags = ? WHERE id=?";
+            final String sql = "UPDATE " + getTableName() + " SET flags = ? WHERE id=?";
             BBDB.executeUpdate(sql, pi.getFlags(), pi.getID());
         }
     }

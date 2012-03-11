@@ -14,14 +14,14 @@ public class PlacedBlock extends Action {
     
     private ArrayList<BBAction> bystanders;
     
-    public PlacedBlock(String player, Block block, String world) {
+    public PlacedBlock(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         // TODO snow check once it gets fixed
         // TODO Water/Lava Check
     }
     
-    public PlacedBlock(String player, String world, int x, int y, int z, int type, byte data) {
+    public PlacedBlock(final String player, final String world, final int x, final int y, final int z, final int type, final byte data) {
         super(player, world, x, y, z, type, Byte.toString(data));
         bystanders = new ArrayList<BBAction>();
         
@@ -29,13 +29,13 @@ public class PlacedBlock extends Action {
     
     @Override
     public void send() {
-        for (BBAction block : bystanders) {
+        for (final BBAction block : bystanders) {
             block.send();
         }
         super.send();
     }
     
-    private PlacedBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private PlacedBlock(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -47,8 +47,8 @@ public class PlacedBlock extends Action {
     }
     
     @Override
-    public void rollback(World wld) {
-        World currWorld = wld;//server.getWorld(world);
+    public void rollback(final World wld) {
+        final World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -57,20 +57,20 @@ public class PlacedBlock extends Action {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
         if ((type != 51) || BBSettings.restoreFire) {
-            World currWorld = server.getWorld(world);
+            final World currWorld = server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
             
-            byte blockData = Byte.parseByte(data);
+            final byte blockData = Byte.parseByte(data);
             currWorld.getBlockAt(x, y, z).setTypeId(type);
             currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
     
-    public static Action getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static Action getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new PlacedBlock(pi, world, x, y, z, type, data);
     }
     

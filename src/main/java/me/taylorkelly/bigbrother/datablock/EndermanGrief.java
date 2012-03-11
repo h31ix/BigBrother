@@ -51,7 +51,7 @@ public class EndermanGrief extends Action {
      * @param type
      * @param data
      */
-    public EndermanGrief(String player, String world, int x, int y, int z, int type, String data) {
+    public EndermanGrief(final String player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
         // TODO Auto-generated constructor stub
     }
@@ -65,7 +65,7 @@ public class EndermanGrief extends Action {
      * @param type
      * @param data
      */
-    public EndermanGrief(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public EndermanGrief(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
         // TODO Auto-generated constructor stub
     }
@@ -76,7 +76,7 @@ public class EndermanGrief extends Action {
      * @see me.taylorkelly.bigbrother.datablock.Action#rollback(org.bukkit.World)
      */
     @Override
-    public void rollback(World world) {
+    public void rollback(final World world) {
         // TODO Auto-generated method stub
         
     }
@@ -87,7 +87,7 @@ public class EndermanGrief extends Action {
      * @see me.taylorkelly.bigbrother.datablock.Action#redo(org.bukkit.Server)
      */
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
         // TODO Auto-generated method stub
         
     }
@@ -129,7 +129,7 @@ public class EndermanGrief extends Action {
      * @param entity
      * @param block
      */
-    public static void createPickup(Entity entity, Block block) {
+    public static void createPickup(final Entity entity, final Block block) {
         // TODO Auto-generated method stub
         
     }
@@ -139,7 +139,7 @@ public class EndermanGrief extends Action {
      * @param location
      * @param type
      */
-    public static void createPlace(Entity entity, Location location, Material type) {
+    public static void createPlace(final Entity entity, final Location location, final Material type) {
         // TODO Auto-generated method stub
         
     }

@@ -38,7 +38,7 @@ public class Finder {
     private final Plugin plugin;
     private static List<Integer> allowedActions;
     
-    public Finder(Location location, List<World> worlds, WorldManager manager, Plugin plugin, Collection<Integer> actions) {
+    public Finder(final Location location, final List<World> worlds, final WorldManager manager, final Plugin plugin, final Collection<Integer> actions) {
         this.manager = manager;
         this.location = location;
         radius = BBSettings.defaultSearchRadius;
@@ -51,29 +51,29 @@ public class Finder {
         }
     }
     
-    public void setRadius(double radius) {
+    public void setRadius(final double radius) {
         this.radius = (int) radius;
     }
     
-    public void addReciever(Player player) {
+    public void addReciever(final Player player) {
         players.add(player);
     }
     
     public void find() {
-        for (Player player : players) {
+        for (final Player player : players) {
             player.sendMessage(ChatColor.AQUA + "Searching...");
         }
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new FinderRunner(plugin, location, radius, manager, players));
     }
     
-    public void find(String player) {
-        for (Player reciept : players) {
+    public void find(final String player) {
+        for (final Player reciept : players) {
             reciept.sendMessage(ChatColor.AQUA + "Searching...");
         }
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new FinderRunner(plugin, player, location, radius, manager, players));
     }
     
-    public void find(ArrayList<String> players) {
+    public void find(final ArrayList<String> players) {
         // TODO find around multiple players
     }
     
@@ -95,7 +95,7 @@ public class Finder {
             this.players = players;
         }
         
-        public FinderRunner(Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
+        public FinderRunner(final Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
             this(plugin, null, location, radius, manager, players);
         }
         
@@ -112,7 +112,7 @@ public class Finder {
     private static final void mysqlFind(final Plugin plugin, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
+        final HashMap<BBPlayerInfo, Integer> modifications = new HashMap<BBPlayerInfo, Integer>();
         try {
             // TODO maybe more customizable actions?
             
@@ -136,14 +136,14 @@ public class Finder {
             
             int size = 0;
             while (rs.next()) {
-                BBPlayerInfo player = BBUsersTable.getInstance().getUserByID(rs.getInt("player"));
-                int mods = rs.getInt("modifications");
+                final BBPlayerInfo player = BBUsersTable.getInstance().getUserByID(rs.getInt("player"));
+                final int mods = rs.getInt("modifications");
                 modifications.put(player, mods);
                 size++;
             }
             if (size > 0) {
-                StringBuilder playerList = new StringBuilder();
-                for (Entry<BBPlayerInfo, Integer> entry : modifications.entrySet()) {
+                final StringBuilder playerList = new StringBuilder();
+                for (final Entry<BBPlayerInfo, Integer> entry : modifications.entrySet()) {
                     if (entry.getKey() != null) {
                         playerList.append(entry.getKey().getName());
                         playerList.append(" (");
@@ -155,17 +155,17 @@ public class Finder {
                     playerList.delete(playerList.lastIndexOf(","), playerList.length());
                 }
                 //TODO Put into sync'd runnable
-                for (Player player : players) {
+                for (final Player player : players) {
                     player.sendMessage(BigBrother.premessage + playerList.length() + " player(s) have modified this area:");
                     player.sendMessage(playerList.toString());
                 }
             } else {
-                for (Player player : players) {
+                for (final Player player : players) {
                     player.sendMessage(BigBrother.premessage + "No modifications in this area.");
                 }
                 
             }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
             BBDB.cleanup("Find SQL", ps, rs);
@@ -178,7 +178,7 @@ public class Finder {
     private static String getActionString() {
         String act = "action IN(";
         boolean first = true;
-        for (int actID : allowedActions) {
+        for (final int actID : allowedActions) {
             if (first) {
                 first = false;
             } else {
@@ -191,13 +191,13 @@ public class Finder {
     
     private static final void mysqlFind(final Plugin plugin, final String playerName, final Location location, final int radius, final WorldManager manager, final ArrayList<Player> players) {
         
-        BBPlayerInfo hunted = BBUsersTable.getInstance().getUserByName(playerName);
+        final BBPlayerInfo hunted = BBUsersTable.getInstance().getUserByName(playerName);
         
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        HashMap<ActionCategory, HashMap<Integer, Integer>> mods = new HashMap<ActionCategory, HashMap<Integer, Integer>>();
-        for (ActionCategory ac : ActionCategory.values()) {
+        final HashMap<ActionCategory, HashMap<Integer, Integer>> mods = new HashMap<ActionCategory, HashMap<Integer, Integer>>();
+        for (final ActionCategory ac : ActionCategory.values()) {
             mods.put(ac, new HashMap<Integer, Integer>());
         }
         
@@ -223,9 +223,9 @@ public class Finder {
             
             int size = 0;
             while (rs.next()) {
-                ActionData dat = ActionProvider.Actions.get(rs.getInt("action"));
-                int type = rs.getInt("type");
-                HashMap<Integer, Integer> wc = mods.get(dat.category);
+                final ActionData dat = ActionProvider.Actions.get(rs.getInt("action"));
+                final int type = rs.getInt("type");
+                final HashMap<Integer, Integer> wc = mods.get(dat.category);
                 if (wc.containsKey(type)) {
                     wc.put(type, wc.get(type) + 1);
                     size++;
@@ -237,17 +237,17 @@ public class Finder {
                 mods.put(dat.category, wc);
             }
             if (size > 0) {
-                for (Player player : players) {
+                for (final Player player : players) {
                     player.sendMessage(BigBrother.premessage + playerName + " has made " + size + " modifications");
-                    for (ActionCategory category : ActionCategory.values()) {
+                    for (final ActionCategory category : ActionCategory.values()) {
                         if (mods.get(category).size() == 0) {
                             continue;
                         }
-                        StringBuilder list = new StringBuilder();
+                        final StringBuilder list = new StringBuilder();
                         list.append(ChatColor.AQUA.toString());
                         list.append(category + ": ");
                         list.append(ChatColor.WHITE.toString());
-                        for (Entry<Integer, Integer> entry : mods.get(category).entrySet()) {
+                        for (final Entry<Integer, Integer> entry : mods.get(category).entrySet()) {
                             list.append(Material.getMaterial(entry.getKey()));
                             list.append(" (");
                             list.append(entry.getValue());
@@ -260,12 +260,12 @@ public class Finder {
                     }
                 }
             } else {
-                for (Player player : players) {
+                for (final Player player : players) {
                     player.sendMessage(BigBrother.premessage + playerName + " has no modifications in this area.");
                 }
                 
             }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
             BBDB.cleanup("Find SQL", ps, rs);

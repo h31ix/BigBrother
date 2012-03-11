@@ -43,21 +43,21 @@ public abstract class ActionProvider {
         public ActionCategory category;
         private ActionProvider provider;
         
-        public ActionData(Plugin plugin, ActionProvider ap, Action action) {
+        public ActionData(final Plugin plugin, final ActionProvider ap, final Action action) {
             this(plugin.getDescription().getName(), action.getCategory(), action.getName());
             this.plugin = plugin;
             provider = ap;
             this.action = action;
         }
         
-        public ActionData(String plugin, ActionCategory category, String action) {
+        public ActionData(final String plugin, final ActionCategory category, final String action) {
             pluginName = plugin;
             this.category = category;
             actionName = action;
         }
         
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (o instanceof ActionData)
                 return ((ActionData) o).pluginName.equalsIgnoreCase(pluginName) && ((ActionData) o).actionName.equalsIgnoreCase(actionName) && (((ActionData) o).category == category);
             return false;
@@ -83,14 +83,14 @@ public abstract class ActionProvider {
      */
     public abstract Action getAction(String actionName, BBPlayerInfo player, String world, int x, int y, int z, int type, String data);
     
-    public ActionProvider(Plugin p) {
+    public ActionProvider(final Plugin p) {
         plugin = p;
     }
     
     public final void disable() {
-        Map<Integer, ActionData> copy = new HashMap<Integer, ActionData>();
+        final Map<Integer, ActionData> copy = new HashMap<Integer, ActionData>();
         copy.putAll(Actions);
-        for (Entry<Integer, ActionData> e : copy.entrySet()) {
+        for (final Entry<Integer, ActionData> e : copy.entrySet()) {
             if (e.getValue().plugin == plugin) {
                 Actions.remove(e.getKey());
             }
@@ -104,8 +104,8 @@ public abstract class ActionProvider {
      * @param provider
      * @param action
      */
-    protected final void registerAction(Plugin plugin, ActionProvider provider, Action action) {
-        ActionData dat = new ActionData(plugin, provider, action);
+    protected final void registerAction(final Plugin plugin, final ActionProvider provider, final Action action) {
+        final ActionData dat = new ActionData(plugin, provider, action);
         int id = findActionID(action.getName());
         if (id == -1) {
             id = ActionTable.add(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), action.getDescription());
@@ -123,8 +123,8 @@ public abstract class ActionProvider {
      * @param action
      * @return
      */
-    public static int getActionID(Action action) {
-        for (Entry<Integer, ActionData> e : Actions.entrySet()) {
+    public static int getActionID(final Action action) {
+        for (final Entry<Integer, ActionData> e : Actions.entrySet()) {
             if (e.getValue().action.getName().equalsIgnoreCase(action.getName()))
                 return e.getKey();
         }
@@ -145,10 +145,10 @@ public abstract class ActionProvider {
      * @param data
      * @return
      */
-    public static Action findAndProvide(int actionID, BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public static Action findAndProvide(final int actionID, final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         if (!Actions.containsKey(actionID))
             return null;
-        ActionProvider provider = Actions.get(actionID).provider;
+        final ActionProvider provider = Actions.get(actionID).provider;
         if (provider == null)
             return null;
         return provider.getAction(Actions.get(actionID).actionName, player, world, x, y, z, type, data);
@@ -160,8 +160,8 @@ public abstract class ActionProvider {
      * @param actionName
      * @return
      */
-    public static int findActionID(String actionName) {
-        for (Entry<Integer, ActionData> e : Actions.entrySet()) {
+    public static int findActionID(final String actionName) {
+        for (final Entry<Integer, ActionData> e : Actions.entrySet()) {
             if (e.getValue().actionName.equalsIgnoreCase(actionName))
                 return e.getKey();
         }
@@ -176,8 +176,8 @@ public abstract class ActionProvider {
      * @param deltaChest
      * @param i
      */
-    protected void registerActionForceID(BigBrother plugin, BBActionProvider provider, Action action, int id) {
-        ActionData dat = new ActionData(plugin, provider, action);
+    protected void registerActionForceID(final BigBrother plugin, final BBActionProvider provider, final Action action, final int id) {
+        final ActionData dat = new ActionData(plugin, provider, action);
         if (!Actions.containsKey(id)) {
             ActionTable.addForcedID(plugin.getDescription().getName(), action.getName(), action.getCategory().ordinal(), id, action.getDescription());
             Actions.put(id, dat);
@@ -190,7 +190,7 @@ public abstract class ActionProvider {
     /**
      * For loading the disabledActions list.
      */
-    public static void loadDisabled(BetterConfig cfg) {
+    public static void loadDisabled(final BetterConfig cfg) {
         List<String> actions;
         if (cfg.getValue("general.disabled-actions") == null) {
             actions = new ArrayList<String>();
@@ -256,8 +256,8 @@ public abstract class ActionProvider {
         } else {
             actions = cfg.getStringList("general.disabled-actions", new ArrayList<String>());
         }
-        for (String act : actions) {
-            int id = ActionProvider.findActionID(act);
+        for (final String act : actions) {
+            final int id = ActionProvider.findActionID(act);
             if (id == -1) {
                 BBLogging.severe(String.format("Cannot disable action \"%s\", because it doesn't exist!", act));
             } else {
@@ -270,11 +270,11 @@ public abstract class ActionProvider {
      * @param class1
      * @return
      */
-    public static boolean isDisabled(Class<? extends Action> c) {
+    public static boolean isDisabled(final Class<? extends Action> c) {
         // TODO Auto-generated method stub
         try {
             return c.newInstance().isDisabled();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             BBLogging.severe("When determining status of " + c.getName() + ":", e);
         }
         return true;
@@ -284,7 +284,7 @@ public abstract class ActionProvider {
      * @param actID
      * @return
      */
-    public static String findActionName(int actID) {
+    public static String findActionName(final int actID) {
         if (!Actions.containsKey(actID))
             return "UNKNOWN ACTION #" + actID;
         return Actions.get(actID).actionName;
@@ -296,11 +296,11 @@ public abstract class ActionProvider {
      * @author N3X15
      * @return
      */
-    public static List<Integer> parseActionSwitch(List<Integer> acts, String actstr) {
+    public static List<Integer> parseActionSwitch(List<Integer> acts, final String actstr) {
         if (acts == null) {
             acts = getDefaultActions();
         }
-        for (String act : actstr.split(",")) {
+        for (final String act : actstr.split(",")) {
             if (!act.startsWith("!") && (acts.size() == 0)) {
                 acts.clear();
             }
@@ -324,8 +324,8 @@ public abstract class ActionProvider {
      * @return
      */
     public static List<Integer> getDefaultActions() {
-        List<Integer> acts = new ArrayList<Integer>();
-        for (int actID : Actions.keySet()) {
+        final List<Integer> acts = new ArrayList<Integer>();
+        for (final int actID : Actions.keySet()) {
             // Not disabled in the config and not hidden.
             if (!disabledActions.contains(actID) && !Actions.get(actID).category.equals(ActionCategory.HIDDEN)) {
                 acts.add(actID);

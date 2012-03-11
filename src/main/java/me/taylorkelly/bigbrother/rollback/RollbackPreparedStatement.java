@@ -24,8 +24,8 @@ public abstract class RollbackPreparedStatement {
         return instance;
     }
     
-    public String create(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS `world`");
+    public String create(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS `world`");
         statement.append(" FROM");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata ");
         statement.append(", " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds ");
@@ -91,8 +91,8 @@ public abstract class RollbackPreparedStatement {
         return statement.toString();
     }
     
-    private StringBuilder getBlockString(ArrayList<Integer> blockTypes) {
-        StringBuilder ret = new StringBuilder("type IN(");
+    private StringBuilder getBlockString(final ArrayList<Integer> blockTypes) {
+        final StringBuilder ret = new StringBuilder("type IN(");
         for (int i = 0; i < blockTypes.size(); i++) {
             ret.append("'");
             ret.append(blockTypes.get(i));
@@ -105,8 +105,8 @@ public abstract class RollbackPreparedStatement {
         return ret;
     }
     
-    private StringBuilder getPlayerString(ArrayList<String> players) {
-        StringBuilder ret = new StringBuilder("player IN (");
+    private StringBuilder getPlayerString(final ArrayList<String> players) {
+        final StringBuilder ret = new StringBuilder("player IN (");
         for (int i = 0; i < players.size(); i++) {
             ret.append("'");
             ret.append(BBUsersTable.getInstance().getUserByName(players.get(i)).getID());
@@ -120,10 +120,10 @@ public abstract class RollbackPreparedStatement {
     }
     
     // @QA-Tested andrewkm  6/12/2011
-    private StringBuilder getActionString(Rollback rollback) {
-        StringBuilder ret = new StringBuilder("action IN(");
+    private StringBuilder getActionString(final Rollback rollback) {
+        final StringBuilder ret = new StringBuilder("action IN(");
         boolean first = true;
-        for (Integer act : rollback.allowedActions) {
+        for (final Integer act : rollback.allowedActions) {
             if (first) {
                 first = false;
             } else {
@@ -137,8 +137,8 @@ public abstract class RollbackPreparedStatement {
         return ret;
     }
     
-    public String update(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("UPDATE ");
+    public String update(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata");
         statement.append(" SET rbacked = '1'");
         statement.append(" WHERE ");
@@ -203,8 +203,8 @@ public abstract class RollbackPreparedStatement {
         return statement.toString();
     }
     
-    public String undoStatement(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("UPDATE ");
+    public String undoStatement(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata");
         statement.append(" SET rbacked = '0'");
         statement.append(" WHERE ");

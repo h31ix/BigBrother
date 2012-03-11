@@ -32,13 +32,13 @@ public class ActionSender {
     private static int sendingTask;
     private static BigBrother plugin;
     
-    public static void shutdown(BigBrother bb) {
+    public static void shutdown(final BigBrother bb) {
         if (sendingTask >= 0) {
             bb.getServer().getScheduler().cancelTask(sendingTask);
         }
     }
     
-    public static void initialize(BigBrother bb, File dataFolder, WorldManager manager) {
+    public static void initialize(final BigBrother bb, final File dataFolder, final WorldManager manager) {
         plugin = bb;
         sendingTask = bb.getServer().getScheduler().scheduleAsyncRepeatingTask(bb, new SendingTask(dataFolder, manager), BBSettings.sendDelay * 30, BBSettings.sendDelay * 30);
         if (sendingTask < 0) {
@@ -46,23 +46,23 @@ public class ActionSender {
         }
     }
     
-    public static void offer(Action dataBlock) {
+    public static void offer(final Action dataBlock) {
         SENDING.add(dataBlock);
     }
     
-    private static boolean sendBlocksSQL(Collection<Action> collection, WorldManager manager) {
+    private static boolean sendBlocksSQL(final Collection<Action> collection, final WorldManager manager) {
         // Try to refactor most of these into the table managers.
         
         // Send a heartbeat after sending blocks.
-        Heartbeat hb = new Heartbeat(plugin);
+        final Heartbeat hb = new Heartbeat(plugin);
         hb.send();
         PreparedStatement ps = null;
-        ResultSet rs = null;
+        final ResultSet rs = null;
         try {
-            String statementSql = BBDataTable.getInstance().getPreparedDataBlockStatement();
+            final String statementSql = BBDataTable.getInstance().getPreparedDataBlockStatement();
             BBLogging.debug(statementSql);
             ps = BBDB.prepare(statementSql);
-            for (Action block : collection) {
+            for (final Action block : collection) {
                 if (BBSettings.worldExclusionList.contains(block.world)) {
                     continue;
                 }
@@ -87,7 +87,7 @@ public class ActionSender {
             ps.executeBatch();
             BBDB.commit();
             return true;
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("Data Insert SQL Exception when sending blocks", ex);
             BBLogging.severe("Possible cause of previous SQLException: ", ex.getNextException());
             return false;
@@ -96,17 +96,17 @@ public class ActionSender {
         }
     }
     
-    private static void sendBlocksFlatFile(File dataFolder, Collection<Action> collection) {
-        File dir = new File(dataFolder, "logs");
+    private static void sendBlocksFlatFile(final File dataFolder, final Collection<Action> collection) {
+        final File dir = new File(dataFolder, "logs");
         if (!dir.exists()) {
             dir.mkdir();
         }
         BufferedWriter bwriter = null;
         FileWriter fwriter = null;
         try {
-            for (Action block : collection) {
-                File file = new File(dir, fixName(block.player.getName()) + ".log");
-                StringBuilder builder = new StringBuilder(Long.toString(System.currentTimeMillis()));
+            for (final Action block : collection) {
+                final File file = new File(dir, fixName(block.player.getName()) + ".log");
+                final StringBuilder builder = new StringBuilder(Long.toString(System.currentTimeMillis()));
                 builder.append(" - ");
                 builder.append(block.toString());
                 builder.append(" ");
@@ -130,7 +130,7 @@ public class ActionSender {
                 bwriter.close();
                 fwriter.close();
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             BBLogging.severe("Data Insert IO Exception", e);
         } finally {
             try {
@@ -140,22 +140,22 @@ public class ActionSender {
                 if (fwriter != null) {
                     fwriter.close();
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 BBLogging.severe("Data Insert IO Exception (on close)", e);
             }
         }
     }
     
-    public static String fixName(String player) {
+    public static String fixName(final String player) {
         return player.replace(".", "").replace(":", "").replace("<", "").replace(">", "").replace("*", "").replace("\\", "").replace("/", "").replace("?", "").replace("\"", "").replace("|", "");
     }
     
     private static class SendingTask implements Runnable {
         
-        private File dataFolder;
-        private WorldManager manager;
+        private final File dataFolder;
+        private final WorldManager manager;
         
-        public SendingTask(File dataFolder, WorldManager manager) {
+        public SendingTask(final File dataFolder, final WorldManager manager) {
             this.dataFolder = dataFolder;
             this.manager = manager;
         }
@@ -163,10 +163,10 @@ public class ActionSender {
         public void run() {
             if (SENDING.size() == 0)
                 return;
-            Collection<Action> collection = new ArrayList<Action>();
+            final Collection<Action> collection = new ArrayList<Action>();
             SENDING.drainTo(collection);
             
-            boolean worked = sendBlocksSQL(collection, manager);
+            final boolean worked = sendBlocksSQL(collection, manager);
             if (BBSettings.flatLog) {
                 sendBlocksFlatFile(dataFolder, collection);
             }

@@ -8,23 +8,23 @@ import org.bukkit.block.Block;
 
 public class DoorOpen extends BBAction {
     
-    public DoorOpen(String player, Block door, String world) {
+    public DoorOpen(final String player, final Block door, final String world) {
         super(player, world, door.getX(), door.getY(), door.getZ(), 324, door.getData() + "");
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new DoorOpen(pi, world, x, y, z, type, data);
     }
     
-    private DoorOpen(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private DoorOpen(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

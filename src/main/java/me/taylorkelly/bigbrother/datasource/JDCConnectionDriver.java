@@ -21,9 +21,9 @@ public class JDCConnectionDriver implements Driver {
     public static final String URL_PREFIX = "jdbc:jdc:";
     private static final int MAJOR_VERSION = 1;
     private static final int MINOR_VERSION = 0;
-    private ConnectionService pool;
+    private final ConnectionService pool;
     
-    public JDCConnectionDriver(String driver, String url, String user, String password) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
+    public JDCConnectionDriver(final String driver, final String url, final String user, final String password) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
         DriverManager.registerDriver(this);
         Class.forName(driver).newInstance();
         pool = new ConnectionService(url, user, password);
@@ -33,13 +33,13 @@ public class JDCConnectionDriver implements Driver {
         pool.closeConnections();
     }
     
-    public Connection connect(String url, Properties props) throws SQLException {
+    public Connection connect(final String url, final Properties props) throws SQLException {
         if (!url.startsWith(JDCConnectionDriver.URL_PREFIX))
             return null;
         return pool.getConnection();
     }
     
-    public boolean acceptsURL(String url) {
+    public boolean acceptsURL(final String url) {
         return url.startsWith(JDCConnectionDriver.URL_PREFIX);
     }
     
@@ -51,7 +51,7 @@ public class JDCConnectionDriver implements Driver {
         return JDCConnectionDriver.MINOR_VERSION;
     }
     
-    public DriverPropertyInfo[] getPropertyInfo(String str, Properties props) {
+    public DriverPropertyInfo[] getPropertyInfo(final String str, final Properties props) {
         return new DriverPropertyInfo[0];
     }
     

@@ -8,13 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class WatchCommand implements CommandExecutor {
-    private BigBrother plugin;
-    
-    public WatchCommand(BigBrother bigBrother) {
-        plugin = bigBrother;
+    public WatchCommand(final BigBrother bigBrother) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         player.sendMessage(ChatColor.RED + "Watch/unwatch is not used anymore");
         
         return true;

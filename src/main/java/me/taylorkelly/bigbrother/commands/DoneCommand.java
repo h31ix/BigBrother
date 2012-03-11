@@ -10,15 +10,15 @@ import org.bukkit.entity.Player;
 
 public class DoneCommand implements CommandExecutor {
     
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public DoneCommand(BigBrother plugin) {
+    public DoneCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(final CommandSender send, final Command arg1, final String arg2, final String[] arg3) {
         
-        Player player = (Player) send;
+        final Player player = (Player) send;
         if (player.hasPermission(Permissions.INFO.id)) {
             plugin.sticker.removeLog(player);
         } else {

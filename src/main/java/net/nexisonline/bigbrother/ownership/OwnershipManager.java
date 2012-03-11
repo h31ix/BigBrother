@@ -54,7 +54,7 @@ public class OwnershipManager {
         /**
          * @param id
          */
-        public OwnershipData(int id) {
+        public OwnershipData(final int id) {
             owner = id;
             time = System.currentTimeMillis();
         }
@@ -70,7 +70,7 @@ public class OwnershipManager {
     private static BigBrother plugin;
     private static HashMap<Location, OwnershipData> ownershipMap = new HashMap<Location, OwnershipData>();
     
-    public static void init(BigBrother plg) {
+    public static void init(final BigBrother plg) {
         plugin = plg;
     }
     
@@ -82,19 +82,19 @@ public class OwnershipManager {
      * @param z Z position of the block
      * @return Owner, or Environment if unknown.
      */
-    public static BBPlayerInfo findOwner(Block b) {
+    public static BBPlayerInfo findOwner(final Block b) {
         if (!BBSettings.storeOwners)
             return BBPlayerInfo.ENVIRONMENT;
         
-        Location loc = b.getLocation();
+        final Location loc = b.getLocation();
         int ownerID = -1;
         if (ownershipMap.containsKey(loc)) {
             ownerID = getFromMap(loc);
         } else {
-            int wldID = plugin.worldManager.getWorld(b.getWorld().getName());
+            final int wldID = plugin.worldManager.getWorld(b.getWorld().getName());
             ownerID = OwnersTable.get(wldID, b.getX(), b.getY(), b.getZ());
         }
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByID(ownerID);
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByID(ownerID);
         if (pi == null)
             return BBPlayerInfo.ENVIRONMENT;
         return pi;
@@ -104,9 +104,9 @@ public class OwnershipManager {
      * @param loc
      * @return
      */
-    private static int getFromMap(Location loc) {
+    private static int getFromMap(final Location loc) {
         synchronized (ownershipMap) {
-            OwnershipData dat = ownershipMap.get(loc);
+            final OwnershipData dat = ownershipMap.get(loc);
             dat.time = System.currentTimeMillis();
             ownershipMap.remove(loc);
             ownershipMap.put(loc, dat);
@@ -120,7 +120,7 @@ public class OwnershipManager {
      * @param b Block
      * @param p Player
      */
-    public static void setOwner(Block b, BBPlayerInfo p) {
+    public static void setOwner(final Block b, final BBPlayerInfo p) {
         setOwnerLocation(b.getLocation(), p);
     }
     
@@ -130,8 +130,8 @@ public class OwnershipManager {
     private static void cleanup() {
         synchronized (ownershipMap) {
             @SuppressWarnings("unchecked")
-            HashMap<Location, OwnershipData> lom = (HashMap<Location, OwnershipData>) ownershipMap.clone();
-            for (Entry<Location, OwnershipData> es : lom.entrySet()) {
+            final HashMap<Location, OwnershipData> lom = (HashMap<Location, OwnershipData>) ownershipMap.clone();
+            for (final Entry<Location, OwnershipData> es : lom.entrySet()) {
                 if (es.getValue().isTimeToGo()) {
                     ownershipMap.remove(es.getKey());
                 }
@@ -146,9 +146,9 @@ public class OwnershipManager {
      * @param blockTo
      * @return
      */
-    public static Flow trackFlow(Block blockFrom, Block blockTo) {
+    public static Flow trackFlow(final Block blockFrom, final Block blockTo) {
         // Try to determine owner.
-        BBPlayerInfo player = findOwner(blockFrom);
+        final BBPlayerInfo player = findOwner(blockFrom);
         setOwner(blockTo, player);
         return new Flow(player.getName(), blockFrom.getWorld().getName(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getTypeId(), (byte) 0);
     }
@@ -157,10 +157,10 @@ public class OwnershipManager {
      * @param location
      * @param pi
      */
-    public static void setOwnerLocation(Location loc, BBPlayerInfo p) {
+    public static void setOwnerLocation(final Location loc, final BBPlayerInfo p) {
         if (!BBSettings.storeOwners)
             return;
-        OwnershipData dat = new OwnershipData(p.getID());
+        final OwnershipData dat = new OwnershipData(p.getID());
         synchronized (ownershipMap) {
             if (ownershipMap.containsKey(loc)) {
                 ownershipMap.remove(loc); // Replace.
@@ -175,8 +175,8 @@ public class OwnershipManager {
      * @param block
      * @return
      */
-    public static BBAction trackBurn(Block block) {
-        Block fire = getBurnSource(block);
+    public static BBAction trackBurn(final Block block) {
+        final Block fire = getBurnSource(block);
         BBPlayerInfo player = BBPlayerInfo.ENVIRONMENT;
         if (fire != null) {
             player = findOwner(fire);
@@ -188,10 +188,10 @@ public class OwnershipManager {
      * @param block
      * @return
      */
-    private static Block getBurnSource(Block block) {
+    private static Block getBurnSource(final Block block) {
         // Fire can be attached to any face of the block,
         // but we should check the top, first.
-        for (BlockFace bf : cardinalFaces) {
+        for (final BlockFace bf : cardinalFaces) {
             if (isFireSource(block.getRelative(bf)))
                 return block.getRelative(bf);
         }
@@ -202,22 +202,22 @@ public class OwnershipManager {
      * @param face
      * @return
      */
-    private static boolean isFireSource(Block block) {
-        Material mat = block.getType();
+    private static boolean isFireSource(final Block block) {
+        final Material mat = block.getType();
         return mat.equals(Material.LAVA) || mat.equals(Material.STATIONARY_LAVA) || mat.equals(Material.FIRE);
     }
     
     /**
      * @param block
      */
-    public static void removeOwner(Block block) {
+    public static void removeOwner(final Block block) {
         removeOwnerByLocation(block.getLocation());
     }
     
     /**
      * @param location
      */
-    public static void removeOwnerByLocation(Location loc) {
+    public static void removeOwnerByLocation(final Location loc) {
         synchronized (ownershipMap) {
             if (ownershipMap.containsKey(loc)) {
                 ownershipMap.remove(loc);

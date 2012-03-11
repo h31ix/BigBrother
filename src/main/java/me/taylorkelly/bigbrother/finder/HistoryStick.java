@@ -19,7 +19,7 @@ public class HistoryStick extends StickMode {
     private int slot;
     
     @Override
-    public void initialize(Player player) {
+    public void initialize(final Player player) {
         slot = player.getInventory().getHeldItemSlot();
         oldItem = player.getInventory().getItem(slot);
         if ((oldItem != null) && (oldItem.getAmount() > 0)) {
@@ -29,7 +29,7 @@ public class HistoryStick extends StickMode {
     }
     
     @Override
-    public void disable(Player player) {
+    public void disable(final Player player) {
         if ((oldItem != null) && (oldItem.getAmount() > 0)) {
             player.sendMessage(ChatColor.AQUA + "Here's your " + oldItem.getType() + " back!");
             player.getInventory().setItem(slot, oldItem);
@@ -39,25 +39,25 @@ public class HistoryStick extends StickMode {
     }
     
     @Override
-    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean ignored) {
-        ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager);
+    public ArrayList<String> getInfoOnBlock(final Block block, final WorldManager manager, final boolean ignored) {
+        final ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager);
         
-        ArrayList<String> msgs = new ArrayList<String>();
+        final ArrayList<String> msgs = new ArrayList<String>();
         if (history.isEmpty()) {
             msgs.add(ChatColor.RED + "No edits on this block");
         } else {
             msgs.add(ChatColor.AQUA.toString() + history.size() + " edits on this block");
-            for (Action dataBlock : history) {
-                Calendar cal = Calendar.getInstance();
-                String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
-                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+            for (final Action dataBlock : history) {
+                final Calendar cal = Calendar.getInstance();
+                final String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
+                final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
                 cal.setTimeInMillis(dataBlock.date * 1000);
-                StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
+                final StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
                 msg.append(ChatColor.WHITE).append(" - ").append(ChatColor.YELLOW);
                 msg.append(dataBlock.player);
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
-                String[] lines = dataBlock.toString().split("\n");
+                final String[] lines = dataBlock.toString().split("\n");
                 msg.append(lines[0]);
                 msgs.add(msg.toString());
                 if (lines.length > 1) {
@@ -76,12 +76,12 @@ public class HistoryStick extends StickMode {
     }
     
     @Override
-    public void update(Player player) {
+    public void update(final Player player) {
         player.getInventory().setItem(slot, new ItemStack(BBSettings.stickItem, 1));
     }
     
     @Override
-    public boolean usesStick(ItemStack itemStack) {
+    public boolean usesStick(final ItemStack itemStack) {
         if (itemStack.getTypeId() == BBSettings.stickItem)
             return true;
         return false;

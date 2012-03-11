@@ -29,7 +29,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void info(String message, Throwable e) {
+    public static void info(final String message, final Throwable e) {
         log.log(Level.INFO, "[BBROTHER] " + message, e);
     }
     
@@ -38,7 +38,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void warning(String message, Throwable e) {
+    public static void warning(final String message, final Throwable e) {
         log.log(Level.WARNING, "[BBROTHER] " + message, e);
     }
     
@@ -47,7 +47,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void severe(String message, Throwable e) {
+    public static void severe(final String message, final Throwable e) {
         log.log(Level.SEVERE, "[BBROTHER] " + message, e);
     }
     
@@ -56,7 +56,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void fine(String message, Throwable e) {
+    public static void fine(final String message, final Throwable e) {
         log.log(Level.FINE, "[BBROTHER] " + message, e);
     }
     
@@ -65,7 +65,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void info(String message) {
+    public static void info(final String message) {
         log.log(Level.INFO, "[BBROTHER] " + message);
     }
     
@@ -74,7 +74,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void warning(String message) {
+    public static void warning(final String message) {
         log.log(Level.WARNING, "[BBROTHER] " + message);
     }
     
@@ -83,7 +83,7 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void severe(String message) {
+    public static void severe(final String message) {
         log.log(Level.SEVERE, "[BBROTHER] " + message);
     }
     
@@ -92,17 +92,17 @@ public class BBLogging {
      * 
      * @author N3X15
      */
-    public static void fine(String message) {
+    public static void fine(final String message) {
         log.log(Level.FINE, "[BBROTHER] " + message);
     }
     
-    public static void debug(String string) {
+    public static void debug(final String string) {
         if (BBSettings.debugMode) {
             log.log(Level.INFO, "[BBDEBUG] " + string);
         }
     }
     
-    public static void debug(String string, Throwable e) {
+    public static void debug(final String string, final Throwable e) {
         if (BBSettings.debugMode) {
             log.log(Level.INFO, "[BBDEBUG] " + string, e);
         }

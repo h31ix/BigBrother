@@ -36,11 +36,11 @@ public abstract class DBTable {
         BBDB.executeUpdate(getCreateSyntax());
     }
     
-    public boolean executeUpdate(String desc, String sql, Object[] args) {
+    public boolean executeUpdate(final String desc, final String sql, final Object[] args) {
         return BBDB.tryUpdate(sql, args);
     }
     
-    public boolean executeUpdate(String desc, String sql) {
+    public boolean executeUpdate(final String desc, final String sql) {
         return executeUpdate(desc, sql, new Object[] {});
     }
     

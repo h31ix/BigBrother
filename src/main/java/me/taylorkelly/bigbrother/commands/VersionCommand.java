@@ -10,10 +10,10 @@ import org.bukkit.command.CommandSender;
 
 public class VersionCommand implements CommandExecutor {
     
-    public VersionCommand(BigBrother plugin) {
+    public VersionCommand(final BigBrother plugin) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] arg3) {
         player.sendMessage("You're running: " + ChatColor.AQUA.toString() + BigBrother.name + " " + BigBrother.version + " (#" + BigBrother.build + ")");
         player.sendMessage("# open statements: " + BBDB.statements.size());
         return true;

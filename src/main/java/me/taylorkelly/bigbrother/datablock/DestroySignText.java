@@ -10,13 +10,13 @@ import org.bukkit.block.Sign;
 
 public class DestroySignText extends BBAction {
     
-    public DestroySignText(String name, Sign sign, String world) {
+    public DestroySignText(final String name, final Sign sign, final String world) {
         super(name, world, sign.getX(), sign.getY(), sign.getZ(), sign.getTypeId(), getText(sign));
     }
     
-    private static String getText(Sign sign) {
-        StringBuilder message = new StringBuilder();
-        String[] lines = sign.getLines();
+    private static String getText(final Sign sign) {
+        final StringBuilder message = new StringBuilder();
+        final String[] lines = sign.getLines();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
             if (i < (lines.length - 1)) {
@@ -26,15 +26,15 @@ public class DestroySignText extends BBAction {
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new DestroySignText(pi, world, x, y, z, type, data);
     }
     
-    private DestroySignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private DestroySignText(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
-    public DestroySignText(BBPlayerInfo player, Sign sign, String world) {
+    public DestroySignText(final BBPlayerInfo player, final Sign sign, final String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
     
@@ -46,17 +46,17 @@ public class DestroySignText extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
-        World currWorld = wld;//server.getWorld(world);
+    public void rollback(final World wld) {
+        final World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         
-        String[] lines = data.split("\u0060");
+        final String[] lines = data.split("\u0060");
         
-        Block block = currWorld.getBlockAt(x, y, z);
+        final Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             for (int i = 0; i < lines.length; i++) {
                 sign.setLine(i, lines[i]);
             }
@@ -66,15 +66,15 @@ public class DestroySignText extends BBAction {
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         
-        Block block = currWorld.getBlockAt(x, y, z);
+        final Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             for (int i = 0; i < sign.getLines().length; i++) {
                 sign.setLine(i, "");
             }
@@ -85,9 +85,9 @@ public class DestroySignText extends BBAction {
     
     @Override
     public String toString() {
-        String[] lines = data.split("\u0060");
+        final String[] lines = data.split("\u0060");
         String out = "destroyed a sign with text: ";
-        for (String line : lines) {
+        for (final String line : lines) {
             out += "\n    " + line;
         }
         return out;

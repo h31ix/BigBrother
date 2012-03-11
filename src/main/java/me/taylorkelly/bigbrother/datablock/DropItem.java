@@ -9,23 +9,23 @@ import org.bukkit.entity.Item;
 
 public class DropItem extends BBAction {
     
-    public DropItem(String player, Item item, String world) {
+    public DropItem(final String player, final Item item, final String world) {
         super(player, world, item.getLocation().getBlockX(), item.getLocation().getBlockY(), item.getLocation().getBlockZ(), item.getItemStack().getTypeId(), item.getItemStack().getAmount() + ";" + item.getItemStack().getData().getData() + ";" + item.getItemStack().getDurability());
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new DropItem(pi, world, x, y, z, type, data);
     }
     
-    private DropItem(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private DropItem(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

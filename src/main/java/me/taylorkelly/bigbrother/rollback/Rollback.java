@@ -43,7 +43,7 @@ public class Rollback {
     private final Plugin plugin;
     public List<Integer> allowedActions;
     
-    public Rollback(Server server, WorldManager manager, Plugin plugin) {
+    public Rollback(final Server server, final WorldManager manager, final Plugin plugin) {
         this.manager = manager;
         rollbackAll = false;
         this.server = server;
@@ -56,18 +56,18 @@ public class Rollback {
         allowedActions = new ArrayList<Integer>();
     }
     
-    public void addReciever(Player player) {
+    public void addReciever(final Player player) {
         recievers.add(player);
     }
     
     public void rollback() {
         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
-        Thread rollbacker = new Rollbacker(plugin, server.getScheduler());
+        final Thread rollbacker = new Rollbacker(plugin, server.getScheduler());
         rollbacker.start();
     }
     
-    private String getSimpleString(ArrayList<?> list) {
-        StringBuilder builder = new StringBuilder();
+    private String getSimpleString(final ArrayList<?> list) {
+        final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             builder.append(list.get(i).toString());
             if ((i + 1) < list.size()) {
@@ -81,15 +81,15 @@ public class Rollback {
         rollbackAll = true;
     }
     
-    public void addPlayers(ArrayList<String> playerList) {
+    public void addPlayers(final ArrayList<String> playerList) {
         players.addAll(playerList);
     }
     
-    public void setTime(long l) {
+    public void setTime(final long l) {
         time = l;
     }
     
-    public void addTypes(ArrayList<Integer> blockTypes) {
+    public void addTypes(final ArrayList<Integer> blockTypes) {
         this.blockTypes.addAll(blockTypes);
     }
     
@@ -112,10 +112,10 @@ public class Rollback {
             return 0;
     }
     
-    public static void undo(Server server, Player player) {
+    public static void undo(final Server server, final Player player) {
         int i = 0;
         while (lastRollback.size() > 0) {
-            Action dataBlock = lastRollback.removeFirst();
+            final Action dataBlock = lastRollback.removeFirst();
             if (dataBlock != null) {
                 dataBlock.redo(server);
                 i++;
@@ -129,7 +129,7 @@ public class Rollback {
         }
     }
     
-    public void setRadius(int radius, Location center) {
+    public void setRadius(final int radius, final Location center) {
         this.radius = radius;
         this.center = center;
     }
@@ -139,11 +139,11 @@ public class Rollback {
         private PreparedStatement create_ps = null;
         private PreparedStatement update_ps = null;
         
-        private Rollbacker(Plugin plugin, BukkitScheduler scheduler) {
+        private Rollbacker(final Plugin plugin, final BukkitScheduler scheduler) {
             try {
                 create_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().create(Rollback.this, manager));
                 update_ps = BBDB.prepare(RollbackPreparedStatement.getInstance().update(Rollback.this, manager));
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 BBLogging.severe("Rollbacker failed to initialize:", e);
             }
         }
@@ -158,14 +158,14 @@ public class Rollback {
                 
                 int rollbackSize = 0;
                 while (set.next()) {
-                    String data = set.getString("data");
+                    final String data = set.getString("data");
                     listBlocks.addLast(ActionProvider.findAndProvide(set.getInt("action"), BBUsersTable.getInstance().getUserByID(set.getInt("player")), set.getString("world"), set.getInt("x"), set.getInt("y"), set.getInt("z"), set.getInt("type"), data));
                     rollbackSize++;
                 }
                 if (rollbackSize > 0) {
-                    for (Player player : recievers) {
+                    for (final Player player : recievers) {
                         player.sendMessage(BigBrother.premessage + "Rolling back " + rollbackSize + " edits.");
-                        String playersString = (rollbackAll) ? "All Players" : getSimpleString(players);
+                        final String playersString = (rollbackAll) ? "All Players" : getSimpleString(players);
                         player.sendMessage(ChatColor.BLUE + "Player(s): " + ChatColor.WHITE + playersString);
                         if (blockTypes.size() > 0) {
                             player.sendMessage(ChatColor.BLUE + "Block Type(s): " + ChatColor.WHITE + getSimpleString(blockTypes));
@@ -174,9 +174,9 @@ public class Rollback {
                             player.sendMessage(ChatColor.BLUE + "Action Type(s): " + ChatColor.WHITE + getActionString(allowedActions));
                         }
                         if (time != 0) {
-                            Calendar cal = Calendar.getInstance();
-                            String DATE_FORMAT = "kk:mm:ss 'on' MMM d";
-                            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+                            final Calendar cal = Calendar.getInstance();
+                            final String DATE_FORMAT = "kk:mm:ss 'on' MMM d";
+                            final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
                             cal.setTimeInMillis(time * 1000);
                             player.sendMessage(ChatColor.BLUE + "Since: " + ChatColor.WHITE + sdf.format(cal.getTime()));
                         }
@@ -187,22 +187,22 @@ public class Rollback {
                     }
                     try {
                         rollbackBlocks();
-                        for (Player player : recievers) {
+                        for (final Player player : recievers) {
                             player.sendMessage(BigBrother.premessage + "Successfully rollback'd.");
                         }
                         
                         update_ps.execute();
                         BBDB.commit();
                         undoRollback = RollbackPreparedStatement.getInstance().undoStatement(Rollback.this, manager);
-                    } catch (SQLException ex) {
+                    } catch (final SQLException ex) {
                         BBLogging.severe("Rollback edit SQL Exception: " + RollbackPreparedStatement.getInstance().update(Rollback.this, manager), ex);
                     }
                 } else {
-                    for (Player player : recievers) {
+                    for (final Player player : recievers) {
                         player.sendMessage(BigBrother.premessage + "Nothing to rollback.");
                     }
                 }
-            } catch (SQLException ex) {
+            } catch (final SQLException ex) {
                 BBLogging.severe("Rollback get SQL Exception", ex);
             } finally {
                 try {
@@ -212,7 +212,7 @@ public class Rollback {
                     if (update_ps != null) {
                         update_ps.close();
                     }
-                } catch (SQLException e) {
+                } catch (final SQLException e) {
                 }
             }
         }
@@ -221,10 +221,10 @@ public class Rollback {
          * @param allowedActions
          * @return
          */
-        private String getActionString(List<Integer> allowedActions) {
+        private String getActionString(final List<Integer> allowedActions) {
             String o = "";
             boolean first = true;
-            for (int actID : allowedActions) {
+            for (final int actID : allowedActions) {
                 if (!first) {
                     o += ", ";
                 }
@@ -239,7 +239,7 @@ public class Rollback {
         
         private final int id;
         
-        public RollbackByTick(BukkitScheduler scheduler, Plugin plugin) {
+        public RollbackByTick(final BukkitScheduler scheduler, final Plugin plugin) {
             id = scheduler.scheduleSyncRepeatingTask(plugin, this, 0, 1);
         }
         
@@ -247,12 +247,12 @@ public class Rollback {
             int count = 0;
             
             while ((count < BBSettings.rollbacksPerTick) && (listBlocks.size() > 0)) {
-                Action dataBlock = listBlocks.removeFirst();
+                final Action dataBlock = listBlocks.removeFirst();
                 if (dataBlock != null) {
                     lastRollback.addFirst(dataBlock);
                     try {
                         dataBlock.rollback(server.getWorld(dataBlock.world));
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         BBLogging.warning("Caught exception when rolling back a " + dataBlock.getName(), e);
                     }
                     count++;

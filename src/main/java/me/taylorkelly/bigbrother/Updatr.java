@@ -23,8 +23,8 @@ import org.bukkit.entity.Player;
 
 public class Updatr {
     
-    public static void updateAvailable(Player player) {
-        URLReader reader = new URLReader();
+    public static void updateAvailable(final Player player) {
+        final URLReader reader = new URLReader();
         if (!reader.versionIsUpToDate(BigBrother.version)) {
             player.sendMessage(ChatColor.RED.toString() + BigBrother.name + " " + BigBrother.version + " has an update to " + reader.getCurrVersion());
         } else {
@@ -32,8 +32,8 @@ public class Updatr {
         }
     }
     
-    static void updateAvailable(ConsoleCommandSender console) {
-        URLReader reader = new URLReader();
+    static void updateAvailable(final ConsoleCommandSender console) {
+        final URLReader reader = new URLReader();
         if (!reader.versionIsUpToDate(BigBrother.version)) {
             console.sendMessage(ChatColor.RED.toString() + BigBrother.name + " " + BigBrother.version + " has an update to " + reader.getCurrVersion());
         } else {

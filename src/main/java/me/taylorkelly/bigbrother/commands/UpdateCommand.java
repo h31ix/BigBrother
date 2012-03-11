@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  */
 public class UpdateCommand implements CommandExecutor {
     
-    public UpdateCommand(BigBrother bigBrother) {
+    public UpdateCommand(final BigBrother bigBrother) {
         // TODO Auto-generated constructor stub
     }
     
@@ -27,7 +27,7 @@ public class UpdateCommand implements CommandExecutor {
      * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
      */
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] arg3) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] arg3) {
         Updatr.updateAvailable((Player) player);
         return true;
     }

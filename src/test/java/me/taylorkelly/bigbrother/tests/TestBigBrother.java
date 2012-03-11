@@ -23,20 +23,20 @@ public class TestBigBrother {
     
     @Test
     public void configGeneration() {
-        File dataFolder = new File(testFolder, "configGeneration");
+        final File dataFolder = new File(testFolder, "configGeneration");
         dataFolder.mkdirs();
-        File settingsFile = new File(dataFolder, "BigBrother.yml");
+        final File settingsFile = new File(dataFolder, "BigBrother.yml");
         BBSettings.initialize(null, dataFolder);
         Assert.assertTrue("Configuration didn't generate.", settingsFile.exists());
     }
     
     @Test
     public void configLoading() throws SQLException {
-        File dataFolder = new File(testFolder, "configLoading");
+        final File dataFolder = new File(testFolder, "configLoading");
         dataFolder.mkdirs();
-        File settingsFile = new File(dataFolder, "BigBrother.yml");
+        final File settingsFile = new File(dataFolder, "BigBrother.yml");
         
-        Configuration cfg = new org.spout.api.util.config.Configuration(settingsFile);
+        final Configuration cfg = new org.spout.api.util.config.Configuration(settingsFile);
         cfg.setValue("database.type", "MYSQL");
         cfg.save();
         

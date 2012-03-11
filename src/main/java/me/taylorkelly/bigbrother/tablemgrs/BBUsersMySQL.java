@@ -45,10 +45,10 @@ public class BBUsersMySQL extends BBUsersTable {
     }
     
     @Override
-    public BBPlayerInfo getUserFromDB(String name) {
+    public BBPlayerInfo getUserFromDB(final String name) {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE `name`=?";
+            final String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE `name`=?";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql, name);
             
@@ -57,7 +57,7 @@ public class BBUsersMySQL extends BBUsersTable {
             
             return new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
             
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error trying to find the user `" + name + "`.", e);
         } finally {
             BBDB.cleanup("BBUsersMySQL.getUserFromDB(string)", null, rs);
@@ -66,7 +66,7 @@ public class BBUsersMySQL extends BBUsersTable {
     }
     
     @Override
-    protected void do_addOrUpdatePlayer(BBPlayerInfo pi) {
+    protected void do_addOrUpdatePlayer(final BBPlayerInfo pi) {
         try {
             if (pi.getNew() && (getUserFromDB(pi.getName()) == null)) {
                 BBDB.executeUpdate("INSERT INTO " + getTableName() + " (name,flags) VALUES (?,?) ON DUPLICATE KEY UPDATE flags=VALUES(flags)", pi.getName(), pi.getFlags());
@@ -74,16 +74,16 @@ public class BBUsersMySQL extends BBUsersTable {
                 BBDB.executeUpdate("UPDATE " + getTableName() + " SET flags = ? WHERE id=?", pi.getFlags(), pi.getID());
             }
             BBDB.commit();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't update the user `" + pi.getName() + "`.", e);
         }
     }
     
     @Override
-    public BBPlayerInfo getUserFromDB(int id) {
+    public BBPlayerInfo getUserFromDB(final int id) {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE `id`=?;";
+            final String sql = "SELECT id,name,flags FROM " + getTableName() + " WHERE `id`=?;";
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql, id);
             if (!rs.next())
@@ -91,7 +91,7 @@ public class BBUsersMySQL extends BBUsersTable {
             
             return new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
             
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't find user #" + id + ".", e);
         } finally {
             BBDB.cleanup("BBUsersMySQL.getUserFromDB(int)", null, rs);
@@ -99,18 +99,18 @@ public class BBUsersMySQL extends BBUsersTable {
         return null;
     }
     
-    public int getSubversion(File file) {
+    public int getSubversion(final File file) {
         try {
-            Scanner scan = new Scanner(file);
-            String version = scan.nextLine();
+            final Scanner scan = new Scanner(file);
+            final String version = scan.nextLine();
             try {
-                int numVersion = Integer.parseInt(version);
+                final int numVersion = Integer.parseInt(version);
                 return numVersion;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return 0;
             }
             
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             return 0;
         }
     }
@@ -119,16 +119,16 @@ public class BBUsersMySQL extends BBUsersTable {
     protected void loadCache() {
         ResultSet rs = null;
         try {
-            String sql = "SELECT id,name,flags FROM " + getTableName();
+            final String sql = "SELECT id,name,flags FROM " + getTableName();
             BBLogging.debug(sql);
             rs = BBDB.executeQuery(sql);
             
             while (rs.next()) {
-                BBPlayerInfo pi = new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
+                final BBPlayerInfo pi = new BBPlayerInfo(rs.getInt("id"), rs.getString("name"), rs.getInt("flags"));
                 knownPlayers.put(pi.getID(), pi);
                 knownNames.put(pi.getName(), pi.getID());
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error trying to load the user/name cache.", e);
         } finally {
             BBDB.cleanup("BBUsersMySQL.getUserFromDB(string)", null, rs);

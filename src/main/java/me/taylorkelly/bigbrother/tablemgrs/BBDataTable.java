@@ -92,10 +92,10 @@ public abstract class BBDataTable extends DBTable {
      */
     public abstract int getCleanseByLimit(Statement stmt, Long maxRecords, long deletesPerCleansing) throws SQLException;
     
-    public ArrayList<Action> getBlockHistory(Block block, WorldManager manager) {
+    public ArrayList<Action> getBlockHistory(final Block block, final WorldManager manager) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Action> blockList = new ArrayList<Action>();
+        final ArrayList<Action> blockList = new ArrayList<Action>();
         
         try {
             // TODO maybe more customizable actions?
@@ -114,12 +114,12 @@ public abstract class BBDataTable extends DBTable {
             
             while (rs.next()) {
                 
-                String data = rs.getString("data");
-                Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
+                final String data = rs.getString("data");
+                final Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
                 newBlock.date = rs.getLong("date");
                 blockList.add(newBlock);
             }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
             BBDB.cleanup("Find", ps, rs);
@@ -133,11 +133,11 @@ public abstract class BBDataTable extends DBTable {
      * @param worldManager
      * @return
      */
-    public ArrayList<Action> getPlayerHistory(Player sender, String name, WorldManager manager) {
+    public ArrayList<Action> getPlayerHistory(final Player sender, final String name, final WorldManager manager) {
         
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Action> blockList = new ArrayList<Action>();
+        final ArrayList<Action> blockList = new ArrayList<Action>();
         
         try {
             // TODO maybe more customizable actions?
@@ -153,12 +153,12 @@ public abstract class BBDataTable extends DBTable {
             BBDB.commit();
             
             while (rs.next()) {
-                String data = rs.getString("data");
-                Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
+                final String data = rs.getString("data");
+                final Action newBlock = ActionProvider.findAndProvide(rs.getInt("action"), BBUsersTable.getInstance().getUserByID(rs.getInt("player")), rs.getString("world"), rs.getInt("x"), rs.getInt("y"), rs.getInt("z"), rs.getInt("type"), data);
                 newBlock.date = rs.getLong("date");
                 blockList.add(newBlock);
             }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("Find SQL Exception", ex);
         } finally {
             BBDB.cleanup("Find", ps, rs);

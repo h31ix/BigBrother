@@ -7,23 +7,23 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Chat extends BBAction {
-    public Chat(Player player, String message, String world) {
+    public Chat(final Player player, final String message, final String world) {
         super(player.getName(), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, message);
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Chat(pi, world, x, y, z, type, data);
     }
     
-    private Chat(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Chat(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

@@ -40,7 +40,7 @@ public class BBDB {
         public Object stmt;
         public StackTraceElement[] stack;
         
-        public StatementInfo(Object stmt) {
+        public StatementInfo(final Object stmt) {
             this.stmt = stmt;
             stack = Thread.currentThread().getStackTrace();
         }
@@ -73,7 +73,7 @@ public class BBDB {
         void disableMe();
     }
     
-    public static void initSettings(BetterConfig yml) {
+    public static void initSettings(final BetterConfig yml) {
         // Database type (Database Management System = DBMS :V)
         final String dbms = yml.getString("database.type", DBMS.NULL.name());
         final String cleanse_age = yml.getString("database.cleanser.age", "7d");
@@ -116,17 +116,17 @@ public class BBDB {
     
     public static void shutdown() {
         // Close open statements
-        for (StatementInfo stmt : statements.values()) {
+        for (final StatementInfo stmt : statements.values()) {
             try {
                 stmt.close();
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
             }
         }
         
         // Close connection
         try {
             conn.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
         }
         
         // Shutdown driver
@@ -134,22 +134,22 @@ public class BBDB {
         
     }
     
-    public static void setDBMS(String name) {
+    public static void setDBMS(final String name) {
         try {
             dbms = DBMS.valueOf(name.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             dbms = DBMS.NULL;
         }
     }
     
-    public static boolean tableExists(String tableName) {
+    public static boolean tableExists(final String tableName) {
         boolean r = false;
         ResultSet rs = null;
         try {
-            DatabaseMetaData dbm = conn.getMetaData();
+            final DatabaseMetaData dbm = conn.getMetaData();
             rs = dbm.getTables(null, null, tableName, null);
             return rs.next();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             r = false;
@@ -158,7 +158,7 @@ public class BBDB {
                 if (rs != null) {
                     rs.close();
                 }
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -178,13 +178,13 @@ public class BBDB {
         }
         try {
             driver = new JDCConnectionDriver(driverClass, getDSN(), username, password);
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             BBLogging.severe("Cannot instantiate the " + driverClass + " driver!", e);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             BBLogging.severe("Cannot access the " + driverClass + " driver!", e);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             BBLogging.severe("Cannot find the " + driverClass + " driver!  Restart the server and try again.", e);
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -193,7 +193,7 @@ public class BBDB {
         conn.setAutoCommit(false);
     }
     
-    public static void cleanup(String caller, Statement stmt, ResultSet rs) {
+    public static void cleanup(final String caller, final Statement stmt, final ResultSet rs) {
         try {
             if (null != rs) {
                 rs.close();
@@ -202,7 +202,7 @@ public class BBDB {
                     statements.remove(rs);
                 }
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error closing recordset from '" + caller + "':", e);
         }
         
@@ -210,7 +210,7 @@ public class BBDB {
             if (null != stmt) {
                 stmt.close();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Error closing statement from '" + caller + "':", e);
         }
     }
@@ -222,9 +222,9 @@ public class BBDB {
      * @param table
      * @return
      */
-    public static int getVersion(File dataFolder, String table) {
-        File f = new File(dataFolder, "DATABASE_VERSION");
-        PropertiesFile pf = new PropertiesFile(f);
+    public static int getVersion(final File dataFolder, final String table) {
+        final File f = new File(dataFolder, "DATABASE_VERSION");
+        final PropertiesFile pf = new PropertiesFile(f);
         return pf.getInt(table, -1, "");
     }
     
@@ -234,15 +234,15 @@ public class BBDB {
      * @param dataFolder
      * @return
      */
-    public static boolean needsUpdate(File dataFolder, String table, int latestVersion) {
+    public static boolean needsUpdate(final File dataFolder, final String table, final int latestVersion) {
         boolean r = true;
         try {
-            File f = new File(dataFolder, "DATABASE_VERSION");
-            PropertiesFile pf = new PropertiesFile(f);
+            final File f = new File(dataFolder, "DATABASE_VERSION");
+            final PropertiesFile pf = new PropertiesFile(f);
             r = (pf.getInt(table, latestVersion, "") < latestVersion);
             pf.setInt(table, latestVersion, "");
             pf.save();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return true;
         }
         return r;
@@ -270,7 +270,7 @@ public class BBDB {
      * @param system The database system to check against.
      * @return
      */
-    public static boolean usingDBMS(DBMS system) {
+    public static boolean usingDBMS(final DBMS system) {
         return dbms == system;
     }
     
@@ -280,11 +280,11 @@ public class BBDB {
      * @param tablename
      * @return
      */
-    public static String applyPrefix(String tablename) {
+    public static String applyPrefix(final String tablename) {
         return prefix + tablename;
     }
     
-    public static boolean tryUpdate(String sql, Object... params) {
+    public static boolean tryUpdate(final String sql, final Object... params) {
         return executeUpdate(sql, params) != Statement.EXECUTE_FAILED;
     }
     
@@ -293,7 +293,7 @@ public class BBDB {
      * @return
      * @throws
      */
-    public static int executeUpdate(String sql, Object... params) {
+    public static int executeUpdate(final String sql, final Object... params) {
         PreparedStatement stmt = null;
         
         int r = Statement.EXECUTE_FAILED;
@@ -305,7 +305,7 @@ public class BBDB {
             }
             r = stmt.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("executeUpdate failed (" + sql + "):", e);
         } finally {
             BBDB.cleanup("executeUpdate (" + sql + ")", stmt, null);
@@ -318,7 +318,7 @@ public class BBDB {
      * @return
      * @throws SQLException
      */
-    public static PreparedStatement prepare(String sql) throws SQLException {
+    public static PreparedStatement prepare(final String sql) throws SQLException {
         return conn.prepareStatement(sql);
     }
     
@@ -343,7 +343,7 @@ public class BBDB {
      * @param name
      * @return
      */
-    public static ResultSet executeQuery(String sql, Object... params) {
+    public static ResultSet executeQuery(final String sql, final Object... params) {
         PreparedStatement stmt = null;
         
         ResultSet rs = null;
@@ -358,14 +358,14 @@ public class BBDB {
                 return null;
             rs = stmt.getResultSet();
             statements.put(rs, new StatementInfo(stmt));
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("executeQuery failed (" + sql + "):", e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             if (e.getClass().getName().contains("CommunicationsException")) {
                 BBLogging.severe("Communications failure, attempting to reconnect.", e);
                 try {
                     reconnect();
-                } catch (SQLException e1) {
+                } catch (final SQLException e1) {
                     BBLogging.severe("Failed to reconnect.", e1);
                 }
             }

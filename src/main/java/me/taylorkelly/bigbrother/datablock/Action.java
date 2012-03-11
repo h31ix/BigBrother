@@ -54,7 +54,7 @@ public abstract class Action {
     public Action() {
     }
     
-    public Action(String player, String world, int x, int y, int z, int type, String data) {
+    public Action(final String player, final String world, final int x, final int y, final int z, final int type, final String data) {
         date = System.currentTimeMillis() / 1000;
         this.player = BBUsersTable.getInstance().getUserByName(player);
         this.world = world;
@@ -65,7 +65,7 @@ public abstract class Action {
         this.data = data;
     }
     
-    public Action(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public Action(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         date = System.currentTimeMillis() / 1000;
         this.player = player;
         this.world = world;
@@ -121,82 +121,82 @@ public abstract class Action {
      */
     public abstract String getDescription();
     
-    protected void chestCheck(String player, Block block) {
+    protected void chestCheck(final String player, final Block block) {
         if (block.getState() instanceof Chest) {
-            Chest chest = (Chest) block.getState();
+            final Chest chest = (Chest) block.getState();
             children.add(new DeltaChest(player, chest, chest.getInventory().getContents(), new ItemStack[chest.getInventory().getSize()]));
         }
     }
     
-    protected void torchCheck(String player, Block block) {
-        ArrayList<Integer> torchTypes = new ArrayList<Integer>();
+    protected void torchCheck(final String player, final Block block) {
+        final ArrayList<Integer> torchTypes = new ArrayList<Integer>();
         torchTypes.add(50); // Torch
         torchTypes.add(75); // Redstone torch (on)
         torchTypes.add(76); // Redstone torch (off)
         
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+        final int x = block.getX();
+        final int y = block.getY();
+        final int z = block.getZ();
         
-        Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
+        final Block torchTop = block.getWorld().getBlockAt(x, y + 1, z);
         
         if (torchTypes.contains(torchTop.getTypeId()) && (torchTop.getData() == 5)) {
             children.add(new BrokenBlock(player, torchTop, world));
         }
-        Block torchNorth = block.getWorld().getBlockAt(x + 1, y, z);
+        final Block torchNorth = block.getWorld().getBlockAt(x + 1, y, z);
         if (torchTypes.contains(torchNorth.getTypeId()) && (torchNorth.getData() == 1)) {
             children.add(new BrokenBlock(player, torchNorth, world));
         }
-        Block torchSouth = block.getWorld().getBlockAt(x - 1, y, z);
+        final Block torchSouth = block.getWorld().getBlockAt(x - 1, y, z);
         if (torchTypes.contains(torchSouth.getTypeId()) && (torchSouth.getData() == 2)) {
             children.add(new BrokenBlock(player, torchSouth, world));
         }
-        Block torchEast = block.getWorld().getBlockAt(x, y, z + 1);
+        final Block torchEast = block.getWorld().getBlockAt(x, y, z + 1);
         if (torchTypes.contains(torchEast.getTypeId()) && (torchEast.getData() == 3)) {
             children.add(new BrokenBlock(player, torchEast, world));
         }
-        Block torchWest = block.getWorld().getBlockAt(x, y, z - 1);
+        final Block torchWest = block.getWorld().getBlockAt(x, y, z - 1);
         if (torchTypes.contains(torchWest.getTypeId()) && (torchWest.getData() == 4)) {
             children.add(new BrokenBlock(player, torchWest, world));
         }
     }
     
-    protected void surroundingSignChecks(String player, Block block) {
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+    protected void surroundingSignChecks(final String player, final Block block) {
+        final int x = block.getX();
+        final int y = block.getY();
+        final int z = block.getZ();
         
-        Block top = block.getWorld().getBlockAt(x, y + 1, z);
+        final Block top = block.getWorld().getBlockAt(x, y + 1, z);
         if (top.getTypeId() == 63) {
             children.add(new BrokenBlock(player, top, world));
         }
-        Block north = block.getWorld().getBlockAt(x + 1, y, z);
+        final Block north = block.getWorld().getBlockAt(x + 1, y, z);
         if ((north.getTypeId() == 68) && (north.getData() == 5)) {
             children.add(new BrokenBlock(player, north, world));
         }
-        Block south = block.getWorld().getBlockAt(x - 1, y, z);
+        final Block south = block.getWorld().getBlockAt(x - 1, y, z);
         if ((south.getTypeId() == 68) && (south.getData() == 4)) {
             children.add(new BrokenBlock(player, south, world));
         }
-        Block east = block.getWorld().getBlockAt(x, y, z + 1);
+        final Block east = block.getWorld().getBlockAt(x, y, z + 1);
         if ((east.getTypeId() == 68) && (east.getData() == 3)) {
             children.add(new BrokenBlock(player, east, world));
         }
-        Block west = block.getWorld().getBlockAt(x, y, z - 1);
+        final Block west = block.getWorld().getBlockAt(x, y, z - 1);
         if ((west.getTypeId() == 68) && (west.getData() == 2)) {
             children.add(new BrokenBlock(player, west, world));
         }
     }
     
-    protected void signCheck(String player, Block block) {
+    protected void signCheck(final String player, final Block block) {
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             children.add(new SignDestroyed(player, block.getTypeId(), block.getData(), sign, world));
         }
     }
     
-    protected void checkGnomesLivingOnTop(String player, Block block) {
-        ArrayList<Integer> gnomes = new ArrayList<Integer>();
+    protected void checkGnomesLivingOnTop(final String player, final Block block) {
+        final ArrayList<Integer> gnomes = new ArrayList<Integer>();
         gnomes.add(6); // Sapling
         gnomes.add(37); // Yellow Flower
         gnomes.add(38); // Red Flower
@@ -221,17 +221,17 @@ public abstract class Action {
         gnomes.add(Material.DETECTOR_RAIL.getId());
         gnomes.add(Material.POWERED_RAIL.getId());
         
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
-        Block mrGnome = block.getWorld().getBlockAt(x, y + 1, z);
+        final int x = block.getX();
+        final int y = block.getY();
+        final int z = block.getZ();
+        final Block mrGnome = block.getWorld().getBlockAt(x, y + 1, z);
         
         if (gnomes.contains(mrGnome.getTypeId())) {
             children.add(new BrokenBlock(player, mrGnome, world));
         }
     }
     
-    protected void bedCheck(String player, Block bed) {
+    protected void bedCheck(final String player, final Block bed) {
         if (bed.getType() == Material.BED_BLOCK) {
             if (bed.getData() >= 8) { // Head of bed
                 Block foot = null;

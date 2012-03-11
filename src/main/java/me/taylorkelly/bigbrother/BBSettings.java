@@ -66,7 +66,7 @@ public class BBSettings {
     
     public static List<String> censoredCommands;
     
-    public static void initialize(BigBrother plg, File dataFolder) {
+    public static void initialize(final BigBrother plg, final File dataFolder) {
         BBSettings.dataFolder = dataFolder;
         //BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
@@ -127,7 +127,7 @@ public class BBSettings {
         yml.save();
     }
     
-    private static void loadYaml(File yamlfile) {
+    private static void loadYaml(final File yamlfile) {
         final BetterConfig yml = new BetterConfig(yamlfile);
         
         // If the file's not there, don't load it
@@ -154,12 +154,12 @@ public class BBSettings {
         }
         BBDB.initSettings(yml);
         
-        List<Object> excluded = yml.getList("general.excluded-blocks");
+        final List<Object> excluded = yml.getList("general.excluded-blocks");
         // Dodge NPE reported by Mineral (and set a default)
         if (excluded == null) {
             yml.setValue("general.excluded-blocks", blockExclusionList);
         } else {
-            for (Object o : excluded) {
+            for (final Object o : excluded) {
                 int id = 0;
                 if (o instanceof Integer) {
                     id = (Integer) o;
@@ -182,7 +182,7 @@ public class BBSettings {
         censoredCommands.add("/login"); // ?
         censoredCommands = yml.getStringList("general.censored-commands", censoredCommands);
         
-        List<String> excludedWorlds = yml.getStringList("general.excluded-worlds", new ArrayList<String>());
+        final List<String> excludedWorlds = yml.getStringList("general.excluded-worlds", new ArrayList<String>());
         if (excludedWorlds == null) {
             yml.setValue("general.excluded-worlds", new ArrayList<String>());
         } else {
@@ -206,7 +206,7 @@ public class BBSettings {
      * @todo Move to SQL tables.
      * @param dataFolder
      */
-    private static void loadLists(File dataFolder) {
+    private static void loadLists(final File dataFolder) {
         File file = new File(dataFolder, "WatchedPlayers.txt");
         try {
             if (!file.exists()) {
@@ -253,7 +253,7 @@ public class BBSettings {
         
     }
     
-    public static Watcher getWatcher(Server server, File dataFolder) {
+    public static Watcher getWatcher(final Server server, final File dataFolder) {
         return new Watcher(server);
     }
     
@@ -270,7 +270,7 @@ public class BBSettings {
      * @param placeholder
      * @return
      */
-    public static String replaceWithPrefix(String sql, String placeholder) {
+    public static String replaceWithPrefix(final String sql, final String placeholder) {
         return sql.replace(placeholder, BBDB.prefix);
     }
     
@@ -280,7 +280,7 @@ public class BBSettings {
      * @param type
      * @return
      */
-    public static boolean isBlockIgnored(int type) {
+    public static boolean isBlockIgnored(final int type) {
         return blockExclusionList.contains(type);
     }
     
@@ -289,19 +289,19 @@ public class BBSettings {
      * 
      * @param f dataFolder.
      */
-    private static void saveDefaultConfig(File f) {
+    private static void saveDefaultConfig(final File f) {
         try {
-            InputStream is = BigBrother.class.getResourceAsStream("/BigBrother.example.yml");
-            BufferedReader in = new BufferedReader(new InputStreamReader(is));
-            FileWriter fstream = new FileWriter(f);
-            BufferedWriter out = new BufferedWriter(fstream);
+            final InputStream is = BigBrother.class.getResourceAsStream("/BigBrother.example.yml");
+            final BufferedReader in = new BufferedReader(new InputStreamReader(is));
+            final FileWriter fstream = new FileWriter(f);
+            final BufferedWriter out = new BufferedWriter(fstream);
             String line;
             while ((line = in.readLine()) != null) {
                 out.write(line + "\n");
             }
             //Close the output stream
             out.close();
-        } catch (Exception e) {//Catch exception if any
+        } catch (final Exception e) {//Catch exception if any
             BBLogging.severe("Error while saving default config: ", e);
         }
     }

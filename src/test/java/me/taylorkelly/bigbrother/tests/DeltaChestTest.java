@@ -41,7 +41,7 @@ public class DeltaChestTest {
         new ItemStack(1, 64), // no change
         new ItemStack(0) // no change
         };
-        DeltaChest.DeltaEntry[] de = DeltaChest.processDeltaStream(5, DeltaChest.getInventoryDelta(stackOrig, stackNew));
+        final DeltaChest.DeltaEntry[] de = DeltaChest.processDeltaStream(5, DeltaChest.getInventoryDelta(stackOrig, stackNew));
         assertEquals("Slot 1 (Added 1)", DeltaType.ADDED, de[0].Type);
         assertEquals("Slot 2 (Removed 1)", DeltaType.REMOVED, de[1].Type);
         assertEquals("Slot 3 (Replaced)", DeltaType.REPLACED, de[2].Type);

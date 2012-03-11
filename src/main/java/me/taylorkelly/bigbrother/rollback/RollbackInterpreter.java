@@ -18,17 +18,17 @@ public class RollbackInterpreter {
     
     private Rollback rollback;
     private Calendar dateSearch;
-    private ArrayList<Integer> blockTypes;
-    private ArrayList<String> playerList;
+    private final ArrayList<Integer> blockTypes;
+    private final ArrayList<String> playerList;
     private boolean all = false;
-    private Server server;
-    private Player player;
-    private WorldManager manager;
+    private final Server server;
+    private final Player player;
+    private final WorldManager manager;
     private int radius = 0;
-    private Plugin plugin;
+    private final Plugin plugin;
     private List<Integer> allowedActions;
     
-    public RollbackInterpreter(Player player, String[] split, Server server, WorldManager manager, Plugin plugin) {
+    public RollbackInterpreter(final Player player, final String[] split, final Server server, final WorldManager manager, final Plugin plugin) {
         this.manager = manager;
         this.player = player;
         this.server = server;
@@ -37,7 +37,7 @@ public class RollbackInterpreter {
         blockTypes = new ArrayList<Integer>();
         allowedActions = ActionProvider.getDefaultActions();
         for (int i = 1; i < split.length; i++) {
-            String argument = split[i].trim();
+            final String argument = split[i].trim();
             if (argument.equals("") || argument.equals(" ")) {
                 continue;
             }
@@ -52,7 +52,7 @@ public class RollbackInterpreter {
             } else if (argument.equalsIgnoreCase("*")) {
                 all = true;
             } else {
-                List<Player> targets = server.matchPlayer(argument);
+                final List<Player> targets = server.matchPlayer(argument);
                 Player findee = null;
                 if (targets.size() == 1) {
                     findee = targets.get(0);
@@ -62,27 +62,27 @@ public class RollbackInterpreter {
         }
     }
     
-    private void parseRadius(String radius) {
+    private void parseRadius(final String radius) {
         try {
-            int radInt = Integer.parseInt(radius);
+            final int radInt = Integer.parseInt(radius);
             if (radInt <= 0) {
                 player.sendMessage(ChatColor.RED + "Ignoring invalid radius: " + radius);
             } else {
                 this.radius = radInt;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             player.sendMessage(ChatColor.RED + "Ignoring invalid radius: " + radius);
         }
     }
     
-    private void parseId(String id) {
+    private void parseId(final String id) {
         if (id.contains(",")) {
-            String[] ids = id.split(",");
-            for (String actId : ids) {
+            final String[] ids = id.split(",");
+            for (final String actId : ids) {
                 if (actId.equals("")) {
                     continue;
                 }
-                Material m = Material.matchMaterial(actId);
+                final Material m = Material.matchMaterial(actId);
                 if (m != null) {
                     blockTypes.add(m.getId());
                 } else {
@@ -90,7 +90,7 @@ public class RollbackInterpreter {
                 }
             }
         } else {
-            Material m = Material.matchMaterial(id);
+            final Material m = Material.matchMaterial(id);
             if (m != null) {
                 blockTypes.add(m.getId());
             } else {

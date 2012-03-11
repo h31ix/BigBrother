@@ -18,7 +18,7 @@ public class BlockBurn extends BBAction {
         super();
     }
     
-    public BlockBurn(String player, Block block, String world) {
+    public BlockBurn(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         torchCheck(player, block);
@@ -27,7 +27,7 @@ public class BlockBurn extends BBAction {
         checkGnomesLivingOnTop(player, block);
     }
     
-    public BlockBurn(Block block, String world) {
+    public BlockBurn(final Block block, final String world) {
         super(ENVIRONMENT, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         torchCheck(ENVIRONMENT, block);
@@ -38,23 +38,23 @@ public class BlockBurn extends BBAction {
     
     @Override
     public void send() {
-        for (BBAction block : bystanders) {
+        for (final BBAction block : bystanders) {
             block.send();
         }
         super.send();
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
         if ((type != 51) || BBSettings.restoreFire) {
-            World currWorld = wld;// server.getWorld(world);
+            final World currWorld = wld;// server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
             byte blockData = 0;
             try {
                 blockData = Byte.valueOf(data);
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 BBLogging.debug("Erroneous BlockBurn data field:  Data value is unparsable.  Your ActionID datatable table may have become scrambled and may not match up with legacy actionIDs.  Defaulting to 0.");
             }
             currWorld.getBlockAt(x, y, z).setTypeId(type);
@@ -63,8 +63,8 @@ public class BlockBurn extends BBAction {
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -72,11 +72,11 @@ public class BlockBurn extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new BlockBurn(pi, world, x, y, z, type, data);
     }
     
-    private BlockBurn(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private BlockBurn(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -85,7 +85,7 @@ public class BlockBurn extends BBAction {
      * @param block
      * @param world
      */
-    public BlockBurn(BBPlayerInfo player, Block block, World world) {
+    public BlockBurn(final BBPlayerInfo player, final Block block, final World world) {
         super(player.getName(), world.getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
         bystanders = new ArrayList<BBAction>();
         torchCheck(player.getName(), block);

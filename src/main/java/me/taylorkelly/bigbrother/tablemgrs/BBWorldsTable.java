@@ -53,16 +53,16 @@ public abstract class BBWorldsTable extends DBTable {
     }
     
     public HashMap<String, Integer> getWorlds() {
-        HashMap<String, Integer> ret = new HashMap<String, Integer>();
+        final HashMap<String, Integer> ret = new HashMap<String, Integer>();
         ResultSet set = null;
         try {
             set = BBDB.executeQuery(getSelectWorldsQuery());
             while (set.next()) {
-                int index = set.getInt("id");
-                String name = set.getString("name");
+                final int index = set.getInt("id");
+                final String name = set.getString("name");
                 ret.put(name, index);
             }
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             BBLogging.severe("World Load Exception", ex);
         } finally {
             BBDB.cleanup("World Load", null, set);
@@ -74,7 +74,7 @@ public abstract class BBWorldsTable extends DBTable {
     
     protected abstract String getSelectWorldsQuery();
     
-    public boolean insertWorld(int index, String world) {
+    public boolean insertWorld(final int index, final String world) {
         return BBDB.tryUpdate(getInsertWorldQuery(), index, world);
     }
     

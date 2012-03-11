@@ -30,24 +30,24 @@ import java.util.logging.Logger;
 
 public class Updater {
     
-    private Logger logger = Logger.getLogger("Minecraft");
+    private final Logger logger = Logger.getLogger("Minecraft");
     
     private final static String UPDATE_SITE = "http://mine.7chan.org/mirror/";
     
-    private List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
+    private final List<UpdaterFile> needsUpdating = new ArrayList<UpdaterFile>();
     
     public Updater() {
     }
     
     public void check() {
-        String[] paths = new String[] { /* "lib/" + getOSSpecificFileName(), */"lib/mysql.jar", "lib/postgresql.jar" };
+        final String[] paths = new String[] { /* "lib/" + getOSSpecificFileName(), */"lib/mysql.jar", "lib/postgresql.jar" };
         
-        for (String path : paths) {
-            File file = new File(path);
+        for (final String path : paths) {
+            final File file = new File(path);
             
             if ((file != null) && !file.exists() && !file.isDirectory()) {
-                String url = UPDATE_SITE + path;
-                UpdaterFile updaterFile = new UpdaterFile(url);
+                final String url = UPDATE_SITE + path;
+                final UpdaterFile updaterFile = new UpdaterFile(url);
                 updaterFile.setLocalLocation(path);
                 needsUpdating.add(updaterFile);
             }
@@ -89,7 +89,7 @@ public class Updater {
         if (needsUpdating.size() == 0)
             return;
         
-        File folder = new File("lib");
+        final File folder = new File("lib");
         
         if (folder.exists() && !folder.isDirectory())
             throw new Exception("Folder \"lib\" cannot be created ! It is a file!");
@@ -100,22 +100,22 @@ public class Updater {
         
         logger.info("Need to download " + needsUpdating.size() + " object(s)");
         
-        Iterator<UpdaterFile> iterator = needsUpdating.iterator();
+        final Iterator<UpdaterFile> iterator = needsUpdating.iterator();
         
         while (iterator.hasNext()) {
-            UpdaterFile item = iterator.next();
+            final UpdaterFile item = iterator.next();
             
             logger.info(" - Downloading file : " + item.getRemoteLocation() + " to " + item.getLocalLocation());
             
-            URL url = new URL(item.getRemoteLocation());
-            File file = new File(item.getLocalLocation());
+            final URL url = new URL(item.getRemoteLocation());
+            final File file = new File(item.getLocalLocation());
             logger.info("(Meaning " + file.getAbsolutePath() + ")");
             if (file.exists()) {
                 file.delete();
             }
             
-            InputStream inputStream = url.openStream();
-            OutputStream outputStream = new FileOutputStream(file);
+            final InputStream inputStream = url.openStream();
+            final OutputStream outputStream = new FileOutputStream(file);
             
             saveTo(inputStream, outputStream);
             
@@ -133,8 +133,8 @@ public class Updater {
      * @param inputStream
      * @param outputStream
      */
-    private void saveTo(InputStream inputStream, OutputStream outputStream) throws IOException {
-        byte[] buffer = new byte[1024];
+    private void saveTo(final InputStream inputStream, final OutputStream outputStream) throws IOException {
+        final byte[] buffer = new byte[1024];
         int len = 0;
         
         while ((len = inputStream.read(buffer)) > 0) {

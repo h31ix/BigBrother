@@ -15,38 +15,38 @@ import org.bukkit.entity.Player;
 
 public class HereCommand implements CommandExecutor {
     
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public HereCommand(BigBrother plugin) {
+    public HereCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
-    public boolean onCommand(CommandSender send, Command arg1, String arg2, String[] split) {
-        Player player = (Player) send;
+    public boolean onCommand(final CommandSender send, final Command arg1, final String arg2, final String[] split) {
+        final Player player = (Player) send;
         if (player.hasPermission(Permissions.INFO.id)) {
             if (split.length == 1) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
+                final Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
                 finder.find();
             } else if (Numbers.isNumber(split[1]) && (split.length == 2)) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
+                final Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[1]));
                 finder.addReciever(player);
                 finder.find();
             } else if (split.length == 2) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
+                final Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.addReciever(player);
-                List<Player> targets = plugin.getServer().matchPlayer(split[1]);
+                final List<Player> targets = plugin.getServer().matchPlayer(split[1]);
                 Player findee = null;
                 if (targets.size() == 1) {
                     findee = targets.get(0);
                 }
                 finder.find((findee == null) ? split[1] : findee.getName());
             } else if (Numbers.isNumber(split[2]) && (split.length == 3)) {
-                Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
+                final Finder finder = new Finder(player.getLocation(), plugin.getServer().getWorlds(), plugin.worldManager, plugin, null);
                 finder.setRadius(Double.parseDouble(split[2]));
                 finder.addReciever(player);
-                List<Player> targets = plugin.getServer().matchPlayer(split[1]);
+                final List<Player> targets = plugin.getServer().matchPlayer(split[1]);
                 Player findee = null;
                 if (targets.size() == 1) {
                     findee = targets.get(0);

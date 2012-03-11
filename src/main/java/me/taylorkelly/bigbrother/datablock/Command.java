@@ -8,23 +8,23 @@ import org.bukkit.entity.Player;
 
 public class Command extends BBAction {
     
-    public Command(Player player, String command, String world) {
+    public Command(final Player player, final String command, final String world) {
         super(player.getName(), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, command);
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Command(pi, world, x, y, z, type, data);
     }
     
-    private Command(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Command(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

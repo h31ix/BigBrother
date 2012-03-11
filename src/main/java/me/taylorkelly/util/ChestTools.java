@@ -19,7 +19,7 @@ public class ChestTools {
      * 
      * @TODO: Is this fixed?
      */
-    public static ItemStack[] getChestContents(Chest chest) {
+    public static ItemStack[] getChestContents(final Chest chest) {
         Chest second = null;
         
         // iterate through nearby blocks.
@@ -46,7 +46,7 @@ public class ChestTools {
             // than it's the one with lower Z coordinate.
             // I believe it can be easily checked with this trick:
             
-            ItemStack[] result = new ItemStack[54];
+            final ItemStack[] result = new ItemStack[54];
             ItemStack[] firstHalf;
             ItemStack[] secondHalf;
             
@@ -74,7 +74,7 @@ public class ChestTools {
      * 
      * @param chest
      */
-    public static void setChestContents(Chest chest, ItemStack[] items) {
+    public static void setChestContents(final Chest chest, final ItemStack[] items) {
         Chest second = null;
         
         // iterate through nearby blocks.

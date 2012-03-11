@@ -21,7 +21,7 @@ import org.spout.api.util.config.ConfigurationNode;
 
 public class BetterNode extends ConfigurationNode {
     
-    protected BetterNode(String path, Object value) {
+    protected BetterNode(final String path, final Object value) {
         super(path, value);
     }
     
@@ -35,7 +35,7 @@ public class BetterNode extends ConfigurationNode {
      * @param o
      * @return
      */
-    private static Long castLong(Object o) {
+    private static Long castLong(final Object o) {
         if (o == null)
             return null;
         else if (o instanceof Byte)
@@ -52,41 +52,41 @@ public class BetterNode extends ConfigurationNode {
             return null;
     }
     
-    public long getLong(long defaultValue) {
+    public long getLong(final long defaultValue) {
         if (getValue() == null) {
-            setValue(defaultValue);
+            setValue(defaultValue, true);
         }
         return castLong(getValue());
     }
     
     @Override
-    public double getDouble(double defaultValue) {
+    public double getDouble(final double defaultValue) {
         if (getValue() == null) {
-            setValue(defaultValue);
+            setValue(defaultValue, true);
         }
         return super.getDouble(defaultValue);
     }
     
     @Override
-    public int getInteger(int defaultValue) {
+    public int getInteger(final int defaultValue) {
         if (getValue() == null) {
-            setValue(defaultValue);
+            setValue(defaultValue, true);
         }
         return super.getInteger(defaultValue);
     }
     
     @Override
-    public String getString(String defaultValue) {
+    public String getString(final String defaultValue) {
         if (getValue() == null) {
-            setValue(defaultValue);
+            setValue(defaultValue, true);
         }
         return super.getString(defaultValue);
     }
     
     @Override
-    public boolean getBoolean(boolean defaultValue) {
+    public boolean getBoolean(final boolean defaultValue) {
         if (getValue() == null) {
-            setValue(defaultValue);
+            setValue(defaultValue, true);
         }
         return super.getBoolean(defaultValue);
     }

@@ -21,13 +21,13 @@ import java.util.Vector;
  * @link http://code.google.com/p/simpl09/
  */
 public class ConnectionService {
-    private Vector<JDCConnection> connections;
-    private String url, user, password;
+    private final Vector<JDCConnection> connections;
+    private final String url, user, password;
     final private long timeout = 60000;
-    private ConnectionReaper reaper;
+    private final ConnectionReaper reaper;
     final private int poolsize = 10;
     
-    public ConnectionService(String url, String user, String password) {
+    public ConnectionService(final String url, final String user, final String password) {
         this.url = url;
         this.user = user;
         this.password = password;
@@ -37,11 +37,11 @@ public class ConnectionService {
     }
     
     public synchronized void reapConnections() {
-        long stale = System.currentTimeMillis() - timeout;
-        Enumeration<JDCConnection> connlist = connections.elements();
+        final long stale = System.currentTimeMillis() - timeout;
+        final Enumeration<JDCConnection> connlist = connections.elements();
         
         while ((connlist != null) && (connlist.hasMoreElements())) {
-            JDCConnection conn = connlist.nextElement();
+            final JDCConnection conn = connlist.nextElement();
             
             if ((conn.inUse()) && (stale > conn.getLastUse()) && (!conn.validate())) {
                 removeConnection(conn);
@@ -50,15 +50,15 @@ public class ConnectionService {
     }
     
     public synchronized void closeConnections() {
-        Enumeration<JDCConnection> connlist = connections.elements();
+        final Enumeration<JDCConnection> connlist = connections.elements();
         
         while ((connlist != null) && (connlist.hasMoreElements())) {
-            JDCConnection conn = connlist.nextElement();
+            final JDCConnection conn = connlist.nextElement();
             removeConnection(conn);
         }
     }
     
-    private synchronized void removeConnection(JDCConnection conn) {
+    private synchronized void removeConnection(final JDCConnection conn) {
         connections.removeElement(conn);
     }
     
@@ -71,7 +71,7 @@ public class ConnectionService {
                 return c;
         }
         
-        Connection conn = DriverManager.getConnection(url, user, password);
+        final Connection conn = DriverManager.getConnection(url, user, password);
         c = new JDCConnection(conn, this);
         c.lease();
         connections.addElement(c);
@@ -79,16 +79,16 @@ public class ConnectionService {
         return c.getConnection();
     }
     
-    public synchronized void returnConnection(JDCConnection conn) {
+    public synchronized void returnConnection(final JDCConnection conn) {
         conn.expireLease();
     }
 }
 
 class ConnectionReaper extends Thread {
-    private ConnectionService pool;
+    private final ConnectionService pool;
     private final long delay = 300000;
     
-    ConnectionReaper(ConnectionService pool) {
+    ConnectionReaper(final ConnectionService pool) {
         this.pool = pool;
     }
     
@@ -97,7 +97,7 @@ class ConnectionReaper extends Thread {
         while (true) {
             try {
                 Thread.sleep(delay);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
             pool.reapConnections();
         }

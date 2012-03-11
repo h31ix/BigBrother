@@ -25,23 +25,23 @@ import java.util.Scanner;
 class URLReader {
     
     private static final String url = "http://taylorkelly.me/plugins/BigBrother/BigBrother.updatr";
-    private ArrayList<String> versions;
+    private final ArrayList<String> versions;
     private String currVersion;
     
     public URLReader() {
         versions = new ArrayList<String>();
         try {
-            URL updateUrl = new URL(url);
-            InputStream uin = updateUrl.openStream();
-            Scanner sc = new Scanner(uin);
+            final URL updateUrl = new URL(url);
+            final InputStream uin = updateUrl.openStream();
+            final Scanner sc = new Scanner(uin);
             while (sc.hasNextLine()) {
-                String line = sc.nextLine();
+                final String line = sc.nextLine();
                 versions.add(line);
                 if (!line.contains("SNAPSHOT")) {
                     currVersion = line;
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             BBLogging.severe("Error getting version information.");
         }
     }
@@ -52,12 +52,12 @@ class URLReader {
      * @param string The line to get the data from
      * @return The data.
      */
-    public static String getField(String string) {
-        int start = string.indexOf("=");
+    public static String getField(final String string) {
+        final int start = string.indexOf("=");
         return string.substring(start + 1).trim();
     }
     
-    public boolean versionIsUpToDate(String version) {
+    public boolean versionIsUpToDate(final String version) {
         return versions.contains(version);
     }
     

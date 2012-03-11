@@ -13,26 +13,26 @@ public class Flow extends BBAction {
     
     private ArrayList<BBAction> bystanders;
     
-    public Flow(String player, Block block, String world) {
+    public Flow(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         // TODO can't lava flow break blocks?
     }
     
-    public Flow(String player, String world, int x, int y, int z, int type, byte data) {
+    public Flow(final String player, final String world, final int x, final int y, final int z, final int type, final byte data) {
         super(player, world, x, y, z, type, Byte.toString(data));
         bystanders = new ArrayList<BBAction>();
     }
     
     @Override
     public void send() {
-        for (BBAction block : bystanders) {
+        for (final BBAction block : bystanders) {
             block.send();
         }
         super.send();
     }
     
-    private Flow(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Flow(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -44,8 +44,8 @@ public class Flow extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
-        World currWorld = wld;//server.getWorld(world);
+    public void rollback(final World wld) {
+        final World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -54,10 +54,10 @@ public class Flow extends BBAction {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Flow(pi, world, x, y, z, type, data);
     }
     

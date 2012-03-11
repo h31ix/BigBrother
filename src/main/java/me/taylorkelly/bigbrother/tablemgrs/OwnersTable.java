@@ -75,7 +75,7 @@ public abstract class OwnersTable extends DBTable {
      * @param z
      * @param playerID
      */
-    public static void set(int world, int x, int y, int z, int playerID) {
+    public static void set(final int world, final int x, final int y, final int z, final int playerID) {
         getInstance().setBlockOwner(world, x, y, z, playerID);
     }
     
@@ -95,7 +95,7 @@ public abstract class OwnersTable extends DBTable {
      * @param z
      * @return
      */
-    public static int get(int world, int x, int y, int z) {
+    public static int get(final int world, final int x, final int y, final int z) {
         return getInstance().getBlockOwner(world, x, y, z);
     }
     
@@ -114,7 +114,7 @@ public abstract class OwnersTable extends DBTable {
      * @param blockY
      * @param blockZ
      */
-    public static void remove(int wldID, int x, int y, int z) {
+    public static void remove(final int wldID, final int x, final int y, final int z) {
         getInstance().removeBlockOwner(wldID, x, y, z);
     }
     

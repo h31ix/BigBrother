@@ -29,12 +29,12 @@ import java.util.Properties;
  * @link http://code.google.com/p/simpl09/
  */
 public class JDCConnection implements Connection {
-    private ConnectionService pool;
-    private Connection conn;
+    private final ConnectionService pool;
+    private final Connection conn;
     private boolean inuse;
     private long timestamp;
     
-    public JDCConnection(Connection conn, ConnectionService pool) {
+    public JDCConnection(final Connection conn, final ConnectionService pool) {
         this.conn = conn;
         this.pool = pool;
         inuse = false;
@@ -54,7 +54,7 @@ public class JDCConnection implements Connection {
     public boolean validate() {
         try {
             conn.getMetaData();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
         return true;
@@ -80,11 +80,11 @@ public class JDCConnection implements Connection {
         return conn;
     }
     
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
+    public PreparedStatement prepareStatement(final String sql) throws SQLException {
         return conn.prepareStatement(sql);
     }
     
-    public CallableStatement prepareCall(String sql) throws SQLException {
+    public CallableStatement prepareCall(final String sql) throws SQLException {
         return conn.prepareCall(sql);
     }
     
@@ -92,11 +92,11 @@ public class JDCConnection implements Connection {
         return conn.createStatement();
     }
     
-    public String nativeSQL(String sql) throws SQLException {
+    public String nativeSQL(final String sql) throws SQLException {
         return conn.nativeSQL(sql);
     }
     
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
+    public void setAutoCommit(final boolean autoCommit) throws SQLException {
         conn.setAutoCommit(autoCommit);
     }
     
@@ -120,7 +120,7 @@ public class JDCConnection implements Connection {
         return conn.getMetaData();
     }
     
-    public void setReadOnly(boolean readOnly) throws SQLException {
+    public void setReadOnly(final boolean readOnly) throws SQLException {
         conn.setReadOnly(readOnly);
     }
     
@@ -128,7 +128,7 @@ public class JDCConnection implements Connection {
         return conn.isReadOnly();
     }
     
-    public void setCatalog(String catalog) throws SQLException {
+    public void setCatalog(final String catalog) throws SQLException {
         conn.setCatalog(catalog);
     }
     
@@ -136,7 +136,7 @@ public class JDCConnection implements Connection {
         return conn.getCatalog();
     }
     
-    public void setTransactionIsolation(int level) throws SQLException {
+    public void setTransactionIsolation(final int level) throws SQLException {
         conn.setTransactionIsolation(level);
     }
     
@@ -158,7 +158,7 @@ public class JDCConnection implements Connection {
      * @see java.sql.Connection#createArrayOf(java.lang.String, java.lang.Object[])
      */
     
-    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+    public Array createArrayOf(final String typeName, final Object[] elements) throws SQLException {
         return conn.createArrayOf(typeName, elements);
     }
     
@@ -208,7 +208,7 @@ public class JDCConnection implements Connection {
      * @see java.sql.Connection#createStatement(int, int)
      */
     
-    public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+    public Statement createStatement(final int resultSetType, final int resultSetConcurrency) throws SQLException {
         return conn.createStatement(resultSetType, resultSetConcurrency);
     }
     
@@ -218,7 +218,7 @@ public class JDCConnection implements Connection {
      * @see java.sql.Connection#createStatement(int, int, int)
      */
     
-    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    public Statement createStatement(final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) throws SQLException {
         return conn.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
     
@@ -228,7 +228,7 @@ public class JDCConnection implements Connection {
      * @see java.sql.Connection#createStruct(java.lang.String, java.lang.Object[])
      */
     
-    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+    public Struct createStruct(final String typeName, final Object[] attributes) throws SQLException {
         return conn.createStruct(typeName, attributes);
     }
     
@@ -248,7 +248,7 @@ public class JDCConnection implements Connection {
      * @see java.sql.Connection#getClientInfo(java.lang.String)
      */
     
-    public String getClientInfo(String name) throws SQLException {
+    public String getClientInfo(final String name) throws SQLException {
         return conn.getClientInfo(name);
     }
     
@@ -262,11 +262,11 @@ public class JDCConnection implements Connection {
         return conn.getHoldability();
     }
     
-    public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+    public boolean isWrapperFor(final Class<?> arg0) throws SQLException {
         return conn.isWrapperFor(arg0);
     }
     
-    public <T> T unwrap(Class<T> arg0) throws SQLException {
+    public <T> T unwrap(final Class<T> arg0) throws SQLException {
         return conn.unwrap(arg0);
     }
     
@@ -274,55 +274,55 @@ public class JDCConnection implements Connection {
         return conn.getTypeMap();
     }
     
-    public boolean isValid(int timeout) throws SQLException {
+    public boolean isValid(final int timeout) throws SQLException {
         return conn.isValid(timeout);
     }
     
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+    public CallableStatement prepareCall(final String sql, final int resultSetType, final int resultSetConcurrency) throws SQLException {
         return conn.prepareCall(sql, resultSetType, resultSetConcurrency);
     }
     
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    public CallableStatement prepareCall(final String sql, final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) throws SQLException {
         return conn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
     
-    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+    public PreparedStatement prepareStatement(final String sql, final int autoGeneratedKeys) throws SQLException {
         return conn.prepareStatement(sql, autoGeneratedKeys);
     }
     
-    public PreparedStatement prepareStatement(String arg0, int[] arg1) throws SQLException {
+    public PreparedStatement prepareStatement(final String arg0, final int[] arg1) throws SQLException {
         return conn.prepareStatement(arg0, arg1);
     }
     
-    public PreparedStatement prepareStatement(String arg0, String[] arg1) throws SQLException {
+    public PreparedStatement prepareStatement(final String arg0, final String[] arg1) throws SQLException {
         return conn.prepareStatement(arg0, arg1);
     }
     
-    public PreparedStatement prepareStatement(String arg0, int arg1, int arg2) throws SQLException {
+    public PreparedStatement prepareStatement(final String arg0, final int arg1, final int arg2) throws SQLException {
         return conn.prepareStatement(arg0, arg1, arg2);
     }
     
-    public PreparedStatement prepareStatement(String arg0, int arg1, int arg2, int arg3) throws SQLException {
+    public PreparedStatement prepareStatement(final String arg0, final int arg1, final int arg2, final int arg3) throws SQLException {
         return conn.prepareStatement(arg0, arg1, arg2, arg3);
     }
     
-    public void releaseSavepoint(Savepoint arg0) throws SQLException {
+    public void releaseSavepoint(final Savepoint arg0) throws SQLException {
         conn.releaseSavepoint(arg0);
     }
     
-    public void rollback(Savepoint arg0) throws SQLException {
+    public void rollback(final Savepoint arg0) throws SQLException {
         conn.rollback(arg0);
     }
     
-    public void setClientInfo(Properties arg0) throws SQLClientInfoException {
+    public void setClientInfo(final Properties arg0) throws SQLClientInfoException {
         conn.setClientInfo(arg0);
     }
     
-    public void setClientInfo(String arg0, String arg1) throws SQLClientInfoException {
+    public void setClientInfo(final String arg0, final String arg1) throws SQLClientInfoException {
         conn.setClientInfo(arg0, arg1);
     }
     
-    public void setHoldability(int arg0) throws SQLException {
+    public void setHoldability(final int arg0) throws SQLException {
         conn.setHoldability(arg0);
     }
     
@@ -330,11 +330,11 @@ public class JDCConnection implements Connection {
         return conn.setSavepoint();
     }
     
-    public Savepoint setSavepoint(String arg0) throws SQLException {
+    public Savepoint setSavepoint(final String arg0) throws SQLException {
         return conn.setSavepoint(arg0);
     }
     
-    public void setTypeMap(Map<String, Class<?>> arg0) throws SQLException {
+    public void setTypeMap(final Map<String, Class<?>> arg0) throws SQLException {
         conn.setTypeMap(arg0);
     }
 }

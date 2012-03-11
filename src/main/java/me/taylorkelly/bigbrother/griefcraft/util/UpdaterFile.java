@@ -29,7 +29,7 @@ public class UpdaterFile {
      */
     private String localLocation;
     
-    public UpdaterFile(String location) {
+    public UpdaterFile(final String location) {
         remoteLocation = location;
         localLocation = location;
     }
@@ -53,7 +53,7 @@ public class UpdaterFile {
      * 
      * @param localLocation
      */
-    public void setLocalLocation(String localLocation) {
+    public void setLocalLocation(final String localLocation) {
         this.localLocation = localLocation;
     }
     
@@ -62,7 +62,7 @@ public class UpdaterFile {
      * 
      * @param remoteLocation
      */
-    public void setRemoteLocation(String remoteLocation) {
+    public void setRemoteLocation(final String remoteLocation) {
         this.remoteLocation = remoteLocation;
     }
     

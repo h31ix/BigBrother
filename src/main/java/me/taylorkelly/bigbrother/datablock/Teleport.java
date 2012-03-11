@@ -7,15 +7,15 @@ import org.bukkit.Server;
 import org.bukkit.World;
 
 public class Teleport extends BBAction {
-    public Teleport(String player, Location to) {
+    public Teleport(final String player, final Location to) {
         super(player, to.getWorld().getName(), to.getBlockX(), to.getBlockY(), to.getBlockZ(), 0, "");
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Teleport(pi, world, x, y, z, type, data);
     }
     
-    private Teleport(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Teleport(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -27,11 +27,11 @@ public class Teleport extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
     @Override

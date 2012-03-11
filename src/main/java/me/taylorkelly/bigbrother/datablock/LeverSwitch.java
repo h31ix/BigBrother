@@ -8,23 +8,23 @@ import org.bukkit.block.Block;
 
 public class LeverSwitch extends BBAction {
     
-    public LeverSwitch(String player, Block lever, String world) {
+    public LeverSwitch(final String player, final Block lever, final String world) {
         super(player, world, lever.getX(), lever.getY(), lever.getZ(), 69, Byte.toString(lever.getData()));
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new LeverSwitch(pi, world, x, y, z, type, data);
     }
     
-    private LeverSwitch(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private LeverSwitch(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

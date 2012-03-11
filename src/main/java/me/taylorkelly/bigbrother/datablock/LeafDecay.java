@@ -13,7 +13,7 @@ public class LeafDecay extends BBAction {
     
     private ArrayList<BBAction> bystanders;
     
-    public LeafDecay(String player, Block block, String world) {
+    public LeafDecay(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         torchCheck(player, block);
@@ -22,7 +22,7 @@ public class LeafDecay extends BBAction {
         checkGnomesLivingOnTop(player, block);
     }
     
-    public LeafDecay(Block block, String world) {
+    public LeafDecay(final Block block, final String world) {
         super(ENVIRONMENT, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         bystanders = new ArrayList<BBAction>();
         torchCheck("Environment", block);
@@ -31,36 +31,36 @@ public class LeafDecay extends BBAction {
         checkGnomesLivingOnTop("Environment", block);
     }
     
-    public static BBAction create(Block block, String world) {
+    public static BBAction create(final Block block, final String world) {
         // TODO Player handling
         return new LeafDecay(block, world);
     }
     
     @Override
     public void send() {
-        for (BBAction block : bystanders) {
+        for (final BBAction block : bystanders) {
             block.send();
         }
         super.send();
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
         if ((type != 51) || BBSettings.restoreFire) {
-            World currWorld = wld;//server.getWorld(world);
+            final World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
             
-            byte blockData = Byte.parseByte(data);
+            final byte blockData = Byte.parseByte(data);
             currWorld.getBlockAt(x, y, z).setTypeId(type);
             currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -68,11 +68,11 @@ public class LeafDecay extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new LeafDecay(pi, world, x, y, z, type, data);
     }
     
-    private LeafDecay(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private LeafDecay(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

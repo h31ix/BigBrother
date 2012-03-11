@@ -22,7 +22,7 @@ public class HistoryLog extends StickMode {
      * @author N3X15
      */
     @Override
-    public void initialize(Player player) {
+    public void initialize(final Player player) {
         player.sendMessage(BigBrother.premessage + "Every log in your inventory (and any logs you pick up) are now History Logs!");
         player.sendMessage(ChatColor.AQUA + "To read the history of a solid block (e.g. Dirt), punch (left-click) it with your History Log.");
         player.sendMessage(ChatColor.AQUA + "To read the history of a non-solid block (e.g. water or air), replace it (right-click) with your History Log");
@@ -30,30 +30,30 @@ public class HistoryLog extends StickMode {
     }
     
     @Override
-    public void disable(Player player) {
+    public void disable(final Player player) {
         player.sendMessage(BigBrother.premessage + "Your logs have returned to their previous level of worthlessness!");
     }
     
     @Override
-    public ArrayList<String> getInfoOnBlock(Block block, WorldManager manager, boolean leftclick) {
-        ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager); //BlockHistory.hist(block, manager);
+    public ArrayList<String> getInfoOnBlock(final Block block, final WorldManager manager, final boolean leftclick) {
+        final ArrayList<Action> history = BBDataTable.getInstance().getBlockHistory(block, manager); //BlockHistory.hist(block, manager);
         
-        ArrayList<String> msgs = new ArrayList<String>();
+        final ArrayList<String> msgs = new ArrayList<String>();
         if (history.isEmpty()) {
             msgs.add(ChatColor.RED + "No edits on this block");
         } else {
             msgs.add(ChatColor.AQUA.toString() + history.size() + " edits on this block");
-            for (Action dataBlock : history) {
-                Calendar cal = Calendar.getInstance();
-                String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
-                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+            for (final Action dataBlock : history) {
+                final Calendar cal = Calendar.getInstance();
+                final String DATE_FORMAT = "MMM.d@'" + ChatColor.GRAY + "'kk.mm.ss";
+                final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
                 cal.setTimeInMillis(dataBlock.date * 1000);
-                StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
+                final StringBuilder msg = new StringBuilder(sdf.format(cal.getTime()));
                 msg.append(ChatColor.WHITE).append(" - ").append(ChatColor.YELLOW);
                 msg.append(dataBlock.player);
                 msg.append(ChatColor.WHITE);
                 msg.append(" ");
-                String[] lines = dataBlock.toString().split("\n");
+                final String[] lines = dataBlock.toString().split("\n");
                 msg.append(lines[0]);
                 msgs.add(msg.toString());
                 if (lines.length > 1) {
@@ -76,12 +76,12 @@ public class HistoryLog extends StickMode {
     }
     
     @Override
-    public void update(Player player) {
+    public void update(final Player player) {
         //player.getInventory().setItem(slot, new ItemStack(Material.LOG, 1));
     }
     
     @Override
-    public boolean usesStick(ItemStack itemStack) {
+    public boolean usesStick(final ItemStack itemStack) {
         if (itemStack.getType() == Material.LOG)
             return true;
         return false;

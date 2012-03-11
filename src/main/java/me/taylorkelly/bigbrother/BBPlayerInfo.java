@@ -58,7 +58,7 @@ public class BBPlayerInfo {
      * 
      * @param name
      */
-    public BBPlayerInfo(String name) {
+    public BBPlayerInfo(final String name) {
         this.name = name;
         setNew(true); // Only really used to determine if we need to INSERT or
                       // UPDATE.
@@ -79,13 +79,13 @@ public class BBPlayerInfo {
      * @param name
      * @param flags
      */
-    public BBPlayerInfo(int id, String name, int flags) {
+    public BBPlayerInfo(final int id, final String name, final int flags) {
         this.id = id;
         this.name = name;
         this.flags = flags;
     }
     
-    private void setFlag(PlayerField fld, boolean on) {
+    private void setFlag(final PlayerField fld, final boolean on) {
         if (!on) {
             flags &= ~(1 << fld.ordinal());
         } else {
@@ -112,8 +112,8 @@ public class BBPlayerInfo {
         name = clone.name;
     }
     
-    private boolean getFlag(PlayerField fld) {
-        int f = (1 << fld.ordinal());
+    private boolean getFlag(final PlayerField fld) {
+        final int f = (1 << fld.ordinal());
         return (flags & f) == f;
     }
     
@@ -134,7 +134,7 @@ public class BBPlayerInfo {
      * 
      * @param b
      */
-    public void setNew(boolean b) {
+    public void setNew(final boolean b) {
         isNew = b;
     }
     
@@ -149,7 +149,7 @@ public class BBPlayerInfo {
     /**
      * @param isWatched
      */
-    public void setWatched(boolean isWatched) {
+    public void setWatched(final boolean isWatched) {
         setFlag(PlayerField.WATCHED, isWatched);
     }
     
@@ -167,7 +167,7 @@ public class BBPlayerInfo {
      * 
      * @param logInPossession
      */
-    public void setHasLog(boolean logInPossession) {
+    public void setHasLog(final boolean logInPossession) {
         setFlag(PlayerField.HAS_LOG, logInPossession);
     }
     
@@ -185,7 +185,7 @@ public class BBPlayerInfo {
      * 
      * @param b
      */
-    public void setHasOpenedChest(Chest c, ItemStack[] contents) {
+    public void setHasOpenedChest(final Chest c, final ItemStack[] contents) {
         myOpenChest = c;
         
         if (contents != null) {
@@ -217,7 +217,7 @@ public class BBPlayerInfo {
      */
     @Override
     public String toString() {
-        String player = getName();
+        final String player = getName();
         /*
          * TODO: Future consideration, working to get this hunk of bugs out the door atm. - N3X if(BBSettings.colorPlayerNames) { player=BBPermissions.getPrefix(player)+player+BBPermissions.getSuffix(player); }
          */

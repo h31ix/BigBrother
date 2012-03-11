@@ -9,15 +9,15 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Login extends BBAction {
-    public Login(Player player, String world) {
+    public Login(final Player player, final String world) {
         super(BBUsersTable.getInstance().getUserByName(player.getName()), world, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, BBSettings.logPlayerIPs ? player.getAddress().getAddress().toString().substring(1) : "");
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Login(pi, world, x, y, z, type, data);
     }
     
-    private Login(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Login(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -29,11 +29,11 @@ public class Login extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
     @Override

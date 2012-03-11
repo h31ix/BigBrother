@@ -14,22 +14,22 @@ import org.bukkit.entity.LivingEntity;
  */
 public class ActionFactory {
     
-    public static void createEndermanPickup(LivingEntity entity, Block block) {
+    public static void createEndermanPickup(final LivingEntity entity, final Block block) {
         // TODO Auto-generated method stub
         
     }
     
-    public static void createEnderGrief(LivingEntity entity, Block block) {
+    public static void createEnderGrief(final LivingEntity entity, final Block block) {
         // TODO Auto-generated method stub
         
     }
     
-    public static void createEndermanPlace(LivingEntity entity, Location location, Material type) {
+    public static void createEndermanPlace(final LivingEntity entity, final Location location, final Material type) {
         // TODO Auto-generated method stub
         
     }
     
-    public static void createSilverfishGrief(LivingEntity entity, Block block) {
+    public static void createSilverfishGrief(final LivingEntity entity, final Block block) {
         // TODO Auto-generated method stub
         
     }

@@ -21,13 +21,13 @@ public class DebugCommand extends BBCommand {
     /**
      * @param plugin
      */
-    public DebugCommand(BigBrother plugin) {
+    public DebugCommand(final BigBrother plugin) {
         super(plugin);
         // TODO Auto-generated constructor stub
     }
     
     @Override
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length == 2) {
                 BBSettings.debugMode = (split[1].equalsIgnoreCase("on"));

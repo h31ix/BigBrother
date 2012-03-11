@@ -30,17 +30,17 @@ import org.bukkit.entity.Player;
 
 public class BBCommand implements CommandExecutor {
     
-    private HashMap<String, CommandExecutor> executors = new HashMap<String, CommandExecutor>();
+    private final HashMap<String, CommandExecutor> executors = new HashMap<String, CommandExecutor>();
     
-    public BBCommand(BigBrother plugin) {
+    public BBCommand(final BigBrother plugin) {
     }
     
-    public void registerExecutor(String subcmd, CommandExecutor cmd) {
+    public void registerExecutor(final String subcmd, final CommandExecutor cmd) {
         executors.put(subcmd.toLowerCase(), cmd);
     }
     
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        String commandName = command.getName().toLowerCase();
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, String[] args) {
+        final String commandName = command.getName().toLowerCase();
         
         args = groupArgs(args);
         if (sender instanceof Player) {
@@ -48,7 +48,7 @@ public class BBCommand implements CommandExecutor {
                 if (args.length == 0)
                     return false;
                 
-                String subcommandName = args[0].toLowerCase();
+                final String subcommandName = args[0].toLowerCase();
                 
                 if (!executors.containsKey(subcommandName))
                     return false;
@@ -57,7 +57,7 @@ public class BBCommand implements CommandExecutor {
             }
         } else if (sender instanceof ConsoleCommandSender) {
             if (commandName.equals("bb")) {
-                ConsoleCommandSender console = (ConsoleCommandSender) sender;
+                final ConsoleCommandSender console = (ConsoleCommandSender) sender;
                 if (args.length == 0)
                     return false;
                 else if (args[0].equalsIgnoreCase("version")) {
@@ -88,11 +88,11 @@ public class BBCommand implements CommandExecutor {
      * @param preargs Arguments to group.
      * @return Grouped args.
      */
-    public static String[] groupArgs(String[] preargs) {
-        List<String> args = new ArrayList<String>();
+    public static String[] groupArgs(final String[] preargs) {
+        final List<String> args = new ArrayList<String>();
         String currentArg = "";
         boolean inQuotes = false;
-        for (String arg : preargs) {
+        for (final String arg : preargs) {
             if (inQuotes) {
                 BBLogging.info(arg);
                 currentArg += " " + arg;
@@ -110,7 +110,7 @@ public class BBCommand implements CommandExecutor {
                 }
             }
         }
-        String[] gargs = new String[args.size()];
+        final String[] gargs = new String[args.size()];
         return args.toArray(gargs);
     }
     

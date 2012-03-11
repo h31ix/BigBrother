@@ -6,19 +6,19 @@ package me.taylorkelly.util;
 
 public class Numbers {
     
-    public static boolean isInteger(String str) {
+    public static boolean isInteger(final String str) {
         try {
             Integer.parseInt(str);
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
     }
     
-    public static boolean isNumber(String string) {
+    public static boolean isNumber(final String string) {
         try {
             Double.parseDouble(string);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             return false;
         }
         return true;

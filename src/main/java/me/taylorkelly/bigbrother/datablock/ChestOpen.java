@@ -8,11 +8,11 @@ import org.bukkit.block.Block;
 
 public class ChestOpen extends BBAction {
     
-    public ChestOpen(String player, Block block, String world) {
+    public ChestOpen(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), 54, "");
     }
     
-    private ChestOpen(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private ChestOpen(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -24,15 +24,15 @@ public class ChestOpen extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
         
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new ChestOpen(pi, world, x, y, z, type, data);
     }
     

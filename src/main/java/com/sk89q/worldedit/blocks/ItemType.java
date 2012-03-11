@@ -254,9 +254,9 @@ public enum ItemType {
     private final String[] lookupKeys;
     
     static {
-        for (ItemType type : EnumSet.allOf(ItemType.class)) {
+        for (final ItemType type : EnumSet.allOf(ItemType.class)) {
             ids.put(type.id, type);
-            for (String key : type.lookupKeys) {
+            for (final String key : type.lookupKeys) {
                 lookup.put(key, type);
             }
         }
@@ -268,7 +268,7 @@ public enum ItemType {
      * @param id
      * @param name
      */
-    ItemType(int id, String name, String lookupKey) {
+    ItemType(final int id, final String name, final String lookupKey) {
         this.id = id;
         this.name = name;
         lookupKeys = new String[] { lookupKey };
@@ -280,7 +280,7 @@ public enum ItemType {
      * @param id
      * @param name
      */
-    ItemType(int id, String name, String... lookupKeys) {
+    ItemType(final int id, final String name, final String... lookupKeys) {
         this.id = id;
         this.name = name;
         this.lookupKeys = lookupKeys;
@@ -292,7 +292,7 @@ public enum ItemType {
      * @param id
      * @return
      */
-    public static ItemType fromID(int id) {
+    public static ItemType fromID(final int id) {
         return ids.get(id);
     }
     
@@ -302,8 +302,8 @@ public enum ItemType {
      * @param id
      * @return
      */
-    public static String toName(int id) {
-        ItemType type = ids.get(id);
+    public static String toName(final int id) {
+        final ItemType type = ids.get(id);
         if (type != null)
             return type.getName();
         else
@@ -316,10 +316,10 @@ public enum ItemType {
      * @param id
      * @return
      */
-    public static String toHeldName(int id) {
+    public static String toHeldName(final int id) {
         if (id == 0)
             return "Hand";
-        ItemType type = ids.get(id);
+        final ItemType type = ids.get(id);
         if (type != null)
             return type.getName();
         else
@@ -332,7 +332,7 @@ public enum ItemType {
      * @param name
      * @return
      */
-    public static ItemType lookup(String name) {
+    public static ItemType lookup(final String name) {
         return lookup(name, true);
     }
     
@@ -343,8 +343,8 @@ public enum ItemType {
      * @param fuzzy
      * @return
      */
-    public static ItemType lookup(String name, boolean fuzzy) {
-        String testName = name.replace(" ", "").toLowerCase();
+    public static ItemType lookup(final String name, final boolean fuzzy) {
+        final String testName = name.replace(" ", "").toLowerCase();
         
         ItemType type = lookup.get(testName);
         
@@ -356,12 +356,12 @@ public enum ItemType {
         
         int minDist = -1;
         
-        for (Entry<String, ItemType> entry : lookup.entrySet()) {
+        for (final Entry<String, ItemType> entry : lookup.entrySet()) {
             if (entry.getKey().charAt(0) != testName.charAt(0)) {
                 continue;
             }
             
-            int dist = StringUtil.getLevenshteinDistance(entry.getKey(), testName);
+            final int dist = StringUtil.getLevenshteinDistance(entry.getKey(), testName);
             
             if (((dist < minDist) || (minDist == -1)) && (dist < 2)) {
                 minDist = dist;
@@ -405,7 +405,7 @@ public enum ItemType {
      * @param id
      * @return
      */
-    public static boolean shouldNotStack(int id) {
+    public static boolean shouldNotStack(final int id) {
         return ((id >= 256) && (id <= 259)) || (id == 261) || ((id >= 267) && (id <= 279)) || ((id >= 281) && (id <= 286)) || ((id >= 290) && (id <= 294)) || ((id >= 298) && (id <= 317)) || ((id >= 325) && (id <= 327)) || (id == 335) || (id == 354) || (id == 355) || (id >= 2256);
     }
     
@@ -415,7 +415,7 @@ public enum ItemType {
      * @param id
      * @return
      */
-    public static boolean usesDamageValue(int id) {
+    public static boolean usesDamageValue(final int id) {
         return (id == 35) || (id == 351);
     }
 }

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 
 public class WorldManager {
-    private HashMap<String, Integer> worldMap;
+    private final HashMap<String, Integer> worldMap;
     
     public WorldManager() {
         worldMap = BBWorldsTable.getInstance().getWorlds();
@@ -35,7 +35,7 @@ public class WorldManager {
      * @param world The name of the world
      * @return The index of the world
      */
-    public int getWorld(String world) {
+    public int getWorld(final String world) {
         if (worldMap.containsKey(world))
             return worldMap.get(world);
         else {
@@ -55,9 +55,9 @@ public class WorldManager {
      * @param values Collection of values
      * @return The max of those numbers (or -1 if it's empty)
      */
-    public static int getMax(Collection<Integer> values) {
+    public static int getMax(final Collection<Integer> values) {
         int max = -1;
-        for (Integer value : values) {
+        for (final Integer value : values) {
             if (value > max) {
                 max = value;
             }
@@ -65,7 +65,7 @@ public class WorldManager {
         return max;
     }
     
-    private boolean saveWorld(String world, int index) {
+    private boolean saveWorld(final String world, final int index) {
         return BBWorldsTable.getInstance().insertWorld(index, world);
     }
 }

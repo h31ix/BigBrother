@@ -13,12 +13,12 @@ import org.bukkit.block.Block;
 
 public class BrokenBlock extends BBAction {
     
-    public BrokenBlock(String player, Block block, String world) {
+    public BrokenBlock(final String player, final Block block, final String world) {
         this(player, block, world, true);
         OwnershipManager.removeOwner(block);
     }
     
-    public BrokenBlock(String player, Block block, String world, boolean checks) {
+    public BrokenBlock(final String player, final Block block, final String world, final boolean checks) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()));
         children = new ArrayList<BBAction>();
         if (checks) {
@@ -32,36 +32,36 @@ public class BrokenBlock extends BBAction {
         OwnershipManager.removeOwner(block);
     }
     
-    public BrokenBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, byte data) {
+    public BrokenBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final byte data) {
         super(pi, world, x, y, z, type, Byte.toString(data));
         children = new ArrayList<BBAction>();
     }
     
     @Override
     public void send() {
-        for (BBAction block : children) {
+        for (final BBAction block : children) {
             block.send();
         }
         super.send();
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
         if ((type != 51) || BBSettings.restoreFire) {
-            World currWorld = wld;//server.getWorld(world);
+            final World currWorld = wld;//server.getWorld(world);
             if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
                 currWorld.loadChunk(x >> 4, z >> 4);
             }
             
-            byte blockData = Byte.parseByte(data);
+            final byte blockData = Byte.parseByte(data);
             currWorld.getBlockAt(x, y, z).setTypeId(type);
             currWorld.getBlockAt(x, y, z).setData(blockData);
         }
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
@@ -69,11 +69,11 @@ public class BrokenBlock extends BBAction {
         currWorld.getBlockAt(x, y, z).setTypeId(0);
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new BrokenBlock(pi, world, x, y, z, type, data);
     }
     
-    private BrokenBlock(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private BrokenBlock(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

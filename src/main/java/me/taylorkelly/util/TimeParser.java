@@ -18,7 +18,7 @@ public class TimeParser {
      * @param player The player to report to
      * @return The Calendar of the specified date
      */
-    public static Calendar parseTime(String strTime, Player player) {
+    public static Calendar parseTime(final String strTime, final Player player) {
         Calendar dateSearch;
         int days = 0;
         int hours = 0;
@@ -81,7 +81,7 @@ public class TimeParser {
         }
     }
     
-    public static long parseInterval(String strTime) {
+    public static long parseInterval(final String strTime) {
         int days = 0;
         int hours = 0;
         int minutes = 0;
@@ -129,7 +129,7 @@ public class TimeParser {
                 lastIndex = currIndex;
                 currIndex += 1;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return -1;
         }
         

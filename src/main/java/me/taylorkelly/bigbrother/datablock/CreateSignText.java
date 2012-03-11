@@ -10,21 +10,21 @@ import org.bukkit.block.Sign;
 
 public class CreateSignText extends BBAction {
     
-    public CreateSignText(String player, Sign sign, String world) {
+    public CreateSignText(final String player, final Sign sign, final String world) {
         super(player, world, sign.getX(), sign.getY(), sign.getZ(), 323, getText(sign));
     }
     
-    public CreateSignText(String player, String[] lines, Block block) {
+    public CreateSignText(final String player, final String[] lines, final Block block) {
         super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), 323, getText(lines));
     }
     
-    private static String getText(Sign sign) {
-        String[] lines = sign.getLines();
+    private static String getText(final Sign sign) {
+        final String[] lines = sign.getLines();
         return getText(lines);
     }
     
-    private static String getText(String[] lines) {
-        StringBuilder message = new StringBuilder();
+    private static String getText(final String[] lines) {
+        final StringBuilder message = new StringBuilder();
         for (int i = 0; i < lines.length; i++) {
             message.append(lines[i]);
             if (i < (lines.length - 1)) {
@@ -34,11 +34,11 @@ public class CreateSignText extends BBAction {
         return message.toString();
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new CreateSignText(pi, world, x, y, z, type, data);
     }
     
-    private CreateSignText(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private CreateSignText(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -50,17 +50,17 @@ public class CreateSignText extends BBAction {
     }
     
     @Override
-    public void redo(Server server) {
-        World currWorld = server.getWorld(world);
+    public void redo(final Server server) {
+        final World currWorld = server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         
-        String[] lines = data.split("\u0060");
+        final String[] lines = data.split("\u0060");
         
-        Block block = currWorld.getBlockAt(x, y, z);
+        final Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             for (int i = 0; i < lines.length; i++) {
                 sign.setLine(i, lines[i]);
             }
@@ -70,15 +70,15 @@ public class CreateSignText extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
-        World currWorld = wld;//server.getWorld(world);
+    public void rollback(final World wld) {
+        final World currWorld = wld;//server.getWorld(world);
         if (!currWorld.isChunkLoaded(x >> 4, z >> 4)) {
             currWorld.loadChunk(x >> 4, z >> 4);
         }
         
-        Block block = currWorld.getBlockAt(x, y, z);
+        final Block block = currWorld.getBlockAt(x, y, z);
         if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
+            final Sign sign = (Sign) block.getState();
             for (int i = 0; i < sign.getLines().length; i++) {
                 sign.setLine(i, "");
             }

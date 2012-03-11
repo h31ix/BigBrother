@@ -13,14 +13,14 @@ import org.bukkit.entity.Player;
 
 public class ConfirmCommand implements CommandExecutor {
     
-    public ConfirmCommand(BigBrother plugin) {
+    public ConfirmCommand(final BigBrother plugin) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length == 1) {
                 if (RollbackConfirmation.hasRI((Player) player)) {
-                    RollbackInterpreter interpret = RollbackConfirmation.getRI((Player) player);
+                    final RollbackInterpreter interpret = RollbackConfirmation.getRI((Player) player);
                     interpret.send();
                 } else {
                     player.sendMessage(BigBrother.premessage + "You have no rollback to confirm.");

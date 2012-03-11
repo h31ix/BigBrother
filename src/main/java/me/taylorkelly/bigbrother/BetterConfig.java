@@ -25,7 +25,7 @@ import org.spout.api.util.config.Configuration;
 
 public class BetterConfig extends Configuration {
     
-    public BetterConfig(File file) {
+    public BetterConfig(final File file) {
         super(file);
     }
     
@@ -35,7 +35,7 @@ public class BetterConfig extends Configuration {
      * @param o
      * @return
      */
-    private static Long castLong(Object o) {
+    private static Long castLong(final Object o) {
         if (o == null)
             return null;
         else if (o instanceof Byte)
@@ -52,7 +52,7 @@ public class BetterConfig extends Configuration {
             return null;
     }
     
-    public long getLong(String path, long defaultValue) {
+    public long getLong(final String path, final long defaultValue) {
         if (getValue(path) == null) {
             setValue(path, defaultValue);
         }
@@ -60,7 +60,7 @@ public class BetterConfig extends Configuration {
     }
     
     @Override
-    public int getInteger(String path, int defaultValue) {
+    public int getInteger(final String path, final int defaultValue) {
         if (getValue(path) == null) {
             setValue(path, defaultValue);
         }
@@ -68,7 +68,7 @@ public class BetterConfig extends Configuration {
     }
     
     @Override
-    public double getDouble(String path, double defaultValue) {
+    public double getDouble(final String path, final double defaultValue) {
         if (getValue(path) == null) {
             setValue(path, defaultValue);
         }
@@ -76,7 +76,7 @@ public class BetterConfig extends Configuration {
     }
     
     @Override
-    public String getString(String path, String defaultValue) {
+    public String getString(final String path, final String defaultValue) {
         if (getValue(path) == null) {
             setValue(path, defaultValue);
         }
@@ -84,21 +84,20 @@ public class BetterConfig extends Configuration {
     }
     
     @Override
-    public boolean getBoolean(String path, boolean defaultValue) {
+    public boolean getBoolean(final String path, final boolean defaultValue) {
         if (getValue(path) == null) {
             setValue(path, defaultValue);
         }
         return super.getBoolean(path, defaultValue);
     }
     
-    @SuppressWarnings("unchecked")
-    public BetterNode getNode(String path) {
+    public BetterNode getNode(final String path) {
         if ((getValue(path) == null) || !(getValue(path) instanceof Map)) {
-            BetterNode node = new BetterNode();
+            final BetterNode node = new BetterNode();
             setValue(path, new HashMap<String, Object>());
             return node;
         } else {
-            Object raw = getValue(path);
+            final Object raw = getValue(path);
             return new BetterNode(path, raw);
         }
         
@@ -108,7 +107,7 @@ public class BetterConfig extends Configuration {
      * Remove a property.
      * @param path
      */
-    public void removeProperty(String path) {
+    public void removeProperty(final String path) {
         super.removeNode(path);
     }
 }

@@ -27,11 +27,11 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class PropertiesFile {
-    private HashMap<String, PropertiesEntry> map;
-    private File file;
+    private final HashMap<String, PropertiesEntry> map;
+    private final File file;
     private boolean modified;
     
-    public PropertiesFile(File file) {
+    public PropertiesFile(final File file) {
         this.file = file;
         map = new HashMap<String, PropertiesEntry>();
         Scanner scan;
@@ -41,35 +41,35 @@ public class PropertiesFile {
             }
             scan = new Scanner(file);
             while (scan.hasNextLine()) {
-                String line = scan.nextLine();
+                final String line = scan.nextLine();
                 if (!line.contains("=")) {
                     continue;
                 }
-                int equals = line.indexOf('=');
+                final int equals = line.indexOf('=');
                 int commentIndex = line.length();
                 if (line.contains("#")) {
                     commentIndex = line.indexOf('#');
                 }
                 
-                String key = line.substring(0, equals).trim();
+                final String key = line.substring(0, equals).trim();
                 if (key.equals("")) {
                     continue;
                 }
-                String value = line.substring(equals + 1, commentIndex).trim();
+                final String value = line.substring(equals + 1, commentIndex).trim();
                 String comment = "";
                 if (commentIndex < (line.length() - 1)) {
                     comment = line.substring(commentIndex + 1, line.length()).trim();
                 }
                 map.put(key, new PropertiesEntry(value, comment));
             }
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             BBLogging.severe("Cannot read file " + file.getName());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             BBLogging.severe("Cannot create file " + file.getName());
         }
     }
     
-    public boolean getBoolean(String key, Boolean defaultValue, String defaultComment) {
+    public boolean getBoolean(final String key, final Boolean defaultValue, final String defaultComment) {
         if (map.containsKey(key))
             return Boolean.parseBoolean(map.get(key).value);
         else {
@@ -79,7 +79,7 @@ public class PropertiesFile {
         }
     }
     
-    public String getString(String key, String defaultValue, String defaultComment) {
+    public String getString(final String key, final String defaultValue, final String defaultComment) {
         if (map.containsKey(key))
             return map.get(key).value;
         else {
@@ -89,11 +89,11 @@ public class PropertiesFile {
         }
     }
     
-    public int getInt(String key, Integer defaultValue, String defaultComment) {
+    public int getInt(final String key, final Integer defaultValue, final String defaultComment) {
         if (map.containsKey(key)) {
             try {
                 return Integer.parseInt(map.get(key).value);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 BBLogging.warning("Trying to get Integer from " + key + ": " + map.get(key).value);
                 return defaultValue;
             }
@@ -104,11 +104,11 @@ public class PropertiesFile {
         }
     }
     
-    public long getLong(String key, Long defaultValue, String defaultComment) {
+    public long getLong(final String key, final Long defaultValue, final String defaultComment) {
         if (map.containsKey(key)) {
             try {
                 return Long.parseLong(map.get(key).value);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 BBLogging.warning("Trying to get Long from " + key + ": " + map.get(key).value);
                 return defaultValue;
             }
@@ -119,11 +119,11 @@ public class PropertiesFile {
         }
     }
     
-    public double getDouble(String key, Double defaultValue, String defaultComment) {
+    public double getDouble(final String key, final Double defaultValue, final String defaultComment) {
         if (map.containsKey(key)) {
             try {
                 return Double.parseDouble(map.get(key).value);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 BBLogging.warning("Trying to get Double from " + key + ": " + map.get(key).value);
                 return defaultValue;
             }
@@ -134,9 +134,9 @@ public class PropertiesFile {
         }
     }
     
-    public void setDouble(String key, Double globalMemory, String defaultComment) {
+    public void setDouble(final String key, final Double globalMemory, final String defaultComment) {
         if (map.containsKey(key)) {
-            PropertiesEntry entry = map.get(key);
+            final PropertiesEntry entry = map.get(key);
             entry.value = globalMemory.toString();
         } else {
             map.put(key, new PropertiesEntry(globalMemory.toString(), defaultComment));
@@ -155,8 +155,8 @@ public class PropertiesFile {
             }
             fwriter = new FileWriter(file);
             bwriter = new BufferedWriter(fwriter);
-            for (Entry<String, PropertiesEntry> entry : map.entrySet()) {
-                StringBuilder builder = new StringBuilder();
+            for (final Entry<String, PropertiesEntry> entry : map.entrySet()) {
+                final StringBuilder builder = new StringBuilder();
                 builder.append(entry.getKey());
                 builder.append(" = ");
                 builder.append(entry.getValue().value);
@@ -168,7 +168,7 @@ public class PropertiesFile {
                 bwriter.newLine();
             }
             bwriter.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             BBLogging.severe("IO Exception with file " + file.getName());
         } finally {
             try {
@@ -179,7 +179,7 @@ public class PropertiesFile {
                 if (fwriter != null) {
                     fwriter.close();
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 BBLogging.severe("IO Exception with file " + file.getName() + " (on close)");
             }
         }
@@ -190,7 +190,7 @@ public class PropertiesFile {
         public String value;
         public String comment;
         
-        public PropertiesEntry(String value, String comment) {
+        public PropertiesEntry(final String value, final String comment) {
             this.value = value;
             this.comment = comment;
         }
@@ -201,9 +201,9 @@ public class PropertiesFile {
      * @param currentVersion
      * @param string
      */
-    public void setInt(String key, int globalMemory, String defaultComment) {
+    public void setInt(final String key, final int globalMemory, final String defaultComment) {
         if (map.containsKey(key)) {
-            PropertiesEntry entry = map.get(key);
+            final PropertiesEntry entry = map.get(key);
             entry.value = Integer.valueOf(globalMemory).toString();
         } else {
             map.put(key, new PropertiesEntry(Integer.valueOf(globalMemory).toString(), defaultComment));

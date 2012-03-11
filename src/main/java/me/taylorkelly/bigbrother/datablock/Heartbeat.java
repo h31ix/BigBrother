@@ -35,10 +35,10 @@ public class Heartbeat extends BBAction {
     /**
      * 
      */
-    public Heartbeat(BigBrother plugin) {
+    public Heartbeat(final BigBrother plugin) {
         // Populate fields
         super(BBPlayerInfo.ENVIRONMENT, "BB_GLOBAL", 0, 0, 0, 0, "");
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(System.currentTimeMillis());
         data = sb.toString();
         type = 0;
@@ -58,7 +58,7 @@ public class Heartbeat extends BBAction {
      * @see me.taylorkelly.bigbrother.datablock.Action#rollback(org.bukkit.World)
      */
     @Override
-    public void rollback(World world) {
+    public void rollback(final World world) {
         
     }
     
@@ -68,7 +68,7 @@ public class Heartbeat extends BBAction {
      * @see me.taylorkelly.bigbrother.datablock.Action#redo(org.bukkit.Server)
      */
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
     /*

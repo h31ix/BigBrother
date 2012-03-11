@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 
 public class CleanseCommand implements CommandExecutor {
     
-    public CleanseCommand(BigBrother plugin) {
+    public CleanseCommand(final BigBrother plugin) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.CLEANSE.id)) {
             if (Cleanser.needsCleaning()) {
                 Cleanser.clean((Player) player);

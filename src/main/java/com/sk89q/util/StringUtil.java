@@ -33,7 +33,7 @@ public class StringUtil {
      * @param len
      * @return
      */
-    public static String trimLength(String str, int len) {
+    public static String trimLength(final String str, final int len) {
         if (str.length() > len)
             return str.substring(0, len);
         
@@ -48,10 +48,10 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(String[] str, String delimiter, int initialIndex) {
+    public static String joinString(final String[] str, final String delimiter, final int initialIndex) {
         if (str.length == 0)
             return "";
-        StringBuilder buffer = new StringBuilder(str[initialIndex]);
+        final StringBuilder buffer = new StringBuilder(str[initialIndex]);
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(str[i]);
         }
@@ -67,10 +67,10 @@ public class StringUtil {
      * @param quote
      * @return
      */
-    public static String joinQuotedString(String[] str, String delimiter, int initialIndex, String quote) {
+    public static String joinQuotedString(final String[] str, final String delimiter, final int initialIndex, final String quote) {
         if (str.length == 0)
             return "";
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         buffer.append(quote);
         buffer.append(str[initialIndex]);
         buffer.append(quote);
@@ -87,7 +87,7 @@ public class StringUtil {
      * @param delimiter
      * @return
      */
-    public static String joinString(String[] str, String delimiter) {
+    public static String joinString(final String[] str, final String delimiter) {
         return joinString(str, delimiter, 0);
     }
     
@@ -99,10 +99,10 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(Object[] str, String delimiter, int initialIndex) {
+    public static String joinString(final Object[] str, final String delimiter, final int initialIndex) {
         if (str.length == 0)
             return "";
-        StringBuilder buffer = new StringBuilder(str[initialIndex].toString());
+        final StringBuilder buffer = new StringBuilder(str[initialIndex].toString());
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(str[i].toString());
         }
@@ -117,10 +117,10 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(int[] str, String delimiter, int initialIndex) {
+    public static String joinString(final int[] str, final String delimiter, final int initialIndex) {
         if (str.length == 0)
             return "";
-        StringBuilder buffer = new StringBuilder(Integer.toString(str[initialIndex]));
+        final StringBuilder buffer = new StringBuilder(Integer.toString(str[initialIndex]));
         for (int i = initialIndex + 1; i < str.length; i++) {
             buffer.append(delimiter).append(Integer.toString(str[i]));
         }
@@ -135,12 +135,12 @@ public class StringUtil {
      * @param initialIndex
      * @return
      */
-    public static String joinString(Collection<?> str, String delimiter, int initialIndex) {
+    public static String joinString(final Collection<?> str, final String delimiter, final int initialIndex) {
         if (str.size() == 0)
             return "";
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         int i = 0;
-        for (Object o : str) {
+        for (final Object o : str) {
             if (i >= initialIndex) {
                 if (i > 0) {
                     buffer.append(delimiter);
@@ -190,7 +190,7 @@ public class StringUtil {
      * @return result distance
      * @throws IllegalArgumentException if either String input <code>null</code>
      */
-    public static int getLevenshteinDistance(String s, String t) {
+    public static int getLevenshteinDistance(final String s, final String t) {
         if ((s == null) || (t == null))
             throw new IllegalArgumentException("Strings must not be null");
         
@@ -200,8 +200,8 @@ public class StringUtil {
          * Effectively, the difference between the two implementations is this one does not cause an out of memory condition when calculating the LD over two very large strings.
          */
         
-        int n = s.length(); // length of s
-        int m = t.length(); // length of t
+        final int n = s.length(); // length of s
+        final int m = t.length(); // length of t
         
         if (n == 0)
             return m;

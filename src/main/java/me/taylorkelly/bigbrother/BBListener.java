@@ -87,15 +87,15 @@ public class BBListener implements Listener {
     
     private final BigBrother plugin;
     
-    public BBListener(BigBrother plugin) {
+    public BBListener(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockSpread(BlockSpreadEvent event) {
+    public void onBlockSpread(final BlockSpreadEvent event) {
         if (!event.isCancelled()) {
-            Block blockTo = event.getBlock();
-            Block blockFrom = event.getSource();
+            final Block blockTo = event.getBlock();
+            final Block blockFrom = event.getSource();
             BBLogging.debug(String.format("BlockSpread: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)", blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()));
             if ((blockTo.getType() == Material.FIRE) || (blockFrom.getType() == Material.FIRE)) {
                 OwnershipManager.trackFlow(blockFrom, blockTo);
@@ -109,20 +109,20 @@ public class BBListener implements Listener {
      * @author N3X15
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPistonExtend(BlockPistonExtendEvent e) {
-        World w = e.getBlock().getWorld();
+    public void onBlockPistonExtend(final BlockPistonExtendEvent e) {
+        final World w = e.getBlock().getWorld();
         // Determine direction of move
-        int xo = e.getDirection().getModX();
-        int yo = e.getDirection().getModY();
-        int zo = e.getDirection().getModZ();
-        BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
+        final int xo = e.getDirection().getModX();
+        final int yo = e.getDirection().getModY();
+        final int zo = e.getDirection().getModZ();
+        final BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
         //Extend piston ownership one block outward
         int x = e.getBlock().getX();
         int y = e.getBlock().getY();
         int z = e.getBlock().getZ();
         
         OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), opi);
-        for (Block b : e.getBlocks()) {
+        for (final Block b : e.getBlocks()) {
             //Get ownership information
             BBPlayerInfo pi = OwnershipManager.findOwner(b);
             x = b.getX();
@@ -132,7 +132,7 @@ public class BBListener implements Listener {
             OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), pi);
             
             // Generate action
-            BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
+            final BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
             if (pi.getWatched()) {
                 action.send();
             }
@@ -145,27 +145,27 @@ public class BBListener implements Listener {
      * @author N3X15
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPistonRetract(BlockPistonRetractEvent e) {
+    public void onBlockPistonRetract(final BlockPistonRetractEvent e) {
         if (!e.isSticky() && !e.isCancelled())
             return;
-        World w = e.getBlock().getWorld();
+        final World w = e.getBlock().getWorld();
         // Determine direction of move
-        int xo = e.getDirection().getModX();
-        int yo = e.getDirection().getModY();
-        int zo = e.getDirection().getModZ();
-        BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
+        final int xo = e.getDirection().getModX();
+        final int yo = e.getDirection().getModY();
+        final int zo = e.getDirection().getModZ();
+        final BBPlayerInfo opi = OwnershipManager.findOwner(e.getBlock());
         //Extend piston ownership one block outward
-        int x = e.getBlock().getX();
-        int y = e.getBlock().getY();
-        int z = e.getBlock().getZ();
+        final int x = e.getBlock().getX();
+        final int y = e.getBlock().getY();
+        final int z = e.getBlock().getZ();
         
         OwnershipManager.setOwnerLocation(new Location(w, x + xo, y + yo, z + zo), BBPlayerInfo.ENVIRONMENT);
-        Block pistonShaft = w.getBlockAt(x + xo, y + yo, z + zo);
+        final Block pistonShaft = w.getBlockAt(x + xo, y + yo, z + zo);
         // <N3X15_> EvilSeph, Dinnerbone, whoever is available:  How am I supposed to track blocks retracted by a piston?  BlockPistonRetractEvent doesn't have a getBlocks() method, so I can't determine what blocks will be affected by sticky pistons.
         // <EvilSeph> rudimentary, sorry
         //for(Block b : e.getBlocks()) {
-        Block b = w.getBlockAt(x + (xo * 2), y + (yo * 2), z + (zo * 2));
-        BBPlayerInfo pi = OwnershipManager.findOwner(b);
+        final Block b = w.getBlockAt(x + (xo * 2), y + (yo * 2), z + (zo * 2));
+        final BBPlayerInfo pi = OwnershipManager.findOwner(b);
         
         // Clear the moved block's ownership
         OwnershipManager.setOwner(b, BBPlayerInfo.ENVIRONMENT);
@@ -174,15 +174,15 @@ public class BBListener implements Listener {
         OwnershipManager.setOwner(pistonShaft, pi);
         
         // Generate action
-        BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
+        final BlockPistoned action = new BlockPistoned(opi, b, e.getDirection());
         if (pi.getWatched()) {
             action.send();
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void STICK_onBlockPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
+    public void STICK_onBlockPlace(final BlockPlaceEvent event) {
+        final Player player = event.getPlayer();
         if (player.hasPermission(Permissions.INFO.id) && plugin.hasStick(player, event.getItemInHand())) {
             plugin.stick(player, event.getBlockPlaced(), false);
             event.setCancelled(true);
@@ -190,7 +190,7 @@ public class BBListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockDamage(BlockDamageEvent event) {
+    public void onBlockDamage(final BlockDamageEvent event) {
         BBLogging.debug("onBlockDamage");
         if (event.getBlock().getType() == Material.TNT) {
             TNTLogger.log(event.getPlayer().getName(), event.getBlock());
@@ -198,52 +198,52 @@ public class BBListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
         if (!event.isCancelled()) {
             BBLogging.debug("onBlockBreak");
-            Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final Player player = event.getPlayer();
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
             if (!ActionProvider.isDisabled(BrokenBlock.class)) {
-                Block block = event.getBlock();
-                BrokenBlock dataBlock = new BrokenBlock(player.getName(), block, block.getWorld().getName());
+                final Block block = event.getBlock();
+                final BrokenBlock dataBlock = new BrokenBlock(player.getName(), block, block.getWorld().getName());
                 dataBlock.send();
             }
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        final Player player = event.getPlayer();
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
         plugin.closeChestIfOpen(pi);
         if (!ActionProvider.isDisabled(PlacedBlock.class) && pi.getWatched() && !event.isCancelled()) {
             BBLogging.debug("onBlockPlace");
-            Block block = event.getBlockPlaced();
+            final Block block = event.getBlockPlaced();
             if ((block.getType() == Material.WATER) || (block.getType() == Material.STATIONARY_WATER) || (block.getType() == Material.LAVA) || (block.getType() == Material.STATIONARY_LAVA) || (block.getType() == Material.FIRE)) {
                 OwnershipManager.setOwner(block, pi);
             }
-            PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
+            final PlacedBlock dataBlock = new PlacedBlock(player.getName(), block, block.getWorld().getName());
             dataBlock.send();
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onLeavesDecay(LeavesDecayEvent event) {
+    public void onLeavesDecay(final LeavesDecayEvent event) {
         if (!ActionProvider.isDisabled(LeafDecay.class) && !event.isCancelled()) {
             // TODO try to find a player that did it.
             final Block block = event.getBlock();
-            BBAction dataBlock = LeafDecay.create(block, block.getWorld().getName());
+            final BBAction dataBlock = LeafDecay.create(block, block.getWorld().getName());
             OwnershipManager.removeOwner(block);
             dataBlock.send();
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockIgnite(BlockIgniteEvent event) {
+    public void onBlockIgnite(final BlockIgniteEvent event) {
         if (!ActionProvider.isDisabled(FlintAndSteel.class) && (event.getCause() == IgniteCause.FLINT_AND_STEEL) && !event.isCancelled()) {
             final Block block = event.getBlock();
-            BBAction dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
+            final BBAction dataBlock = new FlintAndSteel(event.getPlayer().getName(), block, block.getWorld().getName());
             dataBlock.send();
         }
     }
@@ -252,10 +252,10 @@ public class BBListener implements Listener {
      * Called whenever a block is destroyed by fire
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockBurn(BlockBurnEvent event) {
+    public void onBlockBurn(final BlockBurnEvent event) {
         if (!ActionProvider.isDisabled(Flow.class) && !event.isCancelled()) {
             final Block block = event.getBlock();
-            BBAction dataBlock = OwnershipManager.trackBurn(block);
+            final BBAction dataBlock = OwnershipManager.trackBurn(block);
             OwnershipManager.removeOwner(block);
             dataBlock.send();
         }
@@ -265,42 +265,42 @@ public class BBListener implements Listener {
      * Called whenever something flows from one block to another.
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockFromTo(BlockFromToEvent event) {
+    public void onBlockFromTo(final BlockFromToEvent event) {
         if (ActionProvider.isDisabled(Flow.class))
             return;
-        Block blockFrom = event.getBlock();
-        Block blockTo = event.getToBlock();
+        final Block blockFrom = event.getBlock();
+        final Block blockTo = event.getToBlock();
         BBLogging.debug(String.format("BlockFromTo: <%d,%d,%d> (%s) flowed to <%d,%d,%d> (%s)", blockFrom.getX(), blockFrom.getY(), blockFrom.getZ(), blockFrom.getType().name(), blockTo.getX(), blockTo.getY(), blockTo.getZ(), blockTo.getType().name()));
         if (!event.isCancelled()) {
-            int fromID = blockFrom.getTypeId();
-            int toID = blockTo.getTypeId();
+            final int fromID = blockFrom.getTypeId();
+            final int toID = blockTo.getTypeId();
             if (BBSettings.isBlockIgnored(fromID) || (fromID == Material.WATER.getId()) || (fromID == Material.STATIONARY_WATER.getId()) || (fromID == Material.LAVA.getId()) || (fromID == Material.STATIONARY_LAVA.getId()) || BBSettings.isBlockIgnored(toID) || (toID == Material.WATER.getId()) || (toID == Material.STATIONARY_WATER.getId()) || (toID == Material.LAVA.getId()) || (toID == Material.STATIONARY_LAVA.getId()))
                 return;
             // Only record a change if the owner is different (avoids duplicates)
             if (OwnershipManager.findOwner(blockFrom).getID() != OwnershipManager.findOwner(blockTo).getID()) {
-                Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
+                final Flow dataBlock = OwnershipManager.trackFlow(blockFrom, blockTo);
                 dataBlock.send();
             }
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onSignChange(SignChangeEvent event) {
+    public void onSignChange(final SignChangeEvent event) {
         if (event.getBlock().getState() instanceof Sign) {
-            Sign sign = (Sign) event.getBlock().getState();
+            final Sign sign = (Sign) event.getBlock().getState();
             boolean oldText = false;
-            for (String line : sign.getLines()) {
+            for (final String line : sign.getLines()) {
                 if (!line.equals("")) {
                     oldText = true;
                 }
             }
             if (oldText) {
-                SignDestroyed dataBlock = new SignDestroyed(event.getPlayer().getName(), event.getBlock().getTypeId(), event.getBlock().getData(), (Sign) event.getBlock().getState(), event.getBlock().getWorld().getName());
+                final SignDestroyed dataBlock = new SignDestroyed(event.getPlayer().getName(), event.getBlock().getTypeId(), event.getBlock().getData(), (Sign) event.getBlock().getState(), event.getBlock().getWorld().getName());
                 dataBlock.send();
             }
         }
         if (!event.isCancelled() && !ActionProvider.isDisabled(CreateSignText.class)) {
-            CreateSignText dataBlock = new CreateSignText(event.getPlayer().getName(), event.getLines(), event.getBlock());
+            final CreateSignText dataBlock = new CreateSignText(event.getPlayer().getName(), event.getLines(), event.getBlock());
             dataBlock.send();
         }
     }
@@ -310,7 +310,7 @@ public class BBListener implements Listener {
     /////////////////////////////////////////////////////////////
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onEntityBlockChange(EntityChangeBlockEvent event) {
+    public void onEntityBlockChange(final EntityChangeBlockEvent event) {
         if (event.getTo().equals(Material.AIR)) {
             switch (event.getEntityType()) {
                 case ENDERMAN:
@@ -333,7 +333,7 @@ public class BBListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         // Err... why is this null when it's a TNT?
         if (!event.isCancelled()) {
             if (event.getEntity() == null) {
@@ -355,13 +355,13 @@ public class BBListener implements Listener {
     //////////////////////////////////////////////////////
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+    public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
                 return;
-            String[] parts = BBCommand.groupArgs(event.getMessage().split(" "));
-            String cmd = parts[0].toLowerCase();
+            final String[] parts = BBCommand.groupArgs(event.getMessage().split(" "));
+            final String cmd = parts[0].toLowerCase();
             String msg = event.getMessage();
             
             // Perform censoring
@@ -376,31 +376,31 @@ public class BBListener implements Listener {
                     }
                 }
             }
-            Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final Player player = event.getPlayer();
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
             if (!ActionProvider.isDisabled(Command.class) && pi.getWatched()) {
-                Command dataBlock = new Command(player, msg, player.getWorld().getName());
+                final Command dataBlock = new Command(player, msg, player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerCommandPreprocess(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(final PlayerJoinEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
                 return;
-            Player player = event.getPlayer();
+            final Player player = event.getPlayer();
             
             BBUsersTable.getInstance().addOrUpdateUser(player);
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             
             if (!ActionProvider.isDisabled(Login.class) && pi.getWatched()) {
-                Login dataBlock = new Login(player, player.getWorld().getName());
+                final Login dataBlock = new Login(player, player.getWorld().getName());
                 dataBlock.send();
             }
             
@@ -413,105 +413,105 @@ public class BBListener implements Listener {
             BBLogging.debug("- Info privileges: " + player.hasPermission(Permissions.INFO.id));
             BBLogging.debug("- Rollback privileges: " + player.hasPermission(Permissions.ROLLBACK.id));
             BBLogging.debug("- Cleansing privileges: " + player.hasPermission(Permissions.CLEANSE.id));
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerJoin(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(final PlayerQuitEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
                 return;
             final Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
             if (!ActionProvider.isDisabled(Disconnect.class) && pi.getWatched()) {
-                Disconnect dataBlock = new Disconnect(player.getName(), player.getLocation(), player.getWorld().getName());
+                final Disconnect dataBlock = new Disconnect(player.getName(), player.getLocation(), player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerQuit(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
+    public void onPlayerTeleport(final PlayerTeleportEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
                 return;
-            Location from = event.getFrom();
-            Location to = event.getTo();
+            final Location from = event.getFrom();
+            final Location to = event.getTo();
             
             final Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
             if (!ActionProvider.isDisabled(Teleport.class) && pi.getWatched() && (distance(from, to) > 5) && !event.isCancelled()) {
-                Teleport dataBlock = new Teleport(player.getName(), event.getTo());
+                final Teleport dataBlock = new Teleport(player.getName(), event.getTo());
                 dataBlock.send();
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerTeleport(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(final PlayerChatEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
                 return;
             final Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             plugin.closeChestIfOpen(pi);
             if (!ActionProvider.isDisabled(Chat.class) && pi.getWatched()) {
-                Chat dataBlock = new Chat(player, event.getMessage(), player.getWorld().getName());
+                final Chat dataBlock = new Chat(player, event.getMessage(), player.getWorld().getName());
                 dataBlock.send();
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerChat(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+    public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
         try {
             if ((event == null) || (event.getPlayer() == null) || (event.getItem() == null))
                 return;
             final Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             if (!ActionProvider.isDisabled(PickupItem.class) && pi.getWatched()) {
                 // It should not be null, but I have no other way to explain the NPEs.  Bukkit Bug?
                 if ((event.getItem() != null) && (event.getItem().getItemStack() != null)) {
-                    PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
+                    final PickupItem dataBlock = new PickupItem(player.getName(), event.getItem(), event.getItem().getWorld().getName());
                     dataBlock.send();
                 }
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerPickupItem(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
+    public void onPlayerDropItem(final PlayerDropItemEvent event) {
         try {
             if ((event == null) || (event.getPlayer() == null) || (event.getItemDrop() == null) || (event.getItemDrop().getItemStack() == null))
                 return;
             final Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             if (!ActionProvider.isDisabled(DropItem.class) && pi.getWatched()) {
-                DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
+                final DropItem dataBlock = new DropItem(player.getName(), event.getItemDrop(), event.getItemDrop().getWorld().getName());
                 dataBlock.send();
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerDropItem(" + event.toString() + ")", e);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(final PlayerInteractEvent event) {
         try {
             if ((event == null) || (event.getPlayer() == null))
                 return;
@@ -519,8 +519,8 @@ public class BBListener implements Listener {
             if (event.isCancelled())
                 return;
             
-            Player player = event.getPlayer();
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
+            final Player player = event.getPlayer();
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player.getName());
             
             if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 if (player.hasPermission(Permissions.INFO.id) && plugin.hasStick(player, player.getItemInHand()) && plugin.leftClickStick(player)) {
@@ -539,7 +539,7 @@ public class BBListener implements Listener {
                     plugin.stick(player, event.getClickedBlock(), false);
                     
                     // Cancel any interactions.
-                    ArrayList<Material> nonInteracts = new ArrayList<Material>();
+                    final ArrayList<Material> nonInteracts = new ArrayList<Material>();
                     nonInteracts.add(Material.WOOD_PLATE);
                     nonInteracts.add(Material.STONE_PLATE);
                     if (!nonInteracts.contains(event.getClickedBlock().getType())) {
@@ -553,11 +553,11 @@ public class BBListener implements Listener {
                     int type;
                     PlacedBlock dataBlock;
                     World world;
-                    Block block = event.getClickedBlock();
+                    final Block block = event.getClickedBlock();
                     
                     plugin.closeChestIfOpen(pi);
                     if (block.getState() instanceof Chest) {
-                        Chest chest = ((Chest) block.getState());
+                        final Chest chest = ((Chest) block.getState());
                         // OH SHI-
                         BBUsersTable.getInstance().userOpenedChest(player.getName(), chest, ChestTools.getChestContents(chest));
                         return;
@@ -648,25 +648,25 @@ public class BBListener implements Listener {
                                 case WOODEN_DOOR:
                                     //case IRON_DOOR:
                                     if (!ActionProvider.isDisabled(DoorOpen.class)) {
-                                        DoorOpen doorDataBlock = new DoorOpen(event.getPlayer().getName(), block, block.getWorld().getName());
+                                        final DoorOpen doorDataBlock = new DoorOpen(event.getPlayer().getName(), block, block.getWorld().getName());
                                         doorDataBlock.send();
                                     }
                                     break;
                                 case LEVER:
                                     if (!ActionProvider.isDisabled(LeverSwitch.class)) {
-                                        LeverSwitch leverDataBlock = new LeverSwitch(event.getPlayer().getName(), block, block.getWorld().getName());
+                                        final LeverSwitch leverDataBlock = new LeverSwitch(event.getPlayer().getName(), block, block.getWorld().getName());
                                         leverDataBlock.send();
                                     }
                                     break;
                                 case STONE_BUTTON:
                                     if (!ActionProvider.isDisabled(ButtonPress.class)) {
-                                        ButtonPress buttonDataBlock = new ButtonPress(event.getPlayer().getName(), block, block.getWorld().getName());
+                                        final ButtonPress buttonDataBlock = new ButtonPress(event.getPlayer().getName(), block, block.getWorld().getName());
                                         buttonDataBlock.send();
                                     }
                                     break;
                                 case CHEST:
                                     if (!ActionProvider.isDisabled(ChestOpen.class)) {
-                                        BBAction chestDataBlock = new ChestOpen(event.getPlayer().getName(), block, block.getWorld().getName());
+                                        final BBAction chestDataBlock = new ChestOpen(event.getPlayer().getName(), block, block.getWorld().getName());
                                         chestDataBlock.send();
                                     }
                                     break;
@@ -675,12 +675,12 @@ public class BBListener implements Listener {
                     }
                 }
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             BBLogging.severe("onPlayerInteract(" + event.toString() + ")", e);
         }
     }
     
-    private double distance(Location from, Location to) {
+    private double distance(final Location from, final Location to) {
         return Math.sqrt(Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2) + Math.pow(from.getZ() - to.getZ(), 2));
     }
 }

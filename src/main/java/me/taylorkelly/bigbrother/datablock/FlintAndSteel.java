@@ -8,11 +8,11 @@ import org.bukkit.block.Block;
 
 public class FlintAndSteel extends BBAction {
     
-    public FlintAndSteel(String player, Block block, String world) {
+    public FlintAndSteel(final String player, final Block block, final String world) {
         super(player, world, block.getX(), block.getY(), block.getZ(), block.getTypeId(), "");
     }
     
-    private FlintAndSteel(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private FlintAndSteel(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -24,14 +24,14 @@ public class FlintAndSteel extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new FlintAndSteel(pi, world, x, y, z, type, data);
     }
     

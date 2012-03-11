@@ -36,7 +36,7 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
+    protected int addAction(final String pluginName, final String actionName, final int catID, final String actionDesc) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getActualTableName() + " (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
@@ -46,7 +46,7 @@ public class ActionPostgreSQL extends ActionTable {
             ps.setString(4, actionDesc);
             ps.executeUpdate();
             BBDB.commit();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("ActionPostgreSQL.addAction", e);
         } finally {
             BBDB.cleanup("ActionPostgreSQL.addAction", ps, null);
@@ -93,7 +93,7 @@ public class ActionPostgreSQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName, int catID, int ID, String description) {
+    protected void addActionForceID(final String pluginName, final String actionName, final int catID, final int ID, final String description) {
         // TODO Auto-generated method stub
     }
     

@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 
 public class DeleteCommand implements CommandExecutor {
     
-    public DeleteCommand(BigBrother plugin) {
+    public DeleteCommand(final BigBrother plugin) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length == 1) {
                 if (RollbackConfirmation.hasRI((Player) player)) {

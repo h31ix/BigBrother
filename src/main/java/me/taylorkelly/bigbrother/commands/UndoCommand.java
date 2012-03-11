@@ -12,17 +12,17 @@ import org.bukkit.entity.Player;
 
 public class UndoCommand implements CommandExecutor {
     
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public UndoCommand(BigBrother plugin) {
+    public UndoCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length == 1) {
                 if (Rollback.canUndo()) {
-                    int size = Rollback.undoSize();
+                    final int size = Rollback.undoSize();
                     player.sendMessage(BigBrother.premessage + "Undo-ing last rollback of " + size + " blocks");
                     Rollback.undo(plugin.getServer(), (Player) player);
                     player.sendMessage(BigBrother.premessage + "Undo successful");

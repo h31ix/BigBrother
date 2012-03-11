@@ -13,17 +13,17 @@ import org.bukkit.entity.Player;
 
 public class RollbackCommand implements CommandExecutor {
     
-    private BigBrother plugin;
+    private final BigBrother plugin;
     
-    public RollbackCommand(BigBrother plugin) {
+    public RollbackCommand(final BigBrother plugin) {
         this.plugin = plugin;
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         if (player.hasPermission(Permissions.ROLLBACK.id)) {
             if (split.length > 1) {
-                RollbackInterpreter interpreter = new RollbackInterpreter((Player) player, split, plugin.getServer(), plugin.worldManager, plugin);
-                Boolean passed = interpreter.interpret();
+                final RollbackInterpreter interpreter = new RollbackInterpreter((Player) player, split, plugin.getServer(), plugin.worldManager, plugin);
+                final Boolean passed = interpreter.interpret();
                 if (passed != null) {
                     if (passed) {
                         interpreter.send();

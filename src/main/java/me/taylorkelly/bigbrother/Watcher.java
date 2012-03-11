@@ -24,25 +24,25 @@ import org.bukkit.entity.Player;
 
 public class Watcher {
     
-    private Server server;
+    private final Server server;
     
-    public Watcher(Server server) {
+    public Watcher(final Server server) {
         this.server = server;
     }
     
-    public boolean watching(Player player) {
+    public boolean watching(final Player player) {
         return BBUsersTable.getInstance().getUserByName(player.getName()).getWatched();
     }
     
-    public boolean toggleWatch(String player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player);
+    public boolean toggleWatch(final String player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player);
         pi.setWatched(!pi.getWatched());
         return pi.getWatched();
     }
     
     public String getWatchedPlayers() {
-        StringBuilder list = new StringBuilder();
-        for (BBPlayerInfo pi : BBUsersTable.getInstance().knownPlayers.values()) {
+        final StringBuilder list = new StringBuilder();
+        for (final BBPlayerInfo pi : BBUsersTable.getInstance().knownPlayers.values()) {
             if (pi.getWatched()) {
                 list.append(pi.getName());
                 list.append(", ");
@@ -54,24 +54,24 @@ public class Watcher {
         return list.toString();
     }
     
-    public boolean haveSeen(Player player) {
+    public boolean haveSeen(final Player player) {
         return BBUsersTable.getInstance().knownNames.containsKey(player.getName());
     }
     
-    public void watchPlayer(Player player) {
+    public void watchPlayer(final Player player) {
         watchPlayer(player.getName());
     }
     
-    public void watchPlayer(String player) {
-        BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player);
+    public void watchPlayer(final String player) {
+        final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(player);
         pi.setWatched(true);
     }
     
     public String getUnwatchedPlayers() {
-        Player[] playerList = server.getOnlinePlayers();
-        StringBuilder list = new StringBuilder();
-        for (Player name : playerList) {
-            BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(name.getName());
+        final Player[] playerList = server.getOnlinePlayers();
+        final StringBuilder list = new StringBuilder();
+        for (final Player name : playerList) {
+            final BBPlayerInfo pi = BBUsersTable.getInstance().getUserByName(name.getName());
             if (pi.getWatched()) {
                 list.append(pi.getName());
                 list.append(", ");

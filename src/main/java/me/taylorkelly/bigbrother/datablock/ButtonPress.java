@@ -8,23 +8,23 @@ import org.bukkit.block.Block;
 
 public class ButtonPress extends BBAction {
     
-    public ButtonPress(String player, Block button, String world) {
+    public ButtonPress(final String player, final Block button, final String world) {
         super(player, world, button.getX(), button.getY(), button.getZ(), 77, Byte.toString(button.getData()));
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new ButtonPress(pi, world, x, y, z, type, data);
     }
     
-    private ButtonPress(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private ButtonPress(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     

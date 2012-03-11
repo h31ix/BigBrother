@@ -8,10 +8,10 @@ import org.bukkit.command.CommandSender;
 
 public class StickCommand implements CommandExecutor {
     
-    public StickCommand(BigBrother plugin) {
+    public StickCommand(final BigBrother plugin) {
     }
     
-    public boolean onCommand(CommandSender player, Command arg1, String arg2, String[] split) {
+    public boolean onCommand(final CommandSender player, final Command arg1, final String arg2, final String[] split) {
         
         player.sendMessage(BigBrother.premessage + "/bb stick is no longer used.  Please use /bb log.");
         

@@ -11,8 +11,8 @@ import me.taylorkelly.bigbrother.tablemgrs.BBWorldsTable;
 public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStatement {
     
     @Override
-    public String create(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS \"world\"");
+    public String create(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("SELECT bbdata.id, date, player, action, x, y, z, type, data, rbacked, bbworlds.name AS \"world\"");
         statement.append(" FROM");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata,");
         statement.append(" " + BBWorldsTable.getInstance().getTableName() + " AS bbworlds, ");
@@ -76,8 +76,8 @@ public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStateme
         return statement.toString();
     }
     
-    private StringBuilder getBlockString(ArrayList<Integer> blockTypes) {
-        StringBuilder ret = new StringBuilder("type IN(");
+    private StringBuilder getBlockString(final ArrayList<Integer> blockTypes) {
+        final StringBuilder ret = new StringBuilder("type IN(");
         for (int i = 0; i < blockTypes.size(); i++) {
             ret.append("'");
             ret.append(blockTypes.get(i));
@@ -90,8 +90,8 @@ public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStateme
         return ret;
     }
     
-    private StringBuilder getPlayerString(ArrayList<String> players) {
-        StringBuilder ret = new StringBuilder("usr.name IN (");
+    private StringBuilder getPlayerString(final ArrayList<String> players) {
+        final StringBuilder ret = new StringBuilder("usr.name IN (");
         for (int i = 0; i < players.size(); i++) {
             ret.append("'");
             ret.append(players.get(i));
@@ -106,7 +106,7 @@ public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStateme
     
     private StringBuilder getActionString() {
         // TODO maybe more customizable actions?
-        StringBuilder ret = new StringBuilder("action IN(");
+        final StringBuilder ret = new StringBuilder("action IN(");
         ret.append("'");
         ret.append(ActionProvider.findActionID("BrokenBlock"));
         ret.append("','");
@@ -134,8 +134,8 @@ public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStateme
     }
     
     @Override
-    public String update(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("UPDATE");
+    public String update(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("UPDATE");
         statement.append(" " + BBDataTable.getInstance().getTableName());
         statement.append(" SET rbacked = '1'");
         statement.append(" WHERE ");
@@ -202,8 +202,8 @@ public class RollbackPreparedStatementPostgreSQL extends RollbackPreparedStateme
     }
     
     @Override
-    public String undoStatement(Rollback rollback, WorldManager manager) {
-        StringBuilder statement = new StringBuilder("UPDATE ");
+    public String undoStatement(final Rollback rollback, final WorldManager manager) {
+        final StringBuilder statement = new StringBuilder("UPDATE ");
         statement.append(" " + BBDataTable.getInstance().getTableName() + " AS bbdata,");
         statement.append(" " + BBUsersTable.getInstance().getTableName() + " AS usr ");
         statement.append(" SET rbacked = '0'");

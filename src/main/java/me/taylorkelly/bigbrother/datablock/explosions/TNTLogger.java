@@ -15,16 +15,16 @@ public class TNTLogger {
     public static double THRESHOLD = 10.0;
     private static HashMap<Location, String> tntMap = new HashMap<Location, String>();
     
-    public static void log(String player, Block block) {
+    public static void log(final String player, final Block block) {
         tntMap.put(block.getLocation(), player);
     }
     
-    public static void createTNTDataBlock(List<Block> blockList, Location location) {
+    public static void createTNTDataBlock(final List<Block> blockList, final Location location) {
         String player = Action.ENVIRONMENT;
         Location bestLocation = null;
         double bestDistance = THRESHOLD;
-        for (Location loc : tntMap.keySet()) {
-            double distance = distance(loc, location);
+        for (final Location loc : tntMap.keySet()) {
+            final double distance = distance(loc, location);
             if (distance < bestDistance) {
                 bestLocation = loc;
                 bestDistance = distance;
@@ -34,8 +34,8 @@ public class TNTLogger {
         if (bestLocation != null) {
             player = tntMap.remove(bestLocation);
         }
-        for (Block block : blockList) {
-            BBAction dataBlock = new TNTExplosion(player, block, location.getWorld().getName());
+        for (final Block block : blockList) {
+            final BBAction dataBlock = new TNTExplosion(player, block, location.getWorld().getName());
             dataBlock.send();
             if (block.getType() == Material.TNT) {
                 TNTLogger.log(player, block);
@@ -43,7 +43,7 @@ public class TNTLogger {
         }
     }
     
-    public static double distance(Location from, Location to) {
+    public static double distance(final Location from, final Location to) {
         if (!from.getWorld().getName().equals(to.getWorld().getName()))
             return Double.MAX_VALUE;
         else

@@ -40,7 +40,7 @@ public class ActionMySQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addAction(java.lang.String, java.lang.String, int)
      */
     @Override
-    protected int addAction(String pluginName, String actionName, int catID, String actionDesc) {
+    protected int addAction(final String pluginName, final String actionName, final int catID, final String actionDesc) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getTableName() + " (actName,actPlugin,actCategory, actDescription) VALUES (?,?,?,?)");
@@ -50,7 +50,7 @@ public class ActionMySQL extends ActionTable {
             ps.setString(4, actionDesc);
             ps.executeUpdate();
             BBDB.commit();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't add a new action: ", e);
         } finally {
             BBDB.cleanup("ActionMySQL", ps, null);
@@ -62,7 +62,7 @@ public class ActionMySQL extends ActionTable {
             if (!rs.next())
                 return -1;
             return rs.getInt(1);
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't add a new action: ", e);
         } finally {
             BBDB.cleanup("ActionMySQL", null, rs);
@@ -76,7 +76,7 @@ public class ActionMySQL extends ActionTable {
      * @see me.taylorkelly.bigbrother.tablemgrs.ActionTable#addActionForceID(java.lang.String, java.lang.String, int, int)
      */
     @Override
-    protected void addActionForceID(String pluginName, String actionName, int catID, int ID, String description) {
+    protected void addActionForceID(final String pluginName, final String actionName, final int catID, final int ID, final String description) {
         PreparedStatement ps = null;
         try {
             ps = BBDB.prepare("INSERT INTO " + getTableName() + " (actID,actName,actPlugin,actCategory,actDescription) VALUES (?,?,?,?,?)");
@@ -87,7 +87,7 @@ public class ActionMySQL extends ActionTable {
             ps.setString(5, description);
             ps.executeUpdate();
             BBDB.commit();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't add a new action: ", e);
         } finally {
             BBDB.cleanup("ActionMySQL", ps, null);
@@ -119,12 +119,12 @@ public class ActionMySQL extends ActionTable {
         try {
             rs = BBDB.executeQuery("SELECT * FROM " + getTableName());
             while (rs.next()) {
-                ActionData dat = new ActionData(rs.getString("actPlugin"), ActionCategory.values()[rs.getInt("actCategory")], rs.getString("actName"));
-                int id = rs.getInt("actID");
+                final ActionData dat = new ActionData(rs.getString("actPlugin"), ActionCategory.values()[rs.getInt("actCategory")], rs.getString("actName"));
+                final int id = rs.getInt("actID");
                 BBLogging.info(String.format("Action #%d - %s", id, dat.actionName));
                 ActionProvider.Actions.put(id, dat);
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             BBLogging.severe("Can't add a new action: ", e);
         } finally {
             BBDB.cleanup("ActionMySQL", null, rs);

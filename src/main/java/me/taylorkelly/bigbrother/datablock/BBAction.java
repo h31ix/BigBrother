@@ -14,11 +14,11 @@ public abstract class BBAction extends Action {
      * @param type
      * @param data
      */
-    public BBAction(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    public BBAction(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
-    public BBAction(String player, String world, int x, int y, int z, int type, String data) {
+    public BBAction(final String player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -28,7 +28,7 @@ public abstract class BBAction extends Action {
     public BBAction() {
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return null;
     }
 }

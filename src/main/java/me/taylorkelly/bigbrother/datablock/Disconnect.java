@@ -7,15 +7,15 @@ import org.bukkit.Server;
 import org.bukkit.World;
 
 public class Disconnect extends BBAction {
-    public Disconnect(String player, Location location, String world) {
+    public Disconnect(final String player, final Location location, final String world) {
         super(player, world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), 0, "");
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new Disconnect(pi, world, x, y, z, type, data);
     }
     
-    private Disconnect(BBPlayerInfo player, String world, int x, int y, int z, int type, String data) {
+    private Disconnect(final BBPlayerInfo player, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(player, world, x, y, z, type, data);
     }
     
@@ -27,11 +27,11 @@ public class Disconnect extends BBAction {
     }
     
     @Override
-    public void rollback(World wld) {
+    public void rollback(final World wld) {
     }
     
     @Override
-    public void redo(Server server) {
+    public void redo(final Server server) {
     }
     
     @Override

@@ -25,7 +25,7 @@ public enum Permissions {
     
     public final String id;
     
-    Permissions(String permID) {
+    Permissions(final String permID) {
         id = permID;
     }
 }

@@ -40,7 +40,7 @@ public class BlockPistoned extends BBAction {
      * @param block
      * @param direction
      */
-    public BlockPistoned(BBPlayerInfo player, Block block, BlockFace direction) {
+    public BlockPistoned(final BBPlayerInfo player, final Block block, final BlockFace direction) {
         super(player, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getTypeId(), Byte.toString(block.getData()) + "\t" + direction.name());
     }
     
@@ -60,7 +60,7 @@ public class BlockPistoned extends BBAction {
      * @param type
      * @param data
      */
-    public BlockPistoned(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public BlockPistoned(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         super(pi, world, x, y, z, type, data);
     }
     
@@ -70,14 +70,14 @@ public class BlockPistoned extends BBAction {
      * @see me.taylorkelly.bigbrother.datablock.Action#rollback(org.bukkit.World)
      */
     @Override
-    public void rollback(World world) {
+    public void rollback(final World world) {
         
-        Chunk c = world.getChunkAt(x, z);
+        final Chunk c = world.getChunkAt(x, z);
         if (!world.isChunkLoaded(c)) {
             world.loadChunk(c);
         }
         // Get the block we're about to replace
-        Block rb = world.getBlockAt(x, y, z);
+        final Block rb = world.getBlockAt(x, y, z);
         rb.setTypeIdAndData(type, getData(), true);
     }
     
@@ -85,7 +85,7 @@ public class BlockPistoned extends BBAction {
      * @return
      */
     private byte getData() {
-        String dat = data.split("\t")[0];
+        final String dat = data.split("\t")[0];
         
         return Byte.valueOf(dat);
     }
@@ -94,7 +94,7 @@ public class BlockPistoned extends BBAction {
      * @return
      */
     private Vector getDirectionOffset() {
-        BlockFace d = getDirection();
+        final BlockFace d = getDirection();
         return new Vector(d.getModX(), d.getModY(), d.getModZ());
     }
     
@@ -102,7 +102,7 @@ public class BlockPistoned extends BBAction {
      * @return
      */
     private BlockFace getDirection() {
-        String dname = data.split("\t")[1];
+        final String dname = data.split("\t")[1];
         
         return BlockFace.valueOf(dname);
     }
@@ -113,9 +113,9 @@ public class BlockPistoned extends BBAction {
      * @see me.taylorkelly.bigbrother.datablock.Action#redo(org.bukkit.Server)
      */
     @Override
-    public void redo(Server server) {
-        Vector d = getDirectionOffset();
-        World w = server.getWorld(world);
+    public void redo(final Server server) {
+        final Vector d = getDirectionOffset();
+        final World w = server.getWorld(world);
         Chunk c = w.getChunkAt(x, z);
         if (!w.isChunkLoaded(c)) {
             w.loadChunk(c);
@@ -125,7 +125,7 @@ public class BlockPistoned extends BBAction {
             w.loadChunk(c);
         }
         // Get the block we're about to replace
-        Block rb = w.getBlockAt(x + d.getBlockX(), y + d.getBlockY(), z + d.getBlockZ());
+        final Block rb = w.getBlockAt(x + d.getBlockX(), y + d.getBlockY(), z + d.getBlockZ());
         rb.setTypeIdAndData(type, getData(), true);
     }
     
@@ -159,7 +159,7 @@ public class BlockPistoned extends BBAction {
         return "A block moved by a piston";
     }
     
-    public static BBAction getBBDataBlock(BBPlayerInfo pi, String world, int x, int y, int z, int type, String data) {
+    public static BBAction getBBDataBlock(final BBPlayerInfo pi, final String world, final int x, final int y, final int z, final int type, final String data) {
         return new BlockPistoned(pi, world, x, y, z, type, data);
     }
     
