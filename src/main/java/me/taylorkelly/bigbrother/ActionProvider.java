@@ -28,6 +28,7 @@ import me.taylorkelly.bigbrother.datablock.Action;
 import me.taylorkelly.bigbrother.datablock.ActionCategory;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -190,9 +191,9 @@ public abstract class ActionProvider {
     /**
      * For loading the disabledActions list.
      */
-    public static void loadDisabled(final BetterConfig cfg) {
+    public static void loadDisabled(final FileConfiguration cfg) {
         List<String> actions;
-        if (cfg.getValue("general.disabled-actions") == null) {
+        if (cfg.getString("general.disabled-actions") == null) {
             actions = new ArrayList<String>();
             if (!cfg.getBoolean("watched.blocks.block-break", true)) {
                 actions.add("BrokenBlock");
@@ -251,10 +252,10 @@ public abstract class ActionProvider {
             if (!cfg.getBoolean("watched.environment.lava-flow", true)) {
                 actions.add("Flow");
             }
-            cfg.removeProperty("watched");
-            cfg.setValue("general.disabled-actions", actions);
+            cfg.set("watched",null);
+            cfg.set("general.disabled-actions", actions);
         } else {
-            actions = cfg.getStringList("general.disabled-actions", new ArrayList<String>());
+            actions = (List<String>)cfg.getList("general.disabled-actions", new ArrayList<String>());
         }
         for (final String act : actions) {
             final int id = ActionProvider.findActionID(act);

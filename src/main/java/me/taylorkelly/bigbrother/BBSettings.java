@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.taylorkelly.bigbrother.datablock.explosions.TNTLogger;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
@@ -37,6 +39,8 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 
 import com.sk89q.worldedit.blocks.ItemType;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class BBSettings {
     
@@ -63,10 +67,12 @@ public class BBSettings {
     //private static BigBrother plugin;
     public static File dataFolder;
     public static boolean storeOwners = true;
+    private static BigBrother plugin;
     
     public static List<String> censoredCommands;
     
     public static void initialize(final BigBrother plg, final File dataFolder) {
+        plugin = plg;
         BBSettings.dataFolder = dataFolder;
         //BBSettings.plugin=plg;
         watchList = new ArrayList<String>();
@@ -113,93 +119,106 @@ public class BBSettings {
     
     public static void loadPostponed() {
         final File yamlfile = new File(dataFolder, "BigBrother.yml");
-        final BetterConfig yml = new BetterConfig(yamlfile);
+        FileConfiguration yml = null;
         
         // If the file's not there, don't load it
         if (yamlfile.exists()) {
-            yml.load();
+            yml = YamlConfiguration.loadConfiguration(yamlfile);
         }
         
         ActionProvider.loadDisabled(yml);
         
         ActionTable.performPostponedUpdates();
-        
-        yml.save();
+        try {
+            yml.save(yamlfile);
+        } catch (IOException ex) {
+            Logger.getLogger(BBSettings.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private static void loadYaml(final File yamlfile) {
-        final BetterConfig yml = new BetterConfig(yamlfile);
-        
-        // If the file's not there, don't load it
-        if (yamlfile.exists()) {
-            yml.load();
+        FileConfiguration yml = null;
+
+        if (!yamlfile.exists())
+        {
+            System.out.println("[BigBrother] You must rename your config file from BigBrother.example.yml to BigBrother.yml to begin using the plugin. ");
+            plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
         
-        logPlayerIPs = yml.getBoolean("general.log-ips", true);
+        else
+        {
+            yml = YamlConfiguration.loadConfiguration(yamlfile);
         
-        // Import old settings into new config defaults and remove the old versions.
-        if (yml.getValue("database.mysql.username") != null) {
-            BBDB.username = yml.getString("database.mysql.username", BBDB.username);
-            yml.removeProperty("database.mysql.username");
-            BBDB.password = yml.getString("database.mysql.password", BBDB.password);
-            yml.removeProperty("database.mysql.password");
-            BBDB.hostname = yml.getString("database.mysql.hostname", BBDB.hostname);
-            yml.removeProperty("database.mysql.hostname");
-            BBDB.schema = yml.getString("database.mysql.database", BBDB.schema);
-            yml.removeProperty("database.mysql.database");
-            BBDB.port = yml.getInteger("database.mysql.port", BBDB.port);
-            yml.removeProperty("database.mysql.port");
-            BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
-            yml.removeProperty("database.mysql.prefix");
-        }
-        BBDB.initSettings(yml);
-        
-        final List<Object> excluded = yml.getList("general.excluded-blocks");
-        // Dodge NPE reported by Mineral (and set a default)
-        if (excluded == null) {
-            yml.setValue("general.excluded-blocks", blockExclusionList);
-        } else {
-            for (final Object o : excluded) {
-                int id = 0;
-                if (o instanceof Integer) {
-                    id = (Integer) o;
-                } else if (o instanceof String) {
-                    id = ItemType.lookup((String) o).getID();
+            logPlayerIPs = yml.getBoolean("general.log-ips", true);
+
+            // Import old settings into new config defaults and remove the old versions.
+            if (yml.getString("database.mysql.username") != null) {
+                BBDB.username = yml.getString("database.mysql.username", BBDB.username);
+                yml.set("database.mysql.username", null);
+                BBDB.password = yml.getString("database.mysql.password", BBDB.password);
+                yml.set("database.mysql.password", null);
+                BBDB.hostname = yml.getString("database.mysql.hostname", BBDB.hostname);
+                yml.set("database.mysql.hostname",null);
+                BBDB.schema = yml.getString("database.mysql.database", BBDB.schema);
+                yml.set("database.mysql.database",null);
+                BBDB.port = yml.getInt("database.mysql.port", BBDB.port);
+                yml.set("database.mysql.port",null);
+                BBDB.prefix = yml.getString("database.mysql.prefix", BBDB.prefix);
+                yml.set("database.mysql.prefix",null);
+            }
+            BBDB.initSettings(yml);
+
+            final List<Object> excluded = (List<Object>)yml.getList("general.excluded-blocks");
+            // Dodge NPE reported by Mineral (and set a default)
+            if (excluded == null) {
+                yml.set("general.excluded-blocks", blockExclusionList);
+            } else {
+                for (final Object o : excluded) {
+                    int id = 0;
+                    if (o instanceof Integer) {
+                        id = (Integer) o;
+                    } else if (o instanceof String) {
+                        id = ItemType.lookup((String) o).getID();
+                    }
+                    blockExclusionList.add(id);
                 }
-                blockExclusionList.add(id);
+            }
+
+            censoredCommands = new ArrayList<String>();
+            censoredCommands.add("/login"); // xAuth
+            censoredCommands.add("/l"); // xAuth
+            censoredCommands.add("/register"); // xAuth
+            censoredCommands.add("/changepw"); // xAuth
+            censoredCommands.add("/changepass"); // xAuth
+            censoredCommands.add("/cpw"); // xAuth
+            censoredCommands.add("/changepassword"); // xAuth
+            censoredCommands.add("/xauth"); // xAuth
+            censoredCommands.add("/login"); // ?
+            censoredCommands = (List<String>)yml.getList("general.censored-commands", censoredCommands);
+
+            final List<String> excludedWorlds = (List<String>)yml.getList("general.excluded-worlds", new ArrayList<String>());
+            if (excludedWorlds == null) {
+                yml.set("general.excluded-worlds", new ArrayList<String>());
+            } else {
+                worldExclusionList.addAll(excludedWorlds);
+            }
+
+            storeOwners = yml.getBoolean("general.store-owners", storeOwners);
+            stickItem = yml.getInt("general.stick-item", 280);// "The item used for /bb stick");
+            restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
+            autoWatch = yml.getBoolean("general.auto-watch", true);// "Automatically start watching players");
+            defaultSearchRadius = yml.getInt("general.default-search-radius", 5);// "Default search radius for bbhere and bbfind");
+            flatLog = yml.getBoolean("general.personal-log-files", false);// "If true, will also log actions to .logs (one for each player)");
+            rollbacksPerTick = yml.getInt("general.rollbacks-per-tick", 2000);// "If true, will also log actions to .logs (one for each player)");
+            debugMode = yml.getBoolean("general.debug-mode", false);// "If true, will also log actions to .logs (one for each player)");
+            libraryAutoDownload = yml.getBoolean("general.library-autodownload", true);// "If true, will also log actions to .logs (one for each player)");
+            TNTLogger.THRESHOLD = 10.0;//yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
+            try {
+                yml.save(yamlfile);
+            } catch (IOException ex) {
+                Logger.getLogger(BBSettings.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        censoredCommands = new ArrayList<String>();
-        censoredCommands.add("/login"); // xAuth
-        censoredCommands.add("/l"); // xAuth
-        censoredCommands.add("/register"); // xAuth
-        censoredCommands.add("/changepw"); // xAuth
-        censoredCommands.add("/changepass"); // xAuth
-        censoredCommands.add("/cpw"); // xAuth
-        censoredCommands.add("/changepassword"); // xAuth
-        censoredCommands.add("/xauth"); // xAuth
-        censoredCommands.add("/login"); // ?
-        censoredCommands = yml.getStringList("general.censored-commands", censoredCommands);
-        
-        final List<String> excludedWorlds = yml.getStringList("general.excluded-worlds", new ArrayList<String>());
-        if (excludedWorlds == null) {
-            yml.setValue("general.excluded-worlds", new ArrayList<String>());
-        } else {
-            worldExclusionList.addAll(excludedWorlds);
-        }
-        
-        storeOwners = yml.getBoolean("general.store-owners", storeOwners);
-        stickItem = yml.getInteger("general.stick-item", 280);// "The item used for /bb stick");
-        restoreFire = yml.getBoolean("general.restore-fire", false);// "Restore fire when rolling back");
-        autoWatch = yml.getBoolean("general.auto-watch", true);// "Automatically start watching players");
-        defaultSearchRadius = yml.getInteger("general.default-search-radius", 5);// "Default search radius for bbhere and bbfind");
-        flatLog = yml.getBoolean("general.personal-log-files", false);// "If true, will also log actions to .logs (one for each player)");
-        rollbacksPerTick = yml.getInteger("general.rollbacks-per-tick", 2000);// "If true, will also log actions to .logs (one for each player)");
-        debugMode = yml.getBoolean("general.debug-mode", false);// "If true, will also log actions to .logs (one for each player)");
-        libraryAutoDownload = yml.getBoolean("general.library-autodownload", true);// "If true, will also log actions to .logs (one for each player)");
-        TNTLogger.THRESHOLD = 10.0;//yml.getDouble("general.tnt-threshold", 10.0);// "If true, will also log actions to .logs (one for each player)");
-        yml.save();
     }
     
     /**

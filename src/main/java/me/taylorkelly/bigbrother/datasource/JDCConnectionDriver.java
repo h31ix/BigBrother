@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * <b>Purpose:</b>Wrapper for JDBCConnectionDriver.<br>
@@ -33,6 +34,7 @@ public class JDCConnectionDriver implements Driver {
         pool.closeConnections();
     }
     
+    
     public Connection connect(final String url, final Properties props) throws SQLException {
         if (!url.startsWith(JDCConnectionDriver.URL_PREFIX))
             return null;
@@ -57,5 +59,9 @@ public class JDCConnectionDriver implements Driver {
     
     public boolean jdbcCompliant() {
         return false;
+    }
+
+    public Logger getParentLogger() {
+        return Logger.getLogger("Minecraft");
     }
 }

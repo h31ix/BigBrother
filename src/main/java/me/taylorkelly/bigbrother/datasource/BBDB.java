@@ -19,9 +19,9 @@ import java.util.Map;
 import me.taylorkelly.bigbrother.BBLogging;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
-import me.taylorkelly.bigbrother.BetterConfig;
 import me.taylorkelly.bigbrother.PropertiesFile;
 import me.taylorkelly.util.TimeParser;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Persistent database link
@@ -73,7 +73,7 @@ public class BBDB {
         void disableMe();
     }
     
-    public static void initSettings(final BetterConfig yml) {
+    public static void initSettings(final FileConfiguration yml) {
         // Database type (Database Management System = DBMS :V)
         final String dbms = yml.getString("database.type", DBMS.NULL.name());
         final String cleanse_age = yml.getString("database.cleanser.age", "7d");
@@ -87,12 +87,12 @@ public class BBDB {
             BBSettings.cleanseAge = TimeParser.parseInterval(cleanse_age);// "The maximum age of items in the database (can be mixture of #d,h,m,s) (0s to disable)"));
         }
         
-        BBSettings.sendDelay = yml.getInteger("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
+        BBSettings.sendDelay = yml.getInt("database.send-delay", BBSettings.sendDelay);// "Delay in seconds to batch send updates to database (4-5 recommended)");
         
         username = yml.getString("database.username", username);
         password = yml.getString("database.password", password);
         hostname = yml.getString("database.hostname", hostname);
-        port = yml.getInteger("database.port", port);
+        port = yml.getInt("database.port", port);
         schema = yml.getString("database.database", schema);
         prefix = yml.getString("database.prefix", prefix);
         

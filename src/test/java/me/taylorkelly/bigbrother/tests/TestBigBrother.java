@@ -1,17 +1,21 @@
 package me.taylorkelly.bigbrother.tests;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.taylorkelly.bigbrother.BBSettings;
 import me.taylorkelly.bigbrother.BBSettings.DBMS;
 import me.taylorkelly.bigbrother.datasource.BBDB;
 import me.taylorkelly.bigbrother.tablemgrs.ActionTable;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.spout.api.util.config.Configuration;
 
 public class TestBigBrother {
     private File testFolder;
@@ -21,7 +25,6 @@ public class TestBigBrother {
         testFolder = new File("tests");
     }
     
-    @Test
     public void configGeneration() {
         final File dataFolder = new File(testFolder, "configGeneration");
         dataFolder.mkdirs();
@@ -30,15 +33,18 @@ public class TestBigBrother {
         Assert.assertTrue("Configuration didn't generate.", settingsFile.exists());
     }
     
-    @Test
     public void configLoading() throws SQLException {
         final File dataFolder = new File(testFolder, "configLoading");
         dataFolder.mkdirs();
         final File settingsFile = new File(dataFolder, "BigBrother.yml");
         
-        final Configuration cfg = new org.spout.api.util.config.Configuration(settingsFile);
-        cfg.setValue("database.type", "MYSQL");
-        cfg.save();
+        final FileConfiguration cfg = YamlConfiguration.loadConfiguration(settingsFile);
+        cfg.set("database.type", "MYSQL");
+        try {
+            cfg.save(settingsFile);
+        } catch (IOException ex) {
+            Logger.getLogger(TestBigBrother.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         BBSettings.initialize(null, dataFolder);
         

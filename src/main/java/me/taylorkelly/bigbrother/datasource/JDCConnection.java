@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * <b>Purpose:</b>Wrapper for JDBCConnection.<br>
@@ -336,5 +337,25 @@ public class JDCConnection implements Connection {
     
     public void setTypeMap(final Map<String, Class<?>> arg0) throws SQLException {
         conn.setTypeMap(arg0);
+    }
+
+    public void setSchema(String schema) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getSchema() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void abort(Executor executor) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getNetworkTimeout() {
+        return 5000;
     }
 }

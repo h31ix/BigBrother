@@ -27,10 +27,6 @@
 			<name>Nexis Entertainment M2 Repo</name>
 			<url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
 		</repository>
-		<repository>
-			<id>spout-repo</id>
-			<url>http://repo.getspout.org</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -44,25 +40,6 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>1.2.3-R0.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.getspout</groupId>
-			<artifactId>spoutpluginapi</artifactId>
-			<version>dev-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.spout</groupId>
-			<artifactId>spoutapi</artifactId>
-			<version>dev-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.getspout</groupId>
-			<artifactId>commons</artifactId>
-			<version>dev-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
