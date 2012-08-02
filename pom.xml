@@ -16,17 +16,6 @@
 			</releases>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
-		<repository>
-			<id>nexisonline-repo</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<name>Nexis Entertainment M2 Repo</name>
-			<url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -39,7 +28,7 @@
 			
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.2.3-R0.2-SNAPSHOT</version>
+			<version>1.2.5-R5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
