@@ -89,18 +89,7 @@ public class BigBrother extends JavaPlugin {
         // Stuff that was in Constructor
         name = getDescription().getName();
         version = getDescription().getVersion();
-        // git-BigBrother-jenkins-BigBrother-384
-        final String[] buildp = BigBrother.class.getPackage().getImplementationVersion().split("-");
-        build = buildp[buildp.length - 1]; // 384
-        
-        if (version.endsWith("SNAPSHOT")) {
-            BBLogging.info("------------------------------------");
-            BBLogging.info("Hello, and thank you for using the TESTING version of BigBrother!");
-            BBLogging.info("Please note that, since this is far from complete, there will be many bugs.");
-            BBLogging.info("IF YOU FIND ANY BUGS, PLEASE REPORT THEM ON http://bugs.nexisonline.net/bb");
-            BBLogging.info("Please stay tuned in irc.7chan.org #bigbrother for updates and build notifications.");
-            BBLogging.info("------------------------------------");
-        }
+        build = "384";
         
         // Initialize Settings - Needs to come pretty much first
         BBSettings.initialize(this, getDataFolder());
