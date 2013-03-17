@@ -54,6 +54,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,14 +75,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 public class BBListener implements Listener {
     
@@ -314,19 +308,19 @@ public class BBListener implements Listener {
         if (event.getTo().equals(Material.AIR)) {
             switch (event.getEntityType()) {
                 case ENDERMAN:
-                    ActionFactory.createEndermanPickup(event.getEntity(), event.getBlock());
+                    ActionFactory.createEndermanPickup((LivingEntity)event.getEntity(), event.getBlock());
                     break;
                 case ENDER_DRAGON:
-                    ActionFactory.createEnderGrief(event.getEntity(), event.getBlock());
+                    ActionFactory.createEnderGrief((LivingEntity)event.getEntity(), event.getBlock());
                     break;
             }
         } else {
             switch (event.getEntityType()) {
                 case ENDERMAN:
-                    ActionFactory.createEndermanPlace(event.getEntity(), event.getBlock().getLocation(), event.getBlock().getType());
+                    ActionFactory.createEndermanPlace((LivingEntity)event.getEntity(), event.getBlock().getLocation(), event.getBlock().getType());
                     break;
                 case SILVERFISH:
-                    ActionFactory.createSilverfishGrief(event.getEntity(), event.getBlock());
+                    ActionFactory.createSilverfishGrief((LivingEntity)event.getEntity(), event.getBlock());
                     break;
             }
         }
@@ -458,7 +452,7 @@ public class BBListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChat(final PlayerChatEvent event) {
+    public void onPlayerChat(final AsyncPlayerChatEvent event) {
         try {
             //plugin.processPsuedotick();
             if ((event == null) || (event.getPlayer() == null))
